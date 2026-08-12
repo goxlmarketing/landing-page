@@ -1,0 +1,16 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="ally-blade" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2EE6A0"/>
+      <stop offset="55%" stop-color="#00C888"/>
+      <stop offset="100%" stop-color="#00754F"/>
+    </linearGradient>
+  </defs>
+  <g stroke="url(#ally-blade)" stroke-width="6.2" stroke-linecap="round">
+    <path d="M17.87 18.86 C19.99 13.25 21.42 10.28 33.25 7.98" transform="rotate(0 24 24)"/>
+    <path d="M17.87 18.86 C19.99 13.25 21.42 10.28 33.25 7.98" transform="rotate(72 24 24)"/>
+    <path d="M17.87 18.86 C19.99 13.25 21.42 10.28 33.25 7.98" transform="rotate(144 24 24)"/>
+    <path d="M17.87 18.86 C19.99 13.25 21.42 10.28 33.25 7.98" transform="rotate(216 24 24)"/>
+    <path d="M17.87 18.86 C19.99 13.25 21.42 10.28 33.25 7.98" transform="rotate(288 24 24)"/>
+  </g>
+</svg>

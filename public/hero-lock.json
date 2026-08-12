@@ -1,0 +1,66 @@
+{
+  "positions": {
+    "hero-copy": { "left": "0%", "top": "34%" },
+    "q1": { "left": "58%", "top": "16%" },
+    "q2": { "left": "76%", "top": "38%" },
+    "q3": { "left": "62%", "top": "54%" },
+    "q4": { "left": "58%", "top": "58%" }
+  },
+  "content": {
+    "brand": "goxl ally",
+    "navCta": "Register for Early Access",
+    "lead": "Founders are expected\nto have answers.",
+    "ask": "But who helps them find the right ones?",
+    "q1": "Am I making the right decisions?",
+    "q2": "Who do I turn to when stuck?",
+    "q3": "Where is my growth stuck?",
+    "q4": "Where is my growth stuck?",
+    "q1Icon": "",
+    "q2Icon": "",
+    "q3Icon": "",
+    "q4Icon": ""
+  },
+  "visible": {
+    "q1": true,
+    "q2": true,
+    "q3": true,
+    "q4": false,
+    "ask": true,
+    "navCta": false
+  },
+  "type": {
+    "leadSize": 76,
+    "askSize": 30,
+    "leadWeight": 600,
+    "askWeight": 400,
+    "leadTracking": -3,
+    "askTracking": -1.2,
+    "leadColor": "#FFFFFF",
+    "askColor": "#2EE6A0",
+    "copyWidth": 520,
+    "copyAlign": "left"
+  },
+  "cards": {
+    "scale": 100,
+    "opacity": 62,
+    "radius": 8,
+    "blur": 10,
+    "pad": 10,
+    "fontSize": 12,
+    "width": 210
+  },
+  "photo": {
+    "x": 50,
+    "y": 28,
+    "zoom": 134,
+    "bright": 108,
+    "contrast": 92,
+    "saturate": 8
+  },
+  "atmosphere": {
+    "scrim": 92,
+    "vignette": 22,
+    "topDim": 42,
+    "bottomDim": 48
+  }
+}

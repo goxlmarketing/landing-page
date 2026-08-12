@@ -1,0 +1,16 @@
+node_modules
+.next
+out
+.env
+.env*.local
+.vercel
+.pnpm-store
+*.log
+.DS_Store
+Thumbs.db
+_studio-restore
+# local source images (canonical copies live in /public/assets)
+logo 1.jpeg
+logo 123.png
+this image.jpeg
+assests/
