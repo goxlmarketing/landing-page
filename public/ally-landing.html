@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
 <title>GoXL Ally — The Founder's Compass</title>
 <style>
   :root{
@@ -680,6 +680,24 @@
     border-color:var(--accent) !important;
   }
   a.cta{ display:inline-flex; text-decoration:none; }
+  .cta-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+  }
+  .cta-limit{
+    margin:0;
+    font-size:11px;
+    font-weight:500;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:rgba(232,242,238,0.52);
+  }
+  .clarity-actions .cta-wrap{
+    align-items:flex-start;
+    width:100%;
+  }
 
   .micro{
     color:var(--text-mute); font-size:14px; line-height:1.55;
@@ -1680,31 +1698,33 @@
       scroll-behavior:auto !important;
       overflow-x:hidden;
       overflow-y:auto;
-      overscroll-behavior-y:contain;
+      overscroll-behavior-y:auto;
       -webkit-overflow-scrolling:touch;
     }
     body{
       overflow-x:hidden;
       overflow-y:auto;
       -webkit-overflow-scrolling:touch;
+      -webkit-text-size-adjust:100%;
+      touch-action:pan-y;
     }
     .problem,
     .clarity-hero,
     .flow,
     .manifesto{
-      height:96svh !important;
-      min-height:96svh !important;
-      max-height:96svh !important;
+      height:100svh !important;
+      min-height:100svh !important;
+      max-height:100svh !important;
       overflow:hidden !important;
       scroll-snap-align:none !important;
       scroll-snap-stop:normal !important;
       margin:0 !important;
+      isolation:isolate;
     }
     .clarity-hero,
     .flow,
     .manifesto{
       padding:0 !important;
-      margin-top:-28px !important;
     }
     .reveal{
       transition:opacity .55s cubic-bezier(.2,.7,.3,1), transform .55s cubic-bezier(.2,.7,.3,1) !important;
@@ -1715,6 +1735,10 @@
     .float-q{
       touch-action:pan-y !important;
       animation:floatQPhone 5.5s ease-in-out infinite !important;
+      will-change:transform;
+      contain:layout paint;
+      backdrop-filter:blur(5px) !important;
+      -webkit-backdrop-filter:blur(5px) !important;
     }
     .problem.is-editing-floats .float-q{
       touch-action:none !important;
@@ -1768,6 +1792,7 @@
       min-height:48px;
       padding:13px 18px !important;
       font-size:14px !important;
+      touch-action:manipulation;
     }
 
     .float-qs{
@@ -1831,6 +1856,7 @@
       font-size:14px !important;
     }
     .clarity-actions{ margin-top:12px !important; align-items:center !important; }
+    .clarity-actions .cta-wrap{ align-items:center; }
     .clarity-actions .cta{
       min-height:48px;
       justify-content:center;
@@ -1842,6 +1868,13 @@
     .signup-form.open{ max-height:140px !important; }
     .signup-form input,
     .signup-form button{ min-height:44px; }
+    .signup-form button,
+    .flow .step,
+    .flow .pill,
+    .check-row{
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:transparent;
+    }
     .clarity-decide{ padding-top:12px !important; gap:6px !important; }
     .clarity-line{ font-size:clamp(20px, 6vw, 26px) !important; max-width:16ch !important; }
     .clarity-orb{
@@ -1960,6 +1993,21 @@
     }
   }
 
+  @media (max-width: 768px) and (hover:none),
+         (max-width: 768px) and (pointer:coarse){
+    .qcard:hover,
+    .fcard:hover,
+    .cta:hover,
+    .clarity-actions .cta-outline:hover{
+      transform:none !important;
+    }
+    .qcard:hover{
+      background:rgba(8,16,14,0.55);
+      border-color:rgba(120,220,190,0.22);
+      box-shadow:none;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -1981,10 +2029,13 @@
       <div class="hero-statement reveal">
         <h1 class="hero-lead">Founders are expected<br>to have answers.</h1>
         <p class="hero-ask">But who helps them find the right ones?</p>
-        <a class="cta cta-outline hero-cta" href="#early-access">
-          Register for Early Access
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-        </a>
+        <div class="cta-wrap">
+          <a class="cta cta-outline hero-cta" href="#early-access">
+            Register for Early Access
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <p class="cta-limit">Limited slots only</p>
+        </div>
       </div>
     </div>
   </div>
@@ -2044,10 +2095,13 @@
       <p class="clarity-micro">Ally turns your context into clarity, decisions and daily action.</p>
 
       <div class="clarity-actions">
-        <a class="cta cta-outline" href="#early-access" id="registerBtn">
-          Register for Early Access
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-        </a>
+        <div class="cta-wrap">
+          <a class="cta cta-outline" href="#early-access" id="registerBtn">
+            Register for Early Access
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <p class="cta-limit">Limited slots only</p>
+        </div>
         <form class="signup-form" id="signupForm">
           <input type="email" placeholder="you@yourcompany.com" required id="emailInput">
           <button type="submit">Join</button>
@@ -2175,55 +2229,6 @@
 
 <script>
 const isPhone = () => window.matchMedia('(max-width: 768px)').matches;
-
-/* ---------- phone: smooth snap between full screens ---------- */
-(function(){
-  if(!isPhone()) return;
-  const sel = '.problem, .clarity-hero, .flow, .manifesto';
-  let animating = false;
-  let timer = 0;
-
-  function sectionTops(){
-    return [...document.querySelectorAll(sel)].map(el => el.offsetTop);
-  }
-  function nearestTop(){
-    const y = window.scrollY || document.documentElement.scrollTop;
-    const tops = sectionTops();
-    let best = tops[0] || 0;
-    let bestD = Infinity;
-    for(const top of tops){
-      const d = Math.abs(top - y);
-      if(d < bestD){ bestD = d; best = top; }
-    }
-    return best;
-  }
-  function easeTo(target){
-    if(animating) return;
-    const start = window.scrollY || document.documentElement.scrollTop;
-    const dist = target - start;
-    if(Math.abs(dist) < 2) return;
-    animating = true;
-    const dur = Math.min(640, Math.max(420, Math.abs(dist) * 0.62));
-    const t0 = performance.now();
-    const ease = t => t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
-    function frame(now){
-      const p = Math.min(1, (now - t0) / dur);
-      window.scrollTo(0, start + dist * ease(p));
-      if(p < 1) requestAnimationFrame(frame);
-      else animating = false;
-    }
-    requestAnimationFrame(frame);
-  }
-  function settle(){
-    if(animating) return;
-    if(document.querySelector('.problem.is-editing-floats')) return;
-    clearTimeout(timer);
-    timer = setTimeout(() => easeTo(nearestTop()), 150);
-  }
-  window.addEventListener('scroll', settle, { passive: true });
-  window.addEventListener('touchend', settle, { passive: true });
-  window.addEventListener('touchcancel', settle, { passive: true });
-})();
 
 /* ---------- reveal on scroll ---------- */
 const revealEls = document.querySelectorAll('.reveal');
@@ -2536,7 +2541,13 @@ journeyCards.forEach((c,idx)=>{
     }catch(_){}
     applyPositions(activeDefaults());
   }
-  window.addEventListener('resize', ()=>{ loadPositions(); });
+  let lastPhoneMode = isPhoneView();
+  window.addEventListener('resize', ()=>{
+    const nextPhoneMode = isPhoneView();
+    if(nextPhoneMode === lastPhoneMode) return;
+    lastPhoneMode = nextPhoneMode;
+    loadPositions();
+  }, { passive:true });
 
   if(editMode && editBtn && saveBtn && resetBtn){
     function setEditing(on){
