@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>GoXL Ally — The Founder's Compass</title>
 <style>
   :root{
@@ -963,6 +963,7 @@
   }
   .final-brand__name{
     font-size:clamp(28px, 3vw, 40px) !important;
+    white-space:nowrap;
   }
   .final-brand__tag{
     display:block !important;
@@ -1670,6 +1671,287 @@
   }
 
 
+  /* =========================================================
+     PHONE ONLY — laptop / desktop layout is unchanged
+  ========================================================== */
+  @media (max-width: 768px){
+    html{
+      scroll-snap-type:y proximity !important;
+      scroll-behavior:auto !important;
+      overflow-x:hidden;
+      overflow-y:auto;
+      overscroll-behavior-y:contain;
+    }
+    body{
+      overflow-x:hidden;
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+    .problem,
+    .clarity-hero,
+    .flow,
+    .manifesto{
+      height:100dvh !important;
+      min-height:100dvh !important;
+      max-height:100dvh !important;
+      overflow:hidden !important;
+      scroll-snap-align:start !important;
+      scroll-snap-stop:normal !important;
+    }
+    .reveal{
+      transition:opacity .55s cubic-bezier(.2,.7,.3,1), transform .55s cubic-bezier(.2,.7,.3,1) !important;
+    }
+    .hero-statement.reveal{
+      opacity:1 !important;
+    }
+    .float-q{
+      touch-action:pan-y !important;
+      animation:floatQPhone 5.5s ease-in-out infinite !important;
+    }
+    .problem.is-editing-floats .float-q{
+      touch-action:none !important;
+      animation:none !important;
+    }
+    @keyframes floatQPhone{
+      0%,100%{ transform:translate3d(0,0,0); }
+      50%{ transform:translate3d(0,-5px,0); }
+    }
+
+    .top-brand{
+      top:max(14px, env(safe-area-inset-top)) !important;
+      left:max(14px, env(safe-area-inset-left)) !important;
+      font-size:15px !important;
+      gap:8px !important;
+    }
+    .top-brand img{ width:28px !important; height:28px !important; }
+
+    /* --- hero --- */
+    .problem{
+      background-position: center 12% !important;
+    }
+    .problem-inner{
+      width:100% !important;
+      min-height:100% !important;
+      padding:0 !important;
+      align-items:flex-end !important;
+    }
+    .figure-wrap{
+      min-height:0 !important;
+      height:100% !important;
+      justify-content:flex-end !important;
+      padding-bottom:max(18px, env(safe-area-inset-bottom)) !important;
+    }
+    .hero-statement{
+      transform:none !important;
+      max-width:100% !important;
+      padding:0 18px 4px !important;
+    }
+    .hero-lead{
+      font-size:clamp(26px, 7.4vw, 34px) !important;
+      line-height:1.12 !important;
+      margin:0 0 10px !important;
+    }
+    .hero-ask{
+      font-size:15px !important;
+      max-width:22ch !important;
+      margin:0 auto 16px !important;
+    }
+    .hero-cta{
+      min-height:48px;
+      padding:13px 18px !important;
+      font-size:14px !important;
+    }
+
+    .float-qs{
+      position:absolute !important;
+      inset:0 !important;
+      display:block !important;
+      height:auto !important;
+    }
+    .float-q{
+      position:absolute !important;
+      max-width:min(176px, 46vw) !important;
+      width:auto !important;
+      font-size:12px !important;
+      line-height:1.3 !important;
+      padding:10px 12px !important;
+      border-radius:12px !important;
+    }
+    .float-q--tl{ top:48.7%; left:2.2%; right:auto; }
+    .float-q--tr{ top:14.6%; left:2.2%; right:auto; }
+    .float-q--bl{ top:5.4%; left:51.7%; right:auto; }
+    .float-q--br{ top:55.2%; left:51.7%; right:auto; }
+    .float-q__label{
+      font-size:9px !important;
+      margin-bottom:4px !important;
+    }
+    .float-edit-bar{
+      top:max(52px, calc(env(safe-area-inset-top) + 40px)) !important;
+      right:max(10px, env(safe-area-inset-right)) !important;
+    }
+    .float-edit-bar button{
+      min-height:40px;
+      padding:10px 12px !important;
+      font-size:13px !important;
+    }
+    .problem.is-editing-floats .float-q{
+      touch-action:none;
+    }
+
+    /* --- clarity --- */
+    .clarity-stage{
+      width:min(100%, 92vw) !important;
+      gap:22px !important;
+      padding:max(12px, env(safe-area-inset-top)) 0 max(16px, env(safe-area-inset-bottom));
+    }
+    .clarity-title .ct-1,
+    .clarity-title .ct-3{ font-size:clamp(34px, 10vw, 46px) !important; }
+    .clarity-title .ct-2{ font-size:clamp(28px, 8.4vw, 38px) !important; }
+    .clarity-rail{
+      margin-top:18px !important;
+      gap:10px !important;
+      max-width:100% !important;
+      justify-content:center !important;
+    }
+    .clarity-rail .rail-item{
+      font-size:10px !important;
+      letter-spacing:0.1em !important;
+      padding:0 2px !important;
+    }
+    .clarity-micro{
+      margin-top:14px !important;
+      font-size:14px !important;
+    }
+    .clarity-actions{ margin-top:18px !important; align-items:center !important; }
+    .clarity-actions .cta{
+      min-height:48px;
+      justify-content:center;
+    }
+    .signup-form{
+      flex-direction:column;
+      max-width:100% !important;
+    }
+    .signup-form.open{ max-height:140px !important; }
+    .signup-form input,
+    .signup-form button{ min-height:44px; }
+    .clarity-decide{ padding-top:18px !important; gap:6px !important; }
+    .clarity-line{ font-size:clamp(20px, 6vw, 26px) !important; max-width:16ch !important; }
+    .clarity-orb{
+      width:min(220px, 58vw) !important;
+      height:min(220px, 58vw) !important;
+    }
+
+    /* --- product journey: one card at a time --- */
+    .flow{
+      overflow:hidden !important;
+    }
+    .flow-wrap{
+      grid-template-columns:1fr !important;
+      gap:16px !important;
+      width:min(100%, 92vw) !important;
+      padding:max(12px, env(safe-area-inset-top)) 0 max(16px, env(safe-area-inset-bottom)) !important;
+      align-content:center !important;
+    }
+    .flow-head{ text-align:center; }
+    .flow-head .big{
+      font-size:clamp(26px, 8vw, 36px) !important;
+    }
+    .flow-head .flow-sub{
+      margin-left:auto !important;
+      margin-right:auto !important;
+      margin-top:10px !important;
+      font-size:14px !important;
+    }
+    .flow .stepper{
+      margin:18px auto 0 !important;
+      max-width:100% !important;
+    }
+    .flow .step .dot{
+      width:32px !important;
+      height:32px !important;
+      font-size:13px !important;
+    }
+    .flow .step .lbl{ font-size:11px !important; }
+    .flow .cards4{
+      grid-template-columns:1fr !important;
+      gap:0 !important;
+    }
+    .flow .fcard{
+      display:none !important;
+      min-height:0 !important;
+      padding:20px 18px !important;
+      transform:none !important;
+    }
+    .flow .fcard.is-active{
+      display:flex !important;
+      opacity:1 !important;
+      transform:none !important;
+      box-shadow:0 18px 40px -24px rgba(47,227,172,0.3) !important;
+    }
+    .flow .fcard h3{ font-size:18px !important; }
+    .flow .pill{ padding:8px 12px; min-height:36px; }
+
+    /* --- final --- */
+    .manifesto{
+      padding:max(20px, env(safe-area-inset-top)) 20px max(64px, calc(env(safe-area-inset-bottom) + 48px)) !important;
+    }
+    .final-stack{ padding-bottom:88px !important; }
+    .final-horizon{
+      left:8% !important;
+      right:8% !important;
+      bottom:max(48px, calc(env(safe-area-inset-bottom) + 38px)) !important;
+      height:1px !important;
+      opacity:1 !important;
+      z-index:2 !important;
+      background:linear-gradient(90deg, transparent, rgba(232,242,238,0.28) 18%, rgba(47,227,172,0.85) 50%, rgba(232,242,238,0.28) 82%, transparent) !important;
+    }
+    .final-spark{
+      bottom:max(45px, calc(env(safe-area-inset-bottom) + 35px)) !important;
+      width:8px !important;
+      height:8px !important;
+      margin-left:-4px !important;
+      opacity:1 !important;
+      z-index:3 !important;
+      background:rgba(47,227,172,1) !important;
+      box-shadow:0 0 16px rgba(47,227,172,0.85), 0 0 28px rgba(47,227,172,0.4) !important;
+    }
+    .final-glow{
+      bottom:max(36px, calc(env(safe-area-inset-bottom) + 24px)) !important;
+      width:min(320px, 78vw) !important;
+      height:140px !important;
+      opacity:1 !important;
+      z-index:1 !important;
+    }
+    .manifesto h2 .line-noise{
+      font-size:clamp(26px, 7.6vw, 34px) !important;
+      white-space:normal !important;
+    }
+    .manifesto h2 .line-clarity{
+      font-size:clamp(24px, 7vw, 32px) !important;
+      white-space:normal !important;
+      margin-top:0.18em !important;
+    }
+    .final-brand{ margin-top:28px !important; }
+    .final-brand .brand-logo{
+      width:48px !important;
+      height:48px !important;
+    }
+    .final-brand__name{ font-size:24px !important; }
+    .final-journey{
+      margin-top:22px !important;
+      font-size:14px !important;
+      line-height:1.6 !important;
+      max-width:32ch !important;
+    }
+    .manifesto .foot-links{
+      bottom:max(12px, env(safe-area-inset-bottom)) !important;
+      font-size:12px !important;
+      gap:8px !important;
+      padding:0 12px !important;
+      opacity:0.7 !important;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -1681,8 +1963,8 @@
   <canvas id="network-canvas"></canvas>
 
   <a class="top-brand" href="#problem">
-    <img src="/assets/logo-123.png" alt="goxl ally" />
-    <span>goxl ally</span>
+    <img src="/assets/logo-123.png" alt="GoXL Ally" />
+    <span>GoXL Ally</span>
   </a>
 
   <div class="problem-inner">
@@ -1866,11 +2148,11 @@
     <div class="final-brand reveal">
       <img class="brand-logo" src="/assets/logo-123.png" alt="" />
       <div class="final-brand__text">
-        <span class="final-brand__name">ally</span>
+        <span class="final-brand__name">GoXL Ally</span>
         <span class="final-brand__tag">The Founder's Compass</span>
 </div>
     </div>
-        <p class="final-journey reveal">Your ideas. Your challenges. Your journey. Ally stands beside you—helping you find clarity, make better decisions, and move forward.</p>
+        <p class="final-journey reveal">Your ideas. Your challenges. Your journey. GoXL Ally stands beside you—helping you find clarity, make better decisions, and move forward.</p>
 </div>
 
     <nav class="foot-links reveal" aria-label="Legal">
@@ -1884,12 +2166,15 @@
 
 
 <script>
+const isPhone = () => window.matchMedia('(max-width: 768px)').matches;
+
 /* ---------- reveal on scroll ---------- */
 const revealEls = document.querySelectorAll('.reveal');
 const io = new IntersectionObserver((entries)=>{
   entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-},{ threshold:0.15 });
+}, isPhone() ? { threshold:0.06, rootMargin:'80px 0px' } : { threshold:0.15 });
 revealEls.forEach(el=>io.observe(el));
+document.querySelectorAll('#problem .reveal').forEach(el=> el.classList.add('in'));
 
 /* ---------- clarity section enter + rail cycle ---------- */
 (function(){
@@ -1910,7 +2195,7 @@ revealEls.forEach(el=>io.observe(el));
         }
       }
     });
-  }, { threshold:0.35 });
+  }, { threshold: isPhone() ? 0.18 : 0.35 });
   cio.observe(section);
 })();
 
@@ -1918,9 +2203,17 @@ revealEls.forEach(el=>io.observe(el));
 const canvas = document.getElementById('network-canvas');
 const ctx = canvas.getContext('2d');
 let W, H, points = [];
-const POINT_COUNT = 70;
-const MAX_DIST = 140;
+const POINT_COUNT = isPhone() ? 28 : 70;
+const MAX_DIST = isPhone() ? 90 : 140;
 let mouse = { x:-9999, y:-9999 };
+let heroVisible = true;
+const heroSection = document.getElementById('problem');
+if(heroSection){
+  const heroIo = new IntersectionObserver((entries)=>{
+    heroVisible = entries.some(e=>e.isIntersecting);
+  }, { threshold:0.05 });
+  heroIo.observe(heroSection);
+}
 
 function resize(){
   const problem = document.getElementById('problem');
@@ -1940,6 +2233,10 @@ function initPoints(){
   }
 }
 function step(){
+  if(!heroVisible){
+    requestAnimationFrame(step);
+    return;
+  }
   ctx.clearRect(0,0,W,H);
   for(const p of points){
     p.x += p.vx; p.y += p.vy;
@@ -2106,18 +2403,34 @@ journeyCards.forEach((c,idx)=>{
   const resetBtn = document.getElementById('floatResetBtn');
   if(!section || !cards.length) return;
 
+  const phoneMq = window.matchMedia('(max-width: 768px)');
+  const isPhoneView = () => phoneMq.matches;
   const STORAGE_KEY = 'ally-float-q-positions';
+  const STORAGE_KEY_PHONE = 'ally-float-q-positions-phone';
   const defaults = {
     tl: { top: 8.8, left: 24.7 },
     bl: { top: 39.5, left: 17.2 },
     tr: { top: 5.2, left: 61.4 },
     br: { top: 37.4, left: 70.8 },
   };
+  const phoneDefaults = {
+    tl: { top: 48.7, left: 2.2 },
+    tr: { top: 14.6, left: 2.2 },
+    bl: { top: 5.4, left: 51.7 },
+    br: { top: 55.2, left: 51.7 },
+  };
   const editMode = new URLSearchParams(location.search).has('edit');
   if(editMode) document.body.classList.add('is-float-edit');
 
   let editing = false;
   let drag = null;
+
+  function activeDefaults(){
+    return isPhoneView() ? phoneDefaults : defaults;
+  }
+  function activeStorageKey(){
+    return isPhoneView() ? STORAGE_KEY_PHONE : STORAGE_KEY;
+  }
 
   function applyPositions(map){
     cards.forEach(card=>{
@@ -2148,22 +2461,25 @@ journeyCards.forEach((c,idx)=>{
   }
 
   async function loadPositions(){
+    const phone = isPhoneView();
     try{
       const res = await fetch('/float-q-lock.json', { cache: 'no-store' });
       if(res.ok){
         const data = await res.json();
-        if(data && data.positions){
-          applyPositions(data.positions);
+        const locked = phone ? data.phonePositions : data.positions;
+        if(locked){
+          applyPositions(locked);
           return;
         }
       }
     }catch(_){}
     try{
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(activeStorageKey());
       if(raw){ applyPositions(JSON.parse(raw)); return; }
     }catch(_){}
-    applyPositions(defaults);
+    applyPositions(activeDefaults());
   }
+  window.addEventListener('resize', ()=>{ loadPositions(); });
 
   if(editMode && editBtn && saveBtn && resetBtn){
     function setEditing(on){
@@ -2175,19 +2491,23 @@ journeyCards.forEach((c,idx)=>{
     }
     editBtn.addEventListener('click', ()=> setEditing(!editing));
     resetBtn.addEventListener('click', ()=>{
-      applyPositions(defaults);
-      localStorage.removeItem(STORAGE_KEY);
+      applyPositions(activeDefaults());
+      localStorage.removeItem(activeStorageKey());
     });
     saveBtn.addEventListener('click', async ()=>{
       const positions = readPositions();
       applyPositions(positions);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(positions));
+      localStorage.setItem(activeStorageKey(), JSON.stringify(positions));
       saveBtn.textContent = 'Saving…';
       try{
         const res = await fetch('/api/float-q-lock', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ positions, savedAt: new Date().toISOString() }),
+          body: JSON.stringify({
+            positions,
+            viewport: isPhoneView() ? 'phone' : 'desktop',
+            savedAt: new Date().toISOString(),
+          }),
         });
         const data = await res.json();
         if(!res.ok || !data.ok) throw new Error(data.error || 'Save failed');
@@ -2235,11 +2555,12 @@ journeyCards.forEach((c,idx)=>{
       drag = null;
     }
     cards.forEach(card=>{
-      card.addEventListener('pointerdown', onPointerDown);
+      card.addEventListener('pointerdown', onPointerDown, { passive: false });
       card.addEventListener('pointermove', onPointerMove);
       card.addEventListener('pointerup', onPointerUp);
       card.addEventListener('pointercancel', onPointerUp);
     });
+    if(isPhoneView()) setEditing(true);
   }
 
   loadPositions();

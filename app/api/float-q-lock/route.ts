@@ -13,11 +13,11 @@ function assertDevWriteAllowed() {
   return null;
 }
 
-function isValidPositions(body: unknown): body is { positions: Record<string, { top: number; left: number }> } {
-  if (!body || typeof body !== "object") return false;
-  const positions = (body as { positions?: unknown }).positions;
-  if (!positions || typeof positions !== "object") return false;
-  return Object.values(positions).every((p) => {
+type PositionMap = Record<string, { top: number; left: number }>;
+
+function isValidPositions(value: unknown): value is PositionMap {
+  if (!value || typeof value !== "object") return false;
+  return Object.values(value).every((p) => {
     if (!p || typeof p !== "object") return false;
     const { top, left } = p as { top?: unknown; left?: unknown };
     return typeof top === "number" && typeof left === "number" && Number.isFinite(top) && Number.isFinite(left);
@@ -30,16 +30,33 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    if (!isValidPositions(body)) {
+    if (!body || typeof body !== "object" || !isValidPositions((body as { positions?: unknown }).positions)) {
       return Response.json({ ok: false, error: "Invalid positions payload" }, { status: 400 });
     }
+
+    let existing: Record<string, unknown> = {};
+    try {
+      existing = JSON.parse(await readFile(filePath(), "utf8")) as Record<string, unknown>;
+    } catch {
+      existing = {};
+    }
+
+    const isPhone = (body as { viewport?: unknown }).viewport === "phone";
+    const now = new Date().toISOString();
+    const incoming = (body as { positions: PositionMap }).positions;
     const safe = {
-      positions: body.positions,
-      savedAt: new Date().toISOString(),
+      positions: (isPhone && isValidPositions(existing.positions) ? existing.positions : incoming) as PositionMap,
+      phonePositions: (isPhone ? incoming : isValidPositions(existing.phonePositions) ? existing.phonePositions : undefined) as
+        | PositionMap
+        | undefined,
+      savedAt: isPhone && typeof existing.savedAt === "string" ? existing.savedAt : now,
+      phoneSavedAt: isPhone ? now : existing.phoneSavedAt,
       baked: true,
     };
+    if (!safe.phonePositions) delete safe.phonePositions;
+
     await writeFile(filePath(), JSON.stringify(safe, null, 2), "utf8");
-    return Response.json({ ok: true, path: "/float-q-lock.json" });
+    return Response.json({ ok: true, path: "/float-q-lock.json", viewport: isPhone ? "phone" : "desktop" });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to save";
     return Response.json({ ok: false, error: message }, { status: 500 });

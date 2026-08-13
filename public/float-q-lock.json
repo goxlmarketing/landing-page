@@ -1,10 +1,41 @@
 {
   "positions": {
-    "tl": { "top": 8.8, "left": 24.7 },
-    "bl": { "top": 39.5, "left": 17.2 },
-    "tr": { "top": 5.2, "left": 61.4 },
-    "br": { "top": 37.4, "left": 70.8 }
+    "tl": {
+      "top": 8.8,
+      "left": 24.7
+    },
+    "bl": {
+      "top": 39.5,
+      "left": 17.2
+    },
+    "tr": {
+      "top": 5.2,
+      "left": 61.4
+    },
+    "br": {
+      "top": 37.4,
+      "left": 70.8
+    }
+  },
+  "phonePositions": {
+    "tl": {
+      "top": 48.7,
+      "left": 2.2
+    },
+    "bl": {
+      "top": 5.4,
+      "left": 51.7
+    },
+    "tr": {
+      "top": 14.6,
+      "left": 2.2
+    },
+    "br": {
+      "top": 55.2,
+      "left": 51.7
+    }
   },
   "savedAt": "2026-08-12T22:14:23.599Z",
+  "phoneSavedAt": "2026-08-13T13:00:06.556Z",
   "baked": true
 }
