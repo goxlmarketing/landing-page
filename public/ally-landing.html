@@ -688,11 +688,33 @@
   }
   .cta-limit{
     margin:0;
-    font-size:11px;
-    font-weight:500;
-    letter-spacing:0.16em;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:6px 10px;
+    border:1px solid rgba(47,227,172,0.24);
+    border-radius:999px;
+    background:rgba(47,227,172,0.07);
+    box-shadow:0 0 22px rgba(47,227,172,0.08);
+    font-size:10.5px;
+    font-weight:650;
+    letter-spacing:0.14em;
     text-transform:uppercase;
-    color:rgba(232,242,238,0.52);
+    color:rgba(127,252,209,0.9);
+  }
+  .cta-limit::before{
+    content:'';
+    width:5px;
+    height:5px;
+    flex:0 0 auto;
+    border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 9px rgba(47,227,172,0.85);
+    animation:slotPulse 2.2s ease-in-out infinite;
+  }
+  @keyframes slotPulse{
+    0%,100%{ opacity:.55; transform:scale(.85); }
+    50%{ opacity:1; transform:scale(1.15); }
   }
   .clarity-actions .cta-wrap{
     align-items:flex-start;
@@ -1632,6 +1654,34 @@
     color:rgba(238,244,241,0.96);
     font-weight:600;
   }
+  .clarity-decision-copy{
+    margin:6px 0 0;
+    max-width:32ch;
+    color:rgba(232,242,238,0.55);
+    font-size:15px;
+    line-height:1.6;
+  }
+  .decision-path{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+    margin-top:10px;
+  }
+  .decision-path span{
+    display:inline-flex;
+    align-items:center;
+    min-height:32px;
+    padding:7px 10px;
+    border:1px solid rgba(47,227,172,0.18);
+    border-radius:999px;
+    background:rgba(47,227,172,0.055);
+    color:rgba(127,252,209,0.82);
+    font-family:var(--font-mono);
+    font-size:10px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+  }
 
   .clarity-hero.is-in .clarity-micro,
   .clarity-hero.is-in .clarity-decide,
@@ -1877,6 +1927,23 @@
     }
     .clarity-decide{ padding-top:12px !important; gap:6px !important; }
     .clarity-line{ font-size:clamp(20px, 6vw, 26px) !important; max-width:16ch !important; }
+    .clarity-decision-copy{
+      margin-top:6px !important;
+      max-width:29ch !important;
+      font-size:13px !important;
+      line-height:1.5 !important;
+      text-align:center;
+    }
+    .decision-path{
+      justify-content:center;
+      gap:6px;
+      margin-top:8px;
+    }
+    .decision-path span{
+      min-height:29px;
+      padding:6px 8px;
+      font-size:8.5px;
+    }
     .clarity-orb{
       width:min(220px, 58vw) !important;
       height:min(220px, 58vw) !important;
@@ -2114,6 +2181,12 @@
       <div class="clarity-decide">
         <p class="clarity-line">Ally doesn't just answer.</p>
         <p class="clarity-line clarity-line--strong">Ally helps you decide.</p>
+        <p class="clarity-decision-copy">See the trade-offs, choose what matters, and move forward with confidence.</p>
+        <div class="decision-path" aria-label="How Ally helps you decide">
+          <span>See clearly</span>
+          <span>Choose confidently</span>
+          <span>Move forward</span>
+        </div>
       </div>
     </div>
   </div>
