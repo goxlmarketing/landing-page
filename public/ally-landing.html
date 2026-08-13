@@ -1676,11 +1676,12 @@
   ========================================================== */
   @media (max-width: 768px){
     html{
-      scroll-snap-type:y proximity !important;
+      scroll-snap-type:none !important;
       scroll-behavior:auto !important;
       overflow-x:hidden;
       overflow-y:auto;
       overscroll-behavior-y:contain;
+      -webkit-overflow-scrolling:touch;
     }
     body{
       overflow-x:hidden;
@@ -1691,12 +1692,19 @@
     .clarity-hero,
     .flow,
     .manifesto{
-      height:100dvh !important;
-      min-height:100dvh !important;
-      max-height:100dvh !important;
+      height:96svh !important;
+      min-height:96svh !important;
+      max-height:96svh !important;
       overflow:hidden !important;
-      scroll-snap-align:start !important;
+      scroll-snap-align:none !important;
       scroll-snap-stop:normal !important;
+      margin:0 !important;
+    }
+    .clarity-hero,
+    .flow,
+    .manifesto{
+      padding:0 !important;
+      margin-top:-28px !important;
     }
     .reveal{
       transition:opacity .55s cubic-bezier(.2,.7,.3,1), transform .55s cubic-bezier(.2,.7,.3,1) !important;
@@ -1801,14 +1809,14 @@
     /* --- clarity --- */
     .clarity-stage{
       width:min(100%, 92vw) !important;
-      gap:22px !important;
-      padding:max(12px, env(safe-area-inset-top)) 0 max(16px, env(safe-area-inset-bottom));
+      gap:14px !important;
+      padding:8px 0 10px;
     }
     .clarity-title .ct-1,
     .clarity-title .ct-3{ font-size:clamp(34px, 10vw, 46px) !important; }
     .clarity-title .ct-2{ font-size:clamp(28px, 8.4vw, 38px) !important; }
     .clarity-rail{
-      margin-top:18px !important;
+      margin-top:12px !important;
       gap:10px !important;
       max-width:100% !important;
       justify-content:center !important;
@@ -1819,10 +1827,10 @@
       padding:0 2px !important;
     }
     .clarity-micro{
-      margin-top:14px !important;
+      margin-top:10px !important;
       font-size:14px !important;
     }
-    .clarity-actions{ margin-top:18px !important; align-items:center !important; }
+    .clarity-actions{ margin-top:12px !important; align-items:center !important; }
     .clarity-actions .cta{
       min-height:48px;
       justify-content:center;
@@ -1834,7 +1842,7 @@
     .signup-form.open{ max-height:140px !important; }
     .signup-form input,
     .signup-form button{ min-height:44px; }
-    .clarity-decide{ padding-top:18px !important; gap:6px !important; }
+    .clarity-decide{ padding-top:12px !important; gap:6px !important; }
     .clarity-line{ font-size:clamp(20px, 6vw, 26px) !important; max-width:16ch !important; }
     .clarity-orb{
       width:min(220px, 58vw) !important;
@@ -1847,9 +1855,9 @@
     }
     .flow-wrap{
       grid-template-columns:1fr !important;
-      gap:16px !important;
+      gap:10px !important;
       width:min(100%, 92vw) !important;
-      padding:max(12px, env(safe-area-inset-top)) 0 max(16px, env(safe-area-inset-bottom)) !important;
+      padding:8px 0 10px !important;
       align-content:center !important;
     }
     .flow-head{ text-align:center; }
@@ -1863,7 +1871,7 @@
       font-size:14px !important;
     }
     .flow .stepper{
-      margin:18px auto 0 !important;
+      margin:12px auto 0 !important;
       max-width:100% !important;
     }
     .flow .step .dot{
@@ -1893,9 +1901,9 @@
 
     /* --- final --- */
     .manifesto{
-      padding:max(20px, env(safe-area-inset-top)) 20px max(64px, calc(env(safe-area-inset-bottom) + 48px)) !important;
+      padding:12px 20px 56px !important;
     }
-    .final-stack{ padding-bottom:88px !important; }
+    .final-stack{ padding-bottom:64px !important; }
     .final-horizon{
       left:8% !important;
       right:8% !important;
@@ -1931,14 +1939,14 @@
       white-space:normal !important;
       margin-top:0.18em !important;
     }
-    .final-brand{ margin-top:28px !important; }
+    .final-brand{ margin-top:18px !important; }
     .final-brand .brand-logo{
       width:48px !important;
       height:48px !important;
     }
     .final-brand__name{ font-size:24px !important; }
     .final-journey{
-      margin-top:22px !important;
+      margin-top:14px !important;
       font-size:14px !important;
       line-height:1.6 !important;
       max-width:32ch !important;
@@ -2167,6 +2175,55 @@
 
 <script>
 const isPhone = () => window.matchMedia('(max-width: 768px)').matches;
+
+/* ---------- phone: smooth snap between full screens ---------- */
+(function(){
+  if(!isPhone()) return;
+  const sel = '.problem, .clarity-hero, .flow, .manifesto';
+  let animating = false;
+  let timer = 0;
+
+  function sectionTops(){
+    return [...document.querySelectorAll(sel)].map(el => el.offsetTop);
+  }
+  function nearestTop(){
+    const y = window.scrollY || document.documentElement.scrollTop;
+    const tops = sectionTops();
+    let best = tops[0] || 0;
+    let bestD = Infinity;
+    for(const top of tops){
+      const d = Math.abs(top - y);
+      if(d < bestD){ bestD = d; best = top; }
+    }
+    return best;
+  }
+  function easeTo(target){
+    if(animating) return;
+    const start = window.scrollY || document.documentElement.scrollTop;
+    const dist = target - start;
+    if(Math.abs(dist) < 2) return;
+    animating = true;
+    const dur = Math.min(640, Math.max(420, Math.abs(dist) * 0.62));
+    const t0 = performance.now();
+    const ease = t => t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+    function frame(now){
+      const p = Math.min(1, (now - t0) / dur);
+      window.scrollTo(0, start + dist * ease(p));
+      if(p < 1) requestAnimationFrame(frame);
+      else animating = false;
+    }
+    requestAnimationFrame(frame);
+  }
+  function settle(){
+    if(animating) return;
+    if(document.querySelector('.problem.is-editing-floats')) return;
+    clearTimeout(timer);
+    timer = setTimeout(() => easeTo(nearestTop()), 150);
+  }
+  window.addEventListener('scroll', settle, { passive: true });
+  window.addEventListener('touchend', settle, { passive: true });
+  window.addEventListener('touchcancel', settle, { passive: true });
+})();
 
 /* ---------- reveal on scroll ---------- */
 const revealEls = document.querySelectorAll('.reveal');
