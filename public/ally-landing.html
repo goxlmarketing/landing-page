@@ -547,6 +547,7 @@
   body{ scrollbar-width:none; -ms-overflow-style:none; }
 
   .problem,
+  .dimensions,
   .clarity-hero,
   .flow,
   .manifesto{
@@ -560,6 +561,7 @@
     scroll-snap-stop:always;
     box-sizing:border-box;
   }
+  .dimensions,
   .clarity-hero,
   .flow{
     display:flex;
@@ -627,6 +629,7 @@
   body{ scrollbar-width:none; -ms-overflow-style:none; }
 
   .problem,
+  .dimensions,
   .clarity-hero,
   .flow,
   .manifesto{
@@ -640,6 +643,7 @@
     scroll-snap-stop:always;
     box-sizing:border-box;
   }
+  .dimensions,
   .clarity-hero,
   .flow{
     display:flex;
@@ -1654,13 +1658,6 @@
     color:rgba(238,244,241,0.96);
     font-weight:600;
   }
-  .clarity-decision-copy{
-    margin:6px 0 0;
-    max-width:32ch;
-    color:rgba(232,242,238,0.55);
-    font-size:15px;
-    line-height:1.6;
-  }
   .decision-path{
     display:flex;
     flex-wrap:wrap;
@@ -1736,8 +1733,213 @@
     .clarity-micro, .clarity-decide, .clarity-actions, .clarity-rail{
       opacity:1 !important; transform:none !important; transition:none !important;
     }
+    .dim-orb{ animation:none !important; }
+    .dim-lead span,
+    .dim-title span,
+    .dim-pair,
+    .dim-close{
+      opacity:1 !important; transform:none !important; transition:none !important;
+    }
   }
 
+
+  /* =========================================================
+     SECTION — TWO THINGS AT ONCE
+  ========================================================== */
+  .dimensions{
+    position:relative;
+    padding:0;
+    overflow:hidden;
+    background:
+      radial-gradient(ellipse 48% 55% at 18% 50%, rgba(14,48,38,0.42), transparent 70%),
+      radial-gradient(ellipse 42% 50% at 84% 48%, rgba(11,40,32,0.32), transparent 72%),
+      linear-gradient(180deg, #020504 0%, #03100c 48%, #020806 100%);
+  }
+  .dim-atm{ position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+  .dim-orb{
+    position:absolute;
+    width:min(460px, 46vw);
+    height:min(460px, 46vw);
+    filter:blur(10px);
+    animation:dimBreath 9s ease-in-out infinite;
+  }
+  .dim-orb--self{
+    left:8%; top:42%;
+    transform:translate(-20%, -50%);
+    background:radial-gradient(circle, rgba(47,227,172,0.16), transparent 70%);
+  }
+  .dim-orb--biz{
+    right:6%; top:52%;
+    transform:translate(10%, -50%);
+    background:radial-gradient(circle, rgba(47,227,172,0.1), transparent 70%);
+    animation-delay:-4s;
+  }
+  @keyframes dimBreath{
+    0%,100%{ opacity:0.55; }
+    50%{ opacity:0.9; }
+  }
+
+  .dim-stage{
+    position:relative;
+    z-index:2;
+    width:min(1280px, 92vw);
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:minmax(0, 0.92fr) minmax(0, 1.28fr);
+    grid-template-areas:"copy title";
+    gap:clamp(36px, 7vw, 100px);
+    align-items:center;
+    text-align:left;
+  }
+  .dim-left{
+    grid-area:copy;
+    justify-self:start;
+    max-width:460px;
+    width:100%;
+  }
+  .dim-lead{
+    grid-area:title;
+    margin:0;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:0.02em;
+    justify-self:end;
+    width:100%;
+    max-width:640px;
+  }
+  .dim-lead span{
+    display:block;
+    font-family:var(--font-display);
+    font-weight:600;
+    letter-spacing:-0.045em;
+    line-height:0.98;
+    color:#fff;
+    opacity:0;
+    transform:translateY(22px);
+    transition:opacity .9s cubic-bezier(.2,.7,.3,1), transform .9s cubic-bezier(.2,.7,.3,1);
+  }
+  .dim-lead .dl-1{
+    font-size:clamp(48px, 6.4vw, 92px);
+    font-weight:500;
+    color:rgba(238,244,241,0.78);
+  }
+  .dim-lead .dl-2{
+    font-size:clamp(52px, 7vw, 96px);
+  }
+  .dim-lead .dl-2 em{
+    font-style:italic;
+    font-weight:500;
+    color:var(--accent);
+  }
+  .dimensions.is-in .dl-1{ opacity:1; transform:none; transition-delay:.06s; }
+  .dimensions.is-in .dl-2{ opacity:1; transform:none; transition-delay:.2s; }
+
+  .dim-title{
+    margin:0;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:0.06em;
+  }
+  .dim-title span{
+    display:block;
+    font-family:var(--font-display);
+    font-weight:600;
+    letter-spacing:-0.03em;
+    line-height:1.12;
+    color:#fff;
+    opacity:0;
+    transform:translateY(22px);
+    transition:opacity .9s cubic-bezier(.2,.7,.3,1), transform .9s cubic-bezier(.2,.7,.3,1);
+  }
+  .dim-title .dt-1{
+    font-size:clamp(26px, 2.8vw, 38px);
+    font-weight:500;
+    color:rgba(232,242,238,0.55);
+  }
+  .dim-title .dt-2{
+    font-size:clamp(26px, 2.8vw, 38px);
+    color:rgba(238,244,241,0.96);
+    font-weight:600;
+  }
+  .dim-title .dt-2 em{
+    font-style:italic;
+    font-weight:500;
+    color:var(--accent);
+  }
+  .dimensions.is-in .dt-1{ opacity:1; transform:none; transition-delay:.12s; }
+  .dimensions.is-in .dt-2{ opacity:1; transform:none; transition-delay:.22s; }
+
+  .dim-pair{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    width:100%;
+    margin-top:22px;
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity .85s ease .38s, transform .85s ease .38s;
+  }
+  .dimensions.is-in .dim-pair{ opacity:1; transform:none; }
+
+  .dim-pole{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    min-height:64px;
+    padding:16px 20px;
+    border:1px solid rgba(120,220,190,0.22);
+    border-radius:14px;
+    background:rgba(8,16,14,0.45);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+  }
+  .dim-pole p{
+    margin:0;
+    font-family:var(--font-display);
+    font-size:clamp(20px, 2.2vw, 28px);
+    font-weight:600;
+    letter-spacing:-0.03em;
+    color:rgba(238,244,241,0.96);
+  }
+
+  .dim-close{
+    margin:20px 0 0;
+    max-width:32ch;
+    font-family:var(--font-display);
+    font-size:clamp(15px, 1.3vw, 18px);
+    font-weight:400;
+    font-style:normal;
+    letter-spacing:-0.01em;
+    line-height:1.5;
+    color:rgba(232,242,238,0.55);
+    opacity:0;
+    transform:translateY(14px);
+    transition:opacity .85s ease .55s, transform .85s ease .55s;
+  }
+  .dimensions.is-in .dim-close{ opacity:1; transform:none; }
+
+  @media (max-width:900px){
+    .dim-stage{
+      grid-template-columns:1fr;
+      grid-template-areas:"title" "copy";
+      gap:28px;
+      text-align:center;
+    }
+    .dim-left,
+    .dim-lead{
+      justify-self:center;
+      text-align:center;
+      max-width:560px;
+    }
+    .dim-lead,
+    .dim-title{ align-items:center; }
+    .dim-pole{ justify-content:center; }
+    .dim-close{ margin-left:auto; margin-right:auto; }
+    .dim-lead .dl-1{ font-size:clamp(40px, 10vw, 64px); }
+    .dim-lead .dl-2{ font-size:clamp(44px, 11vw, 68px); }
+  }
 
   /* =========================================================
      PHONE ONLY — laptop / desktop layout is unchanged
@@ -1759,6 +1961,7 @@
       touch-action:pan-y;
     }
     .problem,
+    .dimensions,
     .clarity-hero,
     .flow,
     .manifesto{
@@ -1771,6 +1974,7 @@
       margin:0 !important;
       isolation:isolate;
     }
+    .dimensions,
     .clarity-hero,
     .flow,
     .manifesto{
@@ -1881,6 +2085,45 @@
       touch-action:none;
     }
 
+    /* --- two things --- */
+    .dim-stage{
+      width:min(100%, 92vw) !important;
+      gap:16px !important;
+      grid-template-columns:1fr !important;
+      grid-template-areas:"title" "copy" !important;
+      text-align:center !important;
+    }
+    .dim-left,
+    .dim-lead{
+      justify-self:center !important;
+      max-width:560px !important;
+    }
+    .dim-lead,
+    .dim-title{ align-items:center !important; }
+    .dim-lead .dl-1{ font-size:clamp(28px, 8vw, 38px) !important; }
+    .dim-lead .dl-2{ font-size:clamp(30px, 8.8vw, 42px) !important; }
+    .dim-title .dt-1,
+    .dim-title .dt-2{ font-size:clamp(18px, 5.2vw, 24px) !important; }
+    .dim-pair{
+      margin-top:12px !important;
+      gap:8px !important;
+    }
+    .dim-pole{
+      min-height:52px;
+      padding:12px 16px;
+      justify-content:center;
+    }
+    .dim-pole p{ font-size:clamp(18px, 5vw, 22px) !important; }
+    .dim-close{
+      margin-top:12px !important;
+      font-size:clamp(13px, 3.6vw, 16px) !important;
+      max-width:28ch;
+    }
+    .dim-orb{
+      width:min(240px, 64vw) !important;
+      height:min(240px, 64vw) !important;
+    }
+
     /* --- clarity --- */
     .clarity-stage{
       width:min(100%, 92vw) !important;
@@ -1927,13 +2170,6 @@
     }
     .clarity-decide{ padding-top:12px !important; gap:6px !important; }
     .clarity-line{ font-size:clamp(20px, 6vw, 26px) !important; max-width:16ch !important; }
-    .clarity-decision-copy{
-      margin-top:6px !important;
-      max-width:29ch !important;
-      font-size:13px !important;
-      line-height:1.5 !important;
-      text-align:center;
-    }
     .decision-path{
       justify-content:center;
       gap:6px;
@@ -2116,23 +2352,54 @@
 
   <aside class="float-qs" aria-label="Founder questions">
     <p class="float-q float-q--tl" data-fq="tl">
-      <span class="float-q__label">Personal</span>
-      Am I making the right decisions?
+      <span class="float-q__label">Founder</span>
+      Why am I stuck?
     </p>
     <p class="float-q float-q--bl" data-fq="bl">
-      <span class="float-q__label">Personal</span>
-      Who do I turn to when stuck?
+      <span class="float-q__label">Founder</span>
+      What am I avoiding?
     </p>
     <p class="float-q float-q--tr" data-fq="tr">
       <span class="float-q__label">Business</span>
-      How do I improve cash flow?
+      Where is cash leaking?
     </p>
     <p class="float-q float-q--br" data-fq="br">
       <span class="float-q__label">Business</span>
-      Where is my growth stuck?
+      What's blocking growth?
     </p>
   </aside>
 
+</section>
+
+<!-- =========================================================
+     SECTION — TWO THINGS AT ONCE
+========================================================== -->
+<section class="dimensions" id="dimensions">
+  <div class="dim-atm" aria-hidden="true">
+    <div class="dim-orb dim-orb--self"></div>
+    <div class="dim-orb dim-orb--biz"></div>
+  </div>
+  <div class="dim-stage">
+    <div class="dim-left">
+      <p class="dim-title">
+        <span class="dt dt-1">You are building</span>
+        <span class="dt dt-2"><em>two things</em> at once</span>
+      </p>
+      <div class="dim-pair">
+        <div class="dim-pole">
+          <p>Your self</p>
+        </div>
+        <div class="dim-pole">
+          <p>Your business</p>
+        </div>
+      </div>
+      <p class="dim-close">You struggle to know what matters. Ally helps you to decide better.</p>
+    </div>
+    <h2 class="dim-lead">
+      <span class="dl-1">Entrepreneurship is</span>
+      <span class="dl-2"><em>multidimensional.</em></span>
+    </h2>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -2181,7 +2448,6 @@
       <div class="clarity-decide">
         <p class="clarity-line">Ally doesn't just answer.</p>
         <p class="clarity-line clarity-line--strong">Ally helps you decide.</p>
-        <p class="clarity-decision-copy">See the trade-offs, choose what matters, and move forward with confidence.</p>
         <div class="decision-path" aria-label="How Ally helps you decide">
           <span>See clearly</span>
           <span>Choose confidently</span>
@@ -2310,6 +2576,16 @@ const io = new IntersectionObserver((entries)=>{
 }, isPhone() ? { threshold:0.06, rootMargin:'80px 0px' } : { threshold:0.15 });
 revealEls.forEach(el=>io.observe(el));
 document.querySelectorAll('#problem .reveal').forEach(el=> el.classList.add('in'));
+
+/* ---------- two-things section enter ---------- */
+(function(){
+  const section = document.getElementById('dimensions');
+  if(!section) return;
+  const dio = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting) section.classList.add('is-in'); });
+  }, { threshold: isPhone() ? 0.18 : 0.35 });
+  dio.observe(section);
+})();
 
 /* ---------- clarity section enter + rail cycle ---------- */
 (function(){
