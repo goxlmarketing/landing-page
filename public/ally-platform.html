@@ -111,6 +111,14 @@ body.guided .tb-back{display:none!important}
 .btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
 .btn-primary{background:var(--forest);color:#fff;box-shadow:0 8px 22px -8px rgba(14,42,28,.5)}
 .btn-primary:hover{background:var(--forest-2);transform:translateY(-2px)}
+.topbar .tb-right .btn-primary{
+  font-size:12px;font-weight:600;padding:6px 11px;gap:5px;border-radius:10px;min-height:32px;
+  box-shadow:0 4px 14px -6px rgba(14,42,28,.45);
+  white-space:nowrap;flex-shrink:0;overflow:hidden;
+}
+.topbar .tb-right .btn-primary svg{width:14px;height:14px}
+.topbar .tb-icon{width:32px;height:32px;border-radius:9px}
+.topbar .tb-icon svg{width:15px;height:15px}
 .btn-em{background:var(--emerald);color:#06231a;box-shadow:0 10px 26px -8px rgba(16,185,129,.5)}
 .btn-em:hover{background:var(--emerald-bright);transform:translateY(-2px)}
 .btn-ghost{background:#fff;color:var(--forest);border:1px solid var(--bd)}
@@ -1843,7 +1851,9 @@ img,svg,video,canvas{max-width:100%}
 @media(pointer:coarse){
   .nav-item{padding-top:12px;padding-bottom:12px}
   .btn{min-height:44px}
-  .ci-btn,.tb-icon{width:44px;height:44px}
+  .topbar .tb-right .btn{min-height:32px}
+  .ci-btn{width:44px;height:44px}
+  .tb-icon{width:32px;height:32px}
   .ps-chip,.sugg,.ac-pcard,.pm-opt,.nr-acts button,.pa-p{min-height:44px}
   .pg-act,.a-x,.a-rep,.ac-menu,.ac-hist-x,.pc-undo,.pally-x,.ps-x,.np-x,.notif-x{min-width:42px;min-height:42px}
 }
@@ -1867,8 +1877,11 @@ img,svg,video,canvas{max-width:100%}
   .topbar{padding:0 14px}
   .tb-title h1{font-size:18px}
   .tiles,.impact-grid,.wc-flow,.exp-cards,.scan,.fp-choices{grid-template-columns:1fr}
-  .tb-right .btn-primary{width:44px;padding:0;font-size:0;justify-content:center;gap:0}
-  .tb-right .btn-primary svg{margin:0}
+  .topbar .tb-right .btn-primary{
+    width:32px;height:32px;min-height:32px;padding:0;font-size:0;justify-content:center;gap:0;overflow:hidden;
+  }
+  .topbar .tb-right .btn-primary .tb-cta-lbl{display:none}
+  .topbar .tb-right .btn-primary svg{margin:0;width:14px;height:14px}
   .tb-back{width:38px;padding:0;justify-content:center;font-size:0;gap:0}
   .days{grid-template-columns:repeat(4,1fr)}
   .slots{grid-template-columns:repeat(2,1fr)}
@@ -1955,7 +1968,7 @@ img,svg,video,canvas{max-width:100%}
 .bill-note{font-size:12px;color:var(--muted-2);margin:12px 0 0}
 
 /* ---- plan cards ---- */
-.plans{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:30px 0 12px;align-items:stretch}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:30px 0 12px;align-items:stretch}
 .plan-card{position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid var(--bd);border-radius:20px;padding:24px 22px;box-shadow:var(--shadow-card);transition:transform .35s var(--secondary),box-shadow .35s,border-color .35s}
 .plan-card:hover{transform:translateY(-5px);box-shadow:0 24px 50px -22px rgba(6,20,13,.28);border-color:var(--bd-2)}
 .plan-card.popular{background:radial-gradient(130% 100% at 50% 0%,#164a32,var(--forest-deep) 60%,var(--forest-deep-2));border-color:transparent;box-shadow:0 30px 70px -26px rgba(6,32,20,.62);transform:translateY(-8px)}
@@ -2454,7 +2467,7 @@ img,svg,video,canvas{max-width:100%}
     </div>
     <nav class="sb-nav" id="sbNav" aria-label="Sections"></nav>
     <div class="nav-upsell" id="navUpsell">
-      <div class="nu-t">✦ <span id="navPlanLabel">Ally Free</span></div>
+      <div class="nu-t">✦ <span id="navPlanLabel">Ally</span></div>
       <div class="nu-s">Unlock deeper diagnosis, unlimited chat and Founder MRI.</div>
       <button class="nu-btn" type="button" data-bill="pricing"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg> Upgrade plan</button>
     </div>
@@ -2497,10 +2510,10 @@ img,svg,video,canvas{max-width:100%}
         <h1 id="tbTitle">Good morning, User</h1>
       </div>
       <div class="tb-right">
-        <button class="plan-badge tb-plan pb-free" id="tbPlan" type="button" data-bill="pricing" aria-label="Your plan"><span class="pb-dot"></span>Ally Free</button>
+        <button class="plan-badge tb-plan pb-free" id="tbPlan" type="button" data-bill="pricing" aria-label="Your plan"><span class="pb-dot"></span>Ally</button>
         <button class="tb-icon" type="button" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></button>
         <button class="tb-icon" id="notifBell" type="button" aria-label="Reminders from Ally" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="n-badge" id="notifBadge" hidden>0</span></button>
-        <button class="btn btn-primary" type="button" data-act="diagnosis"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> New diagnosis</button>
+        <button class="btn btn-primary" type="button" data-act="diagnosis"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span class="tb-cta-lbl">New diagnosis</span></button>
       </div>
     </header>
     <div class="j-rail" id="jRail" aria-hidden="true">
@@ -3785,8 +3798,14 @@ img,svg,video,canvas{max-width:100%}
   })();
 
   /* ---------------- reusable plan-aware UI helpers ---------------- */
+  function allyPlanName(p){
+    var nm=(p&&p.name)?p.name:(typeof p==='string'?p:'');
+    if(!nm||/^free$/i.test(nm)) return 'Ally';
+    return 'Ally '+nm;
+  }
+  function paidPlans(){ return Billing.PLANS.filter(function(p){ return p.id!=='free'; }); }
   function planBadge(planId, dark){ planId=planId||featureAccess.cur(); var p=Billing.plan(planId);
-    return '<span class="plan-badge pb-'+planId+(dark?' on-dark-badge':'')+'"><span class="pb-dot"></span>Ally '+acEsc(p.name)+'</span>'; }
+    return '<span class="plan-badge pb-'+planId+(dark?' on-dark-badge':'')+'"><span class="pb-dot"></span>'+acEsc(allyPlanName(p))+'</span>'; }
   function lockPreview(type){
     if(type==='bars') return '<div class="lcp-bars"><i style="height:40%"></i><i style="height:70%"></i><i style="height:55%"></i><i style="height:90%"></i><i style="height:65%"></i></div>';
     if(type==='ring') return '<div class="lcp-ring"></div>';
@@ -3822,7 +3841,7 @@ img,svg,video,canvas{max-width:100%}
     var renew = isFree?'Free forever':(s.cancelAtEnd?'Ends '+Billing.fmtDate(s.renewal):Billing.fmtDate(s.renewal));
     var meters=['aiChat','diagnosis','documentAnalysis'].map(usageMeterHTML).join('');
     el2.innerHTML='<div class="myplan">'+
-      '<div class="mp-top"><div><div class="mp-eye">Your plan</div><div class="mp-name">Ally '+acEsc(p.name)+'</div></div>'+planBadge(s.planId)+'</div>'+
+      '<div class="mp-top"><div><div class="mp-eye">Your plan</div><div class="mp-name">'+acEsc(allyPlanName(p))+'</div></div>'+planBadge(s.planId)+'</div>'+
       '<div class="mp-renew"><span class="k">'+(isFree?'Billing':(s.cancelAtEnd?'Access until':'Renews'))+'</span><span class="v">'+renew+'</span></div>'+
       '<div class="mp-meters">'+meters+'</div>'+
       '<div class="mp-acts">'+(isMax
@@ -3883,12 +3902,14 @@ img,svg,video,canvas{max-width:100%}
     return '<span class="cmp-val">'+acEsc(val)+'</span>';
   }
   function renderComparison(){
-    var heads='<tr><th class="cmp-ph"></th>'+Billing.PLANS.map(function(p){
-      return '<th class="cmp-ph'+(p.popular?' cmp-col-pop':'')+'"><div class="cmp-pn">'+acEsc(p.name)+'</div><div class="cmp-pp">'+(p.price===0?'Free':Billing.inr(p.price)+'/mo')+'</div></th>'; }).join('')+'</tr>';
+    var vis=paidPlans();
+    var heads='<tr><th class="cmp-ph"></th>'+vis.map(function(p){
+      return '<th class="cmp-ph'+(p.popular?' cmp-col-pop':'')+'"><div class="cmp-pn">'+acEsc(p.name)+'</div><div class="cmp-pp">'+Billing.inr(p.price)+'/mo</div></th>'; }).join('')+'</tr>';
     var body=Billing.GROUPS.map(function(grp){
-      var g='<tr class="cmp-grp"><td colspan="5">'+acEsc(grp.g)+'</td></tr>';
+      var g='<tr class="cmp-grp"><td colspan="'+(vis.length+1)+'">'+acEsc(grp.g)+'</td></tr>';
       return g+grp.rows.map(function(r){
         return '<tr><td class="cmp-ft">'+acEsc(r.k)+'</td>'+r.v.map(function(val,i){
+          if(!Billing.PLANS[i]||Billing.PLANS[i].id==='free') return '';
           return '<td'+(Billing.PLANS[i].popular?' class="cmp-col-pop"':'')+'>'+cmpCell(val,i)+'</td>'; }).join('')+'</tr>';
       }).join('');
     }).join('');
@@ -3908,7 +3929,7 @@ img,svg,video,canvas{max-width:100%}
         '</div>'+
         '<p class="bill-note" id="billNote">Yearly billing is on the way — you’re seeing monthly pricing.</p>'+
       '</div>'+
-      '<div class="plans">'+Billing.PLANS.map(pricingCard).join('')+'</div>'+
+      '<div class="plans">'+paidPlans().map(pricingCard).join('')+'</div>'+
       '<div class="pr-trust">'+
         '<span><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> 256-bit secure checkout</span>'+
         '<span><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0z"/><path d="M12 7v5l3 2"/></svg> Cancel anytime</span>'+
@@ -3968,7 +3989,7 @@ img,svg,video,canvas{max-width:100%}
         '<div class="co-card">'+
           '<div class="co-sec"><div class="co-sec-t">Your plan</div>'+
             '<div class="co-plan"><span class="co-plan-ic"><svg viewBox="0 0 24 24">'+p.ic+'</svg></span>'+
-              '<div><div class="co-plan-n">Ally '+acEsc(p.name)+'</div><div class="co-plan-s">'+acEsc(p.tagline)+'</div></div>'+
+              '<div><div class="co-plan-n">'+acEsc(allyPlanName(p))+'</div><div class="co-plan-s">'+acEsc(p.tagline)+'</div></div>'+
               '<button class="co-plan-edit" type="button" data-bill="pricing">Change</button></div>'+
             '<div class="co-cycle"><button class="co-cyc on" type="button"><b>Monthly</b><small>'+Billing.inr(p.price)+' / month</small></button>'+
               '<button class="co-cyc" type="button" data-bill="cycle" data-cycle="yearly"><b>Yearly</b><small>Coming soon · save 2 months</small></button></div>'+
@@ -3984,7 +4005,7 @@ img,svg,video,canvas{max-width:100%}
         '</div>'+
         '<div class="co-card co-sum"><div class="co-sec">'+
           '<div class="co-sec-t">Order summary</div>'+
-          '<div class="co-line"><span>Ally '+acEsc(p.name)+' · monthly</span><span class="v">'+Billing.inr(q.base)+'</span></div>'+
+          '<div class="co-line"><span>'+acEsc(allyPlanName(p))+' · monthly</span><span class="v">'+Billing.inr(q.base)+'</span></div>'+
           (q.discount>0?'<div class="co-line disc"><span>Discount ('+acEsc(coCouponCode)+')</span><span class="v">– '+Billing.inr(q.discount,true)+'</span></div>':'')+
           '<div class="co-line"><span>GST (18%)</span><span class="v">'+Billing.inr(q.gst,true)+'</span></div>'+
           '<div class="co-rule"></div>'+
@@ -4023,10 +4044,10 @@ img,svg,video,canvas{max-width:100%}
       '<div class="ps-ring"><svg viewBox="0 0 100 100"><circle class="rbg" cx="50" cy="50" r="45"/><circle class="rfg" cx="50" cy="50" r="45"/></svg>'+
         '<span class="ps-ck"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></div>'+
       '<div class="ps-eye">Payment successful</div>'+
-      '<h1>You’re on Ally '+acEsc(p.name)+'</h1>'+
+      '<h1>You’re on '+acEsc(allyPlanName(p))+'</h1>'+
       '<p class="ps-lede">Your subscription is active. Every '+acEsc(p.name)+' feature is unlocked across your workspace.</p>'+
       '<div class="ps-recap">'+
-        '<div class="psr"><span class="k">Plan</span><span class="v em">Ally '+acEsc(p.name)+'</span></div>'+
+        '<div class="psr"><span class="k">Plan</span><span class="v em">'+acEsc(allyPlanName(p))+'</span></div>'+
         '<div class="psr"><span class="k">Amount paid</span><span class="v">'+Billing.inr(order?order.total:p.price,true)+'</span></div>'+
         '<div class="psr"><span class="k">Renews on</span><span class="v">'+Billing.fmtDate(Billing.sub.renewal)+'</span></div>'+
         '<div class="psr"><span class="k">Transaction ID</span><span class="v">'+acEsc(txn.txnId)+'</span></div>'+
@@ -4063,10 +4084,10 @@ img,svg,video,canvas{max-width:100%}
       usageBlock+
       '<div class="up-compare">'+
         '<div class="up-cc cur"><div class="cc-l">Your plan</div><div class="cc-p">'+planBadge(cur).replace('plan-badge','plan-badge')+'</div><div class="cc-v">'+acEsc(featureValueFor(key,cur))+'</div></div>'+
-        '<div class="up-cc next"><div class="cc-l">'+acEsc(rp.name)+'</div><div class="cc-p"><span class="cc-arrow">→</span> Ally '+acEsc(rp.name)+'</div><div class="cc-v">'+acEsc(featureValueFor(key,recId))+'</div></div>'+
+        '<div class="up-cc next"><div class="cc-l">'+acEsc(rp.name)+'</div><div class="cc-p"><span class="cc-arrow">→</span> '+acEsc(allyPlanName(rp))+'</div><div class="cc-v">'+acEsc(featureValueFor(key,recId))+'</div></div>'+
       '</div>'+
       '<ul class="up-benefits">'+(m.benefits||[]).map(function(b){ return '<li><span class="bk">'+_ck+'</span><span>'+b+'</span></li>'; }).join('')+'</ul>'+
-      '<p class="up-rec">Recommended: <b>Ally '+acEsc(rp.name)+'</b> · '+Billing.inr(rp.price)+'/mo</p>'+
+      '<p class="up-rec">Recommended: <b>'+acEsc(allyPlanName(rp))+'</b> · '+Billing.inr(rp.price)+'/mo</p>'+
       '<div class="up-foot"><button class="btn btn-primary" type="button" data-bill="choose" data-plan="'+rp.id+'">Upgrade to '+acEsc(rp.name)+'</button>'+
         '<button class="up-cmp" type="button" data-bill="compare">Compare all plans</button></div>';
     openModal('up');
@@ -4092,7 +4113,7 @@ img,svg,video,canvas{max-width:100%}
     var history = s.invoices.length
       ? s.invoices.map(function(iv){ var ip=Billing.plan(iv.planId);
           return '<div class="bs-hrow"><span class="hr-ic"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>'+
-            '<div class="hr-main"><div class="hr-t">Ally '+acEsc(ip.name)+' · '+acEsc(iv.id)+'</div><div class="hr-s">'+Billing.fmtDate(iv.date)+' · '+acEsc(iv.status)+'</div></div>'+
+            '<div class="hr-main"><div class="hr-t">'+acEsc(allyPlanName(ip))+' · '+acEsc(iv.id)+'</div><div class="hr-s">'+Billing.fmtDate(iv.date)+' · '+acEsc(iv.status)+'</div></div>'+
             '<span class="hr-amt">'+Billing.inr(iv.amount,true)+'</span>'+
             '<button class="hr-dl" type="button" data-bill="invoice" data-inv="'+acEsc(iv.id)+'" aria-label="Download invoice"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg></button></div>';
         }).join('')
@@ -4100,7 +4121,7 @@ img,svg,video,canvas{max-width:100%}
     return '<div class="fp-sec stagger d5"><div class="fp-sec-head"><div><div class="fp-sec-t">Subscription &amp; billing</div><div class="fp-sec-d">Your plan, renewal and invoices.</div></div></div>'+
       '<div class="bs-card">'+
         '<div class="bs-plan"><span class="bs-plan-ic"><svg viewBox="0 0 24 24">'+p.ic+'</svg></span>'+
-          '<div class="bs-plan-main"><div class="bs-plan-n"><b>Ally '+acEsc(p.name)+'</b> '+billStatusChip()+'</div>'+
+          '<div class="bs-plan-main"><div class="bs-plan-n"><b>'+acEsc(allyPlanName(p))+'</b> '+billStatusChip()+'</div>'+
             '<div class="bs-plan-s">'+renewLine+'</div></div>'+
           '<div class="bs-price"><div class="p">'+(isFree?'₹0':Billing.inr(p.price))+'</div><div class="per">'+(isFree?'forever':'per month')+'</div></div></div>'+
         '<div class="bs-actions">'+actions+'</div>'+
@@ -4131,7 +4152,7 @@ img,svg,video,canvas{max-width:100%}
     var p=Billing.plan(iv.planId), base=p.price, gst=Math.round((iv.amount-iv.amount/1.18)*100)/100;
     var lines=['GoXL Ally','TAX INVOICE','','Invoice: '+iv.id,'Transaction: '+iv.txnId,'Date: '+Billing.fmtDate(iv.date),
       'Billed to: '+(founder.name||'Founder')+' <'+(founder.email||'')+'>','',
-      'Ally '+p.name+' — monthly subscription','Amount (incl. GST @18%): '+Billing.inr(iv.amount,true),'Status: '+iv.status,'',
+      allyPlanName(p)+' — monthly subscription','Amount (incl. GST @18%): '+Billing.inr(iv.amount,true),'Status: '+iv.status,'',
       'This is a system-generated mock invoice for preview purposes.'];
     try{ var blob=new Blob([lines.join('\n')],{type:'text/plain'}); var url=URL.createObjectURL(blob);
       var a=document.createElement('a'); a.href=url; a.download=iv.id+'.txt'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){URL.revokeObjectURL(url);},1000);
@@ -4142,13 +4163,13 @@ img,svg,video,canvas{max-width:100%}
       var pid=Billing.sub.planId, nm=Billing.plan(pid).name;
       /* sidebar upsell */
       var lbl=$('#navPlanLabel'), up=$('#navUpsell');
-      if(lbl) lbl.textContent='Ally '+nm;
+      if(lbl) lbl.textContent=allyPlanName(nm);
       if(up){ up.style.display = pid==='max' ? 'none' : '';
         var btn=up.querySelector('.nu-btn'), sub=up.querySelector('.nu-s');
         if(pid!=='free'){ if(btn) btn.lastChild.nodeValue=' Change plan'; if(sub) sub.textContent='Manage your plan, invoices and renewal.'; }
       }
       /* global topbar plan badge */
-      var tp=$('#tbPlan'); if(tp){ tp.className='plan-badge tb-plan pb-'+pid; tp.innerHTML='<span class="pb-dot"></span>Ally '+acEsc(nm); }
+      var tp=$('#tbPlan'); if(tp){ tp.className='plan-badge tb-plan pb-'+pid; tp.innerHTML='<span class="pb-dot"></span>'+acEsc(allyPlanName(nm)); }
       /* live dashboard surfaces, if built */
       if(inited['dashboard']){ if($('#tokenMeter')) renderMyPlan('#tokenMeter'); dashSyncLocks(); }
       if(inited['allychat']){ try{ acSyncRemain(); }catch(e){} }

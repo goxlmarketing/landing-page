@@ -1955,8 +1955,8 @@
   .dim-lead .dl-2 em{
     font-style:italic;
     font-weight:600;
-    color:var(--accent-2);
-    text-shadow:0 0 22px rgba(47,227,172,0.55), 0 0 48px rgba(47,227,172,0.28);
+    color:#fff;
+    text-shadow:none;
   }
   .dimensions.is-in .dl-1{ opacity:1; transform:none; transition-delay:.06s; }
   .dimensions.is-in .dl-2{ opacity:1; transform:none; transition-delay:.2s; }
@@ -2102,6 +2102,81 @@
     font-weight:500;
     color:var(--accent);
   }
+  .meet-head{
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    align-items:center;
+    width:100%;
+    flex:0 0 auto;
+    gap:10px;
+  }
+  .meet-head .meet-title{ grid-column:2; }
+  .meet-fs-btn{
+    grid-column:3;
+    justify-self:end;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    height:36px;
+    padding:0 12px 0 10px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,0.28);
+    background:rgba(8,16,12,0.72);
+    color:#fff;
+    font-family:var(--font-display);
+    font-size:12.5px;
+    font-weight:600;
+    letter-spacing:0.01em;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .meet-fs-btn svg{
+    width:15px; height:15px;
+    stroke:currentColor; fill:none; stroke-width:2;
+    stroke-linecap:round; stroke-linejoin:round;
+  }
+  .meet-fs-btn .meet-fs-collapse{ display:none; }
+  .meet-fs-btn:hover{
+    border-color:rgba(47,227,172,0.55);
+    color:var(--accent);
+  }
+  html.meet-fs,
+  html.meet-fs body{
+    overflow:hidden !important;
+  }
+  html.meet-fs .meet-ally{
+    z-index:4000;
+    padding:0 !important;
+    height:100svh !important;
+    max-height:none !important;
+    overflow:visible !important;
+  }
+  html.meet-fs .meet-stage{
+    position:fixed;
+    inset:0;
+    z-index:4000;
+    width:100% !important;
+    height:100svh !important;
+    max-width:none;
+    max-height:none;
+    padding:0;
+    gap:0 !important;
+    background:#06140d;
+  }
+  html.meet-fs .meet-head{
+    display:flex;
+    justify-content:flex-end;
+    padding:max(8px, env(safe-area-inset-top)) 12px 8px;
+    background:linear-gradient(180deg, rgba(6,20,13,.96), rgba(6,20,13,.55) 70%, transparent);
+  }
+  html.meet-fs .meet-title{ display:none; }
+  html.meet-fs .meet-fs-btn .meet-fs-expand{ display:none; }
+  html.meet-fs .meet-fs-btn .meet-fs-collapse{ display:block; }
+  html.meet-fs .meet-frame{
+    border-radius:0 !important;
+    border:0;
+    box-shadow:none;
+  }
   .meet-frame{
     width:100%;
     flex:1;
@@ -2177,13 +2252,13 @@
     .meet-ally,
     .flow,
     .manifesto{
-      padding:0 !important;
+      padding:max(28px, env(safe-area-inset-top)) 20px max(36px, env(safe-area-inset-bottom)) !important;
     }
     .dimensions{
-      padding:40px 20px 56px !important;
+      padding:56px 22px 64px !important;
     }
     .clarity-hero{
-      padding:52px 20px 48px !important;
+      padding:56px 22px 64px !important;
     }
     .reveal{
       transition:opacity .55s cubic-bezier(.2,.7,.3,1), transform .55s cubic-bezier(.2,.7,.3,1) !important;
@@ -2248,22 +2323,22 @@
       min-height:0 !important;
       height:100% !important;
       justify-content:flex-end !important;
-      padding-bottom:max(18px, env(safe-area-inset-bottom)) !important;
+      padding-bottom:max(32px, env(safe-area-inset-bottom)) !important;
     }
     .hero-statement{
       transform:none !important;
       max-width:100% !important;
-      padding:0 18px 4px !important;
+      padding:0 20px 8px !important;
     }
     .hero-lead{
       font-size:clamp(26px, 7.4vw, 34px) !important;
       line-height:1.12 !important;
-      margin:0 0 10px !important;
+      margin:0 0 12px !important;
     }
     .hero-ask{
       font-size:15px !important;
       max-width:22ch !important;
-      margin:0 auto 16px !important;
+      margin:0 auto 20px !important;
     }
     .hero-cta{
       min-height:48px;
@@ -2311,7 +2386,7 @@
     /* --- two things --- */
     .dim-stage{
       width:min(100%, 92vw) !important;
-      gap:22px !important;
+      gap:28px !important;
       grid-template-columns:1fr !important;
       grid-template-areas:"title" "copy" !important;
       text-align:center !important;
@@ -2325,11 +2400,15 @@
     .dim-title{ align-items:center !important; }
     .dim-lead .dl-1{ font-size:clamp(28px, 8vw, 38px) !important; }
     .dim-lead .dl-2{ font-size:clamp(36px, 10.6vw, 50px) !important; }
+    .dim-lead .dl-2 em{
+      color:var(--accent-2) !important;
+      text-shadow:0 0 22px rgba(47,227,172,0.55), 0 0 48px rgba(47,227,172,0.28) !important;
+    }
     .dim-title .dt-1,
     .dim-title .dt-2{ font-size:clamp(18px, 5.2vw, 24px) !important; }
     .dim-pair{
-      margin-top:16px !important;
-      gap:12px !important;
+      margin-top:20px !important;
+      gap:14px !important;
     }
     .dim-pole{
       min-height:52px;
@@ -2338,19 +2417,36 @@
     }
     .dim-pole p{ font-size:clamp(18px, 5vw, 22px) !important; }
     .dim-close{
-      margin-top:18px !important;
+      margin-top:22px !important;
       font-size:clamp(13px, 3.6vw, 16px) !important;
       max-width:28ch;
     }
 
     /* --- meet ally --- */
-    .meet-ally{ padding:12px 12px 14px !important; }
+    .meet-ally{ padding:28px 16px 32px !important; }
     .meet-stage{
       width:min(100%, 92vw) !important;
-      height:calc(100svh - 28px) !important;
-      gap:8px !important;
+      height:calc(100svh - 60px) !important;
+      gap:14px !important;
     }
     .meet-title{ font-size:clamp(26px, 7.2vw, 34px) !important; }
+    .meet-head{
+      grid-template-columns:1fr;
+      justify-items:center;
+      gap:10px;
+    }
+    .meet-head .meet-title{ grid-column:1; }
+    .meet-fs-btn{
+      grid-column:1;
+      justify-self:center;
+      height:34px;
+      font-size:12px;
+    }
+    html.meet-fs .meet-head{
+      justify-content:flex-end;
+      padding:max(8px, env(safe-area-inset-top)) 10px 8px;
+    }
+    html.meet-fs .meet-fs-btn{ justify-self:end; }
     .meet-frame{ border-radius:12px; touch-action:pan-y; }
     .dim-link{ display:none !important; }
     .dim-orb{
@@ -2361,8 +2457,8 @@
     /* --- clarity --- */
     .clarity-stage{
       width:min(100%, 92vw) !important;
-      gap:28px !important;
-      padding:8px 0 10px;
+      gap:36px !important;
+      padding:12px 0 16px;
     }
     .clarity-decide{
       position:relative;
@@ -2385,7 +2481,7 @@
     .clarity-title .ct-2{ font-size:clamp(28px, 8.4vw, 38px) !important; }
     .clarity-title{ gap:0.12em !important; }
     .clarity-rail{
-      margin-top:18px !important;
+      margin-top:22px !important;
       gap:10px !important;
       max-width:100% !important;
       justify-content:center !important;
@@ -2396,7 +2492,7 @@
       padding:0 2px !important;
     }
     .clarity-micro{
-      margin-top:16px !important;
+      margin-top:20px !important;
       font-size:14px !important;
     }
     .clarity-actions{ margin-top:12px !important; align-items:center !important; }
@@ -2421,7 +2517,7 @@
     }
     .clarity-decide{ padding-top:28px !important; gap:14px !important; }
     .clarity-line{ font-size:clamp(20px, 6vw, 26px) !important; max-width:16ch !important; }
-    .clarity-sides{ gap:16px !important; margin-top:12px !important; }
+    .clarity-sides{ gap:20px !important; margin-top:16px !important; }
     .clarity-side h3{ font-size:10px !important; }
     .clarity-side p{ font-size:13px !important; }
     .decision-path{
@@ -2445,9 +2541,9 @@
     }
     .flow-wrap{
       grid-template-columns:1fr !important;
-      gap:10px !important;
+      gap:16px !important;
       width:min(100%, 92vw) !important;
-      padding:8px 0 10px !important;
+      padding:12px 0 16px !important;
       align-content:center !important;
     }
     .flow-head{ text-align:center; }
@@ -2457,11 +2553,11 @@
     .flow-head .flow-sub{
       margin-left:auto !important;
       margin-right:auto !important;
-      margin-top:10px !important;
+      margin-top:14px !important;
       font-size:14px !important;
     }
     .flow .stepper{
-      margin:12px auto 0 !important;
+      margin:16px auto 0 !important;
       max-width:100% !important;
     }
     .flow .step .dot{
@@ -2491,7 +2587,7 @@
 
     /* --- final --- */
     .manifesto{
-      padding:12px 20px 56px !important;
+      padding:40px 22px 72px !important;
     }
     .final-stack{ padding-bottom:64px !important; }
     .final-horizon{
@@ -2529,19 +2625,19 @@
       white-space:normal !important;
       margin-top:0.18em !important;
     }
-    .final-brand{ margin-top:18px !important; }
+    .final-brand{ margin-top:24px !important; }
     .final-brand .brand-logo{
       width:48px !important;
       height:48px !important;
     }
     .final-brand__name{ font-size:24px !important; }
     .final-journey{
-      margin-top:14px !important;
+      margin-top:18px !important;
       font-size:14px !important;
       line-height:1.6 !important;
       max-width:32ch !important;
     }
-    .manifesto .final-access{ margin-top:16px !important; }
+    .manifesto .final-access{ margin-top:22px !important; }
     .manifesto .final-access .cta{
       min-height:46px;
       padding:12px 18px;
@@ -2685,7 +2781,7 @@
     .meet-ally,
     .flow,
     .manifesto{
-      margin-top:-2px !important;
+      margin-top:0 !important;
     }
   }
 
@@ -2931,9 +3027,16 @@
 ========================================================== -->
 <section class="meet-ally" id="meet-ally">
   <div class="meet-stage">
-    <h2 class="meet-title">Meet <em>Ally</em></h2>
+    <div class="meet-head">
+      <h2 class="meet-title">Meet <em>Ally</em></h2>
+      <button class="meet-fs-btn" type="button" aria-pressed="false" aria-label="Open dashboard full screen">
+        <svg class="meet-fs-expand" viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
+        <svg class="meet-fs-collapse" viewBox="0 0 24 24"><path d="M9 3v6H3M15 3v6h6M9 21v-6H3M15 21v-6h6"/></svg>
+        <span class="meet-fs-label">Full screen</span>
+      </button>
+    </div>
     <div class="meet-frame">
-      <iframe src="/ally-platform.html?preview=1" title="Ally dashboard" loading="lazy"></iframe>
+      <iframe src="/ally-platform.html?preview=1" title="Ally dashboard" loading="lazy" allow="fullscreen"></iframe>
     </div>
   </div>
 </section>
@@ -3613,9 +3716,30 @@ journeyCards.forEach((c,idx)=>{
     if(e.origin!==location.origin) return;
     if(e.source!==iframe.contentWindow) return;
     if(!e.data || e.data.type!=='ally-chain-scroll') return;
+    if(document.documentElement.classList.contains('meet-fs')) return;
     var dy=e.data.dy;
     if(typeof dy!=='number' || !isFinite(dy) || dy===0) return;
     window.scrollBy(0, dy);
+  });
+})();
+(function(){
+  var btn=document.querySelector('.meet-fs-btn');
+  var label=btn && btn.querySelector('.meet-fs-label');
+  if(!btn) return;
+  function setFs(on){
+    document.documentElement.classList.toggle('meet-fs', on);
+    document.body.classList.toggle('meet-fs', on);
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.setAttribute('aria-label', on ? 'Exit full screen' : 'Open dashboard full screen');
+    if(label) label.textContent = on ? 'Exit' : 'Full screen';
+  }
+  btn.addEventListener('click', function(){
+    setFs(!document.documentElement.classList.contains('meet-fs'));
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key!=='Escape') return;
+    if(document.getElementById('earlyAccessModal') && document.getElementById('earlyAccessModal').classList.contains('is-open')) return;
+    if(document.documentElement.classList.contains('meet-fs')) setFs(false);
   });
 })();
 </script>

@@ -2,43 +2,282 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>About — GoXL Ally</title>
 <style>
+  :root{
+    --bg:#040705;
+    --accent:#2fe3ac;
+    --accent-2:#7ffcd1;
+    --text:#eef4f1;
+    --text-dim:#a9bab3;
+    --text-mute:#647a72;
+    --font-display:'Avenir Next','Segoe UI Semibold','Century Gothic',ui-sans-serif,system-ui,sans-serif;
+    --font-body:'Segoe UI',ui-sans-serif,system-ui,-apple-system,sans-serif;
+    --font-mono:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;
+  }
   *{ box-sizing:border-box; margin:0; padding:0; }
-  html,body{ height:100%; }
+  html,body{ background:var(--bg); color:var(--text); }
   body{
-    min-height:100dvh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:28px;
-    background:#040705;
-    color:#eef4f1;
-    font-family:'Segoe UI', ui-sans-serif, system-ui, sans-serif;
-    text-align:center;
-    padding:24px;
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{ color:inherit; text-decoration:none; }
+  .top-brand{
+    position:absolute; top:max(22px, env(safe-area-inset-top));
+    left:max(22px, env(safe-area-inset-left));
+    z-index:40; display:flex; align-items:center; gap:10px;
+    font-family:var(--font-display); font-weight:700; font-size:18px;
+    letter-spacing:-0.02em; color:#fff;
+    padding:6px 14px 6px 6px;
+    border-radius:999px;
+    background:rgba(8,16,12,0.72);
+    border:1px solid rgba(255,255,255,0.28);
+  }
+  .top-brand img{ width:32px; height:32px; object-fit:contain; }
+  .top-back{
+    position:absolute; top:max(22px, env(safe-area-inset-top));
+    right:max(22px, env(safe-area-inset-right));
+    z-index:40; display:inline-flex; align-items:center; gap:7px;
+    font-family:var(--font-display); font-weight:600; font-size:14px;
+    color:#fff;
+    padding:8px 14px 8px 10px;
+    border-radius:999px;
+    background:rgba(8,16,12,0.72);
+    border:1px solid rgba(255,255,255,0.28);
+  }
+  .top-back svg{ width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; }
+  .top-back:hover{ border-color:rgba(47,227,172,0.55); color:var(--accent); }
+  .back-row{
+    margin-top:36px;
+  }
+  .back-row a{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--font-display); font-weight:600; font-size:14px;
+    color:var(--accent);
+  }
+  .back-row svg{ width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; }
+  .wrap{
+    width:min(720px, 90vw);
+    margin:0 auto;
+    padding:108px 0 80px;
+  }
+  .eye{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:16px;
   }
   h1{
-    font-family:'Avenir Next','Segoe UI Semibold','Century Gothic',ui-sans-serif,system-ui,sans-serif;
-    font-size:clamp(32px, 6vw, 56px);
+    font-family:var(--font-display);
+    font-size:clamp(34px, 7vw, 56px);
+    font-weight:600;
+    letter-spacing:-0.04em;
+    line-height:1.05;
+    margin:0 0 18px;
+  }
+  h1 em{ font-style:italic; font-weight:500; color:var(--accent); }
+  .lede{
+    font-size:clamp(17px, 2.4vw, 20px);
+    line-height:1.55;
+    color:rgba(238,244,241,0.82);
+    margin-bottom:48px;
+    max-width:34ch;
+  }
+  h2{
+    font-family:var(--font-display);
+    font-size:clamp(22px, 4vw, 30px);
     font-weight:600;
     letter-spacing:-0.03em;
-    color:#2fe3ac;
+    line-height:1.2;
+    margin:48px 0 16px;
   }
-  a{
-    color:rgba(238,244,241,0.55);
-    text-decoration:none;
-    font-size:14px;
-    letter-spacing:0.08em;
+  p{
+    font-size:16.5px;
+    line-height:1.7;
+    color:var(--text-dim);
+    margin:0 0 16px;
+  }
+  .pull{
+    font-family:var(--font-display);
+    font-size:clamp(20px, 3.4vw, 26px);
+    font-weight:500;
+    letter-spacing:-0.03em;
+    line-height:1.35;
+    color:#fff;
+    margin:28px 0;
+  }
+  .asks{
+    list-style:none;
+    margin:20px 0 28px;
+    padding:0;
+  }
+  .asks li{
+    font-family:var(--font-display);
+    font-size:18px;
+    font-weight:500;
+    letter-spacing:-0.02em;
+    color:rgba(238,244,241,0.9);
+    padding:10px 0 10px 18px;
+    border-left:1px solid rgba(47,227,172,0.35);
+    margin:8px 0;
+  }
+  .steps{
+    display:flex; flex-wrap:wrap; gap:8px;
+    margin:18px 0 28px;
+  }
+  .steps span{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:0.12em;
     text-transform:uppercase;
+    color:var(--accent);
+    border:1px solid rgba(47,227,172,0.28);
+    border-radius:999px;
+    padding:8px 12px;
   }
-  a:hover{ color:#2fe3ac; }
+  .close{
+    margin-top:56px;
+    padding-top:36px;
+    border-top:1px solid rgba(120,220,190,0.16);
+  }
+  .brand{
+    display:flex; align-items:center; gap:12px;
+    margin:18px 0 10px;
+  }
+  .brand img{ width:42px; height:42px; }
+  .brand strong{
+    display:block;
+    font-family:var(--font-display);
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:-0.03em;
+  }
+  .brand small{
+    display:block;
+    font-size:13px;
+    color:var(--accent);
+    letter-spacing:0.04em;
+  }
+  .foot{
+    display:flex; justify-content:center; flex-wrap:wrap;
+    gap:10px 18px;
+    margin-top:48px;
+    font-size:12.5px;
+    color:var(--text-mute);
+  }
+  .foot a{ color:var(--text-dim); }
+  .foot a:hover{ color:var(--accent); }
+  @media (max-width:768px){
+    .top-brand{
+      top:max(14px, env(safe-area-inset-top));
+      left:max(14px, env(safe-area-inset-left));
+      font-size:15px;
+      background:#101c18;
+      backdrop-filter:none;
+    }
+    .top-brand img{ width:28px; height:28px; }
+    .top-back{
+      top:max(14px, env(safe-area-inset-top));
+      right:max(14px, env(safe-area-inset-right));
+      font-size:13px;
+      background:#101c18;
+      padding:7px 12px 7px 10px;
+    }
+    .wrap{ padding:96px 0 max(64px, env(safe-area-inset-bottom)); }
+    h2{ margin-top:40px; }
+    p{ font-size:16px; }
+  }
 </style>
 </head>
 <body>
-  <h1>hi</h1>
-  <a href="/">Back</a>
+  <a class="top-brand" href="/">
+    <img src="/assets/ally-logo.svg" alt="" />
+    <span>GoXL Ally</span>
+  </a>
+  <a class="top-back js-back" id="backLink" href="/">
+    <svg viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+    Back
+  </a>
+
+  <main class="wrap">
+    <p class="eye">About</p>
+    <h1>Why we built <em>Ally.</em></h1>
+    <p class="lede">At GoXL, our purpose is simple: to make entrepreneurship accessible to everyone.</p>
+
+    <h2>What accessibility actually means</h2>
+    <p>It is not just about giving someone information. It is not just about giving someone a mentor. It is not just about giving someone a network.</p>
+    <p>It is about making sure that a founder — wherever they are, whatever their background — has someone they can rely on when they need clarity, direction and support.</p>
+
+    <h2>Entrepreneurship is a lonely journey</h2>
+    <p>Everyone comes to the founder. The team. The customers. The investors. The family. Everyone expects the founder to have an answer.</p>
+    <p>But even the founder doesn’t have all the answers. So we started asking: where does the founder go?</p>
+    <ul class="asks">
+      <li>I don’t know what to do.</li>
+      <li>I’m confused.</li>
+      <li>I think I’ve made the wrong decision.</li>
+      <li>What should I do next?</li>
+    </ul>
+    <p>Not every founder is comfortable talking about these things. Some want to figure it out themselves. Some don’t have access to the right people. Some simply don’t have a safe, private space to think openly.</p>
+    <p class="pull">Self-doubt turns into isolation. Isolation creates stress. Stress can lead to burnout. And the founder starts experiencing mental fog.</p>
+    <p>You’re working every day. You’re making decisions every day. But somewhere inside, you don’t know: am I actually moving forward?</p>
+
+    <h2>Access shouldn’t depend on where you live</h2>
+    <p>A founder in a Tier 1 city may have the right people, networks and exposure. What about someone in a Tier 2 or Tier 3 city — with the ambition, the capability and the idea, but not the access?</p>
+    <p>We don’t think entrepreneurship should depend on that. That’s why GoXL exists. And that’s why we needed a space a founder can come to anytime — private, without judgement — to talk, think and figure things out.</p>
+
+    <h2>Not another generic AI tool</h2>
+    <p>Most AI tools are built for everyone. We wanted something built for entrepreneurs, by people who understand entrepreneurs. Not something you use once and forget — something that can become part of a founder’s everyday life.</p>
+    <div class="steps">
+      <span>Get clarity</span>
+      <span>Identify problems</span>
+      <span>Build structure</span>
+      <span>Make decisions</span>
+      <span>Take action</span>
+      <span>Move forward</span>
+    </div>
+    <p>We started with diagnosis. Then we realised diagnosis is not enough. If we tell you the problem and leave you there, we haven’t made the journey more accessible. We have to help the founder move forward.</p>
+
+    <h2>A Founder’s Compass</h2>
+    <p>A compass doesn’t walk for you. It doesn’t decide your destination. It helps you understand your direction.</p>
+    <p>When you are confused, it helps you find clarity. When you have a problem, it helps you understand it. When you have too many options, it helps you think through them. When you don’t know what to do next, it helps you find the next step.</p>
+    <p>You remain the founder. You make the decision. You take the action. You build the business.</p>
+    <p class="pull">No founder should have to leave something they wanted to build simply because they didn’t know the direction.</p>
+
+    <h2>Why we called it Ally</h2>
+    <p>It is not just an AI. Not just a diagnosis tool. Not just a platform. It is something that stands with you — someone you can trust, rely on, and move forward with.</p>
+    <p>An ally is more than someone who assists you. An ally stands with you. That is exactly what we wanted this to become.</p>
+
+    <div class="close">
+      <div class="brand">
+        <img src="/assets/ally-logo.svg" alt="" />
+        <div>
+          <strong>GoXL Ally</strong>
+          <small>The Founder's Compass</small>
+        </div>
+      </div>
+      <p>It is not here to replace your thinking, or to make decisions for you. It is here to help you think better, see clearly, navigate, and keep moving.</p>
+      <p>If entrepreneurship is a journey, every founder deserves a compass. Every founder deserves someone to stand with them. And no founder should have to build alone.</p>
+      <p class="back-row"><a class="js-back" href="/"><svg viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Back to home</a></p>
+    </div>
+
+    <nav class="foot" aria-label="Footer">
+      <a class="js-back" href="/">Back</a>
+      <span>·</span>
+      <a href="mailto:hello@goxl.ai?subject=Privacy">Privacy</a>
+      <span>·</span>
+      <a href="mailto:hello@goxl.ai?subject=Terms">Terms</a>
+    </nav>
+  </main>
+  <script>
+    document.querySelectorAll('.js-back, #backLink').forEach(function(el){
+      el.addEventListener('click', function(e){
+        if(window.history.length > 1){ e.preventDefault(); window.history.back(); }
+      });
+    });
+  </script>
 </body>
 </html>
