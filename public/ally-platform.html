@@ -1829,6 +1829,13 @@ body.gate .j-bar{display:none!important}
 /* never allow a horizontal scrollbar */
 html,body{max-width:100%;overflow-x:hidden}
 body.preview .skip{display:none!important}
+body.preview .view.active,
+body.preview .chat-scroll,
+body.preview .ac-scroll{
+  scroll-behavior:auto;
+  overscroll-behavior:none;
+  -webkit-overflow-scrolling:auto;
+}
 .main,.view-wrap,.topbar,.pad{max-width:100%}
 img,svg,video,canvas{max-width:100%}
 
@@ -5690,6 +5697,91 @@ img,svg,video,canvas{max-width:100%}
     showStage(forceStart?0:_rStep);
   }
   _boot=false;   /* restoration done — real founder interactions now show the subtle save indicator */
+})();
+</script>
+<script>
+(function(){
+  if(window.parent===window) return;
+  if(!/[?&]preview\b/.test(location.search)) return;
+
+  function scroller(){
+    var chat=document.querySelector('.view.active.chat-view .chat-scroll, .view.active .ac-scroll');
+    if(chat && chat.scrollHeight>chat.clientHeight+2) return chat;
+    return document.querySelector('.view.active');
+  }
+  function atStart(el){ return !el || el.scrollTop<=1; }
+  function atEnd(el){
+    if(!el) return true;
+    return el.scrollTop+el.clientHeight>=el.scrollHeight-2;
+  }
+  function chain(dy){
+    try{ window.parent.postMessage({type:'ally-chain-scroll', dy:dy}, location.origin); }catch(e){}
+  }
+  function apply(dy){
+    var el=scroller();
+    var down=dy>0;
+    if((down && atEnd(el)) || (!down && atStart(el))){ chain(dy); return; }
+    if(el) el.scrollTop+=dy;
+  }
+
+  var lastX=0, lastY=0, dragging=false, vx=0, lastT=0, raf=0;
+
+  document.addEventListener('touchstart', function(e){
+    if(!e.touches[0]) return;
+    var t=e.target;
+    if(t && t.closest && t.closest('input,textarea,select,[contenteditable="true"],.sb-nav,.sidebar,.np,.mdl')){
+      dragging=false; return;
+    }
+    lastX=e.touches[0].clientX;
+    lastY=e.touches[0].clientY;
+    dragging=false; vx=0;
+    lastT=performance.now();
+    cancelAnimationFrame(raf);
+  }, {capture:true, passive:true});
+
+  document.addEventListener('touchmove', function(e){
+    if(!e.touches[0]) return;
+    var x=e.touches[0].clientX, y=e.touches[0].clientY;
+    var dx=lastX-x, dy=lastY-y;
+    if(!dragging){
+      if(Math.abs(dx)<5 && Math.abs(dy)<5) return;
+      if(Math.abs(dx)>Math.abs(dy)) return;
+      dragging=true;
+    }
+    e.preventDefault();
+    lastX=x; lastY=y;
+    var now=performance.now();
+    var dt=Math.max(8, now-lastT);
+    vx=dy/dt*16;
+    lastT=now;
+    apply(dy);
+  }, {capture:true, passive:false});
+
+  function coast(){
+    vx*=0.93;
+    if(Math.abs(vx)<0.35){ vx=0; return; }
+    apply(vx);
+    raf=requestAnimationFrame(coast);
+  }
+  document.addEventListener('touchend', function(){
+    if(dragging && Math.abs(vx)>0.6) raf=requestAnimationFrame(coast);
+    dragging=false;
+  }, {capture:true, passive:true});
+  document.addEventListener('touchcancel', function(){
+    dragging=false; cancelAnimationFrame(raf);
+  }, {capture:true, passive:true});
+
+  window.addEventListener('wheel', function(e){
+    if(e.ctrlKey) return;
+    var t=e.target;
+    if(t && t.closest && t.closest('input,textarea,select,[contenteditable="true"]')) return;
+    var el=scroller();
+    var dy=e.deltaY;
+    if((dy>0 && atEnd(el)) || (dy<0 && atStart(el))){
+      e.preventDefault();
+      chain(dy);
+    }
+  }, {capture:true, passive:false});
 })();
 </script>
 </body>
