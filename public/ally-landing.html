@@ -549,6 +549,7 @@
   .problem,
   .dimensions,
   .clarity-hero,
+  .meet-ally,
   .flow,
   .manifesto{
     min-height:100vh;
@@ -563,6 +564,7 @@
   }
   .dimensions,
   .clarity-hero,
+  .meet-ally,
   .flow{
     display:flex;
     align-items:center;
@@ -631,6 +633,7 @@
   .problem,
   .dimensions,
   .clarity-hero,
+  .meet-ally,
   .flow,
   .manifesto{
     min-height:100vh;
@@ -645,6 +648,7 @@
   }
   .dimensions,
   .clarity-hero,
+  .meet-ally,
   .flow{
     display:flex;
     align-items:center;
@@ -923,7 +927,30 @@
 
 
   /* ===== final brand: logo + ally only ===== */
-  .manifesto .cta{ display:none !important; }
+  .manifesto .final-access{
+    margin-top:28px;
+    position:relative;
+    z-index:3;
+  }
+  .manifesto .final-access .cta{
+    display:inline-flex !important;
+    background:var(--accent) !important;
+    color:#04120c !important;
+    border:1px solid var(--accent) !important;
+    font-weight:700 !important;
+    box-shadow:0 12px 32px -8px rgba(47,227,172,0.75), 0 0 0 0 rgba(47,227,172,0.4) !important;
+    animation:eaGlow 2.4s ease-in-out infinite;
+  }
+  .manifesto .final-access .cta:hover{
+    background:#7ffcd1 !important;
+    color:#04120c !important;
+    border-color:#7ffcd1 !important;
+    transform:translateY(-2px) !important;
+  }
+  @keyframes eaGlow{
+    0%,100%{ box-shadow:0 12px 32px -8px rgba(47,227,172,0.7), 0 0 0 0 rgba(47,227,172,0.38); }
+    50%{ box-shadow:0 16px 42px -8px rgba(47,227,172,0.95), 0 0 0 12px rgba(47,227,172,0); }
+  }
   .final-brand{
     margin-top:56px !important;
     gap:12px !important;
@@ -1290,14 +1317,14 @@
     align-items:center !important;
   }
   .flow-head .big{
-    font-size:clamp(42px, 5.2vw, 72px) !important;
+    font-size:clamp(56px, 6.8vw, 92px) !important;
     font-weight:600 !important;
-    line-height:1.08 !important;
-    letter-spacing:-0.035em !important;
+    line-height:1.02 !important;
+    letter-spacing:-0.04em !important;
     color:#fff !important;
   }
   .flow-head .big .accent{
-    color:rgba(232,242,238,0.78) !important;
+    color:var(--accent) !important;
   }
   .flow-head .flow-sub{
     margin-top:18px !important;
@@ -1441,7 +1468,7 @@
       gap:28px !important;
     }
     .flow-head .big{
-      font-size:clamp(36px, 8vw, 52px) !important;
+      font-size:clamp(42px, 9vw, 64px) !important;
     }
     .flow .fcard{
       min-height:0 !important;
@@ -1472,10 +1499,12 @@
 
   .clarity-atm{
     position:absolute; inset:0; pointer-events:none; overflow:hidden;
+    -webkit-mask-image:linear-gradient(180deg, transparent 0%, #000 16%, #000 84%, transparent 100%);
+    mask-image:linear-gradient(180deg, transparent 0%, #000 16%, #000 84%, transparent 100%);
   }
   .clarity-beam{
     position:absolute;
-    left:18%; top:-12%;
+    left:18%; top:8%;
     width:min(520px, 55vw);
     height:70%;
     background:linear-gradient(180deg, rgba(47,227,172,0.12), rgba(47,227,172,0.02) 55%, transparent 100%);
@@ -1504,7 +1533,7 @@
     margin:0 auto;
     display:grid;
     grid-template-columns:minmax(0, 1.35fr) minmax(0, 0.9fr);
-    gap:clamp(36px, 7vw, 100px);
+    gap:clamp(20px, 3.6vw, 48px);
     align-items:center;
   }
 
@@ -1652,11 +1681,34 @@
     letter-spacing:-0.03em;
     line-height:1.2;
     color:rgba(232,242,238,0.55);
-    max-width:14ch;
+    max-width:16ch;
   }
   .clarity-line--strong{
     color:rgba(238,244,241,0.96);
     font-weight:600;
+  }
+  .clarity-sides{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    margin-top:8px;
+    width:100%;
+  }
+  .clarity-side h3{
+    margin:0 0 6px;
+    font-family:var(--font-mono);
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--accent);
+  }
+  .clarity-side p{
+    margin:0;
+    font-size:14.5px;
+    line-height:1.45;
+    letter-spacing:-0.01em;
+    color:rgba(232,242,238,0.62);
   }
   .decision-path{
     display:flex;
@@ -1715,6 +1767,9 @@
       padding-top:28px;
     }
     .clarity-line{ max-width:18ch; }
+    .clarity-sides{ align-items:center; }
+    .clarity-side h3,
+    .clarity-side p{ text-align:center; }
     .clarity-orb{
       left:50%;
       width:min(300px, 70vw);
@@ -1737,7 +1792,8 @@
     .dim-lead span,
     .dim-title span,
     .dim-pair,
-    .dim-close{
+    .dim-close,
+    .dim-link{
       opacity:1 !important; transform:none !important; transition:none !important;
     }
   }
@@ -1755,7 +1811,10 @@
       radial-gradient(ellipse 42% 50% at 84% 48%, rgba(11,40,32,0.32), transparent 72%),
       linear-gradient(180deg, #020504 0%, #03100c 48%, #020806 100%);
   }
-  .dim-atm{ position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+  .dim-atm{ position:absolute; inset:0; pointer-events:none; overflow:hidden;
+    -webkit-mask-image:linear-gradient(180deg, transparent 0%, #000 16%, #000 84%, transparent 100%);
+    mask-image:linear-gradient(180deg, transparent 0%, #000 16%, #000 84%, transparent 100%);
+  }
   .dim-orb{
     position:absolute;
     width:min(460px, 46vw);
@@ -1787,15 +1846,41 @@
     display:grid;
     grid-template-columns:minmax(0, 0.92fr) minmax(0, 1.28fr);
     grid-template-areas:"copy title";
-    gap:clamp(36px, 7vw, 100px);
+    gap:clamp(20px, 3.6vw, 48px);
     align-items:center;
     text-align:left;
+  }
+  .dim-link{
+    grid-area:1 / 1 / -1 / -1;
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    overflow:visible;
+    z-index:1;
+    opacity:0;
+    transition:opacity .8s ease .35s;
+  }
+  .dimensions.is-in .dim-link{ opacity:1; }
+  .dim-link path{
+    fill:none;
+    stroke:rgba(47,227,172,0.55);
+    stroke-width:1.5;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+  .dim-link circle{
+    fill:var(--accent);
+    filter:drop-shadow(0 0 8px rgba(47,227,172,0.75));
   }
   .dim-left{
     grid-area:copy;
     justify-self:start;
     max-width:460px;
     width:100%;
+    position:relative;
+    z-index:2;
   }
   .dim-lead{
     grid-area:title;
@@ -1807,6 +1892,8 @@
     justify-self:end;
     width:100%;
     max-width:640px;
+    position:relative;
+    z-index:2;
   }
   .dim-lead span{
     display:block;
@@ -1939,6 +2026,62 @@
     .dim-close{ margin-left:auto; margin-right:auto; }
     .dim-lead .dl-1{ font-size:clamp(40px, 10vw, 64px); }
     .dim-lead .dl-2{ font-size:clamp(44px, 11vw, 68px); }
+    .dim-link{ display:none; }
+  }
+
+  /* =========================================================
+     MEET ALLY — live dashboard preview
+  ========================================================== */
+  .meet-ally{
+    position:relative;
+    padding:28px 22px 32px;
+    overflow:hidden;
+  }
+  .meet-stage{
+    position:relative;
+    z-index:2;
+    width:min(1080px, 88vw);
+    height:min(calc(100dvh - 56px), 820px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+  }
+  .meet-title{
+    margin:0;
+    flex:0 0 auto;
+    font-family:var(--font-display);
+    font-size:clamp(36px, 5vw, 64px);
+    font-weight:600;
+    letter-spacing:-0.045em;
+    line-height:1;
+    color:#fff;
+    text-align:center;
+  }
+  .meet-title em{
+    font-style:italic;
+    font-weight:500;
+    color:var(--accent);
+  }
+  .meet-frame{
+    width:100%;
+    flex:1;
+    min-height:0;
+    border-radius:16px;
+    overflow:hidden;
+    border:1px solid rgba(120,220,190,0.18);
+    background:#06140d;
+    box-shadow:0 28px 80px -28px rgba(0,0,0,0.55);
+  }
+  @media (max-width:900px){
+    .meet-stage{ height:min(calc(100dvh - 48px), 760px); }
+  }
+  .meet-frame iframe{
+    width:100%;
+    height:100%;
+    border:0;
+    display:block;
+    background:#06140d;
   }
 
   /* =========================================================
@@ -1963,6 +2106,7 @@
     .problem,
     .dimensions,
     .clarity-hero,
+    .meet-ally,
     .flow,
     .manifesto{
       height:100svh !important;
@@ -1972,10 +2116,11 @@
       scroll-snap-align:none !important;
       scroll-snap-stop:normal !important;
       margin:0 !important;
-      isolation:isolate;
     }
+    .problem{ isolation:isolate; }
     .dimensions,
     .clarity-hero,
+    .meet-ally,
     .flow,
     .manifesto{
       padding:0 !important;
@@ -2119,6 +2264,17 @@
       font-size:clamp(13px, 3.6vw, 16px) !important;
       max-width:28ch;
     }
+
+    /* --- meet ally --- */
+    .meet-ally{ padding:12px 12px 14px !important; }
+    .meet-stage{
+      width:min(100%, 92vw) !important;
+      height:calc(100svh - 28px) !important;
+      gap:8px !important;
+    }
+    .meet-title{ font-size:clamp(26px, 7.2vw, 34px) !important; }
+    .meet-frame{ border-radius:12px; }
+    .dim-link{ display:none !important; }
     .dim-orb{
       width:min(240px, 64vw) !important;
       height:min(240px, 64vw) !important;
@@ -2170,6 +2326,9 @@
     }
     .clarity-decide{ padding-top:12px !important; gap:6px !important; }
     .clarity-line{ font-size:clamp(20px, 6vw, 26px) !important; max-width:16ch !important; }
+    .clarity-sides{ gap:12px !important; margin-top:6px !important; }
+    .clarity-side h3{ font-size:10px !important; }
+    .clarity-side p{ font-size:13px !important; }
     .decision-path{
       justify-content:center;
       gap:6px;
@@ -2198,7 +2357,7 @@
     }
     .flow-head{ text-align:center; }
     .flow-head .big{
-      font-size:clamp(26px, 8vw, 36px) !important;
+      font-size:clamp(32px, 9.2vw, 42px) !important;
     }
     .flow-head .flow-sub{
       margin-left:auto !important;
@@ -2287,6 +2446,12 @@
       line-height:1.6 !important;
       max-width:32ch !important;
     }
+    .manifesto .final-access{ margin-top:16px !important; }
+    .manifesto .final-access .cta{
+      min-height:46px;
+      padding:12px 18px;
+      font-size:14px;
+    }
     .manifesto .foot-links{
       bottom:max(12px, env(safe-area-inset-bottom)) !important;
       font-size:12px !important;
@@ -2311,6 +2476,207 @@
     }
   }
 
+  /* =========================================================
+     SECTION BLEND — same canvas so snaps don't look like new pages
+  ========================================================== */
+  html, body{
+    background:#020605 !important;
+  }
+  #network-canvas{ z-index:0; }
+  .problem{
+    background:
+      linear-gradient(180deg, rgba(2,6,5,0.48) 0%, rgba(2,6,5,0.16) 30%, rgba(2,6,5,0.78) 72%, #020605 100%),
+      radial-gradient(ellipse 60% 55% at 50% 38%, rgba(2,6,5,0.1), rgba(2,6,5,0.55) 100%),
+      url("/assets/hero-bg.jpeg") center 18% / cover no-repeat !important;
+  }
+  .problem::after{
+    content:'';
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:min(240px, 32vh);
+    background:linear-gradient(180deg, rgba(2,6,5,0) 0%, #020605 88%, #020605 100%);
+    pointer-events:none;
+    z-index:1;
+  }
+  .dimensions,
+  .clarity-hero,
+  .meet-ally,
+  .flow,
+  .manifesto{
+    background:#020605 !important;
+    box-shadow:none !important;
+    border:0 !important;
+  }
+  .dimensions::before,
+  .clarity-hero::before,
+  .flow::before,
+  .manifesto::before,
+  .dimensions::after,
+  .clarity-hero::after,
+  .flow::after,
+  .manifesto::after{
+    content:'';
+    position:absolute;
+    left:0; right:0;
+    height:min(150px, 20vh);
+    pointer-events:none;
+    z-index:1;
+    display:block !important;
+    filter:none !important;
+    width:auto !important;
+    border-radius:0 !important;
+    transform:none !important;
+  }
+  .dimensions::before,
+  .clarity-hero::before,
+  .flow::before,
+  .manifesto::before{
+    top:-2px;
+    background:linear-gradient(180deg, #020605 0%, rgba(2,6,5,0) 100%);
+  }
+  .dimensions::after,
+  .clarity-hero::after,
+  .flow::after,
+  .manifesto::after{
+    bottom:-2px;
+    top:auto;
+    background:linear-gradient(180deg, rgba(2,6,5,0) 0%, #020605 100%);
+  }
+  .clarity-hero,
+  .meet-ally,
+  .flow,
+  .manifesto{
+    margin-top:-2px;
+  }
+  .flow::before{
+    background:
+      linear-gradient(180deg, #020605 0%, rgba(2,6,5,0) 100%),
+      radial-gradient(ellipse 46% 28% at 50% 52%, rgba(14,48,38,0.22), transparent 72%);
+    height:100%;
+    top:0;
+    opacity:1;
+  }
+  .manifesto::before{
+    background:
+      linear-gradient(180deg, #020605 0%, rgba(2,6,5,0) 100%);
+  }
+  @media (max-width: 768px){
+    .problem::after{ height:min(160px, 24svh); }
+    .dimensions::before,
+    .clarity-hero::before,
+    .flow::before,
+    .manifesto::before,
+    .dimensions::after,
+    .clarity-hero::after,
+    .flow::after,
+    .manifesto::after{
+      height:min(110px, 16svh);
+    }
+    .flow::before{ height:100%; }
+    .clarity-hero,
+    .meet-ally,
+    .flow,
+    .manifesto{
+      margin-top:-2px !important;
+    }
+  }
+
+  /* ---------- early access modal ---------- */
+  html.ea-lock,
+  body.ea-lock{ overflow:hidden !important; }
+  .ea-modal{
+    position:fixed; inset:0; z-index:5000;
+    display:flex; align-items:center; justify-content:center;
+    padding:22px 16px;
+    opacity:0; visibility:hidden; pointer-events:none;
+    transition:opacity .28s ease, visibility .28s ease;
+  }
+  .ea-modal.is-open{ opacity:1; visibility:visible; pointer-events:auto; }
+  .ea-backdrop{
+    position:absolute; inset:0;
+    background:rgba(2,6,5,.72);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+  }
+  .ea-dialog{
+    position:relative; z-index:1;
+    width:min(440px, 100%);
+    padding:28px 26px 24px;
+    border-radius:18px;
+    border:1px solid rgba(120,220,190,0.22);
+    background:linear-gradient(180deg, rgba(10,22,17,.97), rgba(5,12,10,.98));
+    box-shadow:0 30px 80px -24px rgba(0,0,0,.7), 0 0 0 1px rgba(47,227,172,0.06);
+  }
+  .ea-x{
+    position:absolute; top:12px; right:12px;
+    width:36px; height:36px;
+    border:none; border-radius:10px;
+    background:transparent; color:var(--text-dim);
+    display:grid; place-items:center;
+  }
+  .ea-x:hover{ color:#fff; background:rgba(255,255,255,.06); }
+  .ea-x svg{ width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; }
+  .ea-eye{
+    font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--accent); margin:0 0 8px;
+  }
+  .ea-dialog h3{
+    font-family:var(--font-display);
+    font-size:clamp(22px, 3vw, 28px);
+    font-weight:600; letter-spacing:-.03em;
+    color:#fff; margin:0 0 8px; line-height:1.15;
+  }
+  .ea-sub{
+    margin:0 0 22px; font-size:14px; line-height:1.5;
+    color:rgba(232,242,238,.62);
+  }
+  .ea-form{ display:flex; flex-direction:column; gap:12px; }
+  .ea-form label{
+    display:flex; flex-direction:column; gap:6px;
+    font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    color:rgba(232,242,238,.55);
+  }
+  .ea-form input{
+    width:100%;
+    background:rgba(255,255,255,.04);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px 14px;
+    color:var(--text);
+    font-size:15px;
+    font-family:inherit;
+    letter-spacing:0;
+    text-transform:none;
+    font-weight:500;
+    outline:none;
+    transition:border-color .2s;
+  }
+  .ea-form input:focus{ border-color:var(--border-strong); }
+  .ea-err{
+    margin:0; min-height:0;
+    font-size:13px; color:#ff8b8b;
+  }
+  .ea-err:empty{ display:none; }
+  .ea-form .cta{
+    margin-top:6px; justify-content:center; width:100%;
+  }
+  .ea-form .cta[disabled]{ opacity:.65; cursor:wait; transform:none; }
+  .ea-done{ text-align:center; padding:8px 0 4px; }
+  .ea-done[hidden],
+  .ea-form[hidden]{ display:none !important; }
+  .ea-done p{
+    margin:0 0 18px; font-size:16px; line-height:1.5;
+    color:rgba(232,242,238,.88);
+  }
+  .ea-done .cta{ justify-content:center; width:100%; }
+  button.cta-limit{
+    font:inherit;
+    cursor:pointer;
+  }
+  @media (max-width:768px){
+    .ea-dialog{ padding:24px 18px 20px; }
+  }
+
 </style>
 </head>
 <body>
@@ -2333,11 +2699,11 @@
         <h1 class="hero-lead">Founders are expected<br>to have answers.</h1>
         <p class="hero-ask">But who helps them find the right ones?</p>
         <div class="cta-wrap">
-          <a class="cta cta-outline hero-cta" href="#early-access">
+          <a class="cta cta-outline hero-cta" href="#early-access" data-early-access>
             Register for Early Access
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
           </a>
-          <p class="cta-limit">Limited slots only</p>
+          <button class="cta-limit" type="button" data-early-access>Limited slots only</button>
         </div>
       </div>
     </div>
@@ -2380,6 +2746,10 @@
     <div class="dim-orb dim-orb--biz"></div>
   </div>
   <div class="dim-stage">
+    <svg class="dim-link" aria-hidden="true">
+      <path></path>
+      <circle r="5"></circle>
+    </svg>
     <div class="dim-left">
       <p class="dim-title">
         <span class="dt dt-1">You are building</span>
@@ -2427,33 +2797,34 @@
       </div>
 
       <p class="clarity-micro">Ally turns your context into clarity, decisions and daily action.</p>
-
-      <div class="clarity-actions">
-        <div class="cta-wrap">
-          <a class="cta cta-outline" href="#early-access" id="registerBtn">
-            Register for Early Access
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </a>
-          <p class="cta-limit">Limited slots only</p>
-        </div>
-        <form class="signup-form" id="signupForm">
-          <input type="email" placeholder="you@yourcompany.com" required id="emailInput">
-          <button type="submit">Join</button>
-        </form>
-        <div class="signup-note" id="signupNote">You're on the list — we'll reach out before public launch.</div>
-      </div>
     </div>
 
     <div class="clarity-right">
       <div class="clarity-decide">
-        <p class="clarity-line">Ally doesn't just answer.</p>
-        <p class="clarity-line clarity-line--strong">Ally helps you decide.</p>
-        <div class="decision-path" aria-label="How Ally helps you decide">
-          <span>See clearly</span>
-          <span>Choose confidently</span>
-          <span>Move forward</span>
+        <p class="clarity-line clarity-line--strong">Ally looks at both sides of the equation.</p>
+        <div class="clarity-sides">
+          <div class="clarity-side">
+            <h3>You</h3>
+            <p>Mind · Confidence · Focus · Decisions</p>
+          </div>
+          <div class="clarity-side">
+            <h3>Your Business</h3>
+            <p>Growth · Finance · Product · Team · Operations</p>
+          </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     MEET ALLY — live dashboard
+========================================================== -->
+<section class="meet-ally" id="meet-ally">
+  <div class="meet-stage">
+    <h2 class="meet-title">Meet <em>Ally</em></h2>
+    <div class="meet-frame">
+      <iframe src="/ally-platform.html?preview=1" title="Ally dashboard" loading="lazy"></iframe>
     </div>
   </div>
 </section>
@@ -2464,11 +2835,11 @@
 <section class="flow" id="product">
   <div class="wrap flow-wrap">
     <div class="flow-head reveal">
-      <h2 class="big">Understand.<br>Decide.<br><span class="accent">Move forward.</span></h2>
+      <h2 class="big">How Ally<br><span class="accent">works</span></h2>
       <p class="flow-sub">From context to action — one deliberate progression.</p>
       <div class="stepper" id="stepper" aria-hidden="true">
         <div class="step active" data-step="0"><div class="dot">1</div><div class="lbl">Diagnosis</div></div>
-        <div class="step" data-step="1"><div class="dot">2</div><div class="lbl">Insight</div></div>
+        <div class="step" data-step="1"><div class="dot">2</div><div class="lbl">Root cause</div></div>
         <div class="step" data-step="2"><div class="dot">3</div><div class="lbl">Direction</div></div>
         <div class="step" data-step="3"><div class="dot">4</div><div class="lbl">Action</div></div>
       </div>
@@ -2494,7 +2865,7 @@
       <div class="fcard" data-step="1">
         <div class="fcard-top">
           <span class="fnum">02</span>
-          <h3>Insight</h3>
+          <h3>Root cause</h3>
         </div>
         <p class="desc">What actually matters?</p>
         <div class="skel-row"><div class="skel-bar" style="width:92%"></div></div>
@@ -2554,6 +2925,13 @@
 </div>
     </div>
         <p class="final-journey reveal">Your ideas. Your challenges. Your journey. GoXL Ally stands beside you—helping you find clarity, make better decisions, and move forward.</p>
+        <div class="cta-wrap final-access reveal">
+          <button class="cta" type="button" data-early-access>
+            Register for Early Access
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </button>
+          <button class="cta-limit" type="button" data-early-access>Limited slots only</button>
+        </div>
 </div>
 
     <nav class="foot-links reveal" aria-label="Legal">
@@ -2565,6 +2943,31 @@
     </nav>
   </section>
 
+<div class="ea-modal" id="earlyAccessModal" aria-hidden="true">
+  <div class="ea-backdrop" data-ea-close></div>
+  <div class="ea-dialog" role="dialog" aria-modal="true" aria-labelledby="eaTitle">
+    <button class="ea-x" type="button" data-ea-close aria-label="Close">
+      <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <p class="ea-eye">Early access</p>
+    <h3 id="eaTitle">Register for Early Access</h3>
+    <p class="ea-sub">Limited slots. Leave your email and phone — we’ll reach out.</p>
+    <form class="ea-form" id="earlyAccessForm" novalidate>
+      <label>Email
+        <input id="eaEmail" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@company.com" required>
+      </label>
+      <label>Phone
+        <input id="eaPhone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+91 98765 43210" required>
+      </label>
+      <p class="ea-err" id="eaErr" role="alert"></p>
+      <button class="cta" type="submit" id="eaSubmit">Join the list</button>
+    </form>
+    <div class="ea-done" id="eaDone" hidden>
+      <p>You’re on the list. We’ll be in touch.</p>
+      <button class="cta" type="button" data-ea-close>Close</button>
+    </div>
+  </div>
+</div>
 
 <script>
 const isPhone = () => window.matchMedia('(max-width: 768px)').matches;
@@ -2577,14 +2980,64 @@ const io = new IntersectionObserver((entries)=>{
 revealEls.forEach(el=>io.observe(el));
 document.querySelectorAll('#problem .reveal').forEach(el=> el.classList.add('in'));
 
-/* ---------- two-things section enter ---------- */
+/* ---------- two-things section enter + connector ---------- */
 (function(){
   const section = document.getElementById('dimensions');
   if(!section) return;
+  const stage = section.querySelector('.dim-stage');
+  const svg = section.querySelector('.dim-link');
+  const path = svg && svg.querySelector('path');
+  const dot = svg && svg.querySelector('circle');
+  const poles = [...section.querySelectorAll('.dim-pole')];
+  const lead = section.querySelector('.dim-lead');
+  const narrow = window.matchMedia('(max-width: 900px)');
+
   const dio = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{ if(e.isIntersecting) section.classList.add('is-in'); });
   }, { threshold: isPhone() ? 0.18 : 0.35 });
   dio.observe(section);
+
+  function layoutLink(){
+    if(!stage || !svg || !path || !dot || poles.length < 2 || !lead) return;
+    if(narrow.matches){
+      path.removeAttribute('d');
+      return;
+    }
+    const sr = stage.getBoundingClientRect();
+    if(sr.width < 40 || sr.height < 40) return;
+    svg.setAttribute('viewBox', `0 0 ${sr.width} ${sr.height}`);
+    svg.setAttribute('width', String(sr.width));
+    svg.setAttribute('height', String(sr.height));
+
+    const p1 = poles[0].getBoundingClientRect();
+    const p2 = poles[1].getBoundingClientRect();
+    const t = lead.getBoundingClientRect();
+    const x1 = p1.right - sr.left;
+    const y1 = p1.top + p1.height / 2 - sr.top;
+    const x2 = p2.right - sr.left;
+    const y2 = p2.top + p2.height / 2 - sr.top;
+    const x3 = t.left - sr.left + 8;
+    const y3 = t.top + t.height / 2 - sr.top;
+    const elbow = Math.round((Math.max(x1, x2) + x3) / 2);
+    const joinY = (y1 + y2) / 2;
+    const c1 = elbow + Math.max(28, (x3 - elbow) * 0.38);
+    const c2 = x3 - Math.max(28, (x3 - elbow) * 0.22);
+
+    path.setAttribute('d', [
+      `M ${x1} ${y1} H ${elbow}`,
+      `M ${x2} ${y2} H ${elbow}`,
+      `M ${elbow} ${y1} V ${y2}`,
+      `M ${elbow} ${joinY} C ${c1} ${joinY}, ${c2} ${y3}, ${x3} ${y3}`
+    ].join(' '));
+    dot.setAttribute('cx', String(elbow));
+    dot.setAttribute('cy', String(joinY));
+  }
+
+  layoutLink();
+  window.addEventListener('resize', layoutLink);
+  if(typeof ResizeObserver !== 'undefined' && stage){
+    new ResizeObserver(layoutLink).observe(stage);
+  }
 })();
 
 /* ---------- clarity section enter + rail cycle ---------- */
@@ -2733,25 +3186,6 @@ function positionBeams(){
 }
 window.addEventListener('load', positionBeams);
 window.addEventListener('resize', positionBeams);
-
-/* ---------- register CTA -> inline signup ---------- */
-const registerBtn = document.getElementById('registerBtn');
-const signupForm = document.getElementById('signupForm');
-const signupNote = document.getElementById('signupNote');
-registerBtn && registerBtn.addEventListener('click', (e) => {
-    const form = document.getElementById('signupForm');
-    if (!form) return;
-    e.preventDefault();
-    form.classList.add('open');
-    document.getElementById('emailInput')?.focus();
-  });
-signupForm.addEventListener('submit', (e)=>{
-  e.preventDefault();
-  signupNote.classList.add('show');
-  registerBtn.textContent = '';
-  registerBtn.innerHTML = "You're in ✓";
-  signupForm.classList.remove('open');
-});
 
 /* ---------- pill toggle (diagnosis card) ---------- */
 document.querySelectorAll('#pillGroup .pill').forEach(p=>{
@@ -2981,6 +3415,85 @@ journeyCards.forEach((c,idx)=>{
   }
 
   loadPositions();
+})();
+
+/* ---------- early access form ---------- */
+(function(){
+  const modal = document.getElementById('earlyAccessModal');
+  const form = document.getElementById('earlyAccessForm');
+  const done = document.getElementById('eaDone');
+  const err = document.getElementById('eaErr');
+  const submit = document.getElementById('eaSubmit');
+  const emailEl = document.getElementById('eaEmail');
+  const phoneEl = document.getElementById('eaPhone');
+  if(!modal || !form || !done || !err || !submit || !emailEl || !phoneEl) return;
+
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  let lastFocus = null;
+
+  function openModal(){
+    lastFocus = document.activeElement;
+    form.hidden = false;
+    done.hidden = true;
+    err.textContent = '';
+    form.reset();
+    submit.disabled = false;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.documentElement.classList.add('ea-lock');
+    document.body.classList.add('ea-lock');
+    setTimeout(()=> emailEl.focus(), 40);
+  }
+  function closeModal(){
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.documentElement.classList.remove('ea-lock');
+    document.body.classList.remove('ea-lock');
+    if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+  }
+
+  document.querySelectorAll('[data-early-access]').forEach((el)=>{
+    el.addEventListener('click', (e)=>{
+      e.preventDefault();
+      openModal();
+    });
+  });
+  modal.addEventListener('click', (e)=>{
+    if(e.target.closest('[data-ea-close]')) closeModal();
+  });
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+  });
+
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const email = emailEl.value.trim();
+    const phone = phoneEl.value.trim();
+    const digits = phone.replace(/\D/g, '');
+    err.textContent = '';
+    if(!emailRe.test(email)){ err.textContent = 'Enter a valid email'; emailEl.focus(); return; }
+    if(digits.length < 10 || digits.length > 15){ err.textContent = 'Enter a valid phone number'; phoneEl.focus(); return; }
+
+    submit.disabled = true;
+    try{
+      const res = await fetch('/api/early-access', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, phone })
+      });
+      const data = await res.json().catch(()=>({}));
+      if(!res.ok || !data.ok){
+        err.textContent = data.error || 'Could not submit. Try again.';
+        submit.disabled = false;
+        return;
+      }
+      form.hidden = true;
+      done.hidden = false;
+    }catch(_){
+      err.textContent = 'Could not submit. Try again.';
+      submit.disabled = false;
+    }
+  });
 })();
 </script>
 </body>
