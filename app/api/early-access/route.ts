@@ -208,16 +208,25 @@ export async function POST(request: Request) {
   }
 
   // Best-effort delivery. Both helpers swallow their own failures and log
-  // server-side, so a Resend outage can never cost us a beta lead.
-  await sendBetaConfirmationEmail({ name, email });
-  await sendInternalNotificationEmail({
-    name,
-    email,
-    phone,
-    linkedinUrl,
-    registeredAt: registration.createdAt,
-    source: SOURCE,
-  });
+  // server-side, so an SMTP outage can never cost us a beta lead.
+  //
+  // Sent concurrently rather than in sequence: each one opens its own SMTP
+  // conversation, and running them back to back doubles the worst case against
+  // the serverless function's timeout. They are independent, so nothing is
+  // gained by ordering them.
+  // `allSettled`, not `all`: a rejection here would turn a committed
+  // registration into a 500, which the invariant above forbids.
+  await Promise.allSettled([
+    sendBetaConfirmationEmail({ name, email }),
+    sendInternalNotificationEmail({
+      name,
+      email,
+      phone,
+      linkedinUrl,
+      registeredAt: registration.createdAt,
+      source: SOURCE,
+    }),
+  ]);
 
   return json({ ok: true, duplicate: false });
 }

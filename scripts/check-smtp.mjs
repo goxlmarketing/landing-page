@@ -27,6 +27,21 @@ console.log(`host   ${host}:${port} (secure: ${port === 465})`);
 console.log(`user   ${user}`);
 console.log(`from   ${from || "(BETA_FROM_EMAIL not set)"}`);
 
+// This script reads .env.local literally, but `next dev` runs it through
+// dotenv-expand, which treats `$` as a variable reference and silently
+// truncates the value. A password can therefore pass here and still fail with
+// `535 authentication failed` in the app. `#` can start an inline comment.
+for (const [char, why] of [["$", "dotenv-expand reads it as a variable reference"],
+                           ["#", "dotenv may treat it as an inline comment"]]) {
+  if (pass.includes(char)) {
+    console.warn(
+      `\nWARN  SMTP_PASSWORD contains '${char}' — ${why}.\n` +
+      `      This check may pass while 'npm run dev' fails with 535.\n` +
+      `      Choose a symbol such as - _ ! . * + = instead.`,
+    );
+  }
+}
+
 // Hostinger rejects a From address that isn't the authenticated mailbox, and
 // the resulting error arrives at send time rather than login time. Catch it here.
 if (from) {

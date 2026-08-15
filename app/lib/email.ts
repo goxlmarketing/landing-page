@@ -43,11 +43,36 @@ const DEFAULT_PORT = 465;
 
 /**
  * The registration response waits on delivery, so a wedged SMTP server must
- * not be able to stall it. These caps bound the worst case at a few seconds.
+ * not be able to stall it.
+ *
+ * These are per-phase caps, so on their own they can stack (connect, then
+ * greet, then transfer). SEND_DEADLINE_MS below is the hard ceiling on a whole
+ * send; the route sends both emails concurrently, so that figure is also the
+ * worst case for the request as a whole. Kept well under the serverless
+ * function limit on Vercel's Hobby plan, which is 10s by default.
  */
-const CONNECTION_TIMEOUT_MS = 5_000;
-const GREETING_TIMEOUT_MS = 5_000;
-const SOCKET_TIMEOUT_MS = 10_000;
+const CONNECTION_TIMEOUT_MS = 4_000;
+const GREETING_TIMEOUT_MS = 4_000;
+const SOCKET_TIMEOUT_MS = 6_000;
+const SEND_DEADLINE_MS = 7_000;
+
+/**
+ * Rejects if `promise` has not settled within `ms`.
+ *
+ * The underlying send may still complete — we simply stop waiting on it. For a
+ * best-effort email that is the right trade: a founder should never see a
+ * failed registration because our mail server was slow.
+ */
+function withDeadline<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(`${label} exceeded ${ms}ms`)), ms);
+    const done = () => clearTimeout(timer);
+    promise.then(
+      (value) => { done(); resolve(value); },
+      (error) => { done(); reject(error); },
+    );
+  });
+}
 
 declare global {
   // Reused across hot reloads in dev and warm invocations in production so we
@@ -89,7 +114,7 @@ async function send(payload: Outgoing, context: string): Promise<boolean> {
   }
 
   try {
-    await transporter.sendMail(payload);
+    await withDeadline(transporter.sendMail(payload), SEND_DEADLINE_MS, context);
     return true;
   } catch (error) {
     // Hostinger rejects any From that isn't the authenticated mailbox, which

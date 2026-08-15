@@ -3282,6 +3282,10 @@
     font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
     color:rgba(232,242,238,.55);
   }
+  .ea-form label .ea-opt{
+    text-transform:none; letter-spacing:0; font-weight:500;
+    color:rgba(232,242,238,.35);
+  }
   .ea-form input{
     width:100%;
     background:rgba(255,255,255,.04);
@@ -3314,6 +3318,11 @@
     margin:0 0 18px; font-size:16px; line-height:1.5;
     color:rgba(232,242,238,.88);
   }
+  .ea-done .ea-done__sub{
+    margin:-10px 0 18px; font-size:14px;
+    color:rgba(232,242,238,.62);
+  }
+  .ea-done .ea-done__sub:empty{ display:none; }
   .ea-done .cta{ justify-content:center; width:100%; }
   button.cta-limit{
     font:inherit;
@@ -3635,22 +3644,26 @@
     </button>
     <p class="ea-eye">Early access</p>
     <h3 id="eaTitle">Register for Early Access</h3>
-    <p class="ea-sub">Limited slots. Leave your name, email and phone number — we’ll reach out.</p>
+    <p class="ea-sub">Limited slots. Share a few details — we’ll reach out when your beta access is ready.</p>
     <form class="ea-form" id="earlyAccessForm" novalidate>
-      <label>Name
-        <input id="eaName" name="name" type="text" autocomplete="name" placeholder="Your name" minlength="2" maxlength="80" required>
+      <label>Full Name
+        <input id="eaName" name="name" type="text" autocomplete="name" placeholder="Your full name" minlength="2" maxlength="80" required>
       </label>
       <label>Email
-        <input id="eaEmail" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@company.com" required>
+        <input id="eaEmail" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@company.com" maxlength="120" required>
       </label>
-      <label>Phone number
-        <input id="eaPhone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+91 98765 43210" required>
+      <label>Phone Number <span class="ea-opt">(optional)</span>
+        <input id="eaPhone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+91 98765 43210" maxlength="24">
+      </label>
+      <label>LinkedIn Profile <span class="ea-opt">(optional)</span>
+        <input id="eaLinkedin" name="linkedinUrl" type="url" autocomplete="url" inputmode="url" placeholder="linkedin.com/in/yourprofile" maxlength="200">
       </label>
       <p class="ea-err" id="eaErr" role="alert"></p>
-      <button class="cta" type="submit" id="eaSubmit">Join the list</button>
+      <button class="cta" type="submit" id="eaSubmit">Join Ally Beta</button>
     </form>
     <div class="ea-done" id="eaDone" hidden>
-      <p>You’re on the list. We’ll be in touch.</p>
+      <p id="eaDoneMsg">You’re on the Ally beta list 🎉</p>
+      <p class="ea-done__sub" id="eaDoneSub">Thanks for joining. We’ll reach out when your beta access is ready.</p>
       <button class="cta" type="button" data-ea-close>Close</button>
     </div>
   </div>
@@ -4125,10 +4138,29 @@ journeyCards.forEach((c,idx)=>{
   const nameEl = document.getElementById('eaName');
   const emailEl = document.getElementById('eaEmail');
   const phoneEl = document.getElementById('eaPhone');
-  if(!modal || !form || !done || !err || !submit || !nameEl || !emailEl || !phoneEl) return;
+  const linkedinEl = document.getElementById('eaLinkedin');
+  const doneMsg = document.getElementById('eaDoneMsg');
+  const doneSub = document.getElementById('eaDoneSub');
+  if(!modal || !form || !done || !err || !submit || !nameEl || !emailEl || !phoneEl || !linkedinEl) return;
 
   const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const submitLabel = submit.textContent;
   let lastFocus = null;
+
+  /* shape-only check, mirrors the server; nothing is fetched or verified */
+  function linkedinLooksValid(value){
+    const raw = value.trim();
+    if(!raw) return true;
+    try{
+      const url = new URL(/^https?:\/\//i.test(raw) ? raw : 'https://' + raw);
+      if(url.protocol !== 'https:' && url.protocol !== 'http:') return false;
+      const host = url.hostname.toLowerCase().replace(/^www\./, '');
+      if(host !== 'linkedin.com' && !host.endsWith('.linkedin.com')) return false;
+      return url.pathname.replace(/\/+$/, '').length > 1;
+    }catch(_){
+      return false;
+    }
+  }
 
   function openModal(){
     lastFocus = document.activeElement;
@@ -4137,6 +4169,7 @@ journeyCards.forEach((c,idx)=>{
     err.textContent = '';
     form.reset();
     submit.disabled = false;
+    submit.textContent = submitLabel;
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.documentElement.classList.add('ea-lock');
@@ -4169,30 +4202,44 @@ journeyCards.forEach((c,idx)=>{
     const name = nameEl.value.trim().replace(/\s+/g, ' ');
     const email = emailEl.value.trim();
     const phone = phoneEl.value.trim();
+    const linkedinUrl = linkedinEl.value.trim();
     const digits = phone.replace(/\D/g, '');
     err.textContent = '';
-    if(name.length < 2 || name.length > 80){ err.textContent = 'Enter your name'; nameEl.focus(); return; }
+    if(name.length < 2 || name.length > 80){ err.textContent = 'Enter your full name'; nameEl.focus(); return; }
     if(!emailRe.test(email)){ err.textContent = 'Enter a valid email'; emailEl.focus(); return; }
-    if(digits.length < 10 || digits.length > 15){ err.textContent = 'Enter a valid phone number'; phoneEl.focus(); return; }
+    if(phone && (digits.length < 10 || digits.length > 15)){ err.textContent = 'Enter a valid phone number'; phoneEl.focus(); return; }
+    if(!linkedinLooksValid(linkedinUrl)){ err.textContent = 'Enter a valid LinkedIn profile URL'; linkedinEl.focus(); return; }
 
     submit.disabled = true;
+    submit.textContent = 'Joining…';
     try{
       const res = await fetch('/api/early-access', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, phone })
+        body: JSON.stringify({ name, email, phone, linkedinUrl })
       });
       const data = await res.json().catch(()=>({}));
       if(!res.ok || !data.ok){
-        err.textContent = data.error || 'Could not submit. Try again.';
+        err.textContent = data.error || 'Something went wrong. Please try again.';
         submit.disabled = false;
+        submit.textContent = submitLabel;
         return;
+      }
+      if(doneMsg && doneSub){
+        if(data.duplicate){
+          doneMsg.textContent = 'You’re already on the Ally beta list.';
+          doneSub.textContent = 'We already have your details — we’ll reach out when your beta access is ready.';
+        }else{
+          doneMsg.textContent = 'You’re on the Ally beta list 🎉';
+          doneSub.textContent = 'Thanks for joining. We’ll reach out when your beta access is ready.';
+        }
       }
       form.hidden = true;
       done.hidden = false;
     }catch(_){
-      err.textContent = 'Could not submit. Try again.';
+      err.textContent = 'Something went wrong. Please try again.';
       submit.disabled = false;
+      submit.textContent = submitLabel;
     }
   });
 })();
