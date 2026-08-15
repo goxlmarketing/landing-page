@@ -10,7 +10,7 @@ const MAX_RATE_BUCKETS = 5_000;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NO_STORE_HEADERS = { "Cache-Control": "no-store" };
 
-type Lead = { email: string; phone: string; at: string };
+type Lead = { name?: string; email: string; phone: string; at: string };
 type RateBucket = { count: number; resetAt: number };
 
 const rateBuckets = new Map<string, RateBucket>();
@@ -78,7 +78,12 @@ function consumeRateLimit(request: Request) {
 function isLead(value: unknown): value is Lead {
   if (!value || typeof value !== "object") return false;
   const lead = value as Partial<Lead>;
-  return typeof lead.email === "string" && typeof lead.phone === "string" && typeof lead.at === "string";
+  return (
+    (lead.name === undefined || typeof lead.name === "string") &&
+    typeof lead.email === "string" &&
+    typeof lead.phone === "string" &&
+    typeof lead.at === "string"
+  );
 }
 
 async function loadLeads(): Promise<Lead[]> {
@@ -144,16 +149,20 @@ export async function POST(request: Request) {
       return json({ ok: false, error: "Request too large" }, 413);
     }
 
-    let body: { email?: unknown; phone?: unknown };
+    let body: { name?: unknown; email?: unknown; phone?: unknown };
     try {
-      body = JSON.parse(raw) as { email?: unknown; phone?: unknown };
+      body = JSON.parse(raw) as { name?: unknown; email?: unknown; phone?: unknown };
     } catch {
       return json({ ok: false, error: "Invalid JSON" }, 400);
     }
 
+    const name = String(body?.name || "").trim().replace(/\s+/g, " ").slice(0, 81);
     const email = String(body?.email || "").trim().toLowerCase().slice(0, 120);
     const phone = String(body?.phone || "").trim().slice(0, 24);
 
+    if (name.length < 2 || name.length > 80) {
+      return json({ ok: false, error: "Enter your name" }, 400);
+    }
     if (!EMAIL_RE.test(email)) {
       return json({ ok: false, error: "Enter a valid email" }, 400);
     }
@@ -162,7 +171,7 @@ export async function POST(request: Request) {
       return json({ ok: false, error: "Enter a valid phone number" }, 400);
     }
 
-    const result = await storeLead({ email, phone, at: new Date().toISOString() });
+    const result = await storeLead({ name, email, phone, at: new Date().toISOString() });
     if (result === "full") {
       return json({ ok: false, error: "Registrations are temporarily unavailable" }, 503);
     }

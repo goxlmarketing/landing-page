@@ -3585,7 +3585,7 @@
     <nav class="foot-links reveal" aria-label="Legal">
       <a href="mailto:hello@goxl.ai?subject=Privacy">Privacy</a><span class="divider">|</span>
       <a href="mailto:hello@goxl.ai?subject=Terms">Terms</a><span class="divider">|</span>
-      <a href="/about.html">About</a><span class="divider">|</span>
+      <a href="/about.html">Our Story</a><span class="divider">|</span>
       <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a><span class="divider">|</span>
       <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     </nav>
@@ -3599,12 +3599,15 @@
     </button>
     <p class="ea-eye">Early access</p>
     <h3 id="eaTitle">Register for Early Access</h3>
-    <p class="ea-sub">Limited slots. Leave your email and phone — we’ll reach out.</p>
+    <p class="ea-sub">Limited slots. Leave your name, email and phone number — we’ll reach out.</p>
     <form class="ea-form" id="earlyAccessForm" novalidate>
+      <label>Name
+        <input id="eaName" name="name" type="text" autocomplete="name" placeholder="Your name" minlength="2" maxlength="80" required>
+      </label>
       <label>Email
         <input id="eaEmail" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@company.com" required>
       </label>
-      <label>Phone
+      <label>Phone number
         <input id="eaPhone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+91 98765 43210" required>
       </label>
       <p class="ea-err" id="eaErr" role="alert"></p>
@@ -4072,9 +4075,10 @@ journeyCards.forEach((c,idx)=>{
   const done = document.getElementById('eaDone');
   const err = document.getElementById('eaErr');
   const submit = document.getElementById('eaSubmit');
+  const nameEl = document.getElementById('eaName');
   const emailEl = document.getElementById('eaEmail');
   const phoneEl = document.getElementById('eaPhone');
-  if(!modal || !form || !done || !err || !submit || !emailEl || !phoneEl) return;
+  if(!modal || !form || !done || !err || !submit || !nameEl || !emailEl || !phoneEl) return;
 
   const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   let lastFocus = null;
@@ -4090,7 +4094,7 @@ journeyCards.forEach((c,idx)=>{
     modal.setAttribute('aria-hidden', 'false');
     document.documentElement.classList.add('ea-lock');
     document.body.classList.add('ea-lock');
-    setTimeout(()=> emailEl.focus(), 40);
+    setTimeout(()=> nameEl.focus(), 40);
   }
   function closeModal(){
     modal.classList.remove('is-open');
@@ -4115,10 +4119,12 @@ journeyCards.forEach((c,idx)=>{
 
   form.addEventListener('submit', async (e)=>{
     e.preventDefault();
+    const name = nameEl.value.trim().replace(/\s+/g, ' ');
     const email = emailEl.value.trim();
     const phone = phoneEl.value.trim();
     const digits = phone.replace(/\D/g, '');
     err.textContent = '';
+    if(name.length < 2 || name.length > 80){ err.textContent = 'Enter your name'; nameEl.focus(); return; }
     if(!emailRe.test(email)){ err.textContent = 'Enter a valid email'; emailEl.focus(); return; }
     if(digits.length < 10 || digits.length > 15){ err.textContent = 'Enter a valid phone number'; phoneEl.focus(); return; }
 
@@ -4127,7 +4133,7 @@ journeyCards.forEach((c,idx)=>{
       const res = await fetch('/api/early-access', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, phone })
+        body: JSON.stringify({ name, email, phone })
       });
       const data = await res.json().catch(()=>({}));
       if(!res.ok || !data.ok){
