@@ -1,11 +1,11 @@
 node_modules
 .next
+tsconfig.tsbuildinfo
 out
 .env
 .env*.local
 .vercel
 .pnpm-store
-data/early-access.json
 *.log
 .DS_Store
 Thumbs.db

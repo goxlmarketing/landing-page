@@ -1,30 +1,34 @@
-import { chmod, mkdir, readFile, writeFile } from "fs/promises";
-import path from "path";
+import { insertBetaUser } from "../../lib/db";
+import { sendBetaConfirmationEmail, sendInternalNotificationEmail } from "../../lib/email";
 
-const filePath = () => path.join(process.cwd(), "data", "early-access.json");
+// Note on Next.js 16: `nodejs` is already the default runtime and the docs
+// direct you to remove the `runtime` export (the Edge runtime is deprecated).
+// POST handlers are never cached, so no `dynamic` export is needed either.
+
 const MAX_BODY_BYTES = 2_048;
-const MAX_LEADS = 10_000;
 const RATE_LIMIT = 10;
 const RATE_WINDOW_MS = 10 * 60 * 1_000;
 const MAX_RATE_BUCKETS = 5_000;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NO_STORE_HEADERS = { "Cache-Control": "no-store" };
 
-type Lead = { name?: string; email: string; phone: string; at: string };
+const NAME_MAX = 80;
+const EMAIL_MAX = 120;
+const PHONE_MAX = 24;
+const LINKEDIN_MAX = 200;
+const SOURCE = "ally_landing_beta";
+
+const GENERIC_ERROR = "Something went wrong. Please try again.";
+
 type RateBucket = { count: number; resetAt: number };
 
 const rateBuckets = new Map<string, RateBucket>();
-let writeQueue: Promise<unknown> = Promise.resolve();
 
 function json(body: unknown, status = 200, headers: Record<string, string> = {}) {
   return Response.json(body, {
     status,
     headers: { ...NO_STORE_HEADERS, ...headers },
   });
-}
-
-function digitsOnly(value: string) {
-  return value.replace(/\D/g, "");
 }
 
 function requestHost(request: Request) {
@@ -75,48 +79,46 @@ function consumeRateLimit(request: Request) {
   return Math.max(1, Math.ceil((bucket.resetAt - now) / 1_000));
 }
 
-function isLead(value: unknown): value is Lead {
-  if (!value || typeof value !== "object") return false;
-  const lead = value as Partial<Lead>;
-  return (
-    (lead.name === undefined || typeof lead.name === "string") &&
-    typeof lead.email === "string" &&
-    typeof lead.phone === "string" &&
-    typeof lead.at === "string"
-  );
+type FieldResult = { ok: true; value: string } | { ok: false };
+
+/**
+ * Optional. Accepts common international formats and stores an E.164-ish value.
+ * An empty phone is valid — it must never block a registration.
+ */
+function normalizePhone(raw: string): FieldResult {
+  const trimmed = raw.trim();
+  if (!trimmed) return { ok: true, value: "" };
+  if (trimmed.length > PHONE_MAX) return { ok: false };
+  const digits = trimmed.replace(/\D/g, "");
+  if (digits.length < 10 || digits.length > 15) return { ok: false };
+  return { ok: true, value: `${trimmed.startsWith("+") ? "+" : ""}${digits}` };
 }
 
-async function loadLeads(): Promise<Lead[]> {
+/**
+ * Optional. Validates shape only — nothing is fetched, scraped or verified.
+ * Query strings and fragments are dropped so tracking params aren't stored.
+ */
+function normalizeLinkedinUrl(raw: string): FieldResult {
+  const trimmed = raw.trim();
+  if (!trimmed) return { ok: true, value: "" };
+  if (trimmed.length > LINKEDIN_MAX) return { ok: false };
+
+  const candidate = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+  let url: URL;
   try {
-    const raw = await readFile(filePath(), "utf8");
-    const parsed: unknown = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed.filter(isLead).slice(0, MAX_LEADS) : [];
+    url = new URL(candidate);
   } catch {
-    return [];
+    return { ok: false };
   }
-}
+  if (url.protocol !== "https:" && url.protocol !== "http:") return { ok: false };
 
-async function storeLead(lead: Lead) {
-  const operation = writeQueue.then(async () => {
-    const dir = path.dirname(filePath());
-    await mkdir(dir, { recursive: true, mode: 0o700 });
-    await chmod(dir, 0o700).catch(() => undefined);
+  const host = url.hostname.toLowerCase().replace(/^www\./, "");
+  if (host !== "linkedin.com" && !host.endsWith(".linkedin.com")) return { ok: false };
 
-    const leads = await loadLeads();
-    if (leads.some((existing) => existing.email === lead.email)) return "duplicate" as const;
-    if (leads.length >= MAX_LEADS) return "full" as const;
+  const path = url.pathname.replace(/\/+$/, "");
+  if (path.length <= 1) return { ok: false };
 
-    leads.push(lead);
-    await writeFile(filePath(), JSON.stringify(leads, null, 2), {
-      encoding: "utf8",
-      mode: 0o600,
-    });
-    await chmod(filePath(), 0o600).catch(() => undefined);
-    return "saved" as const;
-  });
-
-  writeQueue = operation.catch(() => undefined);
-  return operation;
+  return { ok: true, value: `https://${url.hostname.toLowerCase()}${path}` };
 }
 
 export async function POST(request: Request) {
@@ -143,42 +145,79 @@ export async function POST(request: Request) {
     return json({ ok: false, error: "Request too large" }, 413);
   }
 
+  let name: string;
+  let email: string;
+  let phone: string | null;
+  let linkedinUrl: string | null;
+
   try {
     const raw = await request.text();
     if (new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) {
       return json({ ok: false, error: "Request too large" }, 413);
     }
 
-    let body: { name?: unknown; email?: unknown; phone?: unknown };
+    let body: { name?: unknown; email?: unknown; phone?: unknown; linkedinUrl?: unknown };
     try {
-      body = JSON.parse(raw) as { name?: unknown; email?: unknown; phone?: unknown };
+      body = JSON.parse(raw) as typeof body;
     } catch {
       return json({ ok: false, error: "Invalid JSON" }, 400);
     }
 
-    const name = String(body?.name || "").trim().replace(/\s+/g, " ").slice(0, 81);
-    const email = String(body?.email || "").trim().toLowerCase().slice(0, 120);
-    const phone = String(body?.phone || "").trim().slice(0, 24);
+    name = String(body?.name ?? "").trim().replace(/\s+/g, " ").slice(0, NAME_MAX + 1);
+    email = String(body?.email ?? "").trim().toLowerCase().slice(0, EMAIL_MAX);
+    const rawPhone = String(body?.phone ?? "").slice(0, PHONE_MAX + 1);
+    const rawLinkedin = String(body?.linkedinUrl ?? "").slice(0, LINKEDIN_MAX + 1);
 
-    if (name.length < 2 || name.length > 80) {
-      return json({ ok: false, error: "Enter your name" }, 400);
+    if (name.length < 2 || name.length > NAME_MAX) {
+      return json({ ok: false, error: "Enter your full name" }, 400);
     }
     if (!EMAIL_RE.test(email)) {
       return json({ ok: false, error: "Enter a valid email" }, 400);
     }
-    const digits = digitsOnly(phone);
-    if (digits.length < 10 || digits.length > 15) {
+
+    const normalizedPhone = normalizePhone(rawPhone);
+    if (!normalizedPhone.ok) {
       return json({ ok: false, error: "Enter a valid phone number" }, 400);
     }
 
-    const result = await storeLead({ name, email, phone, at: new Date().toISOString() });
-    if (result === "full") {
-      return json({ ok: false, error: "Registrations are temporarily unavailable" }, 503);
+    const normalizedLinkedin = normalizeLinkedinUrl(rawLinkedin);
+    if (!normalizedLinkedin.ok) {
+      return json({ ok: false, error: "Enter a valid LinkedIn profile URL" }, 400);
     }
 
-    return json({ ok: true });
+    phone = normalizedPhone.value || null;
+    linkedinUrl = normalizedLinkedin.value || null;
   } catch (error) {
-    console.error("Early-access registration failed", error);
-    return json({ ok: false, error: "Could not submit. Try again." }, 500);
+    console.error("[ally-beta] request parsing failed", error);
+    return json({ ok: false, error: GENERIC_ERROR }, 500);
   }
+
+  // The database is the source of truth. Nothing after this point may turn a
+  // committed registration into a user-visible failure.
+  let registration: Awaited<ReturnType<typeof insertBetaUser>>;
+  try {
+    registration = await insertBetaUser({ name, email, phone, linkedinUrl, source: SOURCE });
+  } catch (error) {
+    console.error("[ally-beta] registration insert failed", error);
+    return json({ ok: false, error: GENERIC_ERROR }, 500);
+  }
+
+  if (!registration.created) {
+    // Already registered: no second row, and no second confirmation email.
+    return json({ ok: true, duplicate: true });
+  }
+
+  // Best-effort delivery. Both helpers swallow their own failures and log
+  // server-side, so a Resend outage can never cost us a beta lead.
+  await sendBetaConfirmationEmail({ name, email });
+  await sendInternalNotificationEmail({
+    name,
+    email,
+    phone,
+    linkedinUrl,
+    registeredAt: registration.createdAt,
+    source: SOURCE,
+  });
+
+  return json({ ok: true, duplicate: false });
 }
