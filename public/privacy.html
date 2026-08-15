@@ -1,93 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="GoXL Ally Privacy Policy">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://join.goxlally.ai/privacy.html">
-  <title>Privacy Policy — GoXL Ally</title>
-  <link rel="stylesheet" href="/legal.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Privacy Policy — GoXL Ally</title>
+<style>
+  :root{
+    --bg:#040705;
+    --accent:#2fe3ac;
+    --accent-2:#7ffcd1;
+    --text:#eef4f1;
+    --text-dim:#a9bab3;
+    --text-mute:#647a72;
+    --font-display:'Avenir Next','Segoe UI Semibold','Century Gothic',ui-sans-serif,system-ui,sans-serif;
+    --font-body:'Segoe UI',ui-sans-serif,system-ui,-apple-system,sans-serif;
+    --font-mono:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ background:var(--bg); color:var(--text); }
+  body{
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{ color:inherit; text-decoration:none; }
+  .top-brand{
+    position:absolute; top:max(22px, env(safe-area-inset-top));
+    left:max(22px, env(safe-area-inset-left));
+    z-index:40; display:flex; align-items:center; gap:10px;
+    font-family:var(--font-display); font-weight:700; font-size:18px;
+    letter-spacing:-0.02em; color:#fff;
+    padding:6px 14px 6px 6px;
+    border-radius:999px;
+    background:rgba(8,16,12,0.72);
+    border:1px solid rgba(255,255,255,0.28);
+  }
+  .top-brand img{ width:32px; height:32px; object-fit:contain; mix-blend-mode:screen; }
+  .top-back{
+    position:absolute; top:max(22px, env(safe-area-inset-top));
+    right:max(22px, env(safe-area-inset-right));
+    z-index:40; display:inline-flex; align-items:center; gap:7px;
+    font-family:var(--font-display); font-weight:600; font-size:14px;
+    color:#fff;
+    padding:8px 14px 8px 10px;
+    border-radius:999px;
+    background:rgba(8,16,12,0.72);
+    border:1px solid rgba(255,255,255,0.28);
+  }
+  .top-back svg{ width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; }
+  .top-back:hover{ border-color:rgba(47,227,172,0.55); color:var(--accent); }
+  .wrap{
+    width:min(720px, 90vw);
+    margin:0 auto;
+    padding:108px 0 80px;
+  }
+  .eye{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:16px;
+  }
+  h1{
+    font-family:var(--font-display);
+    font-size:clamp(34px, 7vw, 52px);
+    font-weight:600;
+    letter-spacing:-0.04em;
+    line-height:1.05;
+    margin:0 0 18px;
+  }
+  .lede{
+    font-size:clamp(17px, 2.4vw, 20px);
+    line-height:1.55;
+    color:rgba(238,244,241,0.82);
+    margin-bottom:20px;
+    max-width:46ch;
+  }
+  .updated{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:0.04em;
+    color:var(--text-mute);
+    margin-bottom:48px;
+  }
+  h2{
+    font-family:var(--font-display);
+    font-size:clamp(20px, 3.4vw, 25px);
+    font-weight:600;
+    letter-spacing:-0.03em;
+    line-height:1.25;
+    margin:44px 0 14px;
+  }
+  p{
+    font-size:16px;
+    line-height:1.7;
+    color:var(--text-dim);
+    margin:0 0 14px;
+  }
+  ul.plain{
+    margin:0 0 14px;
+    padding-left:20px;
+    color:var(--text-dim);
+  }
+  ul.plain li{
+    font-size:16px;
+    line-height:1.7;
+    margin:0 0 6px;
+  }
+  strong{ color:var(--text); font-weight:600; }
+  .contact-box{
+    margin:14px 0 20px;
+    padding:16px 18px;
+    border:1px solid rgba(47,227,172,0.28);
+    border-radius:14px;
+    background:rgba(47,227,172,0.05);
+  }
+  .contact-box p{ margin:0; color:var(--text); }
+  .contact-box a{ color:var(--accent); }
+  .contact-box a:hover{ text-decoration:underline; }
+  .close{
+    margin-top:56px;
+    padding-top:36px;
+    border-top:1px solid rgba(120,220,190,0.16);
+  }
+  .back-row a{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--font-display); font-weight:600; font-size:14px;
+    color:var(--accent);
+  }
+  .back-row svg{ width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; }
+  .foot{
+    display:flex; justify-content:center; flex-wrap:wrap;
+    gap:10px 18px;
+    margin-top:48px;
+    font-size:12.5px;
+    color:var(--text-mute);
+  }
+  .foot a{ color:var(--text-dim); }
+  .foot a:hover{ color:var(--accent); }
+  @media (max-width:768px){
+    .top-brand{
+      top:max(14px, env(safe-area-inset-top));
+      left:max(14px, env(safe-area-inset-left));
+      font-size:15px;
+      background:#101c18;
+    }
+    .top-brand img{ width:28px; height:28px; }
+    .top-back{
+      top:max(14px, env(safe-area-inset-top));
+      right:max(14px, env(safe-area-inset-right));
+      font-size:13px;
+      background:#101c18;
+      padding:7px 12px 7px 10px;
+    }
+    .wrap{ padding:96px 0 max(64px, env(safe-area-inset-bottom)); }
+    h2{ margin-top:36px; }
+    p, ul.plain li{ font-size:15.5px; }
+  }
+</style>
 </head>
 <body>
   <a class="top-brand" href="/">
-    <img src="/assets/logo-123.png" alt="">
+    <img src="/assets/logo-123.png" alt="" />
     <span>GoXL Ally</span>
   </a>
-  <a class="top-back" href="/">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
-    Home
+  <a class="top-back js-back" id="backLink" href="/">
+    <svg viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+    Back
   </a>
 
-  <main class="legal-wrap">
-    <p class="eyebrow">Your data, handled with care</p>
-    <h1>Privacy Policy</h1>
-    <p class="updated">Effective date: 15 August 2026</p>
-    <p class="intro">This policy explains how GoXL Ally, a GoXL initiative (“GoXL Ally”, “we”, “us”), collects and uses information when you visit our website or register for early access.</p>
+  <main class="wrap">
+    <p class="eye">Privacy Policy</p>
+    <h1>How we handle your data.</h1>
+    <p class="lede">This page explains what we collect when you register for the Ally beta, why we collect it, and how you can control it.</p>
+    <p class="updated">Version v1.0 · Effective 15 August 2026 · Applies to beta registrations at join.goxlally.ai</p>
 
-    <section>
-      <h2>1. Information we collect</h2>
-      <ul>
-        <li>Your name, email address and phone number when you register for early access.</li>
-        <li>Your Terms acceptance, email-marketing preference, consent time and policy version.</li>
-        <li>Basic technical and security information that may appear in website or hosting logs, such as IP address, browser and device information.</li>
-      </ul>
-    </section>
+    <h2>What we collect</h2>
+    <p>When you register for Ally Beta, we collect:</p>
+    <ul class="plain">
+      <li><strong>Full name</strong> — required</li>
+      <li><strong>Email address</strong> — required</li>
+      <li><strong>Phone number</strong> — optional</li>
+      <li><strong>LinkedIn profile URL</strong> — optional</li>
+      <li><strong>Your choices</strong> — whether you accepted these terms, whether you opted in to marketing emails, and when</li>
+    </ul>
+    <p>We don't ask for anything beyond this on the registration form, and we don't use cookies or trackers to collect information about you on this site.</p>
 
-    <section>
-      <h2>2. How we use your information</h2>
-      <ul>
-        <li>To receive, manage and respond to your early-access registration.</li>
-        <li>To send registration confirmations, access invitations and essential product or service updates.</li>
-        <li>To send product news, founder insights and promotional emails only when you choose the optional email-marketing checkbox.</li>
-        <li>To protect the website, prevent misuse and comply with applicable law.</li>
-      </ul>
-      <p class="note">Your phone number is collected for early-access contact and will not be used for promotional SMS or WhatsApp messages under this consent.</p>
-    </section>
+    <h2>Why we collect it</h2>
+    <p><strong>Essential — to run your registration.</strong> We register your interest in Ally Beta, confirm it by email, and contact you when beta access is ready. This is the only thing we need your details for, and it's the only use that isn't optional.</p>
+    <p><strong>Optional — marketing emails.</strong> If, and only if, you tick the separate marketing box on the form, we'll also send you product updates, founder insights and promotional emails. This is entirely your choice: leaving it unticked does not affect your registration in any way.</p>
+    <p>We never sell your information, and we don't use it to build advertising profiles.</p>
 
-    <section>
-      <h2>3. Your choices and consent</h2>
-      <p>Registering for early access requires us to process the details needed to manage your request. Promotional email consent is optional and is not required to register.</p>
-      <p>You may withdraw promotional email consent at any time by using the unsubscribe link in an email or contacting us at <a class="inline-link" href="mailto:hello@goxl.ai?subject=Privacy%20Request">hello@goxl.ai</a>.</p>
-    </section>
+    <h2>Your consent</h2>
+    <p>The registration form asks you for two separate things, and they are deliberately not bundled together:</p>
+    <ul class="plain">
+      <li><strong>Accepting these terms</strong> — required, because we can't process a registration without it.</li>
+      <li><strong>Marketing emails</strong> — optional, off by default, and never a condition of registering.</li>
+    </ul>
+    <p>We record which of these you agreed to, and when, along with the version of this policy in force at the time. You can withdraw either one at any time — see <a href="#your-rights">Your rights</a> below. Withdrawing marketing consent stops the promotional emails; withdrawing entirely means we delete your registration.</p>
 
-    <section>
-      <h2>4. Data sharing</h2>
-      <p><strong>We do not sell or rent your personal information, and we do not share it with third parties for their own advertising.</strong></p>
-      <p>Service providers that are necessary to operate GoXL Ally—such as website hosting, secure data storage and email-delivery providers—may process limited information only to provide those services on our instructions. We may also disclose information where required by law or to protect our legal rights.</p>
-    </section>
+    <h2>Who else sees it</h2>
+    <p>We use two categories of service providers to run this registration system, and both act strictly on our instructions — they don't use your data for their own purposes:</p>
+    <ul class="plain">
+      <li>A <strong>database hosting provider</strong>, to store your registration securely.</li>
+      <li>An <strong>email delivery provider</strong>, to send your confirmation email and, internally, to notify our team of a new registration.</li>
+    </ul>
+    <p>We do not share your information with any other third party, we do not sell or rent it, and we do not use it to build advertising or profiling audiences.</p>
 
-    <section>
-      <h2>5. Retention</h2>
-      <p>We keep registration information only for as long as reasonably necessary to manage early access, provide requested communications and meet legal or security requirements. Marketing preferences are retained while you remain subscribed. When information is no longer required, we delete or anonymise it where reasonably possible.</p>
-    </section>
+    <h2>How long we keep it</h2>
+    <p>We keep your registration for <strong>up to 24 months</strong> from the day you register. After that the purpose you gave it for has been served, and we delete it.</p>
+    <p>If you ask us to delete it sooner, we will — see <a href="#your-rights">Your rights</a> below. If you become an Ally user, your account data is covered by the separate policy you'll agree to at that point.</p>
 
-    <section>
-      <h2>6. Security</h2>
-      <p>We use reasonable technical and organisational safeguards designed to protect personal information. No internet or storage system is completely secure, so we cannot guarantee absolute security.</p>
-    </section>
+    <h2>Age requirement</h2>
+    <p>Ally Beta is for people aged <strong>18 or over</strong>, and you confirm your age when you register. We don't knowingly collect data from children. If you believe a child has registered, email us at <a href="mailto:info@goxlally.ai?subject=Child%20data%20removal">info@goxlally.ai</a> and we'll delete the record.</p>
 
-    <section>
-      <h2>7. Your rights</h2>
-      <p>Subject to applicable law, you may ask to access, correct, update or delete your personal information, withdraw consent, or raise a privacy concern. Email <a class="inline-link" href="mailto:hello@goxl.ai?subject=Privacy%20Request">hello@goxl.ai</a> and include enough information for us to identify and respond to your request.</p>
-    </section>
+    <h2>How we protect it</h2>
+    <p>Your data is stored in a database that is not publicly accessible, transmitted only over encrypted connections, and reachable only by our application's server-side code — never directly from a browser.</p>
 
-    <section>
-      <h2>8. Children</h2>
-      <p>GoXL Ally is intended for people aged 18 and above. We do not knowingly collect personal information from children through the early-access form.</p>
-    </section>
+    <h2 id="your-rights">Your rights</h2>
+    <p>Under India's Digital Personal Data Protection Act, 2023, you have the right to:</p>
+    <ul class="plain">
+      <li><strong>Access</strong> the personal data we hold about you</li>
+      <li><strong>Correct</strong> inaccurate or incomplete data</li>
+      <li><strong>Erase</strong> your data once it's no longer needed for the purpose you gave it for</li>
+      <li><strong>Withdraw consent</strong> at any time, as easily as you gave it</li>
+      <li><strong>Raise a grievance</strong> if you're unhappy with how we've handled your data</li>
+    </ul>
 
-    <section>
-      <h2>9. Changes and contact</h2>
-      <p>We may update this policy as GoXL Ally develops. The effective date above will show the latest version. For questions or complaints about this policy, contact <a class="inline-link" href="mailto:hello@goxl.ai?subject=Privacy%20Request">hello@goxl.ai</a>.</p>
-    </section>
+    <h2>How to reach us — and how to withdraw</h2>
+    <p>One email does all of it. Send us a note and say what you want — a copy of your data, a correction, deletion, or to withdraw consent entirely. You don't need an account or a form, and withdrawing is as easy as giving consent was.</p>
+    <div class="contact-box">
+      <p><strong>Grievance Officer — GoXL Ally</strong></p>
+      <p><strong>Email:</strong> <a href="mailto:info@goxlally.ai?subject=Privacy%20request%20%E2%80%94%20Ally%20Beta">info@goxlally.ai</a></p>
+      <p><strong>Delete my data:</strong> <a href="mailto:info@goxlally.ai?subject=Delete%20my%20Ally%20Beta%20registration&amp;body=Please%20delete%20the%20beta%20registration%20associated%20with%20this%20email%20address.">one-click deletion request &rarr;</a></p>
+    </div>
+    <p>We aim to respond within 30 days. If you're not satisfied with how we've handled your request, you may complain to the Data Protection Board of India.</p>
 
-    <nav class="legal-foot" aria-label="Footer">
-      <a href="/">Home</a><span>·</span>
-      <a href="/terms.html">Terms of Use</a><span>·</span>
-      <a href="/about.html">Our Story</a><span>·</span>
-      <a href="https://www.instagram.com/goxl_ally?igsh=MWgzYXZxaHU5cGw2bA%3D%3D&amp;igsi=MWgzYXZxaHU5cGw2bA%3D%3D" target="_blank" rel="noopener noreferrer">Instagram</a>
+    <h2>If something goes wrong</h2>
+    <p>If a data breach affects your information, we will notify the Data Protection Board of India and every affected person, as the DPDP Act requires.</p>
+
+    <h2>Cookies</h2>
+    <p>This site does not currently use analytics, advertising, or tracking cookies. If that changes in the future, we'll update this page and ask for your consent where required.</p>
+
+    <h2>Changes to this policy</h2>
+    <p>If we make material changes to how we handle your data, we'll update this page and revise the effective date above.</p>
+
+    <div class="close">
+      <p class="back-row"><a class="js-back" href="/"><svg viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Back to home</a></p>
+    </div>
+
+    <nav class="foot" aria-label="Footer">
+      <a class="js-back" href="/">Back</a>
+      <span>·</span>
+      <a href="/terms.html">Terms</a>
     </nav>
   </main>
+  <script>
+    document.querySelectorAll('.js-back, #backLink').forEach(function(el){
+      el.addEventListener('click', function(e){
+        if(window.history.length > 1){ e.preventDefault(); window.history.back(); }
+      });
+    });
+  </script>
 </body>
 </html>
