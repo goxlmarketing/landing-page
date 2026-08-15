@@ -81,7 +81,7 @@ try {
     from,
     to,
     subject: "Ally SMTP test",
-    text: "If you are reading this, Ally beta emails can send from this mailbox.",
+    text: "If you are reading this, Ally early-access emails can send from this mailbox.",
   });
   console.log(`OK    test email accepted for delivery to ${to} (id ${info.messageId})`);
 } catch (error) {

@@ -3724,7 +3724,7 @@
     </button>
     <p class="ea-eye">Early access</p>
     <h3 id="eaTitle">Register for Early Access</h3>
-    <p class="ea-sub">Limited slots. Share a few details — we’ll reach out when your beta access is ready.</p>
+    <p class="ea-sub">Limited slots. Share a few details — we’ll reach out when your early access is ready.</p>
     <form class="ea-form" id="earlyAccessForm" novalidate>
       <label>Full Name
         <input id="eaName" name="name" type="text" autocomplete="name" placeholder="Your full name" minlength="2" maxlength="80" required>
@@ -3747,11 +3747,11 @@
         <span><span class="ea-optional">Optional</span><br>I’d like to receive GoXL Ally product updates, founder insights and promotional emails. I can unsubscribe at any time.</span>
       </label>
       <p class="ea-err" id="eaErr" role="alert"></p>
-      <button class="cta" type="submit" id="eaSubmit">Join Ally Beta</button>
+      <button class="cta" type="submit" id="eaSubmit">Request Early Access</button>
     </form>
     <div class="ea-done" id="eaDone" hidden>
-      <p id="eaDoneMsg">You’re on the Ally beta list 🎉</p>
-      <p class="ea-done__sub" id="eaDoneSub">Thanks for joining. We’ll reach out when your beta access is ready.</p>
+      <p id="eaDoneMsg">Thank you for registering.</p>
+      <p class="ea-done__sub" id="eaDoneSub">Our team will reach out to you soon.</p>
       <button class="cta" type="button" data-ea-close>Close</button>
     </div>
   </div>
@@ -4326,11 +4326,11 @@ journeyCards.forEach((c,idx)=>{
       }
       if(doneMsg && doneSub){
         if(data.duplicate){
-          doneMsg.textContent = 'You’re already on the Ally beta list.';
-          doneSub.textContent = 'We already have your details — we’ll reach out when your beta access is ready.';
+          doneMsg.textContent = 'You’re already registered.';
+          doneSub.textContent = 'Our team will reach out to you soon.';
         }else{
-          doneMsg.textContent = 'You’re on the Ally beta list 🎉';
-          doneSub.textContent = 'Thanks for joining. We’ll reach out when your beta access is ready.';
+          doneMsg.textContent = 'Thank you for registering.';
+          doneSub.textContent = 'Our team will reach out to you soon.';
         }
       }
       form.hidden = true;

@@ -163,7 +163,7 @@ export async function sendInternalNotificationEmail(
   const html = `<!doctype html>
 <html lang="en">
   <body style="margin:0;padding:24px;background:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#1b201e;">
-    <h1 style="margin:0 0 16px;font-size:18px;font-weight:600;">New Ally Beta Registration</h1>
+    <h1 style="margin:0 0 16px;font-size:18px;font-weight:600;">New Ally Early Access Registration</h1>
     <table role="presentation" cellpadding="0" cellspacing="0" style="font-size:14px;line-height:1.6;">
       ${rows
         .map(
@@ -175,13 +175,13 @@ export async function sendInternalNotificationEmail(
   </body>
 </html>`;
 
-  const text = ["New Ally Beta Registration", "", ...rows.map(([label, value]) => `${label}: ${value}`)].join("\n");
+  const text = ["New Ally Early Access Registration", "", ...rows.map(([label, value]) => `${label}: ${value}`)].join("\n");
 
   return send(
     {
       from,
       to,
-      subject: `New Ally Beta Registration — ${registration.name}`,
+      subject: `New Ally Early Access Registration — ${registration.name}`,
       html,
       text,
       replyTo: registration.email,

@@ -16,7 +16,7 @@ const NAME_MAX = 80;
 const EMAIL_MAX = 120;
 const PHONE_MAX = 24;
 const LINKEDIN_MAX = 200;
-const SOURCE = "ally_landing_beta";
+const SOURCE = "ally_landing_early_access";
 const POLICY_VERSION = "2026-08-15";
 
 const GENERIC_ERROR = "Something went wrong. Please try again.";

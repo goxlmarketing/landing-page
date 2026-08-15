@@ -65,19 +65,19 @@ const FONT_MONO = "'SFMono-Regular',Consolas,Menlo,Monaco,'Courier New',monospac
  * are sent as UTF-8.
  */
 const COPY = {
-  subject: "You're on the Ally Founder's List",
+  subject: "We received your GoXL Ally Early Access registration",
   preheader:
     "We've received your details. Our team will review and verify them, then contact you with the next steps.",
   // Rendered uppercase by the eyebrow's text-transform.
-  eyebrow: "Founder's List · Received",
-  heading: "You're on the Ally Founder's List.",
+  eyebrow: "Early Access · Registration Received",
+  heading: "Your Early Access registration is received.",
   brandName: "GoXL Ally",
   brandTag: "The Founder's Compass",
   intro:
-    "Thanks for joining the Ally Founder's List. We've received your details successfully.",
+    "Thanks for registering for GoXL Ally Early Access. We've received your details successfully.",
   what:
     "Ally is the founder's compass — built to help founders turn uncertainty into clarity, better decisions, and deliberate action.",
-  statusTitle: "You're on the Founder's List",
+  statusTitle: "Early Access registration received",
   statusNote: "We'll review and verify your details before reaching out.",
   next:
     "Our team will review and verify your details, then contact you with the next steps.",
@@ -87,7 +87,7 @@ const COPY = {
   builtBy: "Built by GoXL",
   lockup: "Ally × GoXL",
   legal:
-    "You received this email because you registered for the GoXL Ally Founder's List at join.goxlally.ai.",
+    "You received this email because you registered for GoXL Ally Early Access at join.goxlally.ai.",
 } as const;
 
 export function escapeHtml(value: string): string {

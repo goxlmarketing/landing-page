@@ -74,7 +74,7 @@ function shell({
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Email preview — Ally beta confirmation</title>
+<title>Email preview — Ally early-access confirmation</title>
 <style>
   *{ box-sizing:border-box; }
   body{
@@ -111,7 +111,7 @@ function shell({
 </style>
 </head>
 <body>
-  <h1>Ally beta confirmation — email preview</h1>
+  <h1>Ally early-access confirmation — email preview</h1>
   <p class="meta">Subject: <code>${escapeHtml(subject)}</code></p>
   <p class="meta">Development only. This route 404s when <code>NODE_ENV=production</code>.</p>
   <p class="meta">The name below is a sample. In a real send it comes from the registrant's
