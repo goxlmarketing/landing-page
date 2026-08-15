@@ -3106,6 +3106,7 @@
       overflow:hidden;
       pointer-events:none;
     }
+    body.is-editing-mobile-cards .mobile-hero-cards{ pointer-events:auto; }
     .mobile-hero-card{
       position:absolute;
       max-width:min(176px, 46vw);
@@ -3122,6 +3123,19 @@
       line-height:1.3;
       letter-spacing:-.01em;
       text-shadow:0 1px 8px rgba(0,0,0,.46);
+    }
+    body.is-editing-mobile-cards .mobile-hero-card{
+      cursor:grab;
+      touch-action:none;
+      user-select:none;
+      -webkit-user-select:none;
+      outline:1px dashed rgba(127,252,209,.72);
+    }
+    body.is-editing-mobile-cards .mobile-hero-card.is-dragging{
+      z-index:20;
+      cursor:grabbing;
+      outline-color:#7ffcd1;
+      box-shadow:0 12px 32px rgba(0,0,0,.52),0 0 22px rgba(47,227,172,.34);
     }
     .mobile-hero-card__label{
       display:block;
@@ -3181,6 +3195,28 @@
     .problem .float-q--tr .float-q__label,
     .problem .float-q--bl .float-q__label{
       color:#087050 !important;
+    }
+    body.is-float-edit .float-edit-bar{
+      position:fixed;
+      top:auto !important;
+      right:auto !important;
+      bottom:max(14px, env(safe-area-inset-bottom));
+      left:50%;
+      z-index:6000;
+      width:max-content;
+      max-width:calc(100vw - 24px);
+      transform:translateX(-50%);
+      justify-content:center;
+    }
+    body.is-float-edit .problem.is-editing-floats .float-edit-hint{
+      position:fixed;
+      top:auto;
+      right:auto;
+      bottom:max(68px, calc(env(safe-area-inset-bottom) + 54px));
+      left:50%;
+      z-index:6000;
+      transform:translateX(-50%);
+      white-space:nowrap;
     }
   }
 
@@ -3305,19 +3341,19 @@
 </div>
 
 <aside class="mobile-hero-cards" aria-label="Founder questions">
-  <p class="mobile-hero-card mobile-hero-card--stuck">
+  <p class="mobile-hero-card mobile-hero-card--stuck" data-fq="tl">
     <span class="mobile-hero-card__label">Founder</span>
     Why am I stuck?
   </p>
-  <p class="mobile-hero-card mobile-hero-card--avoid">
+  <p class="mobile-hero-card mobile-hero-card--avoid" data-fq="bl">
     <span class="mobile-hero-card__label">Founder</span>
     What am I avoiding?
   </p>
-  <p class="mobile-hero-card mobile-hero-card--cash">
+  <p class="mobile-hero-card mobile-hero-card--cash" data-fq="tr">
     <span class="mobile-hero-card__label">Business</span>
     Where is cash leaking?
   </p>
-  <p class="mobile-hero-card mobile-hero-card--growth">
+  <p class="mobile-hero-card mobile-hero-card--growth" data-fq="br">
     <span class="mobile-hero-card__label">Business</span>
     What's blocking growth?
   </p>
@@ -3893,11 +3929,14 @@ journeyCards.forEach((c,idx)=>{
 /* ---------- floating cards: load locked positions (+ optional ?edit=1) ---------- */
 (function(){
   const section = document.getElementById('problem');
-  const cards = [...document.querySelectorAll('.float-q[data-fq]')];
+  const mobileHost = document.querySelector('.mobile-hero-cards');
+  const desktopCards = [...document.querySelectorAll('.float-q[data-fq]')];
+  const mobileCards = [...document.querySelectorAll('.mobile-hero-card[data-fq]')];
+  const allCards = [...desktopCards, ...mobileCards];
   const editBtn = document.getElementById('floatEditBtn');
   const saveBtn = document.getElementById('floatSaveBtn');
   const resetBtn = document.getElementById('floatResetBtn');
-  if(!section || !cards.length) return;
+  if(!section || !mobileHost || !desktopCards.length || !mobileCards.length) return;
 
   const phoneMq = window.matchMedia('(max-width: 768px)');
   const isPhoneView = () => phoneMq.matches;
@@ -3927,9 +3966,15 @@ journeyCards.forEach((c,idx)=>{
   function activeStorageKey(){
     return isPhoneView() ? STORAGE_KEY_PHONE : STORAGE_KEY;
   }
+  function activeCards(){
+    return isPhoneView() ? mobileCards : desktopCards;
+  }
+  function activeHost(){
+    return isPhoneView() ? mobileHost : section;
+  }
 
   function applyPositions(map){
-    cards.forEach(card=>{
+    activeCards().forEach(card=>{
       const key = card.dataset.fq;
       const pos = map[key];
       if(!pos) return;
@@ -3941,9 +3986,9 @@ journeyCards.forEach((c,idx)=>{
   }
 
   function readPositions(){
-    const rect = section.getBoundingClientRect();
+    const rect = activeHost().getBoundingClientRect();
     const out = {};
-    cards.forEach(card=>{
+    activeCards().forEach(card=>{
       const key = card.dataset.fq;
       const r = card.getBoundingClientRect();
       const top = ((r.top - rect.top) / rect.height) * 100;
@@ -3980,6 +4025,7 @@ journeyCards.forEach((c,idx)=>{
     const nextPhoneMode = isPhoneView();
     if(nextPhoneMode === lastPhoneMode) return;
     lastPhoneMode = nextPhoneMode;
+    document.body.classList.toggle('is-editing-mobile-cards', editing && nextPhoneMode);
     loadPositions();
   }, { passive:true });
 
@@ -3987,6 +4033,7 @@ journeyCards.forEach((c,idx)=>{
     function setEditing(on){
       editing = on;
       section.classList.toggle('is-editing-floats', on);
+      document.body.classList.toggle('is-editing-mobile-cards', on && isPhoneView());
       editBtn.textContent = on ? 'Cancel edit' : 'Edit cards';
       saveBtn.hidden = !on;
       resetBtn.hidden = !on;
@@ -4026,7 +4073,7 @@ journeyCards.forEach((c,idx)=>{
     function onPointerDown(e){
       if(!editing) return;
       const card = e.currentTarget;
-      const rect = section.getBoundingClientRect();
+      const rect = activeHost().getBoundingClientRect();
       const cardRect = card.getBoundingClientRect();
       drag = {
         card,
@@ -4056,7 +4103,7 @@ journeyCards.forEach((c,idx)=>{
       try{ drag.card.releasePointerCapture?.(e.pointerId); }catch(_){}
       drag = null;
     }
-    cards.forEach(card=>{
+    allCards.forEach(card=>{
       card.addEventListener('pointerdown', onPointerDown, { passive: false });
       card.addEventListener('pointermove', onPointerMove);
       card.addEventListener('pointerup', onPointerUp);
