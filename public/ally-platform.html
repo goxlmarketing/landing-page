@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ally — Founder DNA Platform | GoXL</title>
 <meta name="description" content="Ally by GoXL — a Founder DNA Platform. Understand the founder, then the business, then the root cause.">
+<meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="theme-color" content="#06140d">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1892,6 +1893,15 @@ img,svg,video,canvas{max-width:100%}
 }
 
 /* Small mobile (≤479) — tighten spacing, single-column, icon-only primary */
+/* Embedded phone preview: keep the title readable until the dashboard is expanded. */
+@media(max-width:640px){
+  html:not(.preview-fullscreen) body.preview .tb-burger,
+  html:not(.preview-fullscreen) body.preview .tb-back,
+  html:not(.preview-fullscreen) body.preview .tb-right{display:none!important}
+  html:not(.preview-fullscreen) body.preview .topbar{min-height:56px;padding:8px 14px}
+  html:not(.preview-fullscreen) body.preview .tb-title{flex:1;min-width:0}
+}
+
 @media(max-width:479px){
   .pad{padding:18px 14px 46px}
   .topbar{padding:0 14px}
@@ -4512,7 +4522,7 @@ img,svg,video,canvas{max-width:100%}
     var act=e.target.closest('[data-act]');
     if(act){ e.preventDefault(); var a=act.getAttribute('data-act');
       if(a==='diagnosis' || a==='chat-open'){
-        window.toast('You\'re exploring the Ally preview. Join the beta to unlock AI chat and Founder Diagnosis.');
+        window.toast('You\'re exploring the Ally preview. Register for early access to unlock AI chat and Founder Diagnosis.');
       }
       return; }
     var aco=e.target.closest('[data-acopen]');
@@ -4520,7 +4530,7 @@ img,svg,video,canvas{max-width:100%}
     var nav=e.target.closest('[data-nav]');
     if(nav){ e.preventDefault(); var navId=nav.getAttribute('data-nav');
       if(navId==='allychat' || navId==='chat'){
-        window.toast('You\'re exploring the Ally preview. Join the beta to unlock AI chat and Founder Diagnosis.');
+        window.toast('You\'re exploring the Ally preview. Register for early access to unlock AI chat and Founder Diagnosis.');
         return;
       }
       if(state.unlocked) go(navId); else jNext(); return; }
@@ -5784,6 +5794,18 @@ img,svg,video,canvas{max-width:100%}
 (function(){
   if(window.parent===window) return;
   if(!/[?&]preview\b/.test(location.search)) return;
+
+  function setPreviewFullscreen(on){
+    document.documentElement.classList.toggle('preview-fullscreen', !!on);
+    document.body.classList.toggle('preview-fullscreen', !!on);
+  }
+  window.addEventListener('message', function(e){
+    if(e.source!==window.parent) return;
+    if(e.origin!==location.origin && e.origin!=='null') return;
+    if(!e.data || e.data.type!=='ally-preview-fs') return;
+    setPreviewFullscreen(e.data.on);
+  });
+  try{ window.parent.postMessage({type:'ally-preview-ready'}, location.origin); }catch(e){}
 
   function scroller(){
     var chat=document.querySelector('.view.active.chat-view .chat-scroll, .view.active .ac-scroll');

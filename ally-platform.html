@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ally — Founder DNA Platform | GoXL</title>
 <meta name="description" content="Ally by GoXL — a Founder DNA Platform. Understand the founder, then the business, then the root cause.">
+<meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="theme-color" content="#06140d">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -4510,7 +4511,7 @@ img,svg,video,canvas{max-width:100%}
     var act=e.target.closest('[data-act]');
     if(act){ e.preventDefault(); var a=act.getAttribute('data-act');
       if(a==='diagnosis' || a==='chat-open'){
-        window.toast('You\'re exploring the Ally preview. Join the beta to unlock AI chat and Founder Diagnosis.');
+        window.toast('You\'re exploring the Ally preview. Register for early access to unlock AI chat and Founder Diagnosis.');
       }
       return; }
     var aco=e.target.closest('[data-acopen]');
@@ -4518,7 +4519,7 @@ img,svg,video,canvas{max-width:100%}
     var nav=e.target.closest('[data-nav]');
     if(nav){ e.preventDefault(); var navId=nav.getAttribute('data-nav');
       if(navId==='allychat' || navId==='chat'){
-        window.toast('You\'re exploring the Ally preview. Join the beta to unlock AI chat and Founder Diagnosis.');
+        window.toast('You\'re exploring the Ally preview. Register for early access to unlock AI chat and Founder Diagnosis.');
         return;
       }
       if(state.unlocked) go(navId); else jNext(); return; }

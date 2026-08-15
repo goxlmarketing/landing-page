@@ -17,9 +17,9 @@ const EMAIL_MAX = 120;
 const PHONE_MAX = 24;
 const LINKEDIN_MAX = 200;
 const SOURCE = "ally_landing_beta";
+const POLICY_VERSION = "2026-08-15";
 
 const GENERIC_ERROR = "Something went wrong. Please try again.";
-
 type RateBucket = { count: number; resetAt: number };
 
 const rateBuckets = new Map<string, RateBucket>();
@@ -149,6 +149,7 @@ export async function POST(request: Request) {
   let email: string;
   let phone: string | null;
   let linkedinUrl: string | null;
+  let source: string;
 
   try {
     const raw = await request.text();
@@ -156,7 +157,15 @@ export async function POST(request: Request) {
       return json({ ok: false, error: "Request too large" }, 413);
     }
 
-    let body: { name?: unknown; email?: unknown; phone?: unknown; linkedinUrl?: unknown };
+    let body: {
+      name?: unknown;
+      email?: unknown;
+      phone?: unknown;
+      linkedinUrl?: unknown;
+      termsAccepted?: unknown;
+      marketingConsent?: unknown;
+      policyVersion?: unknown;
+    };
     try {
       body = JSON.parse(raw) as typeof body;
     } catch {
@@ -167,6 +176,9 @@ export async function POST(request: Request) {
     email = String(body?.email ?? "").trim().toLowerCase().slice(0, EMAIL_MAX);
     const rawPhone = String(body?.phone ?? "").slice(0, PHONE_MAX + 1);
     const rawLinkedin = String(body?.linkedinUrl ?? "").slice(0, LINKEDIN_MAX + 1);
+    const termsAccepted = body?.termsAccepted === true;
+    const marketingConsent = body?.marketingConsent === true;
+    const policyVersion = String(body?.policyVersion || "").trim().slice(0, 32);
 
     if (name.length < 2 || name.length > NAME_MAX) {
       return json({ ok: false, error: "Enter your full name" }, 400);
@@ -179,6 +191,12 @@ export async function POST(request: Request) {
     if (!normalizedPhone.ok) {
       return json({ ok: false, error: "Enter a valid phone number" }, 400);
     }
+    if (!termsAccepted) {
+      return json({ ok: false, error: "Terms and Privacy acknowledgement required" }, 400);
+    }
+    if (policyVersion !== POLICY_VERSION) {
+      return json({ ok: false, error: "Please review the latest Terms and Privacy Policy" }, 400);
+    }
 
     const normalizedLinkedin = normalizeLinkedinUrl(rawLinkedin);
     if (!normalizedLinkedin.ok) {
@@ -187,6 +205,7 @@ export async function POST(request: Request) {
 
     phone = normalizedPhone.value || null;
     linkedinUrl = normalizedLinkedin.value || null;
+    source = `${SOURCE}|policy=${POLICY_VERSION}|marketing=${marketingConsent ? "yes" : "no"}`;
   } catch (error) {
     console.error("[ally-beta] request parsing failed", error);
     return json({ ok: false, error: GENERIC_ERROR }, 500);
@@ -196,7 +215,7 @@ export async function POST(request: Request) {
   // committed registration into a user-visible failure.
   let registration: Awaited<ReturnType<typeof insertBetaUser>>;
   try {
-    registration = await insertBetaUser({ name, email, phone, linkedinUrl, source: SOURCE });
+    registration = await insertBetaUser({ name, email, phone, linkedinUrl, source });
   } catch (error) {
     console.error("[ally-beta] registration insert failed", error);
     return json({ ok: false, error: GENERIC_ERROR }, 500);
@@ -224,7 +243,7 @@ export async function POST(request: Request) {
       phone,
       linkedinUrl,
       registeredAt: registration.createdAt,
-      source: SOURCE,
+      source,
     }),
   ]);
 

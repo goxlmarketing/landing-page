@@ -4,6 +4,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
 <title>GoXL Ally — The Founder's Compass</title>
+<meta name="description" content="GoXL Ally helps founders turn context into clarity, better decisions, and daily action. Register for early access.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://join.goxlally.ai/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="GoXL Ally">
+<meta property="og:title" content="GoXL Ally — The Founder's Compass">
+<meta property="og:description" content="GoXL Ally helps founders turn context into clarity, better decisions, and daily action. Register for early access.">
+<meta property="og:url" content="https://join.goxlally.ai/">
+<meta property="og:image" content="https://join.goxlally.ai/assets/hero-bg.jpeg">
+<meta property="og:image:alt" content="GoXL Ally — The Founder's Compass">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GoXL Ally — The Founder's Compass">
+<meta name="twitter:description" content="GoXL Ally helps founders turn context into clarity, better decisions, and daily action. Register for early access.">
+<meta name="twitter:image" content="https://join.goxlally.ai/assets/hero-bg.jpeg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "GoXL Ally",
+  "url": "https://join.goxlally.ai/",
+  "description": "GoXL Ally helps founders turn context into clarity, better decisions, and daily action.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "GoXL Entrepreneurship",
+    "url": "https://join.goxlally.ai/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://join.goxlally.ai/assets/goxl-entrepreneurship.png"
+    }
+  }
+}
+</script>
 <script>
 (function(){
   try{ if(sessionStorage.getItem('ally-meet-fs')==='1') document.documentElement.classList.add('meet-fs'); }catch(e){}
@@ -3247,6 +3279,9 @@
   .ea-dialog{
     position:relative; z-index:1;
     width:min(440px, 100%);
+    max-height:calc(100dvh - 32px);
+    overflow-y:auto;
+    overscroll-behavior:contain;
     padding:28px 26px 24px;
     border-radius:18px;
     border:1px solid rgba(120,220,190,0.22);
@@ -3286,7 +3321,7 @@
     text-transform:none; letter-spacing:0; font-weight:500;
     color:rgba(232,242,238,.35);
   }
-  .ea-form input{
+  .ea-form input:not([type="checkbox"]){
     width:100%;
     background:rgba(255,255,255,.04);
     border:1px solid var(--border);
@@ -3301,7 +3336,52 @@
     outline:none;
     transition:border-color .2s;
   }
-  .ea-form input:focus{ border-color:var(--border-strong); }
+  .ea-form input:not([type="checkbox"]):focus{ border-color:var(--border-strong); }
+  .ea-consent{
+    display:grid !important;
+    grid-template-columns:18px minmax(0,1fr);
+    align-items:start;
+    gap:10px !important;
+    color:rgba(232,242,238,.72) !important;
+    font-size:12px !important;
+    font-weight:500 !important;
+    letter-spacing:0 !important;
+    line-height:1.45;
+    text-transform:none !important;
+    cursor:pointer;
+  }
+  .ea-consent input{
+    appearance:none;
+    -webkit-appearance:none;
+    width:18px;
+    height:18px;
+    margin:1px 0 0;
+    border:1px solid rgba(127,252,209,.48);
+    border-radius:5px;
+    background:rgba(255,255,255,.04);
+    cursor:pointer;
+  }
+  .ea-consent input:checked{
+    background:var(--accent);
+    border-color:var(--accent);
+    box-shadow:inset 0 0 0 3px #07130f;
+  }
+  .ea-consent input:focus-visible{
+    outline:2px solid var(--accent-2);
+    outline-offset:2px;
+  }
+  .ea-consent a{
+    color:var(--accent-2);
+    text-decoration:underline;
+    text-underline-offset:2px;
+  }
+  .ea-optional{
+    color:rgba(127,252,209,.7);
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
   .ea-err{
     margin:0; min-height:0;
     font-size:13px; color:#ff8b8b;
@@ -3517,7 +3597,7 @@
       </button>
     </div>
     <div class="meet-frame">
-      <iframe src="/ally-platform.html?preview=1&v=soon22" title="Ally dashboard" loading="lazy" sandbox="allow-scripts allow-same-origin" allow="fullscreen"></iframe>
+      <iframe src="/ally-platform.html?preview=1&v=soon23" title="Ally dashboard" loading="lazy" sandbox="allow-scripts allow-same-origin" allow="fullscreen"></iframe>
     </div>
   </div>
 </section>
@@ -3628,11 +3708,11 @@
 </div>
 
     <nav class="foot-links reveal" aria-label="Legal">
-      <a href="mailto:hello@goxl.ai?subject=Privacy">Privacy</a><span class="divider">|</span>
-      <a href="mailto:hello@goxl.ai?subject=Terms">Terms</a><span class="divider">|</span>
+      <a href="/privacy.html">Privacy</a><span class="divider">|</span>
+      <a href="/terms.html">Terms</a><span class="divider">|</span>
       <a href="/about.html">Our Story</a><span class="divider">|</span>
-      <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a><span class="divider">|</span>
-      <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://www.instagram.com/goxl_ally?igsh=MWgzYXZxaHU5cGw2bA%3D%3D&amp;igsi=MWgzYXZxaHU5cGw2bA%3D%3D" target="_blank" rel="noopener noreferrer">Instagram</a><span class="divider">|</span>
+      <a href="https://www.linkedin.com/showcase/goxl-ally-ai" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     </nav>
   </section>
 
@@ -3657,6 +3737,14 @@
       </label>
       <label>LinkedIn Profile <span class="ea-opt">(optional)</span>
         <input id="eaLinkedin" name="linkedinUrl" type="url" autocomplete="url" inputmode="url" placeholder="linkedin.com/in/yourprofile" maxlength="200">
+      </label>
+      <label class="ea-consent">
+        <input id="eaTerms" name="termsAccepted" type="checkbox" required>
+        <span>I agree to the <a href="/terms.html" target="_blank" rel="noopener noreferrer">Terms of Use</a> and acknowledge the <a href="/privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>. My details will be used to manage my early-access registration.</span>
+      </label>
+      <label class="ea-consent">
+        <input id="eaMarketing" name="marketingConsent" type="checkbox">
+        <span><span class="ea-optional">Optional</span><br>I’d like to receive GoXL Ally product updates, founder insights and promotional emails. I can unsubscribe at any time.</span>
       </label>
       <p class="ea-err" id="eaErr" role="alert"></p>
       <button class="cta" type="submit" id="eaSubmit">Join Ally Beta</button>
@@ -4141,7 +4229,9 @@ journeyCards.forEach((c,idx)=>{
   const linkedinEl = document.getElementById('eaLinkedin');
   const doneMsg = document.getElementById('eaDoneMsg');
   const doneSub = document.getElementById('eaDoneSub');
-  if(!modal || !form || !done || !err || !submit || !nameEl || !emailEl || !phoneEl || !linkedinEl) return;
+  const termsEl = document.getElementById('eaTerms');
+  const marketingEl = document.getElementById('eaMarketing');
+  if(!modal || !form || !done || !err || !submit || !nameEl || !emailEl || !phoneEl || !linkedinEl || !termsEl || !marketingEl) return;
 
   const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const submitLabel = submit.textContent;
@@ -4209,6 +4299,7 @@ journeyCards.forEach((c,idx)=>{
     if(!emailRe.test(email)){ err.textContent = 'Enter a valid email'; emailEl.focus(); return; }
     if(phone && (digits.length < 10 || digits.length > 15)){ err.textContent = 'Enter a valid phone number'; phoneEl.focus(); return; }
     if(!linkedinLooksValid(linkedinUrl)){ err.textContent = 'Enter a valid LinkedIn profile URL'; linkedinEl.focus(); return; }
+    if(!termsEl.checked){ err.textContent = 'Please accept the Terms and acknowledge the Privacy Policy'; termsEl.focus(); return; }
 
     submit.disabled = true;
     submit.textContent = 'Joining…';
@@ -4216,7 +4307,15 @@ journeyCards.forEach((c,idx)=>{
       const res = await fetch('/api/early-access', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, phone, linkedinUrl })
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          linkedinUrl,
+          termsAccepted: true,
+          marketingConsent: marketingEl.checked,
+          policyVersion: '2026-08-15'
+        })
       });
       const data = await res.json().catch(()=>({}));
       if(!res.ok || !data.ok){
@@ -4253,6 +4352,15 @@ journeyCards.forEach((c,idx)=>{
     var sandboxedOpaqueOrigin=iframe.hasAttribute('sandbox') && e.origin==='null';
     if(e.origin!==location.origin && !sandboxedOpaqueOrigin) return;
     if(!e.data) return;
+    if(e.data.type==='ally-preview-ready'){
+      try{
+        iframe.contentWindow.postMessage({
+          type:'ally-preview-fs',
+          on:document.documentElement.classList.contains('meet-fs')
+        }, location.origin);
+      }catch(_){}
+      return;
+    }
     if(e.data.type==='ally-exit-fs'){
       var fsBtn=document.querySelector('.meet-fs-btn');
       if(document.documentElement.classList.contains('meet-fs') && fsBtn) fsBtn.click();
@@ -4275,6 +4383,12 @@ journeyCards.forEach((c,idx)=>{
     btn.setAttribute('aria-pressed', on ? 'true' : 'false');
     btn.setAttribute('aria-label', on ? 'Exit full screen' : 'Open dashboard full screen');
     if(label) label.textContent = on ? 'Exit' : 'Full screen';
+    var iframe=document.querySelector('#meet-ally iframe, .meet-frame iframe');
+    try{
+      if(iframe && iframe.contentWindow){
+        iframe.contentWindow.postMessage({type:'ally-preview-fs', on:on}, location.origin);
+      }
+    }catch(_){}
     try{
       if(on) sessionStorage.setItem('ally-meet-fs','1');
       else sessionStorage.removeItem('ally-meet-fs');
