@@ -242,10 +242,13 @@ function applyAll(hero: HTMLElement, root: HTMLElement, state: StudioState) {
   const lead = root.querySelector<HTMLElement>("[data-edit='lead']");
   const ask = root.querySelector<HTMLElement>("[data-edit='ask']");
   if (lead) {
-    lead.innerHTML = content.lead
-      .split("\n")
-      .map((line) => `<span class="hero-title__row">${line}</span>`)
-      .join("");
+    const rows = content.lead.split("\n").map((line) => {
+      const row = document.createElement("span");
+      row.className = "hero-title__row";
+      row.textContent = line;
+      return row;
+    });
+    lead.replaceChildren(...rows);
   }
   if (ask) {
     ask.textContent = content.ask.replace(/\n/g, " ");

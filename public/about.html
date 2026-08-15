@@ -35,7 +35,7 @@
     background:rgba(8,16,12,0.72);
     border:1px solid rgba(255,255,255,0.28);
   }
-  .top-brand img{ width:32px; height:32px; object-fit:contain; }
+  .top-brand img{ width:32px; height:32px; object-fit:contain; mix-blend-mode:screen; }
   .top-back{
     position:absolute; top:max(22px, env(safe-area-inset-top));
     right:max(22px, env(safe-area-inset-right));
@@ -148,7 +148,7 @@
     display:flex; align-items:center; gap:12px;
     margin:18px 0 10px;
   }
-  .brand img{ width:42px; height:42px; }
+  .brand img{ width:42px; height:42px; object-fit:contain; mix-blend-mode:screen; }
   .brand strong{
     display:block;
     font-family:var(--font-display);
@@ -195,7 +195,7 @@
 </head>
 <body>
   <a class="top-brand" href="/">
-    <img src="/assets/ally-logo.svg" alt="" />
+    <img src="/assets/logo-123.png" alt="" />
     <span>GoXL Ally</span>
   </a>
   <a class="top-back js-back" id="backLink" href="/">
@@ -253,7 +253,7 @@
 
     <div class="close">
       <div class="brand">
-        <img src="/assets/ally-logo.svg" alt="" />
+        <img src="/assets/logo-123.png" alt="" />
         <div>
           <strong>GoXL Ally</strong>
           <small>The Founder's Compass</small>

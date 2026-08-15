@@ -1,37 +1,36 @@
 import { writeFile, readFile } from "fs/promises";
 import path from "path";
+import { apiJson, assertDevWriteAllowed, readJsonBody } from "../_dev-write-security";
 
 const filePath = () => path.join(process.cwd(), "public", "float-q-lock.json");
-
-function assertDevWriteAllowed() {
-  if (process.env.NODE_ENV === "production" && process.env.ALLOW_LOCK_WRITE !== "1") {
-    return Response.json(
-      { ok: false, error: "Lock writes disabled in production" },
-      { status: 403 },
-    );
-  }
-  return null;
-}
+const MAX_PAYLOAD_BYTES = 20_000;
+const ALLOWED_POSITION_IDS = new Set(["tl", "bl", "tr", "br"]);
 
 type PositionMap = Record<string, { top: number; left: number }>;
 
 function isValidPositions(value: unknown): value is PositionMap {
   if (!value || typeof value !== "object") return false;
-  return Object.values(value).every((p) => {
+  const entries = Object.entries(value);
+  if (entries.length === 0 || entries.length > ALLOWED_POSITION_IDS.size) return false;
+  return entries.every(([id, p]) => {
+    if (!ALLOWED_POSITION_IDS.has(id)) return false;
     if (!p || typeof p !== "object") return false;
     const { top, left } = p as { top?: unknown; left?: unknown };
-    return typeof top === "number" && typeof left === "number" && Number.isFinite(top) && Number.isFinite(left);
+    return typeof top === "number" && typeof left === "number" && Number.isFinite(top) && Number.isFinite(left) &&
+      top >= -20 && top <= 120 && left >= -20 && left <= 120;
   });
 }
 
 export async function POST(request: Request) {
-  const blocked = assertDevWriteAllowed();
+  const blocked = assertDevWriteAllowed(request, MAX_PAYLOAD_BYTES);
   if (blocked) return blocked;
 
   try {
-    const body = await request.json();
+    const parsed = await readJsonBody(request, MAX_PAYLOAD_BYTES);
+    if (!parsed.ok) return parsed.response;
+    const body = parsed.value;
     if (!body || typeof body !== "object" || !isValidPositions((body as { positions?: unknown }).positions)) {
-      return Response.json({ ok: false, error: "Invalid positions payload" }, { status: 400 });
+      return apiJson({ ok: false, error: "Invalid positions payload" }, 400);
     }
 
     let existing: Record<string, unknown> = {};
@@ -56,18 +55,18 @@ export async function POST(request: Request) {
     if (!safe.phonePositions) delete safe.phonePositions;
 
     await writeFile(filePath(), JSON.stringify(safe, null, 2), "utf8");
-    return Response.json({ ok: true, path: "/float-q-lock.json", viewport: isPhone ? "phone" : "desktop" });
+    return apiJson({ ok: true, path: "/float-q-lock.json", viewport: isPhone ? "phone" : "desktop" });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to save";
-    return Response.json({ ok: false, error: message }, { status: 500 });
+    console.error("Floating-card lock save failed", error);
+    return apiJson({ ok: false, error: "Failed to save" }, 500);
   }
 }
 
 export async function GET() {
   try {
     const raw = await readFile(filePath(), "utf8");
-    return Response.json(JSON.parse(raw));
+    return apiJson(JSON.parse(raw));
   } catch {
-    return Response.json({ ok: false, error: "No lock file" }, { status: 404 });
+    return apiJson({ ok: false, error: "No lock file" }, 404);
   }
 }

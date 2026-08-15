@@ -62,10 +62,12 @@ a{color:inherit;text-decoration:none}
 .sidebar{position:relative;background:radial-gradient(120% 60% at 0% 0%,#123a27,var(--forest-deep) 55%,var(--forest-night));color:var(--on-dark);display:flex;flex-direction:column;border-right:1px solid var(--line);z-index:40}
 .sidebar::before{content:"";position:absolute;top:-120px;left:-80px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,.28),transparent 70%);filter:blur(90px);pointer-events:none}
 .sb-head{position:relative;padding:20px 20px 16px}
-.sb-brand{display:flex;flex-direction:column;line-height:1}
-.sb-brand .mark{font-family:var(--display);font-weight:800;font-size:23px;letter-spacing:-.02em;color:#fff}
+.sb-brand{display:flex;flex-direction:row;align-items:center;gap:2px;isolation:isolate}
+.sb-brand .sb-logo{width:38px;height:38px;flex-shrink:0;display:block;object-fit:contain;margin-right:9px;transform:translate(26.5px,3px)}
+.sb-brand .sb-word{display:flex;flex-direction:column;line-height:1;min-width:0}
+.sb-brand .mark{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:-.02em;color:#fff}
 .sb-brand .mark .x{color:var(--emerald)}
-.sb-brand .sub{font-size:7.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--on-dark-dim);font-weight:600;margin-top:3px}
+.sb-brand .sub{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark-dim);font-weight:650;margin-top:4px}
 .ally-badge{display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:rgba(16,185,129,.14);border:1px solid rgba(16,185,129,.32);border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--emerald-bright);letter-spacing:.04em}
 .ally-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--emerald-bright);box-shadow:0 0 0 0 rgba(52,211,153,.6);animation:pulse 2.4s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}70%{box-shadow:0 0 0 7px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
@@ -103,6 +105,8 @@ body.guided .tb-back{display:none!important}
 .tb-title .ey{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--emerald)}
 .tb-title h1{font-family:var(--display);font-size:19px;font-weight:700;letter-spacing:-.02em;color:var(--forest);margin:1px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tb-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.tb-goxl-brand{position:relative;width:72px;height:32px;flex:0 0 72px;display:block;overflow:hidden;border:0;background:transparent;box-shadow:none}
+.tb-goxl-brand img{position:absolute;top:54%;left:50%;width:64px;height:64px;max-width:none;display:block;object-fit:contain;transform:translate(-50%,-50%)}
 .tb-icon{width:38px;height:38px;border-radius:11px;border:1px solid var(--bd);background:#fff;display:grid;place-items:center;color:var(--muted);position:relative;transition:.25s var(--secondary)}
 .tb-icon:hover{border-color:var(--bd-2);color:var(--forest);transform:translateY(-1px)}
 .tb-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8}
@@ -112,11 +116,13 @@ body.guided .tb-back{display:none!important}
 .btn-primary{background:var(--forest);color:#fff;box-shadow:0 8px 22px -8px rgba(14,42,28,.5)}
 .btn-primary:hover{background:var(--forest-2);transform:translateY(-2px)}
 .topbar .tb-right .btn-primary{
-  font-size:12px;font-weight:600;padding:6px 11px;gap:5px;border-radius:10px;min-height:32px;
+  width:32px;height:32px;min-height:32px;padding:0;gap:0;border-radius:9px;
+  font-size:20px;font-weight:700;justify-content:center;
   box-shadow:0 4px 14px -6px rgba(14,42,28,.45);
   white-space:nowrap;flex-shrink:0;overflow:hidden;
 }
-.topbar .tb-right .btn-primary svg{width:14px;height:14px}
+.topbar .tb-right .btn-primary svg{display:none}
+.topbar .tb-right .btn-primary .tb-cta-lbl{font-size:20px;font-weight:700;line-height:1}
 .topbar .tb-icon{width:32px;height:32px;border-radius:9px}
 .topbar .tb-icon svg{width:15px;height:15px}
 .btn-em{background:var(--emerald);color:#06231a;box-shadow:0 10px 26px -8px rgba(16,185,129,.5)}
@@ -131,6 +137,7 @@ body.guided .tb-back{display:none!important}
 .view{display:none}
 .view.active{display:block;flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;overscroll-behavior:contain}
 .pad{padding:26px 32px 60px;max-width:1120px;margin:0 auto}
+#v-dashboard .pad{padding-bottom:88px}
 /* primary motion: view enter */
 .view.active .stagger{opacity:0;transform:translateY(16px);animation:rise .7s var(--primary) forwards}
 .stagger.d1{animation-delay:.05s}.stagger.d2{animation-delay:.1s}.stagger.d3{animation-delay:.16s}.stagger.d4{animation-delay:.22s}.stagger.d5{animation-delay:.28s}.stagger.d6{animation-delay:.34s}
@@ -355,6 +362,9 @@ body.guided .tb-back{display:none!important}
 .ac{position:relative;display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;background:radial-gradient(120% 80% at 50% 0%,#123a27,var(--forest-deep) 55%,var(--forest-night))}
 .ac-main{flex:1;display:flex;flex-direction:column;min-height:0;position:relative}
 .ac-bar{display:flex;align-items:center;gap:12px;padding:12px 22px;border-bottom:1px solid var(--line);flex-shrink:0}
+.ac-back{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px 0 10px;border-radius:10px;border:1px solid var(--line-2);background:rgba(255,255,255,.06);color:#fff;font-size:13px;font-weight:650;flex-shrink:0}
+.ac-back svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+.ac-back:hover{background:rgba(255,255,255,.12)}
 .ac-bar .ac-menu{display:grid;width:36px;height:36px;border-radius:10px;place-items:center;border:1px solid var(--line-2);background:rgba(255,255,255,.05);color:var(--on-dark-muted);transition:.2s var(--micro)}
 .ac-bar .ac-menu:hover{color:#fff;background:rgba(255,255,255,.1)}
 .ac-bar .ac-menu svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9}
@@ -1836,6 +1846,15 @@ body.gate .j-bar{display:none!important}
    ============================================================ */
 /* never allow a horizontal scrollbar */
 html,body{max-width:100%;overflow-x:hidden}
+html:has(body.preview),
+body.preview{
+  height:100%;
+  max-height:100%;
+}
+body.preview .platform{
+  height:100%!important;
+  max-height:100%!important;
+}
 body.preview .skip{display:none!important}
 body.preview .view.active,
 body.preview .chat-scroll,
@@ -1875,13 +1894,15 @@ img,svg,video,canvas{max-width:100%}
 @media(max-width:479px){
   .pad{padding:18px 14px 46px}
   .topbar{padding:0 14px}
+  .tb-right{gap:8px}
+  .tb-goxl-brand{width:64px;flex-basis:64px}
+  .tb-goxl-brand img{width:58px;height:58px}
   .tb-title h1{font-size:18px}
   .tiles,.impact-grid,.wc-flow,.exp-cards,.scan,.fp-choices{grid-template-columns:1fr}
   .topbar .tb-right .btn-primary{
-    width:32px;height:32px;min-height:32px;padding:0;font-size:0;justify-content:center;gap:0;overflow:hidden;
+    width:32px;height:32px;min-height:32px;padding:0;font-size:20px;justify-content:center;gap:0;overflow:hidden;
   }
-  .topbar .tb-right .btn-primary .tb-cta-lbl{display:none}
-  .topbar .tb-right .btn-primary svg{margin:0;width:14px;height:14px}
+  .topbar .tb-right .btn-primary .tb-cta-lbl{display:inline;font-size:20px}
   .tb-back{width:38px;padding:0;justify-content:center;font-size:0;gap:0}
   .days{grid-template-columns:repeat(4,1fr)}
   .slots{grid-template-columns:repeat(2,1fr)}
@@ -2175,6 +2196,13 @@ img,svg,video,canvas{max-width:100%}
 
 /* ============================ FEATURE GATING · lock cards ============================ */
 .lock-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.dash-locks,.dash-locks *{pointer-events:none;cursor:default}
+.dash-soon{
+  margin-top:12px;padding:28px 22px;text-align:center;
+  background:#fff;border:1px solid var(--bd);border-radius:16px;
+  font-family:var(--display);font-size:16px;font-weight:650;color:var(--forest);
+  box-shadow:var(--shadow-card);
+}
 .lock-card{position:relative;overflow:hidden;background:#fff;border:1px solid var(--bd);border-radius:16px;padding:18px;box-shadow:var(--shadow-card);cursor:pointer;transition:transform .3s var(--secondary),box-shadow .3s,border-color .3s}
 .lock-card:hover{transform:translateY(-3px);box-shadow:0 18px 40px -20px rgba(6,20,13,.24);border-color:rgba(16,185,129,.4)}
 .lock-card::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,transparent 40%,rgba(16,185,129,.05));pointer-events:none}
@@ -2460,8 +2488,11 @@ img,svg,video,canvas{max-width:100%}
   <aside class="sidebar" id="sidebar" aria-label="Primary">
     <div class="sb-head">
       <div class="sb-brand">
-        <span class="mark">Go<span class="x">XL</span></span>
-        <span class="sub">Ally</span>
+        <img class="sb-logo" src="/assets/ally-logo.png" alt="" />
+        <span class="sb-word">
+          <span class="mark">Go<span class="x">XL</span></span>
+          <span class="sub">Ally</span>
+        </span>
       </div>
       <span class="ally-badge"><span class="dot"></span> Ally · active</span>
     </div>
@@ -2513,7 +2544,12 @@ img,svg,video,canvas{max-width:100%}
         <button class="plan-badge tb-plan pb-free" id="tbPlan" type="button" data-bill="pricing" aria-label="Your plan"><span class="pb-dot"></span>Ally</button>
         <button class="tb-icon" type="button" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></button>
         <button class="tb-icon" id="notifBell" type="button" aria-label="Reminders from Ally" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="n-badge" id="notifBadge" hidden>0</span></button>
-        <button class="btn btn-primary" type="button" data-act="diagnosis"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span class="tb-cta-lbl">New diagnosis</span></button>
+        <button class="btn btn-primary" type="button" data-act="diagnosis" aria-label="New diagnosis">
+          <span class="tb-cta-lbl">+</span>
+        </button>
+        <span class="tb-goxl-brand">
+          <img src="/assets/goxl-entrepreneurship.png" alt="GoXL Entrepreneurship">
+        </span>
       </div>
     </header>
     <div class="j-rail" id="jRail" aria-hidden="true">
@@ -2934,6 +2970,11 @@ img,svg,video,canvas{max-width:100%}
               <div class="rows stagger d5" id="repRows"></div>
             </div>
           </div>
+
+          <section class="dash-locks" style="margin-top:28px">
+            <div class="sec-row"><span class="sec-title">Unlock more with Ally</span></div>
+            <div class="dash-soon">Revealing soon</div>
+          </section>
         </div>
       </section>
 
@@ -2949,6 +2990,10 @@ img,svg,video,canvas{max-width:100%}
           </aside>
           <div class="ac-main">
             <div class="ac-bar">
+              <button class="ac-back" type="button" data-wsback aria-label="Back to dashboard">
+                <svg viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+                Back
+              </button>
               <button class="ac-menu" id="acMenu" type="button" aria-label="Conversation history" title="History"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg></button>
               <div class="ac-ttl"><div class="t" id="acTitle">New conversation</div><div class="s">General consultation · always on</div></div>
               <span id="acPlanBadge" style="margin-right:8px"></span>
@@ -3575,7 +3620,9 @@ img,svg,video,canvas{max-width:100%}
   }
   function syncTbBack(){
     var btn=$('#tbBack'); if(!btn) return;
-    btn.hidden = !state.unlocked || document.body.classList.contains('guided') || currentView==='dashboard';
+    var inFrame=document.body.classList.contains('preview') || window.parent!==window;
+    if(document.body.classList.contains('guided')){ btn.hidden=true; return; }
+    btn.hidden = !state.unlocked && !inFrame ? true : (currentView==='dashboard' && !inFrame);
   }
   function go(id, opts){ // free navigation — only after the workspace is unlocked
     var m=meta[id]; if(!m) return;
@@ -3608,7 +3655,10 @@ img,svg,video,canvas{max-width:100%}
       return;
     }
     if(viewStack.length){ go(viewStack.pop(),{fromBack:true}); return; }
-    if(currentView!=='dashboard') go('dashboard',{fromBack:true, replace:true});
+    if(currentView!=='dashboard'){ go('dashboard',{fromBack:true, replace:true}); return; }
+    if(document.body.classList.contains('preview') || window.parent!==window){
+      try{ window.parent.postMessage({type:'ally-exit-fs'}, location.origin); }catch(e){}
+    }
   }
   /* Hidden billing routes — reached via Upgrade CTAs, not shown in the sidebar */
   meta.pricing={id:'pricing',eye:'Plans & billing',title:'Choose your plan'};
@@ -4138,11 +4188,9 @@ img,svg,video,canvas{max-width:100%}
   /* ---------------- Feature gating · dashboard lock cards (Free only) ---------------- */
   /* feature-driven — locked features for the CURRENT plan (up to 3), from featureAccess */
   function dashLockCards(){
-    var locked=featureAccess.lockedList().slice(0,3);
-    if(!locked.length) return '';                       /* Max users: nothing locked → no section */
     return '<section class="dash-locks" style="margin-top:26px">'+
-      '<div class="sec-row"><span class="sec-title">Unlock more with Ally</span><button class="btn btn-ghost" type="button" data-bill="pricing" style="font-size:12px;padding:7px 13px">See plans</button></div>'+
-      '<div class="lock-grid">'+locked.map(lockCardHTML).join('')+'</div></section>';
+      '<div class="sec-row"><span class="sec-title">Unlock more with Ally</span></div>'+
+      '<div class="dash-soon">Revealing soon</div></section>';
   }
 
   /* ---------------- Invoices (mock download) ---------------- */
@@ -4177,6 +4225,7 @@ img,svg,video,canvas{max-width:100%}
 
   /* ---------------- Delegated billing controls ---------------- */
   document.addEventListener('click',function(e){
+    if(e.target.closest && e.target.closest('.dash-locks')){ e.preventDefault(); e.stopPropagation(); return; }
     var t=e.target.closest('[data-bill]');
     // scrim backdrop close
     var sc=e.target.closest('.mdl-scrim'); if(sc && e.target===sc){ closeModal(sc.id.replace('Scrim','')); return; }
@@ -4198,11 +4247,12 @@ img,svg,video,canvas{max-width:100%}
     if(act==='cancel'){ Billing.cancel(); toast('Plan set to cancel at renewal'); renderProfile(); return; }
     if(act==='resume'){ Billing.resume(); toast('Subscription resumed'); renderProfile(); return; }
     if(act==='reminder'){ Billing.sub.reminder=!Billing.sub.reminder; t.classList.toggle('on',Billing.sub.reminder); t.setAttribute('aria-checked',Billing.sub.reminder?'true':'false'); return; }
-    if(act==='unlock'||act==='why'){ e.stopPropagation(); showUpgradeModal(t.getAttribute('data-feat')); return; }
+    if(act==='unlock'||act==='why'){ e.preventDefault(); e.stopPropagation(); toast('Revealing soon'); return; }
+    if(act==='pricing'&&t.closest('.myplan,.umeter,#tokenMeter,.mp-up')){ e.preventDefault(); e.stopPropagation(); toast('You are at max plan'); return; }
     if(act==='manage'){ closeModal('up'); go('settings'); return; }
   });
   /* keyboard-activate lock cards (role=button) */
-  document.addEventListener('keydown',function(e){ if((e.key==='Enter'||e.key===' ') && e.target.classList && e.target.classList.contains('lock-card')){ e.preventDefault(); showUpgradeModal(e.target.getAttribute('data-feat')); } });
+  document.addEventListener('keydown',function(e){ if((e.key==='Enter'||e.key===' ') && e.target.classList && e.target.classList.contains('lock-card')){ e.preventDefault(); } });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ closeModal('pd'); closeModal('up'); } });
 
   /* Start / re-run the structured Founder Diagnosis — always the full guided flow (never the chat) */
@@ -4929,7 +4979,7 @@ img,svg,video,canvas{max-width:100%}
   }
   function dashSyncLocks(){
     var pad=document.querySelector('#v-dashboard .pad'); if(!pad) return;
-    var ex=pad.querySelector('.dash-locks'); if(ex) ex.remove();
+    if(pad.querySelector('.dash-locks')) return;
     var html=dashLockCards(); if(html){ var w=document.createElement('div'); w.innerHTML=html; if(w.firstChild) pad.appendChild(w.firstChild); }
   }
   function fillTiles(){ document.querySelectorAll('#tilesRow .t-bar i').forEach(function(i){ setTimeout(function(){ i.style.width=i.getAttribute('data-w')+'%'; },120); }); }
@@ -5733,7 +5783,7 @@ img,svg,video,canvas{max-width:100%}
   function atStart(el){ return !el || el.scrollTop<=1; }
   function atEnd(el){
     if(!el) return true;
-    return el.scrollTop+el.clientHeight>=el.scrollHeight-2;
+    return Math.ceil(el.scrollTop+el.clientHeight)>=Math.floor(el.scrollHeight)-1;
   }
   function chain(dy){
     try{ window.parent.postMessage({type:'ally-chain-scroll', dy:dy}, location.origin); }catch(e){}
@@ -5798,10 +5848,14 @@ img,svg,video,canvas{max-width:100%}
     if(t && t.closest && t.closest('input,textarea,select,[contenteditable="true"]')) return;
     var el=scroller();
     var dy=e.deltaY;
+    if(!el){ return; }
     if((dy>0 && atEnd(el)) || (dy<0 && atStart(el))){
       e.preventDefault();
       chain(dy);
+      return;
     }
+    e.preventDefault();
+    el.scrollTop+=dy;
   }, {capture:true, passive:false});
 })();
 </script>
