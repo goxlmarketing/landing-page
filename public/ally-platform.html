@@ -63,11 +63,11 @@ a{color:inherit;text-decoration:none}
 .sidebar::before{content:"";position:absolute;top:-120px;left:-80px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,.28),transparent 70%);filter:blur(90px);pointer-events:none}
 .sb-head{position:relative;padding:20px 20px 16px}
 .sb-brand{display:flex;flex-direction:row;align-items:center;gap:2px;isolation:isolate}
-.sb-brand .sb-logo{width:38px;height:38px;flex-shrink:0;display:block;object-fit:contain;margin-right:9px;transform:translate(26.5px,3px)}
-.sb-brand .sb-word{display:flex;flex-direction:column;line-height:1;min-width:0}
-.sb-brand .mark{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:-.02em;color:#fff}
+.sb-brand .sb-logo{width:38px;height:38px;flex-shrink:0;display:block;object-fit:contain;margin-right:14px;transform:translate(26.5px,3px)}
+.sb-brand .sb-word{display:block;line-height:1;min-width:0}
+.sb-brand .mark{font-family:var(--display);font-weight:800;font-size:14.5px;letter-spacing:-.02em;color:#fff;white-space:nowrap}
 .sb-brand .mark .x{color:var(--emerald)}
-.sb-brand .sub{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark-dim);font-weight:650;margin-top:4px}
+.sb-brand .ally-inline{margin-left:4px;color:#fff;font-weight:650}
 .ally-badge{display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:rgba(16,185,129,.14);border:1px solid rgba(16,185,129,.32);border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--emerald-bright);letter-spacing:.04em}
 .ally-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--emerald-bright);box-shadow:0 0 0 0 rgba(52,211,153,.6);animation:pulse 2.4s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}70%{box-shadow:0 0 0 7px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
@@ -2490,10 +2490,7 @@ img,svg,video,canvas{max-width:100%}
     <div class="sb-head">
       <div class="sb-brand">
         <img class="sb-logo" src="/assets/ally-logo.png" alt="" />
-        <span class="sb-word">
-          <span class="mark">Go<span class="x">XL</span></span>
-          <span class="sub">Ally</span>
-        </span>
+        <span class="sb-word"><span class="mark">Go<span class="x">XL</span><span class="ally-inline">Ally</span></span></span>
       </div>
       <span class="ally-badge"><span class="dot"></span> Ally · active</span>
     </div>
@@ -4514,13 +4511,19 @@ img,svg,video,canvas{max-width:100%}
     // experience actions — keep Chat and Diagnosis routing unambiguous
     var act=e.target.closest('[data-act]');
     if(act){ e.preventDefault(); var a=act.getAttribute('data-act');
-      if(a==='diagnosis') startDiagnosis();
-      else if(a==='chat-open'){ if(state.unlocked) go('allychat'); else jNext(); }
+      if(a==='diagnosis' || a==='chat-open'){
+        window.toast('You\'re exploring the Ally preview. Join the beta to unlock AI chat and Founder Diagnosis.');
+      }
       return; }
     var aco=e.target.closest('[data-acopen]');
     if(aco){ e.preventDefault(); acOpen(aco.getAttribute('data-acopen')); return; }
     var nav=e.target.closest('[data-nav]');
-    if(nav){ e.preventDefault(); if(state.unlocked) go(nav.getAttribute('data-nav')); else jNext(); return; }
+    if(nav){ e.preventDefault(); var navId=nav.getAttribute('data-nav');
+      if(navId==='allychat' || navId==='chat'){
+        window.toast('You\'re exploring the Ally preview. Join the beta to unlock AI chat and Founder Diagnosis.');
+        return;
+      }
+      if(state.unlocked) go(navId); else jNext(); return; }
     // profile / problem chips
     var opt=e.target.closest('.opt');
     if(opt){ var fill=opt.getAttribute('data-fill');
