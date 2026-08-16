@@ -3477,10 +3477,10 @@
 
   <div class="float-edit-bar">
     <button type="button" id="floatEditBtn">Edit cards</button>
-    <button type="button" id="floatSaveBtn" class="is-primary" hidden>Set positions</button>
+    <button type="button" id="floatSaveBtn" class="is-primary" hidden>Save permanent</button>
     <button type="button" id="floatResetBtn" hidden>Reset</button>
   </div>
-  <div class="float-edit-hint">Drag cards → then click Set positions</div>
+  <div class="float-edit-hint">Drag cards → then click Save permanent</div>
 
   <aside class="float-qs" aria-label="Founder questions">
     <p class="float-q float-q--tl" data-fq="tl">
@@ -4041,10 +4041,8 @@ journeyCards.forEach((c,idx)=>{
 
   const phoneMq = window.matchMedia('(max-width: 768px)');
   const isPhoneView = () => phoneMq.matches;
-  const isPhoneLandscape = () => isPhoneView() && window.matchMedia('(orientation: landscape)').matches;
   const STORAGE_KEY = 'ally-float-q-positions';
   const STORAGE_KEY_PHONE = 'ally-float-q-positions-phone';
-  const STORAGE_KEY_PHONE_LANDSCAPE = 'ally-float-q-positions-phone-landscape';
   const defaults = {
     tl: { top: 8.8, left: 24.7 },
     bl: { top: 39.5, left: 17.2 },
@@ -4063,15 +4061,10 @@ journeyCards.forEach((c,idx)=>{
   let editing = false;
   let drag = null;
 
-  function activeViewport(){
-    if(isPhoneLandscape()) return 'phone-landscape';
-    return isPhoneView() ? 'phone' : 'desktop';
-  }
   function activeDefaults(){
     return isPhoneView() ? phoneDefaults : defaults;
   }
   function activeStorageKey(){
-    if(isPhoneLandscape()) return STORAGE_KEY_PHONE_LANDSCAPE;
     return isPhoneView() ? STORAGE_KEY_PHONE : STORAGE_KEY;
   }
   function activeCards(){
@@ -4110,16 +4103,12 @@ journeyCards.forEach((c,idx)=>{
   }
 
   async function loadPositions(){
-    const viewport = activeViewport();
+    const phone = isPhoneView();
     try{
       const res = await fetch('/float-q-lock.json', { cache: 'no-store' });
       if(res.ok){
         const data = await res.json();
-        const locked = viewport === 'phone-landscape'
-          ? (data.phoneLandscapePositions || data.phonePositions)
-          : viewport === 'phone'
-            ? data.phonePositions
-            : data.positions;
+        const locked = phone ? data.phonePositions : data.positions;
         if(locked){
           applyPositions(locked);
           return;
@@ -4132,12 +4121,12 @@ journeyCards.forEach((c,idx)=>{
     }catch(_){}
     applyPositions(activeDefaults());
   }
-  let lastViewportMode = activeViewport();
+  let lastPhoneMode = isPhoneView();
   window.addEventListener('resize', ()=>{
-    const nextViewportMode = activeViewport();
-    if(nextViewportMode === lastViewportMode) return;
-    lastViewportMode = nextViewportMode;
-    document.body.classList.toggle('is-editing-mobile-cards', editing && nextViewportMode !== 'desktop');
+    const nextPhoneMode = isPhoneView();
+    if(nextPhoneMode === lastPhoneMode) return;
+    lastPhoneMode = nextPhoneMode;
+    document.body.classList.toggle('is-editing-mobile-cards', editing && nextPhoneMode);
     loadPositions();
   }, { passive:true });
 
@@ -4166,20 +4155,20 @@ journeyCards.forEach((c,idx)=>{
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             positions,
-            viewport: activeViewport(),
+            viewport: isPhoneView() ? 'phone' : 'desktop',
             savedAt: new Date().toISOString(),
           }),
         });
         const data = await res.json();
         if(!res.ok || !data.ok) throw new Error(data.error || 'Save failed');
-        saveBtn.textContent = 'Set ✓';
+        saveBtn.textContent = 'Saved ✓';
         setEditing(false);
-        setTimeout(()=>{ saveBtn.textContent = 'Set positions'; }, 1200);
+        setTimeout(()=>{ saveBtn.textContent = 'Save permanent'; }, 1200);
       }catch(err){
         console.error(err);
-        saveBtn.textContent = 'Set locally ✓';
+        saveBtn.textContent = 'Saved locally ✓';
         setEditing(false);
-        setTimeout(()=>{ saveBtn.textContent = 'Set positions'; }, 1400);
+        setTimeout(()=>{ saveBtn.textContent = 'Save permanent'; }, 1400);
       }
     });
     function onPointerDown(e){
