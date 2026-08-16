@@ -1892,29 +1892,41 @@ img,svg,video,canvas{max-width:100%}
   .ac-bar .ac-ttl{max-width:56vw}
 }
 
-/* Small mobile (≤479) — tighten spacing, single-column, icon-only primary */
-/* Embedded phone preview: keep the title readable until the dashboard is expanded. */
+/* Mobile app bar — keep essential navigation visible without covering page content. */
 @media(max-width:640px){
-  html:not(.preview-fullscreen) body.preview .tb-burger,
-  html:not(.preview-fullscreen) body.preview .tb-back,
-  html:not(.preview-fullscreen) body.preview .tb-right{display:none!important}
-  html:not(.preview-fullscreen) body.preview .topbar{min-height:56px;padding:8px 14px}
-  html:not(.preview-fullscreen) body.preview .tb-title{flex:1;min-width:0}
+  .topbar{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    grid-template-areas:"title title" "nav actions";
+    gap:8px 10px;
+    min-height:104px;
+    padding:10px 14px;
+  }
+  .tb-title{grid-area:title;min-width:0}
+  .tb-burger{grid-area:nav;display:flex;width:44px;height:40px}
+  .tb-back{grid-area:nav;margin-left:52px;height:40px}
+  .tb-right{grid-area:actions;margin-left:0;gap:8px}
+  .tb-right .tb-plan,
+  .tb-right .tb-goxl-brand,
+  .tb-right .tb-icon[aria-label="Search"]{display:none}
+  .topbar .tb-icon,
+  .topbar .tb-right .btn-primary{width:40px;height:40px;min-height:40px;border-radius:10px}
+  html:not(.preview-fullscreen) body.preview .topbar{min-height:104px;padding:10px 14px}
 }
 
 @media(max-width:479px){
   .pad{padding:18px 14px 46px}
-  .topbar{padding:0 14px}
+  .topbar{padding:10px 14px}
   .tb-right{gap:8px}
   .tb-goxl-brand{width:64px;flex-basis:64px}
   .tb-goxl-brand img{width:58px;height:58px}
   .tb-title h1{font-size:18px}
   .tiles,.impact-grid,.wc-flow,.exp-cards,.scan,.fp-choices{grid-template-columns:1fr}
   .topbar .tb-right .btn-primary{
-    width:32px;height:32px;min-height:32px;padding:0;font-size:20px;justify-content:center;gap:0;overflow:hidden;
+    width:40px;height:40px;min-height:40px;padding:0;font-size:20px;justify-content:center;gap:0;overflow:hidden;
   }
   .topbar .tb-right .btn-primary .tb-cta-lbl{display:inline;font-size:20px}
-  .tb-back{width:38px;padding:0;justify-content:center;font-size:0;gap:0}
+  .tb-back{width:auto;min-width:76px;padding:0 12px;justify-content:center;font-size:13px;gap:6px}
   .days{grid-template-columns:repeat(4,1fr)}
   .slots{grid-template-columns:repeat(2,1fr)}
 }
