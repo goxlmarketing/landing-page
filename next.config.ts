@@ -24,8 +24,21 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["192.168.31.132"],
   // Hide the floating Next.js “N” badge in development
   devIndicators: false,
+  /**
+   * `beforeFiles`, not the default bucket.
+   *
+   * Plain `rewrites()` entries are evaluated AFTER filesystem routes, so
+   * `app/page.tsx` matched `/` first and this rewrite never ran — the old
+   * `middleware.ts` was silently doing all the work. `beforeFiles` runs ahead
+   * of the App Router, which is what actually serves the static landing page
+   * here and lets the deprecated middleware convention go away.
+   */
   async rewrites() {
-    return [{ source: "/", destination: "/ally-landing.html" }];
+    return {
+      beforeFiles: [{ source: "/", destination: "/ally-landing.html" }],
+      afterFiles: [],
+      fallback: [],
+    };
   },
   async redirects() {
     return [

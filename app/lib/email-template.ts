@@ -72,7 +72,7 @@ const COPY = {
   eyebrow: "Early Access · Registration Received",
   heading: "Your Early Access registration is received.",
   brandName: "GoXL Ally",
-  brandTag: "The Founder's Compass",
+  brandTag: "The Founder’s Compass",
   intro:
     "Thanks for registering for GoXL Ally Early Access. We've received your details successfully.",
   what:

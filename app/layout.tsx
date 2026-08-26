@@ -10,11 +10,11 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "GoXL Ally — The Founder's Compass",
+  title: "GoXL Ally — The Founder’s Compass",
   description:
     "Ally helps founders turn context into clarity, better decisions, and daily action. Register for early access.",
   openGraph: {
-    title: "GoXL Ally — The Founder's Compass",
+    title: "GoXL Ally — The Founder’s Compass",
     description: "Clarity, decisions and daily action for founders.",
     type: "website",
   },

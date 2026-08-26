@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
-<title>GoXL Ally — The Founder's Compass</title>
+<title>GoXL Ally — The Founder’s Compass</title>
 <meta name="description" content="GoXL Ally helps founders turn context into clarity, better decisions, and daily action. Register for early access.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://join.goxlally.ai/">
@@ -12,13 +12,13 @@
 <meta name="theme-color" content="#040705">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GoXL Ally">
-<meta property="og:title" content="GoXL Ally — The Founder's Compass">
+<meta property="og:title" content="GoXL Ally — The Founder’s Compass">
 <meta property="og:description" content="GoXL Ally helps founders turn context into clarity, better decisions, and daily action. Register for early access.">
 <meta property="og:url" content="https://join.goxlally.ai/">
 <meta property="og:image" content="https://join.goxlally.ai/assets/hero-bg.v1.jpeg">
-<meta property="og:image:alt" content="GoXL Ally — The Founder's Compass">
+<meta property="og:image:alt" content="GoXL Ally — The Founder’s Compass">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="GoXL Ally — The Founder's Compass">
+<meta name="twitter:title" content="GoXL Ally — The Founder’s Compass">
 <meta name="twitter:description" content="GoXL Ally helps founders turn context into clarity, better decisions, and daily action. Register for early access.">
 <meta name="twitter:image" content="https://join.goxlally.ai/assets/hero-bg.v1.jpeg">
 <script type="application/ld+json">
@@ -425,10 +425,22 @@
     display:flex; align-items:center; gap:0;
     margin-top:28px;
   }
+  /* Real <button> elements so they are keyboard-reachable and announced.
+     These declarations strip the UA button chrome so the rendering is
+     byte-for-byte what the old <div> produced; the :focus-visible ring
+     defined at the top of this sheet still applies. */
   .step{
     display:flex; flex-direction:column; align-items:center; gap:8px;
     position:relative; flex:1;
     cursor:pointer;
+    appearance:none;
+    background:none;
+    border:0;
+    padding:0;
+    margin:0;
+    font:inherit;
+    color:inherit;
+    text-align:center;
   }
   .step .dot{
     width:34px; height:34px; border-radius:50%;
@@ -3504,7 +3516,7 @@
   </p>
   <p class="mobile-hero-card mobile-hero-card--growth" data-fq="br">
     <span class="mobile-hero-card__label">Business</span>
-    What's blocking growth?
+    What’s blocking growth?
   </p>
 </aside>
 
@@ -3557,7 +3569,7 @@
     </p>
     <p class="float-q float-q--br" data-fq="br">
       <span class="float-q__label">Business</span>
-      What's blocking growth?
+      What’s blocking growth?
     </p>
   </aside>
 
@@ -3657,7 +3669,15 @@
       </button>
     </div>
     <div class="meet-frame">
-      <iframe src="/ally-platform.html?preview=1&v=soon23" title="Ally dashboard" loading="lazy" sandbox="allow-scripts allow-same-origin" allow="fullscreen"></iframe>
+      <!-- No `sandbox` attribute. It previously read `allow-scripts
+           allow-same-origin`, which the browser itself warns about: with both
+           flags an iframe can reach into the parent and remove its own sandbox,
+           so it granted nothing while looking like it did. This is first-party
+           content on the same origin and the postMessage handshake below needs
+           same-origin access, so the honest thing is to not claim a sandbox.
+           `fetchpriority=low` keeps this 500 KB document from competing with
+           the hero for bandwidth. -->
+      <iframe src="/ally-platform.html?preview=1&v=soon23" title="Ally dashboard" loading="lazy" fetchpriority="low" allow="fullscreen"></iframe>
     </div>
   </div>
 </section>
@@ -3670,11 +3690,14 @@
     <div class="flow-head reveal">
       <h2 class="big">How Ally<br><span class="accent">works</span></h2>
       <p class="flow-sub">From context to action — one deliberate progression.</p>
-      <div class="stepper" id="stepper" aria-hidden="true">
-        <div class="step active" data-step="0"><div class="dot">1</div><div class="lbl">Diagnosis</div></div>
-        <div class="step" data-step="1"><div class="dot">2</div><div class="lbl">Root cause</div></div>
-        <div class="step" data-step="2"><div class="dot">3</div><div class="lbl">Direction</div></div>
-        <div class="step" data-step="3"><div class="dot">4</div><div class="lbl">Action</div></div>
+      <!-- Was aria-hidden="true" with click handlers on <div>s: invisible to
+           screen readers and unreachable by keyboard, while still being the
+           control that drives the cards below. -->
+      <div class="stepper" id="stepper" aria-label="Highlight a step">
+        <button class="step active" type="button" data-step="0" aria-pressed="true"><span class="dot" aria-hidden="true">1</span><span class="lbl">Diagnosis</span></button>
+        <button class="step"        type="button" data-step="1" aria-pressed="false"><span class="dot" aria-hidden="true">2</span><span class="lbl">Root cause</span></button>
+        <button class="step"        type="button" data-step="2" aria-pressed="false"><span class="dot" aria-hidden="true">3</span><span class="lbl">Direction</span></button>
+        <button class="step"        type="button" data-step="3" aria-pressed="false"><span class="dot" aria-hidden="true">4</span><span class="lbl">Action</span></button>
       </div>
     </div>
 
@@ -3746,7 +3769,7 @@
 
   <div class="final-stack">
     <h2 class="reveal">
-      <span class="line-noise">You don't need more noise.</span>
+      <span class="line-noise">You don’t need more noise.</span>
       <span class="line-clarity">You need <span class="accent">clarity.</span></span>
     </h2>
 
@@ -3754,10 +3777,10 @@
       <img class="brand-logo" src="/assets/logo-123.v1.png" alt="" />
       <div class="final-brand__text">
         <span class="final-brand__name">GoXL Ally</span>
-        <span class="final-brand__tag">The Founder's Compass</span>
+        <span class="final-brand__tag">The Founder’s Compass</span>
 </div>
     </div>
-        <p class="final-journey reveal">Your ideas. Your challenges. Your journey. GoXL Ally stands beside you—helping you find clarity, make better decisions, and move forward.</p>
+        <p class="final-journey reveal">Your ideas. Your challenges. Your journey. GoXL Ally stands beside you — helping you find clarity, make better decisions, and move forward.</p>
         <div class="cta-wrap final-access reveal">
           <button class="cta" type="button" data-early-access>
             Register for Early Access
@@ -3954,8 +3977,19 @@ if(heroSection){
 
 function resize(){
   const problem = document.getElementById('problem');
-  W = canvas.width = problem.clientWidth;
-  H = canvas.height = problem.clientHeight;
+  /* Draw at device resolution, not CSS pixels. The backing store was sized to
+     clientWidth/Height, so on any HiDPI screen the browser was upscaling the
+     particle field and it rendered soft. Capped at 2x — beyond that the extra
+     pixels cost more than they show. */
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  W = problem.clientWidth;
+  H = problem.clientHeight;
+  canvas.width = Math.round(W * dpr);
+  canvas.height = Math.round(H * dpr);
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  // All drawing below stays in CSS-pixel coordinates.
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 function initPoints(){
   points = [];
@@ -4018,7 +4052,15 @@ function step(){
   }
   requestAnimationFrame(step);
 }
-window.addEventListener('resize', ()=>{ resize(); initPoints(); });
+/* Debounced. `resize` fires continuously while the mobile URL bar shows and
+   hides, and initPoints() rebuilds every particle — so the field visibly
+   teleported on each tick. Re-seed only once the size has settled. */
+let resizeTimer = null;
+window.addEventListener('resize', ()=>{
+  resize();                                   // keep the canvas correctly sized
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(initPoints, 150);  // re-seed only after it settles
+}, { passive:true });
 document.getElementById('problem').addEventListener('mousemove', (e)=>{
   const rect = e.currentTarget.getBoundingClientRect();
   mouse.x = e.clientX - rect.left;
@@ -4064,6 +4106,7 @@ function setStep(i){
   steps.forEach((s,idx)=>{
     s.classList.toggle('active', idx===i);
     s.classList.toggle('done', idx<i);
+    s.setAttribute('aria-pressed', idx===i ? 'true' : 'false');
   });
   journeyCards.forEach((c,idx)=>{
     c.classList.toggle('is-active', idx===i);
@@ -4460,8 +4503,10 @@ journeyCards.forEach((c,idx)=>{
   if(!iframe) return;
   window.addEventListener('message', function(e){
     if(e.source!==iframe.contentWindow) return;
-    var sandboxedOpaqueOrigin=iframe.hasAttribute('sandbox') && e.origin==='null';
-    if(e.origin!==location.origin && !sandboxedOpaqueOrigin) return;
+    // The iframe is same-origin first-party content, so this is now a plain
+    // strict check. It used to also accept an opaque 'null' origin to cover the
+    // sandboxed case; that attribute is gone, and the exception with it.
+    if(e.origin!==location.origin) return;
     if(!e.data) return;
     if(e.data.type==='ally-preview-ready'){
       try{
