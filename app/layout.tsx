@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
-import "./globals.css";
 
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-poppins",
-  display: "swap",
-});
+/**
+ * The homepage is a static HTML rewrite handled in `next.config.ts`, so nothing
+ * this layout renders is ever seen on `/`. The only page that reaches it is
+ * `not-found.tsx`, which carries its own inline styles.
+ *
+ * Dropped `globals.css` and the Poppins webfont: neither was reachable. The
+ * stylesheet was 1,669 lines describing a React port of the landing page that
+ * no route renders, and the font was downloaded on every request while the
+ * actual page used its own stack.
+ */
 
 export const metadata: Metadata = {
   title: "GoXL Ally — The Founder’s Compass",
@@ -22,8 +24,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={poppins.variable}>
-      <body>{children}</body>
+    <html lang="en">
+      {/* margin:0 replaces the only rule from globals.css this tree relied on. */}
+      <body style={{ margin: 0 }}>{children}</body>
     </html>
   );
 }
