@@ -59,6 +59,25 @@ const nextConfig: NextConfig = {
         source: "/ally-platform.html",
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }],
       },
+      // Everything under /assets carries a .vN in its filename, so a given URL
+      // always names the same bytes and can be cached indefinitely. Changing an
+      // image means bumping that suffix, which changes the URL — never edit a
+      // file in place and leave the name alone, or clients will hold the stale
+      // copy for a year.
+      //
+      // /assets/email/* is deliberately excluded: those URLs are baked into
+      // confirmation emails already sitting in people's inboxes, so they can't
+      // be renamed. They get a day instead.
+      {
+        source: "/assets/:path((?!email/).*)",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/assets/email/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400" }],
+      },
     ];
   },
 };
