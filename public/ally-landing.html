@@ -633,7 +633,18 @@
   .foot-tag{ color:var(--accent); font-size:13px; letter-spacing:0.04em; margin-bottom:18px; }
   .foot-desc{ color:var(--text-mute); font-size:13px; max-width:460px; margin:0 auto 26px; line-height:1.6; }
   .foot-links{ display:flex; justify-content:center; gap:22px; font-size:12.5px; color:var(--text-dim); }
-  .foot-links a{ transition:color .2s; }
+  .foot-links a{ transition:color .2s; position:relative; }
+  /* Tap target. The links render 16px tall, under the 24px WCAG 2.5.8 floor.
+     Extending the hit area with a pseudo-element rather than padding keeps the
+     footer's height and spacing exactly as they were. All five are already
+     wider than 24px, so only the vertical axis needs help. */
+  .foot-links a::after{
+    content:'';
+    position:absolute;
+    left:0; right:0; top:50%;
+    height:24px;
+    transform:translateY(-50%);
+  }
   .foot-links a:hover{ color:var(--accent); }
   .foot-links .divider{ color:var(--text-mute); }
 
@@ -1061,7 +1072,10 @@
     right:0;
     bottom:22px !important;
     margin-top:0 !important;
-    opacity:0.42 !important;
+    /* 0.42 put these links at 2.5:1 — the ancestor opacity dims the text
+       without dimming the ground behind it, so the contrast collapses. 0.7
+       gives 5.2:1 and matches what the mobile rule below already used. */
+    opacity:0.7 !important;
     z-index:2;
   }
   .final-horizon{
