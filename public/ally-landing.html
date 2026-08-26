@@ -550,6 +550,23 @@
     padding:8px 0; font-size:13.5px; color:var(--text-dim);
     cursor:pointer; user-select:none;
   }
+  /* The real control. These <label>s previously wrapped nothing at all, so
+     they toggled only via a JS click handler — no keyboard path, and nothing
+     for a screen reader to announce as checkable. The input is taken out of
+     flow rather than hidden, so it stays focusable and the flex `gap` is
+     unchanged; .box remains the entire visual. */
+  .check-row .check-input{
+    position:absolute;
+    width:1px; height:1px;
+    margin:0; padding:0; border:0;
+    opacity:0;
+    pointer-events:none;
+  }
+  /* Keyboard focus lands on the invisible input, so show the ring on the box. */
+  .check-row .check-input:focus-visible + .box{
+    outline:2px solid var(--accent-2);
+    outline-offset:2px;
+  }
   .check-row .box{
     width:16px; height:16px; border-radius:5px; flex:0 0 auto;
     border:1.5px solid var(--border-strong);
@@ -3747,10 +3764,10 @@
         </div>
         <p class="desc">What should you do today?</p>
         <div id="checklist">
-          <label class="check-row"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></span><span class="label">Talk to 3 users</span></label>
-          <label class="check-row"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></span><span class="label">Review onboarding</span></label>
-          <label class="check-row"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></span><span class="label">Analyze churn</span></label>
-          <label class="check-row"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></span><span class="label">Plan pricing test</span></label>
+          <label class="check-row"><input class="check-input" type="checkbox"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></span><span class="label">Talk to 3 users</span></label>
+          <label class="check-row"><input class="check-input" type="checkbox"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></span><span class="label">Review onboarding</span></label>
+          <label class="check-row"><input class="check-input" type="checkbox"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></span><span class="label">Analyze churn</span></label>
+          <label class="check-row"><input class="check-input" type="checkbox"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></span><span class="label">Plan pricing test</span></label>
         </div>
         <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
         <div class="progress-label" id="progLabel">0 of 4 done today</div>
@@ -4090,9 +4107,14 @@ function updateProgress(){
   if(progFill) progFill.style.width = (done/rows.length*100)+'%';
   if(progLabel) progLabel.textContent = `${done} of ${rows.length} done today`;
 }
+/* Driven by the checkbox's own `change`, not a click handler on the label.
+   Clicking the label toggles the input natively, and Space on a focused
+   checkbox now works too — which it could not before. */
 rows.forEach(r=>{
-  r.addEventListener('click', ()=>{
-    r.classList.toggle('done');
+  const input = r.querySelector('.check-input');
+  if(!input) return;
+  input.addEventListener('change', ()=>{
+    r.classList.toggle('done', input.checked);
     updateProgress();
   });
 });
