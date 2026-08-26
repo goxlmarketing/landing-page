@@ -2499,7 +2499,10 @@
     }
     .hero-ask{
       font-size:15px !important;
-      max-width:22ch !important;
+      /* 22ch capped this at 178px on a 375px screen — under half the width,
+         which forced three cramped lines. 30ch (243px) fits two and still
+         leaves a comfortable margin. */
+      max-width:30ch !important;
       margin:0 auto 20px !important;
     }
     .hero-cta{
