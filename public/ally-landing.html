@@ -855,7 +855,9 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:8px;
+    /* 8px against 56px of space above the CTA read as cramped — a 7x
+       asymmetry in the same stack. */
+    gap:18px;
   }
   .cta-limit{
     margin:0;
@@ -2150,14 +2152,18 @@
   }
   .dimensions.is-in .dim-pair{ opacity:1; transform:none; }
 
+  /* These are static labels, not controls. A full rounded border plus padding
+     read as a button and invited clicks that do nothing. A single left rule
+     keeps them grouped and legible without promising interactivity. */
   .dim-pole{
     display:flex;
     align-items:center;
     justify-content:flex-start;
     min-height:64px;
     padding:16px 20px;
-    border:1px solid rgba(120,220,190,0.22);
-    border-radius:14px;
+    border:0;
+    border-left:2px solid rgba(120,220,190,0.34);
+    border-radius:0;
     background:rgba(8,16,14,0.45);
     backdrop-filter:blur(10px);
     -webkit-backdrop-filter:blur(10px);
@@ -3632,7 +3638,7 @@
           <p>Your business</p>
         </div>
       </div>
-      <p class="dim-close">You struggle to know what matters. Ally helps you to decide better.</p>
+      <p class="dim-close">You struggle to know what matters. Ally helps you make better decisions.</p>
     </div>
     <h2 class="dim-lead">
       <span class="dl-1">Entrepreneurship is</span>
@@ -4206,7 +4212,13 @@ journeyCards.forEach((c,idx)=>{
     bl: { top: 5.4, left: 51.7 },
     br: { top: 47, left: 51.7 },
   };
-  const editMode = new URLSearchParams(location.search).has('edit');
+  /* ?edit exposes the drag-to-position toolbar. Restricted to local dev: the
+     save endpoint already 403s in production, but the toolbar itself used to
+     appear for anyone who guessed the query string, and positions still
+     persisted to their localStorage. */
+  const isLocalHost = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)
+                   || /^192\.168\./.test(location.hostname);
+  const editMode = isLocalHost && new URLSearchParams(location.search).has('edit');
   if(editMode) document.body.classList.add('is-float-edit');
 
   let editing = false;

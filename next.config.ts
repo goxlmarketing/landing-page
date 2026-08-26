@@ -21,7 +21,12 @@ const contentSecurityPolicy = [
 
 const nextConfig: NextConfig = {
   // Phone / LAN: allow Next.js dev JS/CSS/HMR when opened via network IP
-  allowedDevOrigins: ["192.168.31.132"],
+  // Set ALLOWED_DEV_ORIGIN to your machine's LAN IP to open the dev server from
+  // a phone. Was a hardcoded personal address committed to the repo, which only
+  // ever worked for one machine on one network.
+  allowedDevOrigins: process.env.ALLOWED_DEV_ORIGIN
+    ? [process.env.ALLOWED_DEV_ORIGIN]
+    : [],
   // Hide the floating Next.js “N” badge in development
   devIndicators: false,
   /**
@@ -59,7 +64,10 @@ const nextConfig: NextConfig = {
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Content-Security-Policy", value: contentSecurityPolicy },
           { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
-          { key: "Strict-Transport-Security", value: "max-age=31536000" },
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains",
+          },
           { key: "X-DNS-Prefetch-Control", value: "off" },
           { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
           {
