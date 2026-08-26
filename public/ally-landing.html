@@ -1330,7 +1330,11 @@
     font-size:clamp(16px, 1.7vw, 22px) !important;
     line-height:1.4 !important;
     font-weight:400 !important;
-    max-width:28ch;
+    /* 28ch broke this 61-character line into three, orphaning "next." on its
+       own. 34ch fits it in two, and `balance` evens their lengths instead of
+       leaving a long first line and a short second. */
+    max-width:34ch;
+    text-wrap:balance;
   }
   .hero-cta{
     margin:0 auto;
