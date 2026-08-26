@@ -2900,7 +2900,7 @@ img,svg,video,canvas{max-width:100%}
       <section class="view active" id="v-dashboard">
         <div class="pad">
           <div class="xp-hero stagger d1">
-            <div class="cl-eye" id="dashGreetEye"><span class="dot" style="width:6px;height:6px;border-radius:50%;background:var(--emerald-bright)"></span> <span id="dashGreet">Good evening</span>, <span data-ff>User</span></div>
+            <div class="cl-eye" id="dashGreetEye"><span class="dot" style="width:6px;height:6px;border-radius:50%;background:var(--emerald-bright)"></span> <span id="dashGreet">Good morning</span>, <span data-ff>User</span></div>
             <h2 class="xp-q">How can Ally help you today?</h2>
           </div>
           <div class="xp-cards stagger d1">
@@ -3479,10 +3479,18 @@ img,svg,video,canvas{max-width:100%}
     document.querySelectorAll('[data-fe]').forEach(function(e){e.textContent=founder.email;});
   }
 
+  /* Single source of truth for the time-of-day greeting. Every place that
+     shows one calls this — a hardcoded string here means the header and the
+     body can disagree, which is exactly what used to happen after midday. */
+  function greeting(){
+    var h=new Date().getHours();
+    return h<12 ? 'Good morning' : (h<17 ? 'Good afternoon' : 'Good evening');
+  }
+
   /* ---------------- mock data ---------------- */
   var NAV=[
     {g:'Home'},
-    {id:'dashboard',label:'Dashboard',eye:'Overview',title:'Good morning, User',ic:'<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>'},
+    {id:'dashboard',label:'Dashboard',eye:'Overview',title:'Dashboard',ic:'<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>'},
     {id:'allychat',label:'Chat with Ally',eye:'Conversation',title:'Chat with Ally',ic:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>'},
     {g:'Founder Diagnosis'},
     {id:'chat',label:'Adaptive diagnosis',eye:'Diagnosis',title:'Adaptive diagnosis',n:'01',ic:'<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>'},
@@ -3649,7 +3657,7 @@ img,svg,video,canvas{max-width:100%}
     currentView=id;
     activate(id);
     document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.toggle('active', n.getAttribute('data-nav')===id); });
-    $('#tbEye').textContent=m.eye; $('#tbTitle').textContent=(id==='dashboard'?'Good morning, '+founder.first:m.title);
+    $('#tbEye').textContent=m.eye; $('#tbTitle').textContent=(id==='dashboard'?greeting()+', '+founder.first:m.title);
     closeSidebar();
     syncTbBack();
     history.replaceState({view:id},'','#'+id);
@@ -4969,8 +4977,11 @@ img,svg,video,canvas{max-width:100%}
 
   /* ---- dashboard ---- */
   function initDash(){
-    // time-of-day greeting on the two-experience hero
-    try{ var h=new Date().getHours(), g=$('#dashGreet'); if(g) g.textContent = h<12?'Good morning':(h<17?'Good afternoon':'Good evening'); }catch(e){}
+    // time-of-day greeting, applied to every element that shows one
+    try{
+      var gt=greeting();
+      ['#dashGreet','#planGreet'].forEach(function(sel){ var g=$(sel); if(g) g.textContent=gt; });
+    }catch(e){}
     // journey chips
     var jc=$('#journeyChips');
     JOURNEY.forEach(function(j){
@@ -5105,7 +5116,7 @@ img,svg,video,canvas{max-width:100%}
   var acAtt=[], acAttSeq=0, acReplaceId=null, acDragDepth=0;   /* composer attachments (files · images · links) */
   function initAllyChat(){
     // greet the empty state with the founder's name + time of day
-    var hi=(function(){ try{ var h=new Date().getHours(); return h<12?'Good morning':(h<17?'Good afternoon':'Good evening'); }catch(e){ return 'Hello'; } })();
+    var hi=(function(){ try{ return greeting(); }catch(e){ return 'Hello'; } })();
     window.__acHi=hi;
     acRenderList();
     if(!acWired){
@@ -5405,7 +5416,7 @@ img,svg,video,canvas{max-width:100%}
   function planFmt12(s){ var p=(s||'').split(':'); if(p.length<2) return s||''; var h=+p[0]||0, m=p[1]; var ap=h<12?'AM':'PM', hh=(h%12)||12; return hh+':'+m+' '+ap; }
   function planNow(){ try{ var d=new Date(),h=d.getHours(),mm=(d.getMinutes()<10?'0':'')+d.getMinutes(),ap=h<12?'AM':'PM',hh=(h%12)||12; return hh+':'+mm+' '+ap; }catch(e){ return 'just now'; } }
   function initPlan(){
-    try{ var h=new Date().getHours(); $('#planGreet').textContent = h<12?'Good morning':(h<17?'Good afternoon':'Good evening'); }catch(e){}
+    try{ $('#planGreet').textContent = greeting(); }catch(e){}
     try{ $('#planDate').textContent = new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'}); }catch(e){}
     var mv=$('#planMotiv'); if(mv) mv.textContent=PLAN_MOTIV[planMotivI];
     if(!planInited){ planInited=true; planWire(); }

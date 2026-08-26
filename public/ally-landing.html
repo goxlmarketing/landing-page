@@ -7,6 +7,9 @@
 <meta name="description" content="GoXL Ally helps founders turn context into clarity, better decisions, and daily action. Register for early access.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://join.goxlally.ai/">
+<link rel="icon" href="/assets/ally-logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/ally-logo.png">
+<meta name="theme-color" content="#040705">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GoXL Ally">
 <meta property="og:title" content="GoXL Ally — The Founder's Compass">
@@ -54,7 +57,9 @@
     --accent-dim:#17614c;
     --text:#eef4f1;
     --text-dim:#a9bab3;
-    --text-mute:#647a72;
+    /* 5.58:1 on the section grounds. Was #647a72 (4.26–4.43:1), which failed
+       WCAG 1.4.3 everywhere it was used at 12–13px. */
+    --text-mute:#7a8b84;
     --font-display: 'Avenir Next', 'Segoe UI Semibold', 'Century Gothic', ui-sans-serif, system-ui, sans-serif;
     --font-body: 'Segoe UI', ui-sans-serif, system-ui, -apple-system, sans-serif;
     --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
@@ -73,6 +78,37 @@
 
   a{ color:inherit; text-decoration:none; }
   button{ font-family:inherit; cursor:pointer; }
+
+  /* Skip link. Off-screen until it takes keyboard focus, so pointer users
+     never see it and keyboard users get a way past the full-height hero. */
+  .skip-link{
+    position:absolute;
+    left:-9999px;
+    top:0;
+    z-index:200;
+    background:var(--accent);
+    color:#04120c;
+    padding:12px 18px;
+    border-radius:0 0 8px 0;
+    font-weight:700;
+    font-size:14px;
+  }
+  .skip-link:focus{ left:0; }
+
+  /* Keyboard focus, site-wide.
+     :focus-visible only, so pointer clicks never show a ring — which is what
+     the old blanket `outline:none` was for. --accent-2 on these grounds is
+     well past the 3:1 that WCAG 1.4.11 asks of a state indicator, and 2px
+     satisfies the 2.4.11 perimeter requirement. */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible{
+    outline:2px solid var(--accent-2);
+    outline-offset:2px;
+  }
 
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
@@ -322,7 +358,6 @@
     padding:12px 14px;
     color:var(--text);
     font-size:14px;
-    outline:none;
     transition:border-color .3s;
   }
   .signup-form input:focus{ border-color:var(--border-strong); }
@@ -1462,6 +1497,16 @@
     gap:14px !important;
     transition:opacity .45s ease, transform .45s cubic-bezier(.2,.8,.3,1), border-color .4s ease, background .4s ease, box-shadow .45s ease !important;
   }
+  /* The stepper doesn't auto-cycle when reduced motion is requested, so the
+     three inactive cards would sit dimmed to 0.42 forever and never become
+     readable. Show every card at full strength instead — the same information,
+     presented all at once rather than over time. */
+  @media (prefers-reduced-motion: reduce){
+    .flow .fcard{
+      opacity:1 !important;
+      transform:none !important;
+    }
+  }
   .flow .fcard:hover{
     transform:scale(0.99) !important;
     opacity:0.78;
@@ -1484,7 +1529,10 @@
     margin-bottom:4px;
   }
   .flow .fcard .fnum{
-    color:rgba(232,242,238,0.4) !important;
+    /* Muted grey by design, but at 0.62 not the old 0.4 — that measured
+       3.43:1 and failed WCAG 1.4.3. No !important needed: this selector is
+       already more specific than the base `.fcard .fnum` rule. */
+    color:rgba(232,242,238,0.62);
     font-size:13px !important;
     letter-spacing:0.1em !important;
   }
@@ -1698,7 +1746,7 @@
     font-size:12px;
     letter-spacing:0.12em;
     text-transform:uppercase;
-    color:rgba(232,242,238,0.38);
+    color:rgba(232,242,238,0.62); /* 0.38 gave 3.17:1 — below AA at 12px */
     background:rgba(2,8,6,0.9);
     padding:0 4px;
     transition:color .45s ease;
@@ -3319,7 +3367,17 @@
   }
   .ea-form label .ea-opt{
     text-transform:none; letter-spacing:0; font-weight:500;
-    color:rgba(232,242,238,.35);
+    color:rgba(232,242,238,.62); /* .35 gave 2.84:1 — well below AA */
+  }
+  /* Honeypot. Positioned off-screen rather than display:none — most bots skip
+     fields that are display:none or hidden, which defeats the point. */
+  .ea-hp{
+    position:absolute !important;
+    left:-9999px !important;
+    top:auto !important;
+    width:1px !important;
+    height:1px !important;
+    overflow:hidden !important;
   }
   .ea-form input:not([type="checkbox"]){
     width:100%;
@@ -3333,7 +3391,6 @@
     letter-spacing:0;
     text-transform:none;
     font-weight:500;
-    outline:none;
     transition:border-color .2s;
   }
   .ea-form input:not([type="checkbox"]):focus{ border-color:var(--border-strong); }
@@ -3416,6 +3473,9 @@
 </head>
 <body>
 
+<a class="skip-link" href="#content">Skip to content</a>
+<main id="content">
+
 <!-- =========================================================
      SECTION 1 — HERO
 ========================================================== -->
@@ -3477,10 +3537,10 @@
 
   <div class="float-edit-bar">
     <button type="button" id="floatEditBtn">Edit cards</button>
-    <button type="button" id="floatSaveBtn" class="is-primary" hidden>Save permanent</button>
+    <button type="button" id="floatSaveBtn" class="is-primary" hidden>Set positions</button>
     <button type="button" id="floatResetBtn" hidden>Reset</button>
   </div>
-  <div class="float-edit-hint">Drag cards → then click Save permanent</div>
+  <div class="float-edit-hint">Drag cards → then click Set positions</div>
 
   <aside class="float-qs" aria-label="Founder questions">
     <p class="float-q float-q--tl" data-fq="tl">
@@ -3716,6 +3776,8 @@
     </nav>
   </section>
 
+</main>
+
 <div class="ea-modal" id="earlyAccessModal" aria-hidden="true">
   <div class="ea-backdrop" data-ea-close></div>
   <div class="ea-dialog" role="dialog" aria-modal="true" aria-labelledby="eaTitle">
@@ -3738,6 +3800,12 @@
       <label>LinkedIn Profile <span class="ea-opt">(optional)</span>
         <input id="eaLinkedin" name="linkedinUrl" type="url" autocomplete="url" inputmode="url" placeholder="linkedin.com/in/yourprofile" maxlength="200">
       </label>
+      <!-- Honeypot: off-screen, unreachable by keyboard, hidden from screen
+           readers, and never autofilled. Only a bot ever puts anything here. -->
+      <div class="ea-hp" aria-hidden="true">
+        <label for="eaCompany">Company</label>
+        <input id="eaCompany" name="company" type="text" tabindex="-1" autocomplete="off">
+      </div>
       <label class="ea-consent">
         <input id="eaTerms" name="termsAccepted" type="checkbox" required>
         <span>I agree to the <a href="/terms.html" target="_blank" rel="noopener noreferrer">Terms of Use</a> and acknowledge the <a href="/privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>. My details will be used to manage my early-access registration.</span>
@@ -3747,11 +3815,11 @@
         <span><span class="ea-optional">Optional</span><br>I’d like to receive GoXL Ally product updates, founder insights and promotional emails. I can unsubscribe at any time.</span>
       </label>
       <p class="ea-err" id="eaErr" role="alert"></p>
-      <button class="cta" type="submit" id="eaSubmit">Request Early Access</button>
+      <button class="cta" type="submit" id="eaSubmit">Register for Early Access</button>
     </form>
     <div class="ea-done" id="eaDone" hidden>
       <p id="eaDoneMsg">Thank you for registering.</p>
-      <p class="ea-done__sub" id="eaDoneSub">Our team will reach out to you soon.</p>
+      <p class="ea-done__sub" id="eaDoneSub">We’ve sent a confirmation to your inbox — check spam if it doesn’t arrive. Our team will reach out soon.</p>
       <button class="cta" type="button" data-ea-close>Close</button>
     </div>
   </div>
@@ -3759,6 +3827,11 @@
 
 <script>
 const isPhone = () => window.matchMedia('(max-width: 768px)').matches;
+
+/* The CSS @media (prefers-reduced-motion) block only zeroes transition and
+   animation durations — it can't stop a setInterval from swapping classes.
+   Both auto-cycling sections below check this before starting a timer. */
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 /* ---------- reveal on scroll ---------- */
 const revealEls = document.querySelectorAll('.reveal');
@@ -3821,7 +3894,13 @@ document.querySelectorAll('#problem .reveal').forEach(el=> el.classList.add('in'
     dot.setAttribute('cy', String(joinY));
   }
 
+  /* This runs at parse time, when .dim-stage has no geometry yet, so the
+     `sr.width < 40` guard above returns early and the path is never given a
+     `d`. Nothing re-triggered it afterwards, so the connector simply did not
+     exist until the window was resized. Re-run once after first layout. */
   layoutLink();
+  requestAnimationFrame(layoutLink);
+  window.addEventListener('load', layoutLink);
   window.addEventListener('resize', layoutLink);
   if(typeof ResizeObserver !== 'undefined' && stage){
     new ResizeObserver(layoutLink).observe(stage);
@@ -3839,12 +3918,18 @@ document.querySelectorAll('#problem .reveal').forEach(el=> el.classList.add('in'
     entries.forEach(e=>{
       if(e.isIntersecting){
         section.classList.add('is-in');
-        if(!timer && items.length){
+        // Don't auto-cycle when the OS asks for reduced motion; leave the
+        // first item lit so the section still reads correctly.
+        if(!timer && items.length && !reduceMotion.matches){
           timer = setInterval(()=>{
             i = (i + 1) % items.length;
             items.forEach((el, idx)=> el.classList.toggle('is-on', idx === i));
           }, 1800);
         }
+      }else if(timer){
+        // Was running for the life of the page even when scrolled far away.
+        clearInterval(timer);
+        timer = null;
       }
     });
   }, { threshold: isPhone() ? 0.18 : 0.35 });
@@ -3942,38 +4027,10 @@ document.getElementById('problem').addEventListener('mousemove', (e)=>{
 document.getElementById('problem').addEventListener('mouseleave', ()=>{ mouse.x=-9999; mouse.y=-9999; });
 resize(); initPoints(); step();
 
-/* ---------- beams from question cards toward the center of the photo ---------- */
-function positionBeams(){
-  const wrap = document.querySelector('.problem-inner');
-  const problem = document.getElementById('problem');
-  const wrapRect = wrap.getBoundingClientRect();
-  const problemRect = problem.getBoundingClientRect();
-  // aim roughly at the subject's hands/head in the photo (~50% x, ~40% y of the hero section)
-  const cx = (problemRect.width * 0.5) - (wrapRect.left - problemRect.left);
-  const cy = (problemRect.height * 0.4) - (wrapRect.top - problemRect.top);
-
-  document.querySelectorAll('.qcard').forEach(card=>{
-    const key = card.dataset.beam;
-    const beam = document.getElementById('beam-'+key);
-    if(!beam) return;
-    const cardRect = card.getBoundingClientRect();
-    const isRight = key.includes('r');
-    const originX = (isRight ? cardRect.left : cardRect.right) - wrapRect.left;
-    const originY = cardRect.top + cardRect.height/2 - wrapRect.top;
-    const dx = cx - originX, dy = cy - originY;
-    const len = Math.sqrt(dx*dx+dy*dy) - 60;
-    const angle = Math.atan2(dy,dx) * 180/Math.PI;
-    beam.style.left = originX + 'px';
-    beam.style.top = originY + 'px';
-    beam.style.transform = `rotate(${angle}deg)`;
-    beam.style.setProperty('--beam-len', Math.max(len,0)+'px');
-
-    card.addEventListener('mouseenter', ()=> beam.classList.add('active'));
-    card.addEventListener('mouseleave', ()=> beam.classList.remove('active'));
-  });
-}
-window.addEventListener('load', positionBeams);
-window.addEventListener('resize', positionBeams);
+/* Removed: positionBeams(). It targeted `.qcard` / `#beam-*` elements that no
+   longer exist in the markup, so it did nothing — while still running on every
+   `load` and `resize`, and re-registering mouseenter/mouseleave handlers inside
+   its own loop each time it ran. */
 
 /* ---------- pill toggle (diagnosis card) ---------- */
 document.querySelectorAll('#pillGroup .pill').forEach(p=>{
@@ -4015,7 +4072,20 @@ function setStep(i){
 }
 function startStepper(){
   clearInterval(stepperTimer);
+  if(reduceMotion.matches) return;   // honour the OS setting
   stepperTimer = setInterval(()=>{ setStep((activeStep+1)%steps.length); }, 2800);
+}
+/* Stop burning cycles while the section is off-screen or the tab is hidden.
+   Previously this interval ran for the life of the page. */
+document.addEventListener('visibilitychange', ()=>{
+  if(document.hidden) clearInterval(stepperTimer);
+  else startStepper();
+});
+const flowSection = document.getElementById('product');
+if(flowSection && 'IntersectionObserver' in window){
+  new IntersectionObserver((entries)=>{
+    entries.forEach(e=> e.isIntersecting ? startStepper() : clearInterval(stepperTimer));
+  }, { threshold: 0 }).observe(flowSection);
 }
 setStep(0);
 startStepper();
@@ -4041,8 +4111,10 @@ journeyCards.forEach((c,idx)=>{
 
   const phoneMq = window.matchMedia('(max-width: 768px)');
   const isPhoneView = () => phoneMq.matches;
+  const isPhoneLandscape = () => isPhoneView() && window.matchMedia('(orientation: landscape)').matches;
   const STORAGE_KEY = 'ally-float-q-positions';
   const STORAGE_KEY_PHONE = 'ally-float-q-positions-phone';
+  const STORAGE_KEY_PHONE_LANDSCAPE = 'ally-float-q-positions-phone-landscape';
   const defaults = {
     tl: { top: 8.8, left: 24.7 },
     bl: { top: 39.5, left: 17.2 },
@@ -4061,10 +4133,15 @@ journeyCards.forEach((c,idx)=>{
   let editing = false;
   let drag = null;
 
+  function activeViewport(){
+    if(isPhoneLandscape()) return 'phone-landscape';
+    return isPhoneView() ? 'phone' : 'desktop';
+  }
   function activeDefaults(){
     return isPhoneView() ? phoneDefaults : defaults;
   }
   function activeStorageKey(){
+    if(isPhoneLandscape()) return STORAGE_KEY_PHONE_LANDSCAPE;
     return isPhoneView() ? STORAGE_KEY_PHONE : STORAGE_KEY;
   }
   function activeCards(){
@@ -4103,12 +4180,16 @@ journeyCards.forEach((c,idx)=>{
   }
 
   async function loadPositions(){
-    const phone = isPhoneView();
+    const viewport = activeViewport();
     try{
       const res = await fetch('/float-q-lock.json', { cache: 'no-store' });
       if(res.ok){
         const data = await res.json();
-        const locked = phone ? data.phonePositions : data.positions;
+        const locked = viewport === 'phone-landscape'
+          ? (data.phoneLandscapePositions || data.phonePositions)
+          : viewport === 'phone'
+            ? data.phonePositions
+            : data.positions;
         if(locked){
           applyPositions(locked);
           return;
@@ -4121,12 +4202,12 @@ journeyCards.forEach((c,idx)=>{
     }catch(_){}
     applyPositions(activeDefaults());
   }
-  let lastPhoneMode = isPhoneView();
+  let lastViewportMode = activeViewport();
   window.addEventListener('resize', ()=>{
-    const nextPhoneMode = isPhoneView();
-    if(nextPhoneMode === lastPhoneMode) return;
-    lastPhoneMode = nextPhoneMode;
-    document.body.classList.toggle('is-editing-mobile-cards', editing && nextPhoneMode);
+    const nextViewportMode = activeViewport();
+    if(nextViewportMode === lastViewportMode) return;
+    lastViewportMode = nextViewportMode;
+    document.body.classList.toggle('is-editing-mobile-cards', editing && nextViewportMode !== 'desktop');
     loadPositions();
   }, { passive:true });
 
@@ -4155,20 +4236,20 @@ journeyCards.forEach((c,idx)=>{
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             positions,
-            viewport: isPhoneView() ? 'phone' : 'desktop',
+            viewport: activeViewport(),
             savedAt: new Date().toISOString(),
           }),
         });
         const data = await res.json();
         if(!res.ok || !data.ok) throw new Error(data.error || 'Save failed');
-        saveBtn.textContent = 'Saved ✓';
+        saveBtn.textContent = 'Set ✓';
         setEditing(false);
-        setTimeout(()=>{ saveBtn.textContent = 'Save permanent'; }, 1200);
+        setTimeout(()=>{ saveBtn.textContent = 'Set positions'; }, 1200);
       }catch(err){
         console.error(err);
-        saveBtn.textContent = 'Saved locally ✓';
+        saveBtn.textContent = 'Set locally ✓';
         setEditing(false);
-        setTimeout(()=>{ saveBtn.textContent = 'Save permanent'; }, 1400);
+        setTimeout(()=>{ saveBtn.textContent = 'Set positions'; }, 1400);
       }
     });
     function onPointerDown(e){
@@ -4231,6 +4312,7 @@ journeyCards.forEach((c,idx)=>{
   const doneSub = document.getElementById('eaDoneSub');
   const termsEl = document.getElementById('eaTerms');
   const marketingEl = document.getElementById('eaMarketing');
+  const companyEl = document.getElementById('eaCompany'); // honeypot — always empty for humans
   if(!modal || !form || !done || !err || !submit || !nameEl || !emailEl || !phoneEl || !linkedinEl || !termsEl || !marketingEl) return;
 
   const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -4252,6 +4334,29 @@ journeyCards.forEach((c,idx)=>{
     }
   }
 
+  /* Everything outside the dialog, so it can be made inert while the dialog is
+     open. Without this, Tab walks straight out of the modal into the page
+     behind it — the content is still focusable and still announced. */
+  const outsideModal = () => [...document.body.children].filter(el => el !== modal);
+
+  function setBackgroundInert(on){
+    outsideModal().forEach(el => {
+      if(on){ el.setAttribute('inert', ''); el.setAttribute('aria-hidden', 'true'); }
+      else  { el.removeAttribute('inert'); el.removeAttribute('aria-hidden'); }
+    });
+  }
+
+  /* Fallback wrap-around for browsers without `inert`. */
+  const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]):not([tabindex="-1"]), select, textarea, [tabindex]:not([tabindex="-1"])';
+  function trapTab(e){
+    if(e.key !== 'Tab' || !modal.classList.contains('is-open')) return;
+    const items = [...modal.querySelectorAll(FOCUSABLE)].filter(el => el.offsetParent !== null);
+    if(!items.length) return;
+    const first = items[0], last = items[items.length - 1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  }
+
   function openModal(){
     lastFocus = document.activeElement;
     form.hidden = false;
@@ -4264,6 +4369,8 @@ journeyCards.forEach((c,idx)=>{
     modal.setAttribute('aria-hidden', 'false');
     document.documentElement.classList.add('ea-lock');
     document.body.classList.add('ea-lock');
+    setBackgroundInert(true);
+    document.addEventListener('keydown', trapTab, true);
     setTimeout(()=> nameEl.focus(), 40);
   }
   function closeModal(){
@@ -4271,6 +4378,8 @@ journeyCards.forEach((c,idx)=>{
     modal.setAttribute('aria-hidden', 'true');
     document.documentElement.classList.remove('ea-lock');
     document.body.classList.remove('ea-lock');
+    setBackgroundInert(false);
+    document.removeEventListener('keydown', trapTab, true);
     if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
   }
 
@@ -4302,7 +4411,7 @@ journeyCards.forEach((c,idx)=>{
     if(!termsEl.checked){ err.textContent = 'Please accept the Terms and acknowledge the Privacy Policy'; termsEl.focus(); return; }
 
     submit.disabled = true;
-    submit.textContent = 'Joining…';
+    submit.textContent = 'Registering…';
     try{
       const res = await fetch('/api/early-access', {
         method: 'POST',
@@ -4314,7 +4423,8 @@ journeyCards.forEach((c,idx)=>{
           linkedinUrl,
           termsAccepted: true,
           marketingConsent: marketingEl.checked,
-          policyVersion: '2026-08-15'
+          policyVersion: '2026-08-15',
+          company: companyEl ? companyEl.value : ''
         })
       });
       const data = await res.json().catch(()=>({}));
@@ -4326,11 +4436,12 @@ journeyCards.forEach((c,idx)=>{
       }
       if(doneMsg && doneSub){
         if(data.duplicate){
+          // No second row and no second email, so don't promise one.
           doneMsg.textContent = 'You’re already registered.';
-          doneSub.textContent = 'Our team will reach out to you soon.';
+          doneSub.textContent = 'You’re on the list — our team will reach out soon.';
         }else{
           doneMsg.textContent = 'Thank you for registering.';
-          doneSub.textContent = 'Our team will reach out to you soon.';
+          doneSub.textContent = 'We’ve sent a confirmation to your inbox — check spam if it doesn’t arrive. Our team will reach out soon.';
         }
       }
       form.hidden = true;

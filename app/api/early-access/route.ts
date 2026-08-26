@@ -49,10 +49,29 @@ function isSameOriginRequest(request: Request) {
   }
 }
 
+/**
+ * Rate-limit key for this caller.
+ *
+ * Both header names here are client-settable in a plain HTTP request, so the
+ * only value we can trust is one a proxy we control put there. Two rules keep
+ * this honest:
+ *
+ *   1. `x-forwarded-for` is a chain — a client can pre-seed it and the proxy
+ *      APPENDS the real address, so the LAST entry is the trustworthy one.
+ *      Reading the first entry (as this did) let a caller pick their own key
+ *      and sidestep the limit entirely by rotating it per request.
+ *   2. `x-real-ip` is only consulted as a fallback, never in preference to the
+ *      forwarded chain, because nothing appends to it.
+ *
+ * On Vercel both headers are rewritten at the edge, so the last entry is the
+ * single real client IP and this behaves identically — it just stops being
+ * bypassable if the app is ever fronted by a different proxy.
+ */
 function clientKey(request: Request) {
+  const chain = request.headers.get("x-forwarded-for")?.split(",") ?? [];
+  const nearest = chain.length ? chain[chain.length - 1]?.trim() : undefined;
   const realIp = request.headers.get("x-real-ip")?.trim();
-  const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
-  return (realIp || forwarded || "unknown").slice(0, 96);
+  return (nearest || realIp || "unknown").slice(0, 96);
 }
 
 function consumeRateLimit(request: Request) {
@@ -165,11 +184,22 @@ export async function POST(request: Request) {
       termsAccepted?: unknown;
       marketingConsent?: unknown;
       policyVersion?: unknown;
+      company?: unknown;
     };
     try {
       body = JSON.parse(raw) as typeof body;
     } catch {
       return json({ ok: false, error: "Invalid JSON" }, 400);
+    }
+
+    // Honeypot. `company` is rendered off-screen and hidden from assistive
+    // tech, so a real person can never fill it; form-filling bots populate
+    // every input they find. Answer 200 rather than an error — an error tells
+    // the author which field gave them away, and they just stop sending it.
+    // Nothing is written and no email is sent.
+    if (String(body?.company ?? "").trim() !== "") {
+      console.warn("[ally-beta] honeypot tripped", { ip: clientKey(request) });
+      return json({ ok: true, duplicate: false });
     }
 
     name = String(body?.name ?? "").trim().replace(/\s+/g, " ").slice(0, NAME_MAX + 1);
