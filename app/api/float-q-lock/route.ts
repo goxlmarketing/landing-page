@@ -5,6 +5,7 @@ import { apiJson, assertDevWriteAllowed, readJsonBody } from "../_dev-write-secu
 const filePath = () => path.join(process.cwd(), "public", "float-q-lock.json");
 const MAX_PAYLOAD_BYTES = 20_000;
 const ALLOWED_POSITION_IDS = new Set(["tl", "bl", "tr", "br"]);
+const ALLOWED_VIEWPORTS = new Set(["desktop", "phone", "phone-landscape"]);
 
 type PositionMap = Record<string, { top: number; left: number }>;
 
@@ -33,6 +34,11 @@ export async function POST(request: Request) {
       return apiJson({ ok: false, error: "Invalid positions payload" }, 400);
     }
 
+    const viewport = (body as { viewport?: unknown }).viewport;
+    if (typeof viewport !== "string" || !ALLOWED_VIEWPORTS.has(viewport)) {
+      return apiJson({ ok: false, error: "Invalid viewport" }, 400);
+    }
+
     let existing: Record<string, unknown> = {};
     try {
       existing = JSON.parse(await readFile(filePath(), "utf8")) as Record<string, unknown>;
@@ -40,22 +46,31 @@ export async function POST(request: Request) {
       existing = {};
     }
 
-    const isPhone = (body as { viewport?: unknown }).viewport === "phone";
+    const isPhone = viewport === "phone";
+    const isPhoneLandscape = viewport === "phone-landscape";
+    const isDesktop = viewport === "desktop";
     const now = new Date().toISOString();
     const incoming = (body as { positions: PositionMap }).positions;
     const safe = {
-      positions: (isPhone && isValidPositions(existing.positions) ? existing.positions : incoming) as PositionMap,
+      positions: (isDesktop ? incoming : isValidPositions(existing.positions) ? existing.positions : incoming) as PositionMap,
       phonePositions: (isPhone ? incoming : isValidPositions(existing.phonePositions) ? existing.phonePositions : undefined) as
         | PositionMap
         | undefined,
-      savedAt: isPhone && typeof existing.savedAt === "string" ? existing.savedAt : now,
+      phoneLandscapePositions: (isPhoneLandscape
+        ? incoming
+        : isValidPositions(existing.phoneLandscapePositions)
+          ? existing.phoneLandscapePositions
+          : undefined) as PositionMap | undefined,
+      savedAt: isDesktop ? now : typeof existing.savedAt === "string" ? existing.savedAt : now,
       phoneSavedAt: isPhone ? now : existing.phoneSavedAt,
+      phoneLandscapeSavedAt: isPhoneLandscape ? now : existing.phoneLandscapeSavedAt,
       baked: true,
     };
     if (!safe.phonePositions) delete safe.phonePositions;
+    if (!safe.phoneLandscapePositions) delete safe.phoneLandscapePositions;
 
     await writeFile(filePath(), JSON.stringify(safe, null, 2), "utf8");
-    return apiJson({ ok: true, path: "/float-q-lock.json", viewport: isPhone ? "phone" : "desktop" });
+    return apiJson({ ok: true, path: "/float-q-lock.json", viewport });
   } catch (error) {
     console.error("Floating-card lock save failed", error);
     return apiJson({ ok: false, error: "Failed to save" }, 500);
