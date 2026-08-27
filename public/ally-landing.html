@@ -3818,8 +3818,12 @@
        which is exactly where the node is centred — so the curves land on it
        at any column width instead of ending 126px above. */
     .both-curves{
-      display:block; position:absolute; bottom:50%; left:0; right:0;
-      width:100%; height:auto; aspect-ratio:120 / 190; overflow:visible;
+      /* -8px each side so the dots land on the panel edges rather than
+         inside the narrow centre column; the reference has them ~88px apart
+         over a ~91px drop, close to square, not the tall pinched V a
+         column-width box produced. */
+      display:block; position:absolute; bottom:50%; left:-8px; right:-8px;
+      width:auto; height:auto; aspect-ratio:120 / 121; overflow:visible;
     }
     .both-curves path{
       stroke:var(--accent); stroke-width:1.4; stroke-linecap:round;
@@ -3828,13 +3832,13 @@
     .both-curves circle{ fill:var(--accent); }
     .both-wire, .both-dot{ display:none; }
 
-    .both-stage{ grid-template-columns:1fr 74px 1fr; }
+    .both-stage{ grid-template-columns:1fr 86px 1fr; }
     .both-panel{ padding:14px 11px; }
     .both-lead{ font-size:14px; margin-bottom:12px; }
     .both-chips{ flex-direction:column; gap:5px; align-items:flex-start; }
     .both-chips li{ font-size:12px; padding:4px 9px; }
-    .both-node{ width:48px; height:48px; }
-    .both-node img{ width:26px; height:26px; }
+    .both-node{ width:56px; height:56px; }
+    .both-node img{ width:30px; height:30px; }
     .both-wire--l{ right:calc(50% + 26px); }
     .both-wire--r{ left:calc(50% + 26px); }
     .both-drop{ top:calc(50% + 34px); }
@@ -4015,8 +4019,8 @@
       </article>
 
       <div class="both-core">
-        <svg class="both-curves" viewBox="0 0 120 190" preserveAspectRatio="xMidYMin meet" fill="none" aria-hidden="true">
-          <path d="M9 9 C 9 120, 60 108, 60 190"/><path d="M111 9 C 111 120, 60 108, 60 190"/>
+        <svg class="both-curves" viewBox="0 0 120 121" preserveAspectRatio="xMidYMid meet" fill="none" aria-hidden="true">
+          <path d="M9 9 C 9 62, 50 95, 60 121"/><path d="M111 9 C 111 62, 70 95, 60 121"/>
           <circle cx="9" cy="9" r="4"/><circle cx="111" cy="9" r="4"/>
         </svg>
         <svg class="both-curves" viewBox="0 0 120 80" preserveAspectRatio="xMidYMin meet" fill="none" aria-hidden="true">
