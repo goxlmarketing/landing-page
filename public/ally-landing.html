@@ -39,11 +39,6 @@
   }
 }
 </script>
-<script>
-(function(){
-  try{ if(sessionStorage.getItem('ally-meet-fs')==='1') document.documentElement.classList.add('meet-fs'); }catch(e){}
-})();
-</script>
 <style>
   :root{
     --bg:#040705;
@@ -3844,6 +3839,227 @@
     .flow .cards4 .fcard{ display:flex !important; }
   }
 
+  /* =========================================================
+     MEET ALLY — scroll-driven product reveal
+     Progress through .reveal-wrap is written to --lp / --fp / --cp by the
+     script, and every transform below is a pure function of those. That is
+     what makes reversing free: scrolling up recomputes the same numbers, so
+     there is no second animation and no state to reset.
+  ========================================================== */
+  .reveal-wrap{
+    position:relative;
+    /* The scroll distance the transformation is spread over. The sticky child
+       is one viewport, so the extra 110vh is what the laptop travels through. */
+    height:210vh;
+    background:transparent;
+  }
+  .reveal-sticky{
+    position:sticky;
+    top:0;
+    height:100vh;
+    height:100dvh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    padding:0 clamp(20px, 5vw, 72px);
+  }
+
+  /* Ambient forest glow that strengthens as the laptop arrives. Kept as one
+     soft radial rather than a filter, so it costs nothing to animate. */
+  .reveal-glow{
+    position:absolute;
+    left:50%; top:56%;
+    /* 100vw, not 120vw: under reduced motion .reveal-sticky becomes static, so
+       the glow resolves against .reveal-wrap instead and escapes the sticky
+       element's overflow:hidden. The wrapper cannot clip it — overflow:hidden
+       there would break position:sticky for its child — so the width is capped
+       to the viewport instead. At 1024px the wider value pushed 88px of
+       horizontal scroll onto the page. */
+    width:min(1200px, 100vw); height:min(760px, 80vh);
+    transform:translate(-50%,-50%);
+    background:radial-gradient(ellipse at center,
+      rgba(47,227,172,0.13) 0%,
+      rgba(20,90,70,0.07) 38%,
+      rgba(0,0,0,0) 72%);
+    opacity:calc(0.25 + var(--lp, 0) * 0.75);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .reveal-grid{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:1440px;
+    display:grid;
+    grid-template-columns:minmax(240px, 340px) minmax(0, 1fr);
+    align-items:center;
+    gap:clamp(24px, 4vw, 64px);
+  }
+
+  /* ---------- copy ---------- */
+  .reveal-copy{
+    opacity:var(--cp, 0);
+    transform:translateY(calc((1 - var(--cp, 0)) * 18px));
+  }
+  .reveal-eyebrow{
+    font-size:12px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--accent); font-weight:600; line-height:1.7;
+    margin-bottom:18px;
+  }
+  .reveal-title{
+    font-family:var(--font-display);
+    font-size:clamp(34px, 3.6vw, 52px);
+    line-height:1.05; font-weight:600; letter-spacing:-0.02em;
+    margin-bottom:16px;
+  }
+  .reveal-title em{ font-style:normal; color:var(--accent); }
+  .reveal-body{
+    font-size:clamp(14px, 1.15vw, 16px);
+    line-height:1.6;
+    color:rgba(232,242,238,0.68);
+    max-width:34ch;
+    margin-bottom:22px;
+  }
+  .reveal-link{
+    display:inline-flex; align-items:center; gap:9px;
+    background:none; border:0; padding:0;
+    font-family:inherit; font-size:14px; font-weight:600;
+    color:var(--accent); cursor:pointer;
+    transition:gap .25s ease;
+  }
+  .reveal-link svg{ width:17px; height:17px; }
+  .reveal-link:hover{ gap:14px; }
+
+  /* ---------- the laptop ---------- */
+  .reveal-stage{
+    /* Start values. Overridden per breakpoint rather than duplicating the
+       transform itself, so there is one formula for every screen size. */
+    --ty:190px;
+    --rx:7deg;
+    --ry:-8deg;
+    --s0:0.74;
+    --s1:1.04;
+    position:relative;
+    perspective:1500px;
+    transform-style:preserve-3d;
+  }
+  .reveal-laptop{
+    display:block;
+    width:100%;
+    height:auto;
+    max-width:1100px;      /* never scaled past the file's own resolution */
+    margin:0 auto;
+    transform-origin:center center;
+    transform:
+      translateY(calc((1 - var(--lp, 0)) * var(--ty)))
+      rotateX(calc((1 - var(--lp, 0)) * var(--rx)))
+      rotateY(calc((1 - var(--lp, 0)) * var(--ry)))
+      scale(calc(var(--s0) + var(--lp, 0) * (var(--s1) - var(--s0))));
+    /* Physical drop shadow while it is still angled, easing off as it turns
+       to face the viewer — the cue that it has stopped being an object. */
+    filter:drop-shadow(0 calc((1 - var(--lp, 0)) * 40px)
+                       calc((1 - var(--lp, 0)) * 60px)
+                       rgba(0,0,0,calc((1 - var(--lp, 0)) * 0.55)));
+  }
+
+  /* ---------- full-screen control ---------- */
+  .reveal-fs{
+    position:absolute;
+    top:clamp(10px, 2.5vh, 26px);
+    right:clamp(10px, 3vw, 40px);
+    z-index:3;
+    display:inline-flex; align-items:center; gap:8px;
+    padding:9px 15px;
+    border-radius:999px;
+    border:1px solid rgba(120,220,190,0.28);
+    background:rgba(4,12,9,0.72);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    color:var(--accent);
+    font-family:inherit; font-size:12.5px; font-weight:600;
+    letter-spacing:0.02em;
+    cursor:pointer;
+    opacity:var(--fp, 0);
+    transform:translateY(calc((1 - var(--fp, 0)) * 8px));
+    pointer-events:none;                       /* until it has faded in */
+  }
+  .reveal-fs svg{ width:15px; height:15px; }
+  .reveal-wrap[data-fs-ready="1"] .reveal-fs{ pointer-events:auto; }
+
+  /* ---------- product viewer ---------- */
+  .viewer{
+    position:fixed; inset:0; z-index:120;
+    display:none;
+    align-items:center; justify-content:center;
+    padding:clamp(12px, 3vw, 40px);
+  }
+  .viewer.is-open{ display:flex; }
+  .viewer-backdrop{
+    position:absolute; inset:0;
+    background:rgba(2,6,5,0.92);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+  }
+  .viewer-panel{
+    position:relative;
+    width:100%; height:100%;
+    max-width:1500px;
+    border-radius:14px;
+    overflow:hidden;
+    border:1px solid rgba(120,220,190,0.18);
+    background:#040a08;
+    box-shadow:0 30px 90px rgba(0,0,0,0.6);
+  }
+  .viewer-frame{ width:100%; height:100%; }
+  .viewer-frame iframe{ width:100%; height:100%; border:0; display:block; }
+  .viewer-x{
+    position:absolute; top:12px; right:12px; z-index:2;
+    display:inline-flex; align-items:center; justify-content:center;
+    width:38px; height:38px; border-radius:50%;
+    border:1px solid rgba(120,220,190,0.25);
+    background:rgba(4,12,9,0.85);
+    color:var(--accent);
+    cursor:pointer;
+  }
+  .viewer-x svg{ width:18px; height:18px; }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 1024px){
+    .reveal-grid{
+      grid-template-columns:minmax(0,1fr);
+      gap:clamp(18px, 3vh, 32px);
+      max-width:760px;
+    }
+    .reveal-copy{ text-align:center; }
+    .reveal-body{ margin-left:auto; margin-right:auto; }
+    .reveal-stage{ --ty:150px; --rx:5deg; --ry:-5deg; --s0:0.8; --s1:1.02; }
+  }
+  @media (max-width: 768px){
+    .reveal-wrap{ height:190vh; }
+    .reveal-sticky{ padding:0 16px; }
+    /* Far less travel and almost no yaw: on a phone the big rotation reads as
+       distortion rather than depth, and a wide laptop cannot afford the width. */
+    .reveal-stage{ --ty:100px; --rx:3deg; --ry:0deg; --s0:0.88; --s1:1; }
+    .reveal-title{ font-size:clamp(28px, 8vw, 38px); }
+    .reveal-eyebrow{ font-size:11px; margin-bottom:12px; }
+    .reveal-body{ font-size:14px; margin-bottom:18px; }
+    .reveal-fs{ font-size:11.5px; padding:8px 12px; top:8px; right:8px; }
+    .viewer{ padding:8px; }
+  }
+
+  /* ---------- reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce){
+    /* No journey: the wrapper collapses to a single screen and the product is
+       simply there, straight and complete. Full screen still works. */
+    .reveal-wrap{ height:auto; }
+    .reveal-sticky{ position:static; height:auto; padding:64px clamp(20px,5vw,72px); }
+    .reveal-copy{ opacity:1 !important; transform:none !important; }
+    .reveal-laptop{ transform:none !important; filter:none !important; }
+    .reveal-fs{ opacity:1 !important; transform:none !important; pointer-events:auto !important; }
+    .reveal-glow{ opacity:0.5 !important; }
+  }
 </style>
 </head>
 <body>
@@ -4037,28 +4253,41 @@
   </div>
 </section>
 <!-- =========================================================
-     MEET ALLY — live dashboard
+     MEET ALLY — scroll-driven product reveal
+     A tall wrapper with a sticky viewport inside. Scroll position through the
+     wrapper drives the laptop's transform directly, so the movement follows
+     the scrollbar exactly and reverses on its own when scrolling back up.
+     No wheel interception, no pinning library, no autoplay.
 ========================================================== -->
-<section class="meet-ally" id="meet-ally">
-  <div class="meet-stage">
-    <div class="meet-head">
-      <h2 class="meet-title">Meet <em>Ally</em></h2>
-      <button class="meet-fs-btn" type="button" aria-pressed="false" aria-label="Open dashboard full screen">
-        <svg class="meet-fs-expand" viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
-        <svg class="meet-fs-collapse" viewBox="0 0 24 24"><path d="M9 3v6H3M15 3v6h6M9 21v-6H3M15 21v-6h6"/></svg>
-        <span class="meet-fs-label">Full screen</span>
-      </button>
-    </div>
-    <div class="meet-frame">
-      <!-- No `sandbox` attribute. It previously read `allow-scripts
-           allow-same-origin`, which the browser itself warns about: with both
-           flags an iframe can reach into the parent and remove its own sandbox,
-           so it granted nothing while looking like it did. This is first-party
-           content on the same origin and the postMessage handshake below needs
-           same-origin access, so the honest thing is to not claim a sandbox.
-           `fetchpriority=low` keeps this 500 KB document from competing with
-           the hero for bandwidth. -->
-      <iframe src="/ally-platform.html?preview=1&v=soon23" title="Ally dashboard" loading="lazy" fetchpriority="low" allow="fullscreen"></iframe>
+<section class="reveal-wrap" id="meet-ally">
+  <div class="reveal-sticky">
+    <div class="reveal-glow" aria-hidden="true"></div>
+
+    <div class="reveal-grid">
+      <div class="reveal-copy">
+        <p class="reveal-eyebrow">See what<br>clarity looks like.</p>
+        <h2 class="reveal-title">Meet <em>Ally</em></h2>
+        <p class="reveal-body">Your AI companion that helps you diagnose what&rsquo;s really happening, find the real priority, and plan your next move.</p>
+        <button class="reveal-link" type="button" data-viewer-open>
+          Explore the experience
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <div class="reveal-stage">
+        <!-- width/height are the file's own pixels, so the box is reserved
+             before it loads and nothing shifts. -->
+        <img class="reveal-laptop"
+             src="/assets/ally-laptop.v1.jpg"
+             width="1672" height="941"
+             fetchpriority="high"
+             alt="The Ally dashboard on a laptop, showing a founder's top priority, why it matters and the recommended next move.">
+        <button class="reveal-fs" type="button" data-viewer-open
+                aria-label="Open the Ally dashboard full screen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
+          <span>Full screen</span>
+        </button>
+      </div>
     </div>
   </div>
 </section>
@@ -4226,6 +4455,19 @@
       <p class="ea-done__sub" id="eaDoneSub">We’ve sent a confirmation to your inbox — check spam if it doesn’t arrive. Our team will reach out soon.</p>
       <button class="cta" type="button" data-ea-close>Close</button>
     </div>
+  </div>
+</div>
+
+<!-- Product viewer. Holds the real dashboard rather than the still, so what
+     opens is the live interface. The iframe has no src until the first open,
+     which keeps its 500 KB off the initial page load entirely. -->
+<div class="viewer" id="allyViewer" aria-hidden="true">
+  <div class="viewer-backdrop" data-viewer-close></div>
+  <div class="viewer-panel" role="dialog" aria-modal="true" aria-label="Ally dashboard">
+    <button class="viewer-x" type="button" data-viewer-close aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="viewer-frame" id="allyViewerFrame"></div>
   </div>
 </div>
 
@@ -4834,73 +5076,134 @@ journeyCards.forEach((c,idx)=>{
 })();
 </script>
 <script>
+/* ---------- Meet Ally: scroll-driven product reveal ---------- */
 (function(){
-  var iframe=document.querySelector('#meet-ally iframe, .meet-frame iframe');
-  if(!iframe) return;
-  window.addEventListener('message', function(e){
-    if(e.source!==iframe.contentWindow) return;
-    // The iframe is same-origin first-party content, so this is now a plain
-    // strict check. It used to also accept an opaque 'null' origin to cover the
-    // sandboxed case; that attribute is gone, and the exception with it.
-    if(e.origin!==location.origin) return;
-    if(!e.data) return;
-    if(e.data.type==='ally-preview-ready'){
-      try{
-        iframe.contentWindow.postMessage({
-          type:'ally-preview-fs',
-          on:document.documentElement.classList.contains('meet-fs')
-        }, location.origin);
-      }catch(_){}
-      return;
+  const wrap = document.getElementById('meet-ally');
+  if(!wrap) return;
+  const stage = wrap.querySelector('.reveal-stage');
+  if(!stage) return;
+
+  /* Reduced motion gets the finished state from CSS and no scroll work at all. */
+  if(reduceMotion.matches){
+    wrap.setAttribute('data-fs-ready','1');
+    return;
+  }
+
+  /* Sub-range of the overall progress, clamped to 0..1. Each visual step reads
+     its own slice, which is what lets them overlap — the hero copy is still
+     fading while the laptop is already on its way up. */
+  const at = (p, a, b) => Math.min(1, Math.max(0, (p - a) / (b - a)));
+
+  let ticking = false;
+  let fsReady = false;
+
+  function apply(){
+    ticking = false;
+    const rect = wrap.getBoundingClientRect();
+    const travel = wrap.offsetHeight - window.innerHeight;
+    if(travel <= 0) return;
+
+    /* 0 when the wrapper's top reaches the viewport top, 1 when its bottom does. */
+    const p = Math.min(1, Math.max(0, -rect.top / travel));
+
+    stage.style.setProperty('--lp', at(p, 0.10, 0.72).toFixed(4));  // laptop
+    wrap.style.setProperty('--lp',  at(p, 0.10, 0.72).toFixed(4));  // glow
+    wrap.style.setProperty('--cp',  at(p, 0.04, 0.26).toFixed(4));  // copy
+    stage.style.setProperty('--fp', at(p, 0.78, 0.90).toFixed(4));  // control
+
+    /* Only clickable once it is actually visible. */
+    const ready = p >= 0.86;
+    if(ready !== fsReady){
+      fsReady = ready;
+      wrap.setAttribute('data-fs-ready', ready ? '1' : '0');
     }
-    if(e.data.type==='ally-exit-fs'){
-      var fsBtn=document.querySelector('.meet-fs-btn');
-      if(document.documentElement.classList.contains('meet-fs') && fsBtn) fsBtn.click();
-      return;
-    }
-    if(e.data.type!=='ally-chain-scroll') return;
-    if(document.documentElement.classList.contains('meet-fs')) return;
-    var dy=e.data.dy;
-    if(typeof dy!=='number' || !isFinite(dy) || dy===0) return;
-    window.scrollBy(0, dy);
-  });
+  }
+
+  function onScroll(){
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(apply);
+  }
+
+  /* Plain scroll listening — nothing is intercepted and nothing calls
+     preventDefault, so native scrolling, keyboard paging and momentum all
+     behave exactly as they would without this. */
+  window.addEventListener('scroll', onScroll, { passive:true });
+  window.addEventListener('resize', onScroll, { passive:true });
+  apply();
 })();
+
+/* ---------- product viewer ---------- */
 (function(){
-  var btn=document.querySelector('.meet-fs-btn');
-  var label=btn && btn.querySelector('.meet-fs-label');
-  if(!btn) return;
-  function setFs(on){
-    document.documentElement.classList.toggle('meet-fs', on);
-    document.body.classList.toggle('meet-fs', on);
-    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-    btn.setAttribute('aria-label', on ? 'Exit full screen' : 'Open dashboard full screen');
-    if(label) label.textContent = on ? 'Exit' : 'Full screen';
-    var iframe=document.querySelector('#meet-ally iframe, .meet-frame iframe');
-    try{
-      if(iframe && iframe.contentWindow){
-        iframe.contentWindow.postMessage({type:'ally-preview-fs', on:on}, location.origin);
-      }
-    }catch(_){}
-    try{
-      if(on) sessionStorage.setItem('ally-meet-fs','1');
-      else sessionStorage.removeItem('ally-meet-fs');
-    }catch(e){}
-    if(on){
-      var meet=document.getElementById('meet-ally');
-      if(meet) meet.scrollIntoView({block:'start', behavior:'auto'});
-    }
+  const viewer = document.getElementById('allyViewer');
+  const host = document.getElementById('allyViewerFrame');
+  if(!viewer || !host) return;
+
+  const FOCUSABLE = 'a[href], button:not([disabled]), input, select, textarea, iframe, [tabindex]:not([tabindex="-1"])';
+  let lastFocus = null;
+
+  function ensureFrame(){
+    if(host.querySelector('iframe')) return;
+    /* Created on first open, so the dashboard's 500 KB never touches the
+       initial page load. */
+    const f = document.createElement('iframe');
+    f.src = '/ally-platform.html?preview=1&v=soon23';
+    f.title = 'Ally dashboard';
+    f.setAttribute('allow','fullscreen');
+    host.appendChild(f);
   }
-  btn.addEventListener('click', function(){
-    setFs(!document.documentElement.classList.contains('meet-fs'));
-  });
-  document.addEventListener('keydown', function(e){
-    if(e.key!=='Escape') return;
-    if(document.getElementById('earlyAccessModal') && document.getElementById('earlyAccessModal').classList.contains('is-open')) return;
-    if(document.documentElement.classList.contains('meet-fs')) setFs(false);
-  });
-  if(document.documentElement.classList.contains('meet-fs')){
-    setFs(true);
+
+  function outside(){
+    return [...document.body.children].filter(el => el !== viewer);
   }
+
+  function trap(e){
+    if(e.key !== 'Tab') return;
+    const items = [...viewer.querySelectorAll(FOCUSABLE)].filter(el => el.offsetParent !== null);
+    if(!items.length) return;
+    const first = items[0], last = items[items.length - 1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  }
+
+  function onKey(e){
+    if(e.key === 'Escape'){ close(); return; }
+    trap(e);
+  }
+
+  /* The trigger is passed in rather than read from document.activeElement:
+     Safari does not focus a button when it is clicked, so activeElement would
+     be <body> there and focus would have nowhere to return to on close. */
+  function open(trigger){
+    lastFocus = trigger || document.activeElement;
+    ensureFrame();
+    viewer.classList.add('is-open');
+    viewer.setAttribute('aria-hidden','false');
+    /* Scroll position is untouched: the page is frozen where it stands and
+       restored to the same place, so closing returns you mid-transformation
+       exactly where you left. */
+    outside().forEach(el => { el.setAttribute('inert',''); el.setAttribute('aria-hidden','true'); });
+    document.documentElement.classList.add('ea-lock');
+    document.body.classList.add('ea-lock');
+    document.addEventListener('keydown', onKey, true);
+    setTimeout(() => viewer.querySelector('.viewer-x')?.focus(), 40);
+  }
+
+  function close(){
+    viewer.classList.remove('is-open');
+    viewer.setAttribute('aria-hidden','true');
+    outside().forEach(el => { el.removeAttribute('inert'); el.removeAttribute('aria-hidden'); });
+    document.documentElement.classList.remove('ea-lock');
+    document.body.classList.remove('ea-lock');
+    document.removeEventListener('keydown', onKey, true);
+    /* preventScroll: restoring focus must not move the page. Without it the
+       browser scrolls the trigger back into view, which would undo the whole
+       point of returning the reader to exactly where they were. */
+    if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus({ preventScroll:true });
+  }
+
+  document.querySelectorAll('[data-viewer-open]').forEach(b => b.addEventListener('click', () => open(b)));
+  viewer.addEventListener('click', e => { if(e.target.closest('[data-viewer-close]')) close(); });
 })();
 </script>
 </body>
