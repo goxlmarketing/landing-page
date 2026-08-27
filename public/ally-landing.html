@@ -3528,208 +3528,239 @@
 
   /* =========================================================
      TWO THINGS AT ONCE — merged section
-     Replaces .dim-* and .clarity-*. The connector is built from CSS boxes
-     rather than a measured SVG path: the old .dim-link needed JS to compute
-     its geometry, which silently produced no line at all until a resize.
+     Replaces .dim-* and .clarity-*. The connector is drawn as an SVG with a
+     fixed viewBox rather than measured at runtime: the old .dim-link computed
+     its geometry in JS, hit its own width guard at parse time, and silently
+     produced no line at all until a resize.
   ========================================================== */
   .both{
     position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:64px 24px;
+    display:flex; align-items:center; justify-content:center;
+    padding:56px 24px;
     overflow:hidden;
   }
+  .both-sprite{ position:absolute; width:0; height:0; overflow:hidden; }
   .both-inner{
-    position:relative;
-    z-index:2;
-    width:100%;
-    max-width:1180px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:clamp(28px, 4.5vh, 56px);
+    position:relative; z-index:2;
+    width:100%; max-width:1120px;
+    display:flex; flex-direction:column; align-items:center;
+    gap:clamp(24px, 3.6vh, 44px);
   }
 
-  /* ambient wash — one orb behind each panel */
   .both-atm{ position:absolute; inset:0; z-index:0; pointer-events:none; }
   .both-orb{
     position:absolute; top:50%; width:46vw; height:46vw;
-    max-width:620px; max-height:620px;
+    max-width:600px; max-height:600px;
     transform:translateY(-50%);
-    border-radius:50%;
-    filter:blur(90px);
-    opacity:0.5;
+    border-radius:50%; filter:blur(90px); opacity:0.45;
   }
-  .both-orb--you{ left:-10vw; background:radial-gradient(circle, rgba(47,227,172,0.16), transparent 68%); }
-  .both-orb--biz{ right:-10vw; background:radial-gradient(circle, rgba(127,252,209,0.11), transparent 68%); }
+  .both-orb--you{ left:-12vw; background:radial-gradient(circle, rgba(47,227,172,0.15), transparent 68%); }
+  .both-orb--biz{ right:-12vw; background:radial-gradient(circle, rgba(127,252,209,0.10), transparent 68%); }
 
   /* ---------- head ---------- */
-  .both-head{ text-align:center; max-width:60ch; }
+  .both-head{ text-align:left; width:100%; max-width:none; }
   .both-eyebrow{
-    font-size:12px; letter-spacing:0.22em; text-transform:uppercase;
-    color:var(--accent); margin-bottom:14px; font-weight:600;
+    font-size:12px; letter-spacing:0.2em; text-transform:uppercase;
+    color:var(--accent); font-weight:600; margin-bottom:12px;
   }
   .both-title{
     font-family:var(--font-display);
-    font-size:clamp(30px, 4.4vw, 60px);
-    line-height:1.06; font-weight:600; letter-spacing:-0.02em;
-    text-wrap:balance;
+    font-size:clamp(28px, 3.9vw, 52px);
+    line-height:1.08; font-weight:600; letter-spacing:-0.02em;
   }
-  .both-title em{ font-style:italic; color:var(--accent); }
-  .both-sub{
-    margin-top:14px;
-    font-size:clamp(15px, 1.5vw, 20px);
-    color:rgba(232,242,238,0.72);
-    text-wrap:balance;
+  .both-intro{
+    margin-top:14px; max-width:46ch;
+    font-size:clamp(15px, 1.35vw, 18px); line-height:1.55;
+    color:rgba(232,242,238,0.66);
   }
 
-  /* ---------- stage: panel | core | panel ---------- */
+  /* ---------- stage ---------- */
   .both-stage{
     width:100%;
     display:grid;
-    grid-template-columns:1fr minmax(150px, 220px) 1fr;
-    align-items:center;
+    grid-template-columns:1fr minmax(140px, 210px) 1fr;
+    align-items:stretch;
   }
   .both-panel{
-    border:1px solid rgba(120,220,190,0.16);
-    border-radius:18px;
-    background:linear-gradient(160deg, rgba(10,22,18,0.72), rgba(6,12,10,0.5));
-    padding:clamp(18px, 2.2vw, 30px);
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
+    position:relative;
+    border:1px solid rgba(120,220,190,0.14);
+    border-radius:20px;
+    background:linear-gradient(165deg, rgba(12,24,20,0.8), rgba(6,12,10,0.55));
+    padding:clamp(18px, 2vw, 26px);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
   }
-  .both-label{
-    font-size:11px; letter-spacing:0.18em; text-transform:uppercase;
-    color:var(--accent); font-weight:600; margin-bottom:10px;
-  }
-  .both-lead{
-    font-size:clamp(15px, 1.35vw, 19px);
-    font-weight:600; line-height:1.35; color:var(--text);
+  .both-panel-ic{
+    display:flex; align-items:center; justify-content:center;
+    width:44px; height:44px; border-radius:50%;
+    background:rgba(47,227,172,0.09);
+    border:1px solid rgba(120,220,190,0.18);
     margin-bottom:16px;
   }
-  .both-chips{ list-style:none; display:flex; flex-wrap:wrap; gap:8px; }
+  .both-panel-ic svg{ width:22px; height:22px; }
+  .both-panel-ic svg, .both-chips svg, .both-note-ic svg{
+    fill:none; stroke:var(--accent); stroke-width:1.7;
+    stroke-linecap:round; stroke-linejoin:round;
+  }
+  .both-label{
+    font-size:11.5px; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--accent); font-weight:600; margin-bottom:8px;
+  }
+  .both-lead{
+    font-size:clamp(14px, 1.25vw, 17px);
+    line-height:1.4; color:rgba(232,242,238,0.78);
+    padding-bottom:16px;
+    border-bottom:1px solid rgba(120,220,190,0.12);
+  }
+  .both-chips{ list-style:none; margin-top:16px; display:flex; flex-direction:column; gap:12px; }
   .both-chips li{
-    font-size:13px;
-    padding:6px 12px;
-    border-radius:999px;
-    border:1px solid rgba(120,220,190,0.2);
-    background:rgba(255,255,255,0.03);
-    color:rgba(232,242,238,0.82);
+    display:flex; align-items:center; gap:11px;
+    font-size:clamp(13px, 1.1vw, 15px); font-weight:500;
+    color:var(--text);
+  }
+  .both-chips svg{ width:17px; height:17px; flex:0 0 auto; }
+
+  /* ---------- centre ---------- */
+  /* Laid out in flow, not with absolute offsets: the SVG keeps its aspect
+     ratio, so the node centres on the curve's end at every column width. */
+  .both-core{
+    --node:74px;
+    position:relative;
+    display:flex; flex-direction:column; align-items:center;
+    padding-top:8%;
+  }
+  .both-wires{
+    width:100%; aspect-ratio:120 / 80; height:auto;
+    overflow:visible; flex:0 0 auto;
+  }
+  .both-wire{
+    stroke:var(--accent); stroke-width:1.4; stroke-linecap:round;
+    stroke-dasharray:3 6; opacity:0.65;
+  }
+  .both-wire-dot{ fill:var(--accent); }
+  .both-node{
+    margin-top:calc(var(--node) / -2);   /* centre on where the curves land */
+    flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+    width:var(--node); height:var(--node); border-radius:50%;
+    background:radial-gradient(circle, rgba(10,32,25,0.95), rgba(4,12,9,0.9));
+    border:1px solid rgba(47,227,172,0.35);
+    box-shadow:0 0 34px rgba(47,227,172,0.34), inset 0 0 18px rgba(47,227,172,0.12);
+  }
+  .both-node img{ width:38px; height:38px; display:block; }
+  .both-drop{
+    flex:1 1 auto; min-height:24px; width:1px;
+    background:repeating-linear-gradient(180deg, rgba(47,227,172,0.55) 0 3px, transparent 3px 8px);
+    transform-origin:top center;
+  }
+  .both-core-label{
+    margin:10px 0 8px; flex:0 0 auto;
+    font-size:11px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--accent); font-weight:600;
+  }
+  .both-pill{
+    flex:0 0 auto;
+    font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--accent); font-weight:600;
+    padding:7px 14px; border-radius:999px;
+    border:1px solid rgba(47,227,172,0.35);
+    background:rgba(47,227,172,0.06);
     white-space:nowrap;
   }
 
-  /* ---------- centre ---------- */
-  .both-core{
-    position:relative;
-    align-self:center;
-    height:200px;
-    display:flex; flex-direction:column;
-    align-items:center; justify-content:center;
-  }
-  /* the two runs into the node. scaleX from the outer edge so they read as
-     travelling inward when the section enters. */
-  .both-wire{
-    position:absolute; top:50%; height:1px;
-    background:linear-gradient(90deg, rgba(47,227,172,0), rgba(47,227,172,0.55));
-    transition:transform .7s cubic-bezier(.2,.8,.3,1) .45s;
-  }
-  .both-wire--l{ left:-4px; right:calc(50% + 26px); transform-origin:left center; }
-  .both-wire--r{ right:-4px; left:calc(50% + 26px); transform-origin:right center;
-    background:linear-gradient(270deg, rgba(47,227,172,0), rgba(47,227,172,0.55)); }
-
-  .both-node{
-    position:relative; width:18px; height:18px; border-radius:50%;
-    background:var(--accent-2);
-    box-shadow:0 0 0 8px rgba(47,227,172,0.12), 0 0 0 20px rgba(47,227,172,0.06), 0 0 28px rgba(47,227,172,0.55);
-    transition:transform .5s cubic-bezier(.34,1.56,.64,1) 1.05s;
-  }
-  .both-drop{
-    position:absolute; top:calc(50% + 26px); width:1px; height:46px;
-    background:repeating-linear-gradient(180deg, rgba(47,227,172,0.5) 0 3px, transparent 3px 7px);
-    transform-origin:top center;
-    transition:transform .45s ease 1.35s;
-  }
-  .both-core-label{
-    position:absolute; top:calc(50% + 78px);
-    font-size:11px; letter-spacing:0.2em; text-transform:uppercase;
-    color:var(--accent); font-weight:600;
-    transition:opacity .4s ease 1.5s;
-  }
-
   /* ---------- foot ---------- */
-  .both-foot{ text-align:center; max-width:62ch; }
+  .both-foot{ width:100%; text-align:center; }
   .both-close{
     font-family:var(--font-display);
-    font-size:clamp(19px, 2.2vw, 30px);
+    font-size:clamp(19px, 2.1vw, 28px);
     line-height:1.25; font-weight:600; letter-spacing:-0.01em;
     text-wrap:balance;
   }
   .both-note{
-    margin-top:12px;
-    font-size:clamp(13px, 1.15vw, 15px);
-    line-height:1.6;
-    color:rgba(232,242,238,0.62);
-    text-wrap:balance;
+    margin:18px auto 0; max-width:640px;
+    display:flex; align-items:center; gap:16px;
+    text-align:left;
+    padding:16px 20px; border-radius:16px;
+    border:1px solid rgba(120,220,190,0.14);
+    background:rgba(255,255,255,0.025);
+  }
+  .both-note-ic{
+    flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+    width:44px; height:44px; border-radius:50%;
+    background:rgba(47,227,172,0.08);
+    border:1px solid rgba(120,220,190,0.18);
+  }
+  .both-note-ic svg{ width:22px; height:22px; }
+  .both-note p{
+    font-size:clamp(13px, 1.1vw, 15px); line-height:1.55;
+    color:rgba(232,242,238,0.66);
   }
 
   /* ---------- staged entrance ----------
-     Everything here is gated behind .will-animate, which only JS adds. If the
-     script never runs, errors, or the observer never fires, the section simply
-     renders in its final state — the hidden-by-default version would leave a
-     whole content section invisible. */
+     Gated behind .will-animate, which only JS adds. If the script never runs,
+     throws, or the observer never fires, the CSS default is the finished
+     state — the alternative leaves a whole content section at opacity 0. */
   .both.will-animate .both-head,
   .both.will-animate .both-panel,
   .both.will-animate .both-foot{
     opacity:0;
     transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.3,1);
   }
-  .both.will-animate .both-panel--you{ transform:translateX(-28px); }
-  .both.will-animate .both-panel--biz{ transform:translateX(28px); }
-  .both.will-animate .both-head{ transform:translateY(16px); }
+  .both.will-animate .both-panel--you{ transform:translateX(-26px); }
+  .both.will-animate .both-panel--biz{ transform:translateX(26px); }
+  .both.will-animate .both-head,
   .both.will-animate .both-foot{ transform:translateY(16px); }
-  .both.will-animate .both-wire{ transform:scaleX(0); }
-  .both.will-animate .both-node{ transform:scale(0); }
-  .both.will-animate .both-drop{ transform:scaleY(0); }
-  .both.will-animate .both-core-label{ opacity:0; }
+  .both.will-animate .both-wire{
+    stroke-dasharray:200; stroke-dashoffset:200;
+    transition:stroke-dashoffset .9s ease .5s;
+  }
+  .both.will-animate .both-wire-dot,
+  .both.will-animate .both-node,
+  .both.will-animate .both-drop,
+  .both.will-animate .both-core-label,
+  .both.will-animate .both-pill{ opacity:0; transition:opacity .45s ease; }
 
-  .both.is-in .both-head{ opacity:1; transform:none; }                       /* stage 1 */
-  .both.is-in .both-panel{ opacity:1; transform:none; transition-delay:.25s; } /* stage 2 */
-  .both.is-in .both-wire{ transform:scaleX(1); }                             /* stage 3 */
-  .both.is-in .both-node{ transform:scale(1); }                              /* stage 4 */
-  .both.is-in .both-drop{ transform:scaleY(1); }
-  .both.is-in .both-core-label{ opacity:1; }
-  .both.is-in .both-foot{ opacity:1; transform:none; transition-delay:1.55s; }
+  .both.is-in .both-head{ opacity:1; transform:none; }
+  .both.is-in .both-panel{ opacity:1; transform:none; transition-delay:.22s; }
+  .both.is-in .both-wire-dot{ opacity:1; transition-delay:.45s; }
+  .both.is-in .both-wire{ stroke-dashoffset:0; }
+  .both.is-in .both-node{ opacity:1; transition-delay:1.25s; }
+  .both.is-in .both-drop{ opacity:1; transition-delay:1.45s; }
+  .both.is-in .both-core-label{ opacity:1; transition-delay:1.6s; }
+  .both.is-in .both-pill{ opacity:1; transition-delay:1.7s; }
+  .both.is-in .both-foot{ opacity:1; transform:none; transition-delay:1.5s; }
 
-  /* Everything visible immediately, no staging, when motion is not wanted. */
   @media (prefers-reduced-motion: reduce){
-    .both-head, .both-panel, .both-foot{ opacity:1 !important; transform:none !important; }
-    .both-wire{ transform:scaleX(1) !important; }
-    .both-node{ transform:scale(1) !important; }
-    .both-drop{ transform:scaleY(1) !important; }
-    .both-core-label{ opacity:1 !important; }
+    .both-head, .both-panel, .both-foot,
+    .both-wire-dot, .both-node, .both-drop, .both-core-label, .both-pill{
+      opacity:1 !important; transform:none !important;
+    }
+    .both-wire{ stroke-dasharray:3 6 !important; stroke-dashoffset:0 !important; }
   }
 
   @media (max-width: 900px){
-    .both{ padding:48px 16px; }
-    .both-stage{ grid-template-columns:1fr minmax(96px, 130px) 1fr; }
-    .both-panel{ padding:16px 14px; border-radius:14px; }
-    .both-chips{ gap:6px; }
-    .both-chips li{ font-size:12px; padding:5px 9px; }
-    .both-core{ height:160px; }
-    .both-node{ width:14px; height:14px; }
+    .both{ padding:44px 16px; }
+    .both-stage{ grid-template-columns:1fr minmax(92px, 124px) 1fr; }
+    .both-panel{ padding:16px 14px; border-radius:16px; }
+    .both-panel-ic{ width:38px; height:38px; margin-bottom:12px; }
+    .both-panel-ic svg{ width:19px; height:19px; }
+    .both-chips{ gap:10px; margin-top:13px; }
+    .both-core{ --node:62px; }
+    .both-node img{ width:32px; height:32px; }
   }
 
   @media (max-width: 560px){
-    .both-stage{ grid-template-columns:1fr 74px 1fr; }
-    .both-panel{ padding:14px 11px; }
-    .both-lead{ font-size:14px; margin-bottom:12px; }
-    .both-chips{ flex-direction:column; gap:5px; align-items:flex-start; }
-    .both-chips li{ font-size:12px; padding:4px 9px; }
-    .both-core{ height:150px; }
-    .both-wire--l{ right:calc(50% + 18px); }
-    .both-wire--r{ left:calc(50% + 18px); }
-    .both-core-label{ top:calc(50% + 70px); font-size:10px; letter-spacing:0.16em; }
+    .both-stage{ grid-template-columns:1fr 78px 1fr; }
+    .both-panel{ padding:14px 12px; }
+    .both-lead{ font-size:13.5px; padding-bottom:12px; }
+    .both-chips li{ font-size:13px; gap:9px; }
+    .both-chips svg{ width:15px; height:15px; }
+    .both-core{ --node:52px; }
+    .both-node img{ width:27px; height:27px; }
+    .both-core-label{ font-size:10px; }
+    .both-pill{ font-size:9.5px; padding:6px 10px; letter-spacing:0.1em; }
+    .both-note{ flex-direction:row; gap:12px; padding:14px; }
+    .both-note-ic{ width:38px; height:38px; }
   }
 </style>
 </head>
@@ -3855,8 +3886,8 @@
 <!-- =========================================================
      SECTION — TWO THINGS AT ONCE
      Merges the old #dimensions and #clarity sections. Both were explaining
-     the same idea (founder + business) across two full screens; this states
-     it once, and the connector diagram carries the argument instead of prose.
+     the same idea across two full screens; this states it once and lets the
+     diagram carry the argument.
 ========================================================== -->
 <section class="both" id="dimensions">
   <div class="both-atm" aria-hidden="true">
@@ -3864,49 +3895,81 @@
     <div class="both-orb both-orb--biz"></div>
   </div>
 
+  <!-- Icon sprite. Defined once and referenced with <use> so the twelve marks
+       below cost one copy each rather than a full path per instance. -->
+  <svg class="both-sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-you" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M5.5 19.5c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/></symbol>
+    <symbol id="i-biz" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 9.5h17M8 3.5v3M16 3.5v3"/></symbol>
+    <symbol id="i-mind" viewBox="0 0 24 24"><path d="M12 5.5v13M12 5.5a3 3 0 0 0-5.6 1.4A2.8 2.8 0 0 0 5 12a2.9 2.9 0 0 0 1.7 4.8A3 3 0 0 0 12 18.5M12 5.5a3 3 0 0 1 5.6 1.4A2.8 2.8 0 0 1 19 12a2.9 2.9 0 0 1-1.7 4.8A3 3 0 0 1 12 18.5"/></symbol>
+    <symbol id="i-focus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol>
+    <symbol id="i-confidence" viewBox="0 0 24 24"><path d="M12 3.5l7 2.8v5.2c0 4.2-2.9 7.4-7 9-4.1-1.6-7-4.8-7-9V6.3z"/></symbol>
+    <symbol id="i-decisions" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2"/><path d="M8.4 12.2l2.5 2.5 4.7-5"/></symbol>
+    <symbol id="i-growth" viewBox="0 0 24 24"><path d="M4 20V10M10 20V5M16 20v-7M22 20H2"/></symbol>
+    <symbol id="i-finance" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2"/><path d="M12 7.4v9.2M14.4 9.6c-.5-.8-1.4-1.2-2.4-1.2-1.4 0-2.4.8-2.4 1.9 0 2.6 4.9 1.4 4.9 4 0 1.2-1.1 2-2.5 2-1.1 0-2-.4-2.5-1.3"/></symbol>
+    <symbol id="i-product" viewBox="0 0 24 24"><path d="M12 3.2l7.5 4.1v9.4L12 20.8 4.5 16.7V7.3z"/><path d="M4.7 7.4L12 11.5l7.3-4.1M12 11.5v9.1"/></symbol>
+    <symbol id="i-team" viewBox="0 0 24 24"><circle cx="9" cy="9" r="3.1"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M16.2 7.2a3 3 0 0 1 0 5.6M17.5 19c0-2.2-.9-3.9-2.4-4.7"/></symbol>
+    <symbol id="i-ops" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.2 14.6a1.6 1.6 0 0 0 .3 1.8l.1.1a1.9 1.9 0 1 1-2.7 2.7l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a1.9 1.9 0 1 1-3.8 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a1.9 1.9 0 1 1-2.7-2.7l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3.9a1.9 1.9 0 1 1 0-3.8H4a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a1.9 1.9 0 1 1 2.7-2.7l.1.1a1.6 1.6 0 0 0 1.8.3H10a1.6 1.6 0 0 0 1-1.5V3.9a1.9 1.9 0 1 1 3.8 0V4a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a1.9 1.9 0 1 1 2.7 2.7l-.1.1a1.6 1.6 0 0 0-.3 1.8V10a1.6 1.6 0 0 0 1.5 1h.2a1.9 1.9 0 1 1 0 3.8H20a1.6 1.6 0 0 0-1.5 1z"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M15.4 8.6l-2 4.8-4.8 2 2-4.8z"/></symbol>
+  </svg>
+
   <div class="both-inner">
     <header class="both-head">
-      <p class="both-eyebrow">Why Ally looks at both</p>
-      <h2 class="both-title">You&rsquo;re building <em>two things</em> at once.</h2>
-      <p class="both-sub">Your business. And yourself as a founder.</p>
+      <p class="both-eyebrow">You&rsquo;re building two things at once.</p>
+      <h2 class="both-title">Your business.<br>And yourself as a founder.</h2>
+      <p class="both-intro">Ally understands both &mdash; because the right business decision depends on the context around it.</p>
     </header>
 
     <div class="both-stage">
       <article class="both-panel both-panel--you">
+        <span class="both-panel-ic" aria-hidden="true"><svg><use href="#i-you"/></svg></span>
         <p class="both-label">You</p>
         <p class="both-lead">The founder behind the decisions.</p>
         <ul class="both-chips">
-          <li>Mind</li>
-          <li>Focus</li>
-          <li>Confidence</li>
-          <li>Decisions</li>
+          <li><svg aria-hidden="true"><use href="#i-mind"/></svg>Mind</li>
+          <li><svg aria-hidden="true"><use href="#i-focus"/></svg>Focus</li>
+          <li><svg aria-hidden="true"><use href="#i-confidence"/></svg>Confidence</li>
+          <li><svg aria-hidden="true"><use href="#i-decisions"/></svg>Decisions</li>
         </ul>
       </article>
 
-      <div class="both-core">
-        <span class="both-wire both-wire--l" aria-hidden="true"></span>
-        <span class="both-wire both-wire--r" aria-hidden="true"></span>
-        <span class="both-node" aria-hidden="true"></span>
-        <span class="both-drop" aria-hidden="true"></span>
-        <p class="both-core-label">Context</p>
+      <div class="both-core" aria-hidden="true">
+        <!-- viewBox ends exactly at the curve's end point, so the node can be
+             centred on it with a negative margin instead of a hand-tuned top
+             offset that only lines up at one column width. -->
+        <svg class="both-wires" viewBox="0 0 120 80" preserveAspectRatio="xMidYMin meet" fill="none">
+          <path class="both-wire" d="M8 8 C 8 48, 60 44, 60 80"/>
+          <path class="both-wire" d="M112 8 C 112 48, 60 44, 60 80"/>
+          <circle class="both-wire-dot" cx="8" cy="8" r="3.4"/>
+          <circle class="both-wire-dot" cx="112" cy="8" r="3.4"/>
+        </svg>
+        <span class="both-node">
+          <img src="/assets/ally-logo.v1.svg" alt="" width="34" height="34">
+        </span>
+        <span class="both-drop"></span>
+        <p class="both-core-label">Ally</p>
+        <span class="both-pill">Connects both</span>
       </div>
 
       <article class="both-panel both-panel--biz">
+        <span class="both-panel-ic" aria-hidden="true"><svg><use href="#i-biz"/></svg></span>
         <p class="both-label">Your business</p>
         <p class="both-lead">The business those decisions shape.</p>
         <ul class="both-chips">
-          <li>Growth</li>
-          <li>Finance</li>
-          <li>Product</li>
-          <li>Team</li>
-          <li>Operations</li>
+          <li><svg aria-hidden="true"><use href="#i-growth"/></svg>Growth</li>
+          <li><svg aria-hidden="true"><use href="#i-finance"/></svg>Finance</li>
+          <li><svg aria-hidden="true"><use href="#i-product"/></svg>Product</li>
+          <li><svg aria-hidden="true"><use href="#i-team"/></svg>Team</li>
+          <li><svg aria-hidden="true"><use href="#i-ops"/></svg>Operations</li>
         </ul>
       </article>
     </div>
 
     <footer class="both-foot">
       <p class="both-close">Ally connects both before helping you find direction.</p>
-      <p class="both-note">Because what&rsquo;s happening in the business and what&rsquo;s happening with the founder are rarely completely separate.</p>
+      <div class="both-note">
+        <span class="both-note-ic" aria-hidden="true"><svg><use href="#i-compass"/></svg></span>
+        <p>Because what&rsquo;s happening in the business and what&rsquo;s happening with you are rarely completely separate.</p>
+      </div>
     </footer>
   </div>
 </section>
