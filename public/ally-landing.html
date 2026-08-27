@@ -3586,10 +3586,18 @@
 
   /* ---------- stage: panel | core | panel ---------- */
   .both-stage{
+    position:relative;
     width:100%;
     display:grid;
     grid-template-columns:1fr minmax(150px, 220px) 1fr;
-    align-items:center;
+    align-items:stretch;
+    /* room under the panel row for the ALLY label and its pill */
+    padding-bottom:84px;
+  }
+  /* Centred on the stage, so its width is free of the narrow centre column. */
+  .both-meet{
+    position:absolute; left:0; right:0; bottom:0;
+    display:flex; flex-direction:column; align-items:center; gap:10px;
   }
   .both-panel{
     border:1px solid rgba(120,220,190,0.16);
@@ -3620,10 +3628,11 @@
   }
 
   /* ---------- centre ---------- */
+  /* Stretches to the panel row so the dotted drop can run all the way to the
+     bottom of the panels rather than stopping in mid-air. */
   .both-core{
     position:relative;
-    align-self:center;
-    height:200px;
+    align-self:stretch;
     display:flex; flex-direction:column;
     align-items:center; justify-content:center;
   }
@@ -3661,16 +3670,16 @@
   }
   .both-dot--l{ left:-3px; }
   .both-dot--r{ right:-3px; }
+  /* Runs from just under the node to the foot of the panel row — `bottom:0`
+     rather than a fixed height, so it stays correct however tall the panels
+     grow. */
   .both-drop{
-    position:absolute; top:calc(50% + 42px); width:1px; height:46px;
+    position:absolute; top:calc(50% + 42px); bottom:0; width:1px;
     background:repeating-linear-gradient(180deg, rgba(47,227,172,0.5) 0 3px, transparent 3px 7px);
     transform-origin:top center;
     transition:transform .45s ease 1.35s;
   }
   .both-core-label{
-    /* the node now ends at +32 and the drop runs +42 to +88, so the label
-       needs to start below that — at +78 it sat on top of the dotted line */
-    position:absolute; top:calc(50% + 100px);
     font-size:11px; letter-spacing:0.2em; text-transform:uppercase;
     color:var(--accent); font-weight:600;
     transition:opacity .4s ease 1.5s;
@@ -3684,12 +3693,36 @@
     line-height:1.25; font-weight:600; letter-spacing:-0.01em;
     text-wrap:balance;
   }
+  .both-pill{
+    font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--accent); font-weight:600;
+    padding:7px 15px; border-radius:999px;
+    border:1px solid rgba(47,227,172,0.35);
+    background:rgba(47,227,172,0.06);
+    white-space:nowrap;
+    transition:opacity .4s ease 1.6s;
+  }
   .both-note{
-    margin-top:12px;
+    margin:18px auto 0; max-width:620px;
+    display:flex; align-items:center; gap:16px;
+    text-align:left;
+    padding:16px 20px; border-radius:16px;
+    border:1px solid rgba(120,220,190,0.14);
+    background:rgba(255,255,255,0.025);
+  }
+  .both-note-ic{
+    flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+    width:44px; height:44px; border-radius:50%;
+    color:var(--accent);
+    background:rgba(47,227,172,0.08);
+    border:1px solid rgba(120,220,190,0.18);
+  }
+  .both-note-ic svg{ width:22px; height:22px; }
+  .both-note p{
     font-size:clamp(13px, 1.15vw, 15px);
     line-height:1.6;
     color:rgba(232,242,238,0.62);
-    text-wrap:balance;
   }
 
   /* ---------- staged entrance ----------
@@ -3729,7 +3762,7 @@
     .both-node{ transform:scale(1) !important; }
     .both-dot{ opacity:1 !important; }
     .both-drop{ transform:scaleY(1) !important; }
-    .both-core-label{ opacity:1 !important; }
+    .both-core-label, .both-pill{ opacity:1 !important; }
   }
 
   @media (max-width: 900px){
@@ -3738,10 +3771,8 @@
     .both-panel{ padding:16px 14px; border-radius:14px; }
     .both-chips{ gap:6px; }
     .both-chips li{ font-size:12px; padding:5px 9px; }
-    .both-core{ height:190px; }
     .both-node{ width:54px; height:54px; }
     .both-node img{ width:29px; height:29px; }
-    .both-core-label{ top:calc(50% + 92px); }
   }
 
   @media (max-width: 560px){
@@ -3750,13 +3781,17 @@
     .both-lead{ font-size:14px; margin-bottom:12px; }
     .both-chips{ flex-direction:column; gap:5px; align-items:flex-start; }
     .both-chips li{ font-size:12px; padding:4px 9px; }
-    .both-core{ height:186px; }
     .both-node{ width:48px; height:48px; }
     .both-node img{ width:26px; height:26px; }
     .both-wire--l{ right:calc(50% + 26px); }
     .both-wire--r{ left:calc(50% + 26px); }
-    .both-drop{ top:calc(50% + 34px); height:38px; }
-    .both-core-label{ top:calc(50% + 84px); font-size:10px; letter-spacing:0.16em; }
+    .both-drop{ top:calc(50% + 34px); }
+    .both-core-label{ font-size:10px; letter-spacing:0.16em; }
+    .both-stage{ padding-bottom:76px; }
+    .both-pill{ font-size:10px; padding:6px 13px; }
+    .both-note{ gap:12px; padding:14px; }
+    .both-note-ic{ width:38px; height:38px; }
+    .both-note-ic svg{ width:19px; height:19px; }
   }
 </style>
 </head>
@@ -3919,7 +3954,6 @@
           <img src="/assets/ally-logo.v1.svg" alt="" width="34" height="34">
         </span>
         <span class="both-drop" aria-hidden="true"></span>
-        <p class="both-core-label">Context</p>
       </div>
 
       <article class="both-panel both-panel--biz">
@@ -3933,11 +3967,25 @@
           <li>Operations</li>
         </ul>
       </article>
+
+      <!-- Sits below the panel row, not inside the centre column: the pill is
+           wider than that column and would spill over both panels. -->
+      <div class="both-meet">
+        <p class="both-core-label">Ally</p>
+        <span class="both-pill">Connects both</span>
+      </div>
     </div>
 
     <footer class="both-foot">
       <p class="both-close">Ally connects both before helping you find direction.</p>
-      <p class="both-note">Because what&rsquo;s happening in the business and what&rsquo;s happening with the founder are rarely completely separate.</p>
+      <div class="both-note">
+        <span class="both-note-ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="8.4"/><path d="M15.4 8.6l-2 4.8-4.8 2 2-4.8z"/>
+          </svg>
+        </span>
+        <p>Because what&rsquo;s happening in the business and what&rsquo;s happening with the founder are rarely completely separate.</p>
+      </div>
     </footer>
   </div>
 </section>
