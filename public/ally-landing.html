@@ -663,7 +663,6 @@
   .dimensions,
   .clarity-hero,
   .meet-ally,
-  .flow,
   .manifesto{
     min-height:100vh;
     min-height:100dvh;
@@ -758,7 +757,6 @@
   .dimensions,
   .clarity-hero,
   .meet-ally,
-  .flow,
   .manifesto{
     min-height:100vh;
     min-height:100dvh;
@@ -1479,7 +1477,11 @@
     background:
       radial-gradient(ellipse 60% 50% at 68% 45%, rgba(11,59,44,0.32), transparent 70%),
       linear-gradient(180deg, #040908 0%, #030706 55%, #020605 100%) !important;
-    padding:0 !important;
+    /* This section is no longer locked to 100dvh — its content is only ~400px
+       tall, so at full height it filled 52% of the screen with 191px of dead
+       space above and below, against 89% and 93% for the sections either side.
+       It sizes to its content now, with padding in the same range as those. */
+    padding:clamp(72px, 9vh, 112px) 24px !important;
   }
   .flow-wrap{
     width:min(1380px, 94vw) !important;
@@ -2379,7 +2381,6 @@
     }
     .problem,
     .meet-ally,
-    .flow,
     .manifesto{
       height:100svh !important;
       min-height:100svh !important;
@@ -2389,6 +2390,9 @@
       scroll-snap-stop:normal !important;
       margin:0 !important;
     }
+    /* .flow moved down here for the same reason as on desktop: locked to the
+       viewport it filled 55% of the screen, 178px empty above and 186px below. */
+    .flow,
     .dimensions,
     .clarity-hero{
       height:auto !important;
@@ -3830,6 +3834,16 @@
     .both-note-ic{ width:38px; height:38px; }
     .both-note-ic svg{ width:19px; height:19px; }
   }
+  /* On phones only the active step card is rendered; the rest are
+     display:none and the stepper cycles through them. Since the stepper does
+     not auto-advance under reduced motion, that left those visitors seeing
+     one step of four. Show all four stacked instead — the same trade the
+     desktop rule makes, replacing a sequence with everything at once.
+     .flow .cards4 .fcard outranks the .flow .fcard rule that hides them. */
+  @media (max-width: 768px) and (prefers-reduced-motion: reduce){
+    .flow .cards4 .fcard{ display:flex !important; }
+  }
+
 </style>
 </head>
 <body>
