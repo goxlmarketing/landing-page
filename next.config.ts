@@ -1,4 +1,18 @@
+import os from "node:os";
 import type { NextConfig } from "next";
+
+/**
+ * This machine's LAN addresses, so `next dev` will serve its own dev resources
+ * to a phone on the same network.
+ *
+ * Replaces a hardcoded personal IP that only ever worked on one machine. An
+ * empty list was the wrong correction — it locks the dev server to localhost,
+ * which is what broke opening the site on a phone.
+ */
+const lanOrigins = Object.values(os.networkInterfaces())
+  .flat()
+  .filter((i): i is os.NetworkInterfaceInfo => !!i && i.family === "IPv4" && !i.internal)
+  .map((i) => i.address);
 
 const contentSecurityPolicy = [
   "default-src 'self'",
@@ -26,7 +40,7 @@ const nextConfig: NextConfig = {
   // ever worked for one machine on one network.
   allowedDevOrigins: process.env.ALLOWED_DEV_ORIGIN
     ? [process.env.ALLOWED_DEV_ORIGIN]
-    : [],
+    : lanOrigins,
   // Hide the floating Next.js “N” badge in development
   devIndicators: false,
   /**
