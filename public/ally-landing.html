@@ -2840,14 +2840,41 @@
     .both-note-ic{ width:38px; height:38px; }
     .both-note-ic svg{ width:19px; height:19px; }
   }
-  /* On phones only the active step card is rendered; the rest are
-     display:none and the stepper cycles through them. Since the stepper does
-     not auto-advance under reduced motion, that left those visitors seeing
-     one step of four. Show all four stacked instead — the same trade the
-     desktop rule makes, replacing a sequence with everything at once.
-     .flow .cards4 .fcard outranks the .flow .fcard rule that hides them. */
-  @media (max-width: 768px) and (prefers-reduced-motion: reduce){
-    .flow .cards4 .fcard{ display:flex !important; }
+  /* On phones the four steps are a swipe carousel. This replaces two
+     workarounds at once: showing one card at a time on a 2.8s timer, and the
+     reduced-motion rule that stacked all four so that timer wouldn't leave
+     those visitors on step one of four — which is what made the section
+     1355px tall. All four are present, the section stays short, and it reads
+     the same whether or not reduced motion is on.
+     .flow .cards4 .fcard outranks the .flow .fcard rules above. */
+  @media (max-width: 768px){
+    .flow .cards4{
+      display:flex !important;
+      grid-template-columns:none !important;
+      gap:12px !important;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      overscroll-behavior-x:contain;
+      -webkit-overflow-scrolling:touch;
+      padding:6px 0 14px;              /* the scroll box would clip the ring */
+      scrollbar-width:none;
+    }
+    .flow .cards4::-webkit-scrollbar{ display:none; }
+    .flow .cards4 .fcard{
+      display:flex !important;
+      flex:0 0 86%;                    /* the next card peeks, so it reads as more */
+      scroll-snap-align:center;
+      /* Full strength, not 0.42. A card half on screen still has to be
+         readable, and dimmed body text on this background fails contrast. */
+      opacity:1 !important;
+      transform:none !important;
+      min-height:0 !important;
+      padding:20px 18px !important;
+    }
+    .flow .cards4 .fcard.is-active{
+      transform:none !important;
+      box-shadow:0 18px 40px -24px rgba(47,227,172,0.3) !important;
+    }
   }
 
   /* =========================================================
@@ -4134,6 +4161,20 @@ rows.forEach(r=>{
 /* ---------- stepper + journey cards ---------- */
 const steps = document.querySelectorAll('#stepper .step');
 const journeyCards = document.querySelectorAll('#journey .fcard');
+/* On phones #journey is a swipe carousel rather than a timed slideshow: the
+   stepper is its pagination, and the swipe is the control. */
+const journeyTrack = document.getElementById('journey');
+function isCarousel(){
+  return !!journeyTrack && journeyTrack.scrollWidth > journeyTrack.clientWidth + 4;
+}
+function scrollToCard(i){
+  const c = journeyCards[i];
+  if(!c || !journeyTrack) return;
+  journeyTrack.scrollTo({
+    left: c.offsetLeft - (journeyTrack.clientWidth - c.offsetWidth) / 2,
+    behavior: reduceMotion.matches ? 'auto' : 'smooth'
+  });
+}
 let activeStep = 0;
 let stepperTimer = null;
 function setStep(i){
@@ -4150,6 +4191,7 @@ function setStep(i){
 function startStepper(){
   clearInterval(stepperTimer);
   if(reduceMotion.matches) return;   // honour the OS setting
+  if(isCarousel()) return;           // a timer would fight the swipe
   stepperTimer = setInterval(()=>{ setStep((activeStep+1)%steps.length); }, 2800);
 }
 /* Stop burning cycles while the section is off-screen or the tab is hidden.
@@ -4167,12 +4209,60 @@ if(flowSection && 'IntersectionObserver' in window){
 setStep(0);
 startStepper();
 steps.forEach((s,idx)=>{
-  s.addEventListener('click', ()=>{ setStep(idx); startStepper(); });
+  s.addEventListener('click', ()=>{
+    setStep(idx);
+    if(isCarousel()) scrollToCard(idx); else startStepper();
+  });
 });
 journeyCards.forEach((c,idx)=>{
-  c.addEventListener('mouseenter', ()=>{ setStep(idx); clearInterval(stepperTimer); });
+  /* Hover is a pointer idea. On the carousel a tap fires mouseenter too,
+     which would move the stepper away from the card being swiped to. */
+  c.addEventListener('mouseenter', ()=>{ if(isCarousel()) return; setStep(idx); clearInterval(stepperTimer); });
   c.addEventListener('mouseleave', ()=>{ startStepper(); });
 });
+
+if(journeyTrack){
+  /* Swiping moves the stepper: whichever card is nearest the middle wins. */
+  let jTick = 0;
+  journeyTrack.addEventListener('scroll', ()=>{
+    if(jTick) return;
+    jTick = requestAnimationFrame(()=>{
+      jTick = 0;
+      if(!isCarousel()) return;
+      const mid = journeyTrack.scrollLeft + journeyTrack.clientWidth / 2;
+      let best = 0, bestD = Infinity;
+      journeyCards.forEach((c,i)=>{
+        const d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid);
+        if(d < bestD){ bestD = d; best = i; }
+      });
+      if(best !== activeStep) setStep(best);
+    });
+  }, { passive:true });
+
+  /* A scroll container is only reachable by keyboard if it can take focus,
+     and only announced as one thing if it is labelled. Neither is wanted on
+     desktop, where it is an ordinary grid. */
+  function syncTrackRole(){
+    if(isCarousel()){
+      journeyTrack.setAttribute('tabindex','0');
+      journeyTrack.setAttribute('role','group');
+      journeyTrack.setAttribute('aria-label','How Ally works — swipe through the four steps');
+    }else{
+      journeyTrack.removeAttribute('tabindex');
+      journeyTrack.removeAttribute('role');
+      journeyTrack.removeAttribute('aria-label');
+    }
+  }
+  syncTrackRole();
+  /* ResizeObserver, not resize: the resize event fires before the new layout
+     is measurable, so isCarousel() still reported the old width and the
+     carousel came out of a desktop-width page with no tabindex on it. */
+  if('ResizeObserver' in window){
+    new ResizeObserver(()=>{ syncTrackRole(); startStepper(); }).observe(journeyTrack);
+  }else{
+    addEventListener('resize', ()=>{ setTimeout(()=>{ syncTrackRole(); startStepper(); }, 150); });
+  }
+}
 
 /* ---------- floating cards: load locked positions (+ optional ?edit=1) ---------- */
 (function(){
