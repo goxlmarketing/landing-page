@@ -2949,7 +2949,16 @@
   }
   .reveal-screen iframe{
     width:100%; height:100%; border:0; display:block;
+    /* Inline, the dashboard is something you look at, not something you use.
+       The platform's preview mode puts overscroll-behavior:contain on its
+       scrolling view, so a wheel or a touch-drag landing on the frame is
+       absorbed in there and never chains back out — scrolling over Meet Ally
+       simply stopped. Taking the frame out of hit-testing sends those
+       gestures to the page instead. It becomes live again the instant the
+       viewer borrows it. */
+    pointer-events:none;
   }
+  .reveal-screen{ cursor:zoom-in; }
 
   /* ---------- full-screen control ---------- */
   .reveal-fs{
@@ -2998,7 +3007,7 @@
     box-shadow:0 30px 90px rgba(0,0,0,0.6);
   }
   .viewer-frame{ width:100%; height:100%; }
-  .viewer-frame iframe{ width:100%; height:100%; border:0; display:block; }
+  .viewer-frame iframe{ width:100%; height:100%; border:0; display:block; pointer-events:auto; }
   .viewer-x{
     position:absolute; top:12px; right:12px; z-index:2;
     display:inline-flex; align-items:center; justify-content:center;
@@ -3621,7 +3630,7 @@
              the page and its state survives opening and closing. -->
         <div class="reveal-screen" id="allyScreen">
           <iframe src="/ally-platform.html?preview=1&v=soon23" title="Ally dashboard"
-                  loading="lazy" fetchpriority="low" allow="fullscreen"></iframe>
+                  loading="lazy" fetchpriority="low" allow="fullscreen" inert></iframe>
         </div>
         <button class="reveal-fs" type="button" data-viewer-open
                 aria-label="Open the Ally dashboard full screen">
@@ -4537,11 +4546,15 @@ journeyCards.forEach((c,idx)=>{
   const screen = document.getElementById('allyScreen');
   function borrowFrame(){
     const f = screen && screen.querySelector('iframe');
-    if(f) host.appendChild(f);
+    if(!f) return;
+    host.appendChild(f);
+    f.removeAttribute('inert');   // full screen is the live one
   }
   function returnFrame(){
     const f = host.querySelector('iframe');
-    if(f && screen) screen.appendChild(f);
+    if(!f || !screen) return;
+    f.setAttribute('inert','');   // back to a thing you look at
+    screen.appendChild(f);
   }
 
   function outside(){
@@ -4593,6 +4606,17 @@ journeyCards.forEach((c,idx)=>{
        point of returning the reader to exactly where they were. */
     if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus({ preventScroll:true });
   }
+
+  /* With the inline frame out of hit-testing, a click on the dashboard would
+     otherwise land on nothing. Clicking it opens full screen, which is what
+     clicking a picture of an app should do. The trigger passed for focus
+     return is the Full screen button, since the frame is not focusable —
+     that button and "Explore the experience" are the keyboard route, and
+     both sit right beside it. */
+  if(screen) screen.addEventListener('click', () => {
+    if(viewer.classList.contains('is-open')) return;
+    open(screen.parentElement && screen.parentElement.querySelector('.reveal-fs'));
+  });
 
   document.querySelectorAll('[data-viewer-open]').forEach(b => b.addEventListener('click', () => open(b)));
   viewer.addEventListener('click', e => { if(e.target.closest('[data-viewer-close]')) close(); });
