@@ -9,6 +9,12 @@
 <link rel="canonical" href="https://join.goxlally.ai/">
 <link rel="icon" href="/assets/ally-logo.v1.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/ally-logo.v1.png">
+<!-- The product's fonts. Scoped to the card plates below so the rest of the
+     page keeps its own type. Same stylesheet ally-platform.html already loads,
+     so it is warm in cache by the time the dashboard opens. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700;800&display=swap">
 <meta name="theme-color" content="#040705">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GoXL Ally">
@@ -3098,20 +3104,39 @@
      rather than the landing page's. Values taken from ally-platform.html:
      ivory surfaces, forest ink, emerald accent. Dark cards here read as
      landing-page graphics rather than a look at the real thing. */
+  /* The plate the card sits on. In the product a white card sits on an ivory
+     page, and that pair is most of what makes it read as an app screen. A
+     single cream card dropped straight onto the dark page has no pair, which
+     is why it looked like a landing-page graphic instead of the thing itself.
+     The plate is what floats here, so the deep shadow belongs to it. */
+  .pitch-visual{
+    background:#f7f1eb;                 /* --ivory   */
+    border:1px solid #d8cfc2;           /* --bd-2    */
+    border-radius:20px;
+    padding:clamp(13px, 1.3vw, 19px);
+    box-shadow:0 2px 6px -2px rgba(0,0,0,.4), 0 30px 70px -24px rgba(0,0,0,.55);
+  }
+
   .card{
-    --c-surface:#fbf7f2;
-    --c-surface-2:#f7f1eb;
+    --c-surface:#ffffff;
+    --c-surface-2:#fbf7f2;              /* --ivory-2 */
     --c-ink:#16241c;
-    --c-muted:#556458;
-    --c-line:#e7e0d6;
+    --c-muted:#556458;                  /* --muted. --muted-2 (#6c7a70) is
+                                           what the dashboard uses here, but
+                                           on the tile fill it is 4.23:1 —
+                                           under AA. This clears it. */
+    --c-line:#e7e0d6;                   /* --bd      */
     --c-forest:#1B4332;
     --c-emerald:#10B981;
+    font-family:'Inter', system-ui, sans-serif;
     border:1px solid var(--c-line);
-    border-radius:18px;
+    border-radius:16px;
     background:var(--c-surface);
     color:var(--c-ink);
     padding:clamp(16px, 1.6vw, 22px);
-    box-shadow:0 2px 6px -2px rgba(0,0,0,.4), 0 30px 70px -24px rgba(0,0,0,.55);
+    /* --shadow-card, verbatim. Tight and close, not a dramatic float — an
+       app surface sits on its page, it does not hover over it. */
+    box-shadow:0 1px 2px -1px rgba(6,20,13,.14), 0 6px 16px -6px rgba(6,20,13,.18);
   }
   .card-top{
     display:flex; align-items:center; justify-content:space-between;
@@ -3122,7 +3147,11 @@
     font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase;
     color:var(--c-forest); font-weight:700;
   }
-  .card-name{ font-size:14.5px; font-weight:600; color:var(--c-ink); margin-top:3px; }
+  .card-name{
+    font-family:'Inter Tight','Inter',system-ui,sans-serif;
+    font-size:14.5px; font-weight:700; letter-spacing:-0.01em;
+    color:var(--c-ink); margin-top:3px;
+  }
   .card-meta{ font-size:11px; color:var(--c-muted); }
 
   /* a labelled block inside a card */
@@ -3133,12 +3162,25 @@
     padding:13px 14px;
   }
   .tile + .tile{ margin-top:9px; }
-  .tile-eye{
-    font-size:9.5px; letter-spacing:0.15em; text-transform:uppercase;
-    color:var(--c-forest); font-weight:700; margin-bottom:6px;
+  /* .t-lbl from the dashboard. The uppercase tracked eyebrow is a
+     landing-page device the product never uses, and it was the loudest
+     thing in the card. */
+  .tile .tile-eye{
+    font-size:11.5px; font-weight:600; color:var(--c-muted);
+    letter-spacing:normal; text-transform:none; margin-bottom:7px;
   }
   .tile p{ font-size:12.5px; line-height:1.5; color:var(--c-muted); }
-  .tile strong{ color:var(--c-ink); font-weight:600; }
+  .tile strong{
+    font-family:'Inter Tight','Inter',system-ui,sans-serif;
+    color:var(--c-forest); font-weight:700; letter-spacing:-0.01em;
+  }
+  /* .t-val: the dashboard states a number large and lets it carry the tile. */
+  .t-val{
+    font-family:'Inter Tight','Inter',system-ui,sans-serif;
+    font-size:26px; font-weight:800; color:var(--c-forest);
+    letter-spacing:-0.02em; line-height:1;
+  }
+  .t-val .u{ font-size:13px; color:var(--c-muted); font-weight:600; }
 
   .card-grid{ display:grid; grid-template-columns:1fr 1fr; gap:9px; align-items:start; }
   .card-cols{ display:grid; grid-template-columns:1fr 1fr; gap:11px; }
@@ -3703,7 +3745,7 @@
           </div>
           <div class="tile">
             <p class="tile-eye">Focus time</p>
-            <p><strong style="font-size:22px">90</strong> mins</p>
+            <p><span class="t-val">90<span class="u"> mins</span></span></p>
             <div class="bar"><i style="width:62%"></i></div>
             <p class="card-meta" style="margin-top:9px">9am &nbsp;&middot;&nbsp; 12pm &nbsp;&middot;&nbsp; 3pm &nbsp;&middot;&nbsp; 6pm</p>
           </div>
