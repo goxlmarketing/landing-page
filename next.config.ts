@@ -30,7 +30,16 @@ const contentSecurityPolicy = [
   "media-src 'self'",
   "worker-src 'self' blob:",
   "manifest-src 'self'",
-  "upgrade-insecure-requests",
+  /**
+   * Production only.
+   *
+   * This rewrites every subresource request to https. The dev server is plain
+   * http, so on a phone opening http://<lan-ip>:3000 the browser asked for
+   * https://<lan-ip>:3000/assets/... — nothing is listening there, and every
+   * image failed while the text rendered fine. It goes unnoticed on localhost,
+   * which browsers treat as a secure context and exempt from the upgrade.
+   */
+  ...(process.env.NODE_ENV === "production" ? ["upgrade-insecure-requests"] : []),
 ].join("; ");
 
 const nextConfig: NextConfig = {
