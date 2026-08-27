@@ -3616,6 +3616,12 @@
     font-weight:600; line-height:1.35; color:var(--text);
     margin-bottom:16px;
   }
+  /* Phone-only pieces, off by default so the desktop layout is untouched. */
+  .both-sprite{ position:absolute; width:0; height:0; overflow:hidden; }
+  .both-panel-ic,
+  .both-curves,
+  .both-chips li svg{ display:none; }
+
   .both-chips{ list-style:none; display:flex; flex-wrap:wrap; gap:8px; }
   .both-chips li{
     font-size:13px;
@@ -3778,6 +3784,50 @@
   }
 
   @media (max-width: 560px){
+    /* ---- phone treatment ----
+       Icons, the divider and the curved connectors exist only here. Above
+       560px the desktop pill layout is untouched, which is the point: the
+       two should not drift apart. */
+    .both-panel-ic{
+      display:flex; align-items:center; justify-content:center;
+      width:38px; height:38px; border-radius:50%;
+      background:rgba(47,227,172,0.09);
+      border:1px solid rgba(120,220,190,0.18);
+      margin-bottom:12px;
+    }
+    .both-panel-ic svg{ width:19px; height:19px; }
+    .both-chips li svg{ display:block; width:15px; height:15px; flex:0 0 auto; }
+    .both-panel-ic svg, .both-chips li svg{
+      fill:none; stroke:var(--accent); stroke-width:1.7;
+      stroke-linecap:round; stroke-linejoin:round;
+    }
+    /* items become a plain list under a rule, not pills */
+    .both-lead{
+      padding-bottom:12px;
+      border-bottom:1px solid rgba(120,220,190,0.12);
+      margin-bottom:0 !important;
+    }
+    .both-chips{ margin-top:12px; gap:11px !important; }
+    .both-chips li{
+      display:flex; align-items:center; gap:9px;
+      border:0; background:none; padding:0; border-radius:0;
+      font-weight:500; color:var(--text);
+    }
+    /* curved connectors replace the straight rules */
+    /* bottom:50% puts the SVG's lower edge on the core's vertical midpoint,
+       which is exactly where the node is centred — so the curves land on it
+       at any column width instead of ending 126px above. */
+    .both-curves{
+      display:block; position:absolute; bottom:50%; left:0; right:0;
+      width:100%; height:auto; aspect-ratio:120 / 190; overflow:visible;
+    }
+    .both-curves path{
+      stroke:var(--accent); stroke-width:1.4; stroke-linecap:round;
+      stroke-dasharray:3 6; opacity:0.65;
+    }
+    .both-curves circle{ fill:var(--accent); }
+    .both-wire, .both-dot{ display:none; }
+
     .both-stage{ grid-template-columns:1fr 74px 1fr; }
     .both-panel{ padding:14px 11px; }
     .both-lead{ font-size:14px; margin-bottom:12px; }
@@ -3928,6 +3978,22 @@
     <div class="both-orb both-orb--biz"></div>
   </div>
 
+  <!-- Icons for the phone layout, defined once and referenced with <use>.
+       Hidden above 560px, where the desktop pill treatment is used. -->
+  <svg class="both-sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-you" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M5.5 19.5c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/></symbol>
+    <symbol id="i-biz" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 9.5h17M8 3.5v3M16 3.5v3"/></symbol>
+    <symbol id="i-mind" viewBox="0 0 24 24"><path d="M12 5.5v13M12 5.5a3 3 0 0 0-5.6 1.4A2.8 2.8 0 0 0 5 12a2.9 2.9 0 0 0 1.7 4.8A3 3 0 0 0 12 18.5M12 5.5a3 3 0 0 1 5.6 1.4A2.8 2.8 0 0 1 19 12a2.9 2.9 0 0 1-1.7 4.8A3 3 0 0 1 12 18.5"/></symbol>
+    <symbol id="i-focus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol>
+    <symbol id="i-confidence" viewBox="0 0 24 24"><path d="M12 3.5l7 2.8v5.2c0 4.2-2.9 7.4-7 9-4.1-1.6-7-4.8-7-9V6.3z"/></symbol>
+    <symbol id="i-decisions" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2"/><path d="M8.4 12.2l2.5 2.5 4.7-5"/></symbol>
+    <symbol id="i-growth" viewBox="0 0 24 24"><path d="M4 20V10M10 20V5M16 20v-7M22 20H2"/></symbol>
+    <symbol id="i-finance" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2"/><path d="M12 7.4v9.2M14.4 9.6c-.5-.8-1.4-1.2-2.4-1.2-1.4 0-2.4.8-2.4 1.9 0 2.6 4.9 1.4 4.9 4 0 1.2-1.1 2-2.5 2-1.1 0-2-.4-2.5-1.3"/></symbol>
+    <symbol id="i-product" viewBox="0 0 24 24"><path d="M12 3.2l7.5 4.1v9.4L12 20.8 4.5 16.7V7.3z"/><path d="M4.7 7.4L12 11.5l7.3-4.1M12 11.5v9.1"/></symbol>
+    <symbol id="i-team" viewBox="0 0 24 24"><circle cx="9" cy="9" r="3.1"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M16.2 7.2a3 3 0 0 1 0 5.6M17.5 19c0-2.2-.9-3.9-2.4-4.7"/></symbol>
+    <symbol id="i-ops" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 4.2v-1M12 20.8v-1M19.5 12h1M3.5 12h1M17.3 6.7l.7-.7M6 18l.7-.7M17.3 17.3l.7.7M6 6l.7.7"/></symbol>
+  </svg>
+
   <div class="both-inner">
     <header class="both-head">
       <p class="both-eyebrow">Why Ally looks at both</p>
@@ -3937,17 +4003,26 @@
 
     <div class="both-stage">
       <article class="both-panel both-panel--you">
+        <span class="both-panel-ic" aria-hidden="true"><svg><use href="#i-you"/></svg></span>
         <p class="both-label">You</p>
         <p class="both-lead">The founder behind the decisions.</p>
         <ul class="both-chips">
-          <li>Mind</li>
-          <li>Focus</li>
-          <li>Confidence</li>
-          <li>Decisions</li>
+          <li><svg aria-hidden="true"><use href="#i-mind"/></svg>Mind</li>
+          <li><svg aria-hidden="true"><use href="#i-focus"/></svg>Focus</li>
+          <li><svg aria-hidden="true"><use href="#i-confidence"/></svg>Confidence</li>
+          <li><svg aria-hidden="true"><use href="#i-decisions"/></svg>Decisions</li>
         </ul>
       </article>
 
       <div class="both-core">
+        <svg class="both-curves" viewBox="0 0 120 190" preserveAspectRatio="xMidYMin meet" fill="none" aria-hidden="true">
+          <path d="M9 9 C 9 120, 60 108, 60 190"/><path d="M111 9 C 111 120, 60 108, 60 190"/>
+          <circle cx="9" cy="9" r="4"/><circle cx="111" cy="9" r="4"/>
+        </svg>
+        <svg class="both-curves" viewBox="0 0 120 80" preserveAspectRatio="xMidYMin meet" fill="none" aria-hidden="true">
+          <path d="M8 8 C 8 48, 60 44, 60 80"/><path d="M112 8 C 112 48, 60 44, 60 80"/>
+          <circle cx="8" cy="8" r="3.4"/><circle cx="112" cy="8" r="3.4"/>
+        </svg>
         <span class="both-wire both-wire--l" aria-hidden="true"></span>
         <span class="both-wire both-wire--r" aria-hidden="true"></span>
         <span class="both-dot both-dot--l" aria-hidden="true"></span>
@@ -3959,14 +4034,15 @@
       </div>
 
       <article class="both-panel both-panel--biz">
+        <span class="both-panel-ic" aria-hidden="true"><svg><use href="#i-biz"/></svg></span>
         <p class="both-label">Your business</p>
         <p class="both-lead">The business those decisions shape.</p>
         <ul class="both-chips">
-          <li>Growth</li>
-          <li>Finance</li>
-          <li>Product</li>
-          <li>Team</li>
-          <li>Operations</li>
+          <li><svg aria-hidden="true"><use href="#i-growth"/></svg>Growth</li>
+          <li><svg aria-hidden="true"><use href="#i-finance"/></svg>Finance</li>
+          <li><svg aria-hidden="true"><use href="#i-product"/></svg>Product</li>
+          <li><svg aria-hidden="true"><use href="#i-team"/></svg>Team</li>
+          <li><svg aria-hidden="true"><use href="#i-ops"/></svg>Operations</li>
         </ul>
       </article>
 
