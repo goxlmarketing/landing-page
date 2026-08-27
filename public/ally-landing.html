@@ -4596,6 +4596,48 @@ journeyCards.forEach((c,idx)=>{
 
   document.querySelectorAll('[data-viewer-open]').forEach(b => b.addEventListener('click', () => open(b)));
   viewer.addEventListener('click', e => { if(e.target.closest('[data-viewer-close]')) close(); });
+
+  /* ---------- hand the scroll back at the frame's ends ----------
+     overscroll-behavior:auto is necessary but not sufficient. Chrome latches
+     a wheel gesture to the scroller it began in and will not chain out of an
+     iframe part-way through, and the dashboard's own body is overflow:hidden,
+     which absorbs what does get past. The result was the page stopping dead
+     at both ends of the frame.
+
+     Same origin, so the overflow can simply be forwarded: when the scroller
+     under the pointer is already at the limit the wheel is pushing towards,
+     cancel it and move the page by the same amount instead. Touch is left to
+     the CSS — touch scrolling chains out of iframes on its own. */
+  function scrollerAt(node, doc){
+    for(let n = node; n && n !== doc.documentElement; n = n.parentElement){
+      const oy = doc.defaultView.getComputedStyle(n).overflowY;
+      if((oy === 'auto' || oy === 'scroll') && n.scrollHeight > n.clientHeight + 1) return n;
+    }
+    return null;
+  }
+
+  function wireChain(frame){
+    const doc = frame.contentDocument;
+    if(!doc || doc.__allyChained) return;
+    doc.__allyChained = true;                     // survives the frame moving
+    doc.addEventListener('wheel', e => {
+      if(viewer.classList.contains('is-open')) return;   // full screen keeps its own scroll
+      const sc = scrollerAt(e.target, doc);
+      const past = !sc
+        || (e.deltaY < 0 && sc.scrollTop <= 0)
+        || (e.deltaY > 0 && sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 1);
+      if(!past) return;
+      e.preventDefault();
+      window.scrollBy(0, e.deltaY);
+    }, { passive:false });
+  }
+
+  const inlineFrame = screen && screen.querySelector('iframe');
+  if(inlineFrame){
+    /* load may already have fired for a cached frame, so try both. */
+    inlineFrame.addEventListener('load', () => wireChain(inlineFrame));
+    try{ if(inlineFrame.contentDocument && inlineFrame.contentDocument.readyState !== 'loading') wireChain(inlineFrame); }catch(_){}
+  }
 })();
 </script>
 </body>
