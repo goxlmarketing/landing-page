@@ -3035,6 +3035,193 @@
     .viewer{ padding:8px; }
   }
 
+  /* =========================================================
+     PITCH SECTIONS — outcome, diagnosis, day plan, chat, trust
+     One pattern: a copy column and a product card. The card primitives below
+     are shared so the five sections look like one system rather than five
+     separate designs, and so a change to the card style lands everywhere.
+  ========================================================== */
+  .pitch{
+    position:relative;
+    padding:clamp(56px, 8vh, 100px) clamp(20px, 5vw, 72px);
+  }
+  .pitch-inner{
+    width:100%;
+    max-width:1180px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:minmax(260px, 380px) minmax(0, 1fr);
+    align-items:center;
+    gap:clamp(28px, 4vw, 64px);
+  }
+  .pitch--flip .pitch-inner{ grid-template-columns:minmax(0,1fr) minmax(260px,380px); }
+  .pitch--flip .pitch-copy{ order:2; }
+  .pitch--flip .pitch-visual{ order:1; }
+
+  .pitch-eyebrow{
+    font-size:12px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--accent); font-weight:600; line-height:1.7; margin-bottom:14px;
+  }
+  .pitch-title{
+    font-family:var(--font-display);
+    font-size:clamp(26px, 3vw, 40px);
+    line-height:1.12; font-weight:600; letter-spacing:-0.02em;
+    text-wrap:balance;
+  }
+  .pitch-title em{ font-style:normal; color:var(--accent); }
+  .pitch-body{
+    margin-top:14px;
+    font-size:clamp(14px, 1.15vw, 16px); line-height:1.6;
+    color:rgba(232,242,238,0.66);
+    max-width:38ch;
+  }
+  .pitch-badge{
+    display:inline-block; margin-top:18px;
+    font-size:11px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--accent); font-weight:600;
+    padding:7px 14px; border-radius:999px;
+    border:1px solid rgba(47,227,172,0.32);
+    background:rgba(47,227,172,0.06);
+  }
+
+  /* checklist used in the outcome and trust columns */
+  .pitch-list{ list-style:none; margin-top:22px; display:flex; flex-direction:column; gap:13px; }
+  .pitch-list li{
+    display:flex; align-items:flex-start; gap:11px;
+    font-size:clamp(13.5px, 1.1vw, 15px); line-height:1.45;
+    color:rgba(232,242,238,0.82);
+  }
+  .pitch-list svg{ width:17px; height:17px; flex:0 0 auto; margin-top:1px; stroke:var(--accent); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+
+  /* ---------- card primitives ---------- */
+  .card{
+    border:1px solid rgba(120,220,190,0.14);
+    border-radius:18px;
+    background:linear-gradient(165deg, rgba(12,24,20,0.82), rgba(6,12,10,0.6));
+    padding:clamp(16px, 1.6vw, 22px);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    box-shadow:0 24px 70px -30px rgba(0,0,0,0.6);
+  }
+  .card-top{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:12px; padding-bottom:13px; margin-bottom:15px;
+    border-bottom:1px solid rgba(120,220,190,0.1);
+  }
+  .card-eye{
+    font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--accent); font-weight:600;
+  }
+  .card-name{ font-size:14.5px; font-weight:600; color:var(--text); margin-top:3px; }
+  .card-meta{ font-size:11px; color:var(--text-mute); }
+
+  /* a labelled block inside a card */
+  .tile{
+    border:1px solid rgba(120,220,190,0.1);
+    border-radius:12px;
+    background:rgba(255,255,255,0.022);
+    padding:13px 14px;
+  }
+  .tile + .tile{ margin-top:9px; }
+  .tile-eye{
+    font-size:9.5px; letter-spacing:0.15em; text-transform:uppercase;
+    color:var(--accent); font-weight:600; margin-bottom:6px;
+  }
+  .tile p{ font-size:12.5px; line-height:1.5; color:rgba(232,242,238,0.72); }
+  .tile strong{ color:var(--text); font-weight:600; }
+
+  .card-grid{ display:grid; grid-template-columns:1fr 1fr; gap:9px; align-items:start; }
+  .card-cols{ display:grid; grid-template-columns:1fr 1fr; gap:11px; }
+
+  /* small rows with a leading check or dot */
+  .row{ display:flex; align-items:center; gap:9px; font-size:12.5px; color:rgba(232,242,238,0.78); padding:5px 0; }
+  .row svg{ width:14px; height:14px; flex:0 0 auto; stroke:var(--accent); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .row-num{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:18px; height:18px; flex:0 0 auto; border-radius:50%;
+    font-size:10px; font-weight:700; color:var(--accent);
+    border:1px solid rgba(47,227,172,0.34); background:rgba(47,227,172,0.08);
+  }
+
+  .tile--locked{ opacity:0.72; }
+  .tile-lock{
+    display:flex; align-items:center; gap:7px; margin-top:10px;
+    font-size:10.5px; letter-spacing:0.04em;
+    color:var(--text-mute);
+  }
+  .tile-lock svg{ width:13px; height:13px; flex:0 0 auto; stroke:var(--text-mute); fill:none; stroke-width:1.7; }
+
+  .chip{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:11px; padding:5px 10px; border-radius:999px;
+    border:1px solid rgba(120,220,190,0.18);
+    background:rgba(255,255,255,0.03);
+    color:rgba(232,242,238,0.8);
+  }
+  .chip-row{ display:flex; flex-wrap:wrap; gap:7px; margin-top:10px; }
+
+  /* progress ring for the outcome card */
+  .ring{ position:relative; width:74px; height:74px; flex:0 0 auto; }
+  .ring svg{ width:100%; height:100%; transform:rotate(-90deg); }
+  .ring circle{ fill:none; stroke-width:6; }
+  .ring .ring-bg{ stroke:rgba(120,220,190,0.14); }
+  .ring .ring-fg{ stroke:var(--accent); stroke-linecap:round; }
+  .ring b{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size:17px; font-weight:700; color:var(--text);
+  }
+
+  /* horizontal bar used for focus time */
+  .bar{ height:6px; border-radius:99px; background:rgba(120,220,190,0.12); overflow:hidden; margin-top:8px; }
+  .bar i{ display:block; height:100%; border-radius:99px; background:var(--accent); }
+
+  /* chat bubbles */
+  .bubble{
+    max-width:88%; padding:11px 13px; border-radius:14px;
+    font-size:12.5px; line-height:1.5;
+  }
+  .bubble--me{
+    margin-left:auto; background:var(--accent); color:#04120c; font-weight:600;
+    border-bottom-right-radius:5px;
+  }
+  .bubble--ally{
+    background:rgba(255,255,255,0.04); color:rgba(232,242,238,0.82);
+    border:1px solid rgba(120,220,190,0.12); border-bottom-left-radius:5px;
+  }
+  .bubble-stack{ display:flex; flex-direction:column; gap:10px; }
+  .fake-input{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    margin-top:13px; padding:10px 12px; border-radius:999px;
+    border:1px solid rgba(120,220,190,0.16); background:rgba(255,255,255,0.025);
+    font-size:12px; color:var(--text-mute);
+  }
+  .fake-input svg{ width:15px; height:15px; stroke:var(--accent); fill:none; stroke-width:2; }
+
+  /* testimonial */
+  .quote-who{ display:flex; align-items:center; gap:10px; margin-bottom:13px; }
+  .quote-av{
+    width:34px; height:34px; border-radius:50%; flex:0 0 auto;
+    background:linear-gradient(140deg, rgba(47,227,172,0.35), rgba(10,40,30,0.9));
+    border:1px solid rgba(120,220,190,0.25);
+  }
+  .quote-name{ font-size:12.5px; font-weight:600; color:var(--text); }
+  .quote-role{ font-size:11px; color:var(--text-mute); }
+  .quote-text{ font-size:14.5px; line-height:1.55; color:var(--text); }
+  .quote-foot{ margin-top:14px; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-mute); }
+
+  @media (max-width: 1024px){
+    .pitch-inner,
+    .pitch--flip .pitch-inner{ grid-template-columns:minmax(0,1fr); max-width:640px; }
+    .pitch--flip .pitch-copy{ order:1; }
+    .pitch--flip .pitch-visual{ order:2; }
+    .pitch-body{ max-width:none; }
+  }
+  @media (max-width: 560px){
+    .pitch{ padding:clamp(40px, 6vh, 64px) 16px; }
+    .card{ padding:14px; border-radius:14px; }
+    .card-cols{ grid-template-columns:1fr; }
+    .card-grid{ grid-template-columns:1fr; }
+    .pitch-title{ font-size:clamp(24px, 7vw, 32px); }
+  }
 </style>
 </head>
 <body>
@@ -3082,7 +3269,6 @@
     <img src="/assets/logo-123.v1.png" alt="" />
     <span>GoXL Ally</span>
   </a>
-  <span class="hero-preview"><img src="/assets/goxl-entrepreneurship.v1.png" alt="GoXL Entrepreneurship" /></span>
 
   <div class="problem-inner">
     <div class="figure-wrap">
@@ -3129,6 +3315,80 @@
 
 </section>
 
+
+<!-- =========================================================
+     02 — OUTCOME + PRODUCT PROOF
+     Real Ally output this early, before any explanation of how it works.
+========================================================== -->
+<section class="pitch" id="outcome">
+  <div class="pitch-inner">
+    <div class="pitch-copy">
+      <p class="pitch-eyebrow">From uncertainty<br>to a clear next move.</p>
+      <h2 class="pitch-title">Here&rsquo;s what clarity with Ally actually looks like.</h2>
+      <ul class="pitch-list">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.6 12.2l2.4 2.4 4.4-4.8"/></svg>Understand what&rsquo;s really happening</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.6 12.2l2.4 2.4 4.4-4.8"/></svg>Identify the real root cause</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.6 12.2l2.4 2.4 4.4-4.8"/></svg>Know what deserves your attention now</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.6 12.2l2.4 2.4 4.4-4.8"/></svg>Take action with confidence</li>
+      </ul>
+    </div>
+
+    <div class="pitch-visual">
+      <div class="card">
+        <div class="card-top">
+          <div>
+            <p class="card-eye">Your clarity overview</p>
+            <p class="card-name">Good evening, User</p>
+          </div>
+          <p class="card-meta">Diagnosis completed &middot; 1 day ago</p>
+        </div>
+
+        <div class="card-grid">
+          <div>
+            <div class="tile">
+              <p class="tile-eye">What&rsquo;s really happening</p>
+              <p>Retention is dropping because new users aren&rsquo;t reaching the first meaningful experience fast enough.</p>
+            </div>
+            <div class="tile">
+              <p class="tile-eye">Root cause</p>
+              <p>Onboarding is not leading to activation. Users get lost before they see value.</p>
+            </div>
+            <div class="tile">
+              <p class="tile-eye">What matters now</p>
+              <p>Fix onboarding before increasing acquisition.</p>
+            </div>
+            <div class="tile">
+              <p class="tile-eye">Your next 3 moves</p>
+              <p class="row"><span class="row-num">1</span>Talk to 3 recently churned users</p>
+              <p class="row"><span class="row-num">2</span>Review first-session drop-off</p>
+              <p class="row"><span class="row-num">3</span>Test a shorter onboarding path</p>
+            </div>
+          </div>
+
+          <div>
+            <div class="tile">
+              <p class="tile-eye">Today&rsquo;s priority</p>
+              <p style="margin-bottom:12px">Understand where activation breaks.</p>
+              <div class="ring">
+                <svg viewBox="0 0 80 80" aria-hidden="true">
+                  <circle class="ring-bg" cx="40" cy="40" r="33"/>
+                  <circle class="ring-fg" cx="40" cy="40" r="33"
+                          stroke-dasharray="207" stroke-dashoffset="72"/>
+                </svg>
+                <b>65%</b>
+              </div>
+            </div>
+            <div class="tile">
+              <p class="tile-eye">Day plan</p>
+              <p><strong>3 tasks</strong> planned for today</p>
+              <span class="chip" style="margin-top:10px">View Day Plan &rarr;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- =========================================================
      SECTION — TWO THINGS AT ONCE
@@ -3228,6 +3488,61 @@
   </div>
 </section>
 <!-- =========================================================
+     04 — ALLY STARTS BY UNDERSTANDING
+     The diagnosis gets its own moment, and the 4-step journey is shown.
+========================================================== -->
+<section class="pitch" id="diagnosis">
+  <div class="pitch-inner">
+    <div class="pitch-copy">
+      <h2 class="pitch-title">Ally doesn&rsquo;t start with advice.<br>It starts by <em>understanding.</em></h2>
+      <p class="pitch-body">A 20-minute structured diagnosis that maps your Founder DNA and Business DNA to find the real root cause.</p>
+      <span class="pitch-badge">~20 minutes</span>
+    </div>
+
+    <div class="pitch-visual">
+      <div class="card">
+        <div class="card-top">
+          <p class="card-name">Diagnosis in progress</p>
+          <p class="card-meta">Step 1 of 4</p>
+        </div>
+
+        <div class="chip-row" style="margin-top:0; margin-bottom:16px">
+          <span class="chip"><span class="row-num">1</span>Founder DNA</span>
+          <span class="chip"><span class="row-num">2</span>Business DNA</span>
+          <span class="chip"><span class="row-num">3</span>Patterns</span>
+          <span class="chip"><span class="row-num">4</span>Root Cause</span>
+        </div>
+
+        <div class="card-cols">
+          <div class="tile">
+            <p class="tile-eye">Founder DNA</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 4v2M12 18v2M4 12h2M18 12h2"/></svg>Mindset</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17l5-5 4 3 7-8"/></svg>Decision Patterns</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l6 2.4v4.5c0 3.6-2.5 6.4-6 7.7-3.5-1.3-6-4.1-6-7.7V6.4z"/></svg>Strengths</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"/><circle cx="12" cy="12" r="2.5"/></svg>Blind Spots</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></svg>Energy &amp; Focus</p>
+          </div>
+
+          <div class="tile">
+            <p class="tile-eye">Business DNA</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V11M10 19V5M16 19v-6M21 19H3"/></svg>Growth</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l7 3.9v8.9L12 20.2 5 16.3V7.4z"/></svg>Product</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M14 9.8c-.5-.7-1.3-1-2.2-1-1.3 0-2.2.7-2.2 1.7 0 2.4 4.5 1.3 4.5 3.7 0 1.1-1 1.9-2.3 1.9-1 0-1.9-.4-2.3-1.2"/></svg>Finance</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M16.5 7.5a2.9 2.9 0 0 1 0 5.4"/></svg>Team</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 4.2v-1M12 20.8v-1M19.5 12h1M3.5 12h1M17.3 6.7l.7-.7M6 18l.7-.7M17.3 17.3l.7.7M6 6l.7.7"/></svg>Operations</p>
+          </div>
+        </div>
+
+        <div class="tile" style="margin-top:11px">
+          <p class="tile-eye">Root cause</p>
+          <p>Both sides are read together before Ally suggests anything.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
      MEET ALLY — scroll-driven product reveal
      Copy on the left, the live dashboard on the right. Full screen borrows
      the same frame rather than creating a second one.
@@ -3268,6 +3583,7 @@
 <!-- =========================================================
      SECTION 3 — PRODUCT FLOW
 ========================================================== -->
+
 <section class="flow" id="product">
   <div class="wrap flow-wrap">
     <div class="flow-head reveal">
@@ -3345,6 +3661,109 @@
 <!-- =========================================================
      SECTION 4 — FINAL / EARLY ACCESS
 ========================================================== -->
+<!-- =========================================================
+     07 — DAY PLANNING
+========================================================== -->
+<section class="pitch pitch--flip" id="day-plan">
+  <div class="pitch-inner">
+    <div class="pitch-copy">
+      <h2 class="pitch-title">Clarity is only useful if it changes what you <em>do today.</em></h2>
+      <p class="pitch-body">Ally turns direction into a focused plan for your day.</p>
+    </div>
+
+    <div class="pitch-visual">
+      <div class="card">
+        <div class="card-top">
+          <p class="card-name">Your Day Plan</p>
+          <p class="card-meta">Today</p>
+        </div>
+
+        <div class="tile">
+          <p class="tile-eye">Today&rsquo;s priority</p>
+          <p><strong>Improve onboarding activation</strong></p>
+        </div>
+
+        <div class="card-cols" style="margin-top:11px">
+          <div class="tile">
+            <p class="tile-eye">Your 3 moves for today</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l4.5 4.5L20 6.5"/></svg>Talk to 3 recently churned users</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l4.5 4.5L20 6.5"/></svg>Review first-session drop-off data</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l4.5 4.5L20 6.5"/></svg>Map the new onboarding flow</p>
+          </div>
+          <div class="tile">
+            <p class="tile-eye">Focus time</p>
+            <p><strong style="font-size:22px">90</strong> mins</p>
+            <div class="bar"><i style="width:62%"></i></div>
+            <p class="card-meta" style="margin-top:9px">9am &nbsp;&middot;&nbsp; 12pm &nbsp;&middot;&nbsp; 3pm &nbsp;&middot;&nbsp; 6pm</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     08 — ONGOING ALLY, CHAT WITH CONTEXT
+========================================================== -->
+<section class="pitch" id="ongoing">
+  <div class="pitch-inner">
+    <div class="pitch-copy">
+      <h2 class="pitch-title">And tomorrow, Ally doesn&rsquo;t start from <em>zero.</em></h2>
+      <p class="pitch-body">Ask anything. Ally remembers what matters.</p>
+    </div>
+
+    <div class="pitch-visual">
+      <div class="card">
+        <div class="card-top">
+          <p class="card-name">Chat with Ally</p>
+          <p class="card-meta">Context on</p>
+        </div>
+
+        <div class="bubble-stack">
+          <p class="bubble bubble--me">Why is retention still dropping?</p>
+          <p class="bubble bubble--ally">Based on your diagnosis and recent data, the main issue is still users not reaching the &ldquo;aha&rdquo; moment. Onboarding changes haven&rsquo;t reduced time-to-value yet. Let&rsquo;s look at the new funnel.</p>
+        </div>
+
+        <div class="fake-input">
+          <span>Ask anything&hellip;</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     09 — TRUST / PROOF
+========================================================== -->
+<section class="pitch pitch--flip" id="trust">
+  <div class="pitch-inner">
+    <div class="pitch-copy">
+      <h2 class="pitch-title">Built for founders.<br>Backed by <em>methodology.</em></h2>
+      <ul class="pitch-list">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.6 12.2l2.4 2.4 4.4-4.8"/></svg>Built by GoXL</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.6 12.2l2.4 2.4 4.4-4.8"/></svg>Founder-first methodology</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.6 12.2l2.4 2.4 4.4-4.8"/></svg>Privacy by design</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.6 12.2l2.4 2.4 4.4-4.8"/></svg>Your data. Your context.</li>
+      </ul>
+    </div>
+
+    <div class="pitch-visual">
+      <div class="card">
+        <div class="quote-who">
+          <span class="quote-av" aria-hidden="true"></span>
+          <span>
+            <span class="quote-name">Karan</span>
+            <span class="quote-role">SaaS Founder</span>
+          </span>
+        </div>
+        <p class="quote-text">&ldquo;Ally helped me see the real problem. Not just the symptoms.&rdquo;</p>
+        <p class="quote-foot">Early access &middot; Founder</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="manifesto" id="early-access">
   <div class="final-glow" aria-hidden="true"></div>
   <div class="final-horizon" aria-hidden="true"></div>
