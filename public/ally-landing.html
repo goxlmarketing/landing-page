@@ -3841,27 +3841,16 @@
 
   /* =========================================================
      MEET ALLY — scroll-driven product reveal
-     Progress through .reveal-wrap is written to --lp / --fp / --cp by the
-     script, and every transform below is a pure function of those. That is
-     what makes reversing free: scrolling up recomputes the same numbers, so
-     there is no second animation and no state to reset.
+     A plain section: copy on the left, the live dashboard on the right.
   ========================================================== */
   .reveal-wrap{
     position:relative;
-    /* The scroll distance the transformation is spread over. The sticky child
-       is one viewport, so the extra 110vh is what the laptop travels through. */
-    height:210vh;
-    background:transparent;
+    padding:clamp(56px, 8vh, 96px) 0;
   }
-  .reveal-sticky{
-    position:sticky;
-    top:0;
-    height:100vh;
-    height:100dvh;
+  .reveal-inner{
     display:flex;
     align-items:center;
     justify-content:center;
-    overflow:hidden;
     padding:0 clamp(20px, 5vw, 72px);
   }
 
@@ -3870,19 +3859,15 @@
   .reveal-glow{
     position:absolute;
     left:50%; top:56%;
-    /* 100vw, not 120vw: under reduced motion .reveal-sticky becomes static, so
-       the glow resolves against .reveal-wrap instead and escapes the sticky
-       element's overflow:hidden. The wrapper cannot clip it — overflow:hidden
-       there would break position:sticky for its child — so the width is capped
-       to the viewport instead. At 1024px the wider value pushed 88px of
-       horizontal scroll onto the page. */
+    /* Capped to the viewport, not 120vw. Nothing here clips it, so a wider
+       glow put 88px of horizontal scroll on the page at 1024px. */
     width:min(1200px, 100vw); height:min(760px, 80vh);
     transform:translate(-50%,-50%);
     background:radial-gradient(ellipse at center,
       rgba(47,227,172,0.13) 0%,
       rgba(20,90,70,0.07) 38%,
       rgba(0,0,0,0) 72%);
-    opacity:calc(0.25 + var(--lp, 0) * 0.75);
+    opacity:0.55;
     pointer-events:none;
     z-index:0;
   }
@@ -3899,10 +3884,6 @@
   }
 
   /* ---------- copy ---------- */
-  .reveal-copy{
-    opacity:var(--cp, 0);
-    transform:translateY(calc((1 - var(--cp, 0)) * 18px));
-  }
   .reveal-eyebrow{
     font-size:12px; letter-spacing:0.18em; text-transform:uppercase;
     color:var(--accent); font-weight:600; line-height:1.7;
@@ -3934,13 +3915,6 @@
 
   /* ---------- the laptop ---------- */
   .reveal-stage{
-    /* Start values. Overridden per breakpoint rather than duplicating the
-       transform itself, so there is one formula for every screen size. */
-    --ty:190px;
-    --rx:7deg;
-    --ry:-8deg;
-    --s0:0.74;
-    --s1:1.04;
     position:relative;
     /* The cap lives here rather than on the frame so the stage box and the
        frame box are the same width — the control anchors to the stage, and
@@ -3951,8 +3925,6 @@
     width:100%;
     max-width:1100px;
     justify-self:center;
-    perspective:1500px;
-    transform-style:preserve-3d;
   }
   .reveal-screen{
     display:block;
@@ -3963,12 +3935,6 @@
     border:1px solid rgba(120,220,190,0.18);
     background:#06140d;
     box-shadow:0 28px 80px -28px rgba(0,0,0,0.55);
-    transform-origin:center center;
-    transform:
-      translateY(calc((1 - var(--lp, 0)) * var(--ty)))
-      rotateX(calc((1 - var(--lp, 0)) * var(--rx)))
-      rotateY(calc((1 - var(--lp, 0)) * var(--ry)))
-      scale(calc(var(--s0) + var(--lp, 0) * (var(--s1) - var(--s0))));
   }
   .reveal-screen iframe{
     width:100%; height:100%; border:0; display:block;
@@ -3993,12 +3959,8 @@
     font-family:inherit; font-size:12.5px; font-weight:600;
     letter-spacing:0.02em;
     cursor:pointer;
-    opacity:var(--fp, 0);
-    transform:translateY(calc((1 - var(--fp, 0)) * 8px));
-    pointer-events:none;                       /* until it has faded in */
   }
   .reveal-fs svg{ width:15px; height:15px; }
-  .reveal-wrap[data-fs-ready="1"] .reveal-fs{ pointer-events:auto; }
 
   /* ---------- product viewer ---------- */
   .viewer{
@@ -4046,14 +4008,9 @@
     }
     .reveal-copy{ text-align:center; }
     .reveal-body{ margin-left:auto; margin-right:auto; }
-    .reveal-stage{ --ty:150px; --rx:5deg; --ry:-5deg; --s0:0.8; --s1:1.02; }
   }
   @media (max-width: 768px){
-    .reveal-wrap{ height:190vh; }
-    .reveal-sticky{ padding:0 16px; }
-    /* Far less travel and almost no yaw: on a phone the big rotation reads as
-       distortion rather than depth, and a wide laptop cannot afford the width. */
-    .reveal-stage{ --ty:100px; --rx:3deg; --ry:0deg; --s0:0.88; --s1:1; }
+    .reveal-inner{ padding:0 16px; }
     .reveal-title{ font-size:clamp(28px, 8vw, 38px); }
     .reveal-eyebrow{ font-size:11px; margin-bottom:12px; }
     .reveal-body{ font-size:14px; margin-bottom:18px; }
@@ -4073,17 +4030,6 @@
     .viewer{ padding:8px; }
   }
 
-  /* ---------- reduced motion ---------- */
-  @media (prefers-reduced-motion: reduce){
-    /* No journey: the wrapper collapses to a single screen and the product is
-       simply there, straight and complete. Full screen still works. */
-    .reveal-wrap{ height:auto; }
-    .reveal-sticky{ position:static; height:auto; padding:64px clamp(20px,5vw,72px); }
-    .reveal-copy{ opacity:1 !important; transform:none !important; }
-    .reveal-screen{ transform:none !important; }
-    .reveal-fs{ opacity:1 !important; transform:none !important; pointer-events:auto !important; }
-    .reveal-glow{ opacity:0.5 !important; }
-  }
 </style>
 </head>
 <body>
@@ -4278,13 +4224,11 @@
 </section>
 <!-- =========================================================
      MEET ALLY — scroll-driven product reveal
-     A tall wrapper with a sticky viewport inside. Scroll position through the
-     wrapper drives the laptop's transform directly, so the movement follows
-     the scrollbar exactly and reverses on its own when scrolling back up.
-     No wheel interception, no pinning library, no autoplay.
+     Copy on the left, the live dashboard on the right. Full screen borrows
+     the same frame rather than creating a second one.
 ========================================================== -->
 <section class="reveal-wrap" id="meet-ally">
-  <div class="reveal-sticky">
+  <div class="reveal-inner">
     <div class="reveal-glow" aria-hidden="true"></div>
 
     <div class="reveal-grid">
@@ -5100,130 +5044,6 @@ journeyCards.forEach((c,idx)=>{
 })();
 </script>
 <script>
-/* ---------- Meet Ally: scroll-driven product reveal ---------- */
-(function(){
-  const wrap = document.getElementById('meet-ally');
-  if(!wrap) return;
-  const stage = wrap.querySelector('.reveal-stage');
-  if(!stage) return;
-
-  /* ===== TEMPORARY PREVIEW OVERRIDE — REMOVE BEFORE SHIPPING =====
-     This machine has Windows animation effects switched off, so the browser
-     reports prefers-reduced-motion:reduce and the static path below is what
-     renders. ?motion=1 forces the animated path so the journey can be looked
-     at without touching an OS accessibility setting. This must not survive
-     review: real reduced-motion visitors have to keep the static view. */
-  const forceMotion = new URLSearchParams(location.search).has('motion');
-  if(forceMotion){
-    const o = document.createElement('style');
-    o.textContent =
-      '.reveal-wrap{height:210vh!important}' +
-      '.reveal-sticky{position:sticky!important;top:0!important;height:100dvh!important;padding:0 clamp(20px,5vw,72px)!important}' +
-      '.reveal-copy{opacity:var(--cp,0)!important;transform:translateY(calc((1 - var(--cp,0))*18px))!important}' +
-      '.reveal-screen{transform:translateY(calc((1 - var(--lp,0))*var(--ty))) rotateX(calc((1 - var(--lp,0))*var(--rx))) rotateY(calc((1 - var(--lp,0))*var(--ry))) scale(calc(var(--s0) + var(--lp,0)*(var(--s1) - var(--s0))))!important;' +
-      'filter:drop-shadow(0 calc((1 - var(--lp,0))*40px) calc((1 - var(--lp,0))*60px) rgba(0,0,0,calc((1 - var(--lp,0))*0.55)))!important}' +
-      '.reveal-fs{opacity:var(--fp,0)!important;transform:translateY(calc((1 - var(--fp,0))*8px))!important}';
-    document.head.appendChild(o);
-  }
-  /* ===== END TEMPORARY OVERRIDE ===== */
-
-  /* Reduced motion gets the finished state from CSS and no scroll work at all. */
-  if(reduceMotion.matches && !forceMotion){
-    wrap.setAttribute('data-fs-ready','1');
-    return;
-  }
-
-  /* Sub-range of the overall progress, clamped to 0..1. Each visual step reads
-     its own slice, which is what lets them overlap — the hero copy is still
-     fading while the laptop is already on its way up. */
-  const at = (p, a, b) => Math.min(1, Math.max(0, (p - a) / (b - a)));
-
-  const screen = document.getElementById('allyScreen');
-  let raf = 0, shown = 0, target = 0, fsReady = false;
-
-  /* easeOutQuad. Linear reads mechanical — the frame arrives at a constant
-     rate and stops dead — so this decelerates into the final position.
-     Deliberately not cubic: cubic had the frame 96% settled by the halfway
-     point, leaving most of the section as dead scroll with nothing moving. */
-  const ease = t => 1 - (1 - t) * (1 - t);
-
-  function measure(){
-    const travel = wrap.offsetHeight - window.innerHeight;
-    if(travel <= 0) return null;
-    /* 0 when the wrapper's top reaches the viewport top, 1 when its bottom does. */
-    return Math.min(1, Math.max(0, -wrap.getBoundingClientRect().top / travel));
-  }
-
-  function paint(p){
-    const lp = ease(at(p, 0.10, 0.78)).toFixed(4);
-    stage.style.setProperty('--lp', lp);                            // frame
-    wrap.style.setProperty('--lp',  lp);                            // glow
-    wrap.style.setProperty('--cp',  at(p, 0.04, 0.26).toFixed(4));  // copy
-    stage.style.setProperty('--fp', at(p, 0.78, 0.90).toFixed(4));  // control
-
-    /* Only clickable once it is actually visible. */
-    const ready = p >= 0.86;
-    if(ready !== fsReady){
-      fsReady = ready;
-      wrap.setAttribute('data-fs-ready', ready ? '1' : '0');
-    }
-  }
-
-  /* Eased catch-up rather than painting the raw scroll value. Chasing the
-     target by a fraction each frame takes the sharp edges off fast flicks and
-     trackpad jitter without decoupling from the scrollbar — the frame is still
-     wherever the scroll position says it should be, it just gets there over
-     ~150ms instead of instantly. Terminates as soon as it arrives, so nothing
-     runs while the page is idle. */
-  function frame(){
-    raf = 0;
-    const d = target - shown;
-    if(Math.abs(d) < 0.0005){ shown = target; paint(shown); return; }
-    shown += d * 0.18;
-    paint(shown);
-    raf = requestAnimationFrame(frame);
-  }
-
-  function onScroll(){
-    const p = measure();
-    if(p === null) return;
-    target = p;
-    if(!raf) raf = requestAnimationFrame(frame);
-  }
-
-  /* Promote the frame to its own compositor layer while the section is near.
-     Without this the browser can re-rasterise the live dashboard on every
-     frame, which is what makes transformed iframes stutter on cheaper phones;
-     promoted, it is rasterised once and the transform is a GPU operation on
-     that texture. Dropped again when far away, because a permanent
-     will-change holds the memory for the whole visit. */
-  if(screen && 'IntersectionObserver' in window){
-    new IntersectionObserver((entries) => {
-      entries.forEach(e => { screen.style.willChange = e.isIntersecting ? 'transform' : ''; });
-    }, { rootMargin: '60% 0px' }).observe(wrap);
-  }
-
-  /* Self-heal if frames were requested but never delivered. A backgrounded tab
-     throttles requestAnimationFrame, so a scroll right before switching away
-     leaves a frame pending forever — and because the guard above skips while
-     one is pending, every later scroll would be ignored and the laptop would
-     freeze mid-transformation for the rest of the visit. */
-  document.addEventListener('visibilitychange', () => {
-    if(document.hidden) return;
-    if(raf){ cancelAnimationFrame(raf); raf = 0; }
-    onScroll();
-  });
-
-  /* Plain scroll listening — nothing is intercepted and nothing calls
-     preventDefault, so native scrolling, keyboard paging and momentum all
-     behave exactly as they would without this. */
-  window.addEventListener('scroll', onScroll, { passive:true });
-  window.addEventListener('resize', onScroll, { passive:true });
-  /* Paint the starting state without easing into it. */
-  target = shown = measure() || 0;
-  paint(shown);
-})();
-
 /* ---------- product viewer ---------- */
 (function(){
   const viewer = document.getElementById('allyViewer');
