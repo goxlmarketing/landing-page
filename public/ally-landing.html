@@ -3942,15 +3942,22 @@
     --s0:0.74;
     --s1:1.04;
     position:relative;
+    /* The cap lives here rather than on the frame so the stage box and the
+       frame box are the same width — the control anchors to the stage, and
+       anything else would leave it floating away from the frame edge.
+       width:100% with justify-self, not margin:0 auto: auto margins on a grid
+       item drop it out of stretch and size it to its content, which collapsed
+       the frame from 898px to 302px. */
+    width:100%;
+    max-width:1100px;
+    justify-self:center;
     perspective:1500px;
     transform-style:preserve-3d;
   }
   .reveal-screen{
     display:block;
     width:100%;
-    max-width:1100px;
     aspect-ratio:16 / 10;   /* reserves the box before the frame loads */
-    margin:0 auto;
     border-radius:16px;
     overflow:hidden;
     border:1px solid rgba(120,220,190,0.18);
@@ -3969,9 +3976,11 @@
 
   /* ---------- full-screen control ---------- */
   .reveal-fs{
+    /* Above the frame, not on it. Inside the frame it sat on top of the
+       dashboard's own header controls. */
     position:absolute;
-    top:clamp(10px, 2.5vh, 26px);
-    right:clamp(10px, 3vw, 40px);
+    bottom:calc(100% + 14px);
+    right:0;
     z-index:3;
     display:inline-flex; align-items:center; gap:8px;
     padding:9px 15px;
@@ -4048,7 +4057,9 @@
     .reveal-title{ font-size:clamp(28px, 8vw, 38px); }
     .reveal-eyebrow{ font-size:11px; margin-bottom:12px; }
     .reveal-body{ font-size:14px; margin-bottom:18px; }
-    .reveal-fs{ font-size:11.5px; padding:8px 12px; top:8px; right:8px; }
+    /* top/right here would fight the bottom:100% anchor above and drop the
+       control back onto the dashboard's own header. */
+    .reveal-fs{ font-size:11.5px; padding:7px 11px; bottom:calc(100% + 10px); right:0; }
     /* A dashboard at 16:10 on a 375px screen is 209px tall and unreadable.
        Taller here so the interface is legible, the way the old mobile frame
        was — width is the constraint on a phone, height is not. */
