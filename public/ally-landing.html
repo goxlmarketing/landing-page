@@ -3093,69 +3093,80 @@
   }
   .pitch-list svg{ width:17px; height:17px; flex:0 0 auto; margin-top:1px; stroke:var(--accent); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
 
-  /* ---------- card primitives ---------- */
+  /* ---------- card primitives ----------
+     These are pieces of the product, so they carry the dashboard's palette
+     rather than the landing page's. Values taken from ally-platform.html:
+     ivory surfaces, forest ink, emerald accent. Dark cards here read as
+     landing-page graphics rather than a look at the real thing. */
   .card{
-    border:1px solid rgba(120,220,190,0.14);
+    --c-surface:#fbf7f2;
+    --c-surface-2:#f7f1eb;
+    --c-ink:#16241c;
+    --c-muted:#556458;
+    --c-line:#e7e0d6;
+    --c-forest:#1B4332;
+    --c-emerald:#10B981;
+    border:1px solid var(--c-line);
     border-radius:18px;
-    background:linear-gradient(165deg, rgba(12,24,20,0.82), rgba(6,12,10,0.6));
+    background:var(--c-surface);
+    color:var(--c-ink);
     padding:clamp(16px, 1.6vw, 22px);
-    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
-    box-shadow:0 24px 70px -30px rgba(0,0,0,0.6);
+    box-shadow:0 2px 6px -2px rgba(0,0,0,.4), 0 30px 70px -24px rgba(0,0,0,.55);
   }
   .card-top{
     display:flex; align-items:center; justify-content:space-between;
     gap:12px; padding-bottom:13px; margin-bottom:15px;
-    border-bottom:1px solid rgba(120,220,190,0.1);
+    border-bottom:1px solid var(--c-line);
   }
   .card-eye{
     font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase;
-    color:var(--accent); font-weight:600;
+    color:var(--c-forest); font-weight:700;
   }
-  .card-name{ font-size:14.5px; font-weight:600; color:var(--text); margin-top:3px; }
-  .card-meta{ font-size:11px; color:var(--text-mute); }
+  .card-name{ font-size:14.5px; font-weight:600; color:var(--c-ink); margin-top:3px; }
+  .card-meta{ font-size:11px; color:var(--c-muted); }
 
   /* a labelled block inside a card */
   .tile{
-    border:1px solid rgba(120,220,190,0.1);
+    border:1px solid var(--c-line);
     border-radius:12px;
-    background:rgba(255,255,255,0.022);
+    background:var(--c-surface-2);
     padding:13px 14px;
   }
   .tile + .tile{ margin-top:9px; }
   .tile-eye{
     font-size:9.5px; letter-spacing:0.15em; text-transform:uppercase;
-    color:var(--accent); font-weight:600; margin-bottom:6px;
+    color:var(--c-forest); font-weight:700; margin-bottom:6px;
   }
-  .tile p{ font-size:12.5px; line-height:1.5; color:rgba(232,242,238,0.72); }
-  .tile strong{ color:var(--text); font-weight:600; }
+  .tile p{ font-size:12.5px; line-height:1.5; color:var(--c-muted); }
+  .tile strong{ color:var(--c-ink); font-weight:600; }
 
   .card-grid{ display:grid; grid-template-columns:1fr 1fr; gap:9px; align-items:start; }
   .card-cols{ display:grid; grid-template-columns:1fr 1fr; gap:11px; }
 
   /* small rows with a leading check or dot */
-  .row{ display:flex; align-items:center; gap:9px; font-size:12.5px; color:rgba(232,242,238,0.78); padding:5px 0; }
-  .row svg{ width:14px; height:14px; flex:0 0 auto; stroke:var(--accent); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .row{ display:flex; align-items:center; gap:9px; font-size:12.5px; color:var(--c-ink); padding:5px 0; }
+  .row svg{ width:14px; height:14px; flex:0 0 auto; stroke:var(--c-emerald); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
   .row-num{
     display:inline-flex; align-items:center; justify-content:center;
     width:18px; height:18px; flex:0 0 auto; border-radius:50%;
-    font-size:10px; font-weight:700; color:var(--accent);
-    border:1px solid rgba(47,227,172,0.34); background:rgba(47,227,172,0.08);
+    font-size:10px; font-weight:700; color:var(--c-forest);
+    border:1px solid rgba(27,67,50,0.22); background:rgba(16,185,129,0.12);
   }
 
   .tile--locked{ opacity:0.72; }
   .tile-lock{
     display:flex; align-items:center; gap:7px; margin-top:10px;
     font-size:10.5px; letter-spacing:0.04em;
-    color:var(--text-mute);
+    color:var(--c-muted);
   }
-  .tile-lock svg{ width:13px; height:13px; flex:0 0 auto; stroke:var(--text-mute); fill:none; stroke-width:1.7; }
+  .tile-lock svg{ width:13px; height:13px; flex:0 0 auto; stroke:var(--c-muted); fill:none; stroke-width:1.7; }
 
   .chip{
     display:inline-flex; align-items:center; gap:6px;
     font-size:11px; padding:5px 10px; border-radius:999px;
-    border:1px solid rgba(120,220,190,0.18);
-    background:rgba(255,255,255,0.03);
-    color:rgba(232,242,238,0.8);
+    border:1px solid rgba(27,67,50,0.18);
+    background:rgba(16,185,129,0.1);
+    color:var(--c-forest); font-weight:600;
   }
   .chip-row{ display:flex; flex-wrap:wrap; gap:7px; margin-top:10px; }
 
@@ -3163,16 +3174,16 @@
   .ring{ position:relative; width:74px; height:74px; flex:0 0 auto; }
   .ring svg{ width:100%; height:100%; transform:rotate(-90deg); }
   .ring circle{ fill:none; stroke-width:6; }
-  .ring .ring-bg{ stroke:rgba(120,220,190,0.14); }
-  .ring .ring-fg{ stroke:var(--accent); stroke-linecap:round; }
+  .ring .ring-bg{ stroke:rgba(27,67,50,0.12); }
+  .ring .ring-fg{ stroke:var(--c-emerald); stroke-linecap:round; }
   .ring b{
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-    font-size:17px; font-weight:700; color:var(--text);
+    font-size:17px; font-weight:700; color:var(--c-ink);
   }
 
   /* horizontal bar used for focus time */
-  .bar{ height:6px; border-radius:99px; background:rgba(120,220,190,0.12); overflow:hidden; margin-top:8px; }
-  .bar i{ display:block; height:100%; border-radius:99px; background:var(--accent); }
+  .bar{ height:6px; border-radius:99px; background:rgba(27,67,50,0.12); overflow:hidden; margin-top:8px; }
+  .bar i{ display:block; height:100%; border-radius:99px; background:var(--c-emerald); }
 
   /* chat bubbles */
   .bubble{
@@ -3180,33 +3191,33 @@
     font-size:12.5px; line-height:1.5;
   }
   .bubble--me{
-    margin-left:auto; background:var(--accent); color:#04120c; font-weight:600;
+    margin-left:auto; background:var(--c-forest); color:#eaf3ee; font-weight:600;
     border-bottom-right-radius:5px;
   }
   .bubble--ally{
-    background:rgba(255,255,255,0.04); color:rgba(232,242,238,0.82);
-    border:1px solid rgba(120,220,190,0.12); border-bottom-left-radius:5px;
+    background:var(--c-surface-2); color:var(--c-muted);
+    border:1px solid var(--c-line); border-bottom-left-radius:5px;
   }
   .bubble-stack{ display:flex; flex-direction:column; gap:10px; }
   .fake-input{
     display:flex; align-items:center; justify-content:space-between; gap:10px;
     margin-top:13px; padding:10px 12px; border-radius:999px;
-    border:1px solid rgba(120,220,190,0.16); background:rgba(255,255,255,0.025);
-    font-size:12px; color:var(--text-mute);
+    border:1px solid var(--c-line); background:var(--c-surface-2);
+    font-size:12px; color:var(--c-muted);
   }
-  .fake-input svg{ width:15px; height:15px; stroke:var(--accent); fill:none; stroke-width:2; }
+  .fake-input svg{ width:15px; height:15px; stroke:var(--c-emerald); fill:none; stroke-width:2; }
 
   /* testimonial */
   .quote-who{ display:flex; align-items:center; gap:10px; margin-bottom:13px; }
   .quote-av{
     width:34px; height:34px; border-radius:50%; flex:0 0 auto;
-    background:linear-gradient(140deg, rgba(47,227,172,0.35), rgba(10,40,30,0.9));
-    border:1px solid rgba(120,220,190,0.25);
+    background:linear-gradient(140deg, #34d399, #1B4332);
+    border:1px solid rgba(27,67,50,0.2);
   }
-  .quote-name{ font-size:12.5px; font-weight:600; color:var(--text); }
-  .quote-role{ font-size:11px; color:var(--text-mute); }
-  .quote-text{ font-size:14.5px; line-height:1.55; color:var(--text); }
-  .quote-foot{ margin-top:14px; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-mute); }
+  .quote-name{ font-size:12.5px; font-weight:600; color:var(--c-ink); }
+  .quote-role{ font-size:11px; color:var(--c-muted); }
+  .quote-text{ font-size:14.5px; line-height:1.55; color:var(--c-ink); }
+  .quote-foot{ margin-top:14px; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--c-muted); }
 
   @media (max-width: 1024px){
     .pitch-inner,
