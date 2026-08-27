@@ -3525,6 +3525,212 @@
     .ea-dialog{ padding:24px 18px 20px; }
   }
 
+
+  /* =========================================================
+     TWO THINGS AT ONCE — merged section
+     Replaces .dim-* and .clarity-*. The connector is built from CSS boxes
+     rather than a measured SVG path: the old .dim-link needed JS to compute
+     its geometry, which silently produced no line at all until a resize.
+  ========================================================== */
+  .both{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:64px 24px;
+    overflow:hidden;
+  }
+  .both-inner{
+    position:relative;
+    z-index:2;
+    width:100%;
+    max-width:1180px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:clamp(28px, 4.5vh, 56px);
+  }
+
+  /* ambient wash — one orb behind each panel */
+  .both-atm{ position:absolute; inset:0; z-index:0; pointer-events:none; }
+  .both-orb{
+    position:absolute; top:50%; width:46vw; height:46vw;
+    max-width:620px; max-height:620px;
+    transform:translateY(-50%);
+    border-radius:50%;
+    filter:blur(90px);
+    opacity:0.5;
+  }
+  .both-orb--you{ left:-10vw; background:radial-gradient(circle, rgba(47,227,172,0.16), transparent 68%); }
+  .both-orb--biz{ right:-10vw; background:radial-gradient(circle, rgba(127,252,209,0.11), transparent 68%); }
+
+  /* ---------- head ---------- */
+  .both-head{ text-align:center; max-width:60ch; }
+  .both-eyebrow{
+    font-size:12px; letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:14px; font-weight:600;
+  }
+  .both-title{
+    font-family:var(--font-display);
+    font-size:clamp(30px, 4.4vw, 60px);
+    line-height:1.06; font-weight:600; letter-spacing:-0.02em;
+    text-wrap:balance;
+  }
+  .both-title em{ font-style:italic; color:var(--accent); }
+  .both-sub{
+    margin-top:14px;
+    font-size:clamp(15px, 1.5vw, 20px);
+    color:rgba(232,242,238,0.72);
+    text-wrap:balance;
+  }
+
+  /* ---------- stage: panel | core | panel ---------- */
+  .both-stage{
+    width:100%;
+    display:grid;
+    grid-template-columns:1fr minmax(150px, 220px) 1fr;
+    align-items:center;
+  }
+  .both-panel{
+    border:1px solid rgba(120,220,190,0.16);
+    border-radius:18px;
+    background:linear-gradient(160deg, rgba(10,22,18,0.72), rgba(6,12,10,0.5));
+    padding:clamp(18px, 2.2vw, 30px);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+  }
+  .both-label{
+    font-size:11px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--accent); font-weight:600; margin-bottom:10px;
+  }
+  .both-lead{
+    font-size:clamp(15px, 1.35vw, 19px);
+    font-weight:600; line-height:1.35; color:var(--text);
+    margin-bottom:16px;
+  }
+  .both-chips{ list-style:none; display:flex; flex-wrap:wrap; gap:8px; }
+  .both-chips li{
+    font-size:13px;
+    padding:6px 12px;
+    border-radius:999px;
+    border:1px solid rgba(120,220,190,0.2);
+    background:rgba(255,255,255,0.03);
+    color:rgba(232,242,238,0.82);
+    white-space:nowrap;
+  }
+
+  /* ---------- centre ---------- */
+  .both-core{
+    position:relative;
+    align-self:center;
+    height:200px;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+  }
+  /* the two runs into the node. scaleX from the outer edge so they read as
+     travelling inward when the section enters. */
+  .both-wire{
+    position:absolute; top:50%; height:1px;
+    background:linear-gradient(90deg, rgba(47,227,172,0), rgba(47,227,172,0.55));
+    transition:transform .7s cubic-bezier(.2,.8,.3,1) .45s;
+  }
+  .both-wire--l{ left:-4px; right:calc(50% + 26px); transform-origin:left center; }
+  .both-wire--r{ right:-4px; left:calc(50% + 26px); transform-origin:right center;
+    background:linear-gradient(270deg, rgba(47,227,172,0), rgba(47,227,172,0.55)); }
+
+  .both-node{
+    position:relative; width:18px; height:18px; border-radius:50%;
+    background:var(--accent-2);
+    box-shadow:0 0 0 8px rgba(47,227,172,0.12), 0 0 0 20px rgba(47,227,172,0.06), 0 0 28px rgba(47,227,172,0.55);
+    transition:transform .5s cubic-bezier(.34,1.56,.64,1) 1.05s;
+  }
+  .both-drop{
+    position:absolute; top:calc(50% + 26px); width:1px; height:46px;
+    background:repeating-linear-gradient(180deg, rgba(47,227,172,0.5) 0 3px, transparent 3px 7px);
+    transform-origin:top center;
+    transition:transform .45s ease 1.35s;
+  }
+  .both-core-label{
+    position:absolute; top:calc(50% + 78px);
+    font-size:11px; letter-spacing:0.2em; text-transform:uppercase;
+    color:var(--accent); font-weight:600;
+    transition:opacity .4s ease 1.5s;
+  }
+
+  /* ---------- foot ---------- */
+  .both-foot{ text-align:center; max-width:62ch; }
+  .both-close{
+    font-family:var(--font-display);
+    font-size:clamp(19px, 2.2vw, 30px);
+    line-height:1.25; font-weight:600; letter-spacing:-0.01em;
+    text-wrap:balance;
+  }
+  .both-note{
+    margin-top:12px;
+    font-size:clamp(13px, 1.15vw, 15px);
+    line-height:1.6;
+    color:rgba(232,242,238,0.62);
+    text-wrap:balance;
+  }
+
+  /* ---------- staged entrance ----------
+     Everything here is gated behind .will-animate, which only JS adds. If the
+     script never runs, errors, or the observer never fires, the section simply
+     renders in its final state — the hidden-by-default version would leave a
+     whole content section invisible. */
+  .both.will-animate .both-head,
+  .both.will-animate .both-panel,
+  .both.will-animate .both-foot{
+    opacity:0;
+    transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.3,1);
+  }
+  .both.will-animate .both-panel--you{ transform:translateX(-28px); }
+  .both.will-animate .both-panel--biz{ transform:translateX(28px); }
+  .both.will-animate .both-head{ transform:translateY(16px); }
+  .both.will-animate .both-foot{ transform:translateY(16px); }
+  .both.will-animate .both-wire{ transform:scaleX(0); }
+  .both.will-animate .both-node{ transform:scale(0); }
+  .both.will-animate .both-drop{ transform:scaleY(0); }
+  .both.will-animate .both-core-label{ opacity:0; }
+
+  .both.is-in .both-head{ opacity:1; transform:none; }                       /* stage 1 */
+  .both.is-in .both-panel{ opacity:1; transform:none; transition-delay:.25s; } /* stage 2 */
+  .both.is-in .both-wire{ transform:scaleX(1); }                             /* stage 3 */
+  .both.is-in .both-node{ transform:scale(1); }                              /* stage 4 */
+  .both.is-in .both-drop{ transform:scaleY(1); }
+  .both.is-in .both-core-label{ opacity:1; }
+  .both.is-in .both-foot{ opacity:1; transform:none; transition-delay:1.55s; }
+
+  /* Everything visible immediately, no staging, when motion is not wanted. */
+  @media (prefers-reduced-motion: reduce){
+    .both-head, .both-panel, .both-foot{ opacity:1 !important; transform:none !important; }
+    .both-wire{ transform:scaleX(1) !important; }
+    .both-node{ transform:scale(1) !important; }
+    .both-drop{ transform:scaleY(1) !important; }
+    .both-core-label{ opacity:1 !important; }
+  }
+
+  @media (max-width: 900px){
+    .both{ padding:48px 16px; }
+    .both-stage{ grid-template-columns:1fr minmax(96px, 130px) 1fr; }
+    .both-panel{ padding:16px 14px; border-radius:14px; }
+    .both-chips{ gap:6px; }
+    .both-chips li{ font-size:12px; padding:5px 9px; }
+    .both-core{ height:160px; }
+    .both-node{ width:14px; height:14px; }
+  }
+
+  @media (max-width: 560px){
+    .both-stage{ grid-template-columns:1fr 74px 1fr; }
+    .both-panel{ padding:14px 11px; }
+    .both-lead{ font-size:14px; margin-bottom:12px; }
+    .both-chips{ flex-direction:column; gap:5px; align-items:flex-start; }
+    .both-chips li{ font-size:12px; padding:4px 9px; }
+    .both-core{ height:150px; }
+    .both-wire--l{ right:calc(50% + 18px); }
+    .both-wire--r{ left:calc(50% + 18px); }
+    .both-core-label{ top:calc(50% + 70px); font-size:10px; letter-spacing:0.16em; }
+  }
 </style>
 </head>
 <body>
@@ -3646,84 +3852,62 @@
     </div>
   </div>
 </section>
-
 <!-- =========================================================
      SECTION — TWO THINGS AT ONCE
+     Merges the old #dimensions and #clarity sections. Both were explaining
+     the same idea (founder + business) across two full screens; this states
+     it once, and the connector diagram carries the argument instead of prose.
 ========================================================== -->
-<section class="dimensions" id="dimensions">
-  <div class="dim-atm" aria-hidden="true">
-    <div class="dim-orb dim-orb--self"></div>
-    <div class="dim-orb dim-orb--biz"></div>
-  </div>
-  <div class="dim-stage">
-    <svg class="dim-link" aria-hidden="true">
-      <path></path>
-      <circle r="5"></circle>
-    </svg>
-    <div class="dim-left">
-      <p class="dim-title">
-        <span class="dt dt-1">You are building</span>
-        <span class="dt dt-2"><em>two things</em> at once</span>
-      </p>
-      <div class="dim-pair">
-        <div class="dim-pole">
-          <p>Your self</p>
-        </div>
-        <div class="dim-pole">
-          <p>Your business</p>
-        </div>
-      </div>
-      <p class="dim-close">You struggle to know what matters. Ally helps you make better decisions.</p>
-    </div>
-    <h2 class="dim-lead">
-      <span class="dl-1">Entrepreneurship is</span>
-      <span class="dl-2"><em>multidimensional.</em></span>
-    </h2>
-  </div>
-</section>
-
-<!-- =========================================================
-     SECTION 2 — CLARITY
-========================================================== -->
-<section class="clarity-hero" id="clarity">
-  <div class="clarity-atm" aria-hidden="true">
-    <div class="clarity-beam"></div>
-    <div class="clarity-orb"></div>
+<section class="both" id="dimensions">
+  <div class="both-atm" aria-hidden="true">
+    <div class="both-orb both-orb--you"></div>
+    <div class="both-orb both-orb--biz"></div>
   </div>
 
-  <div class="clarity-stage">
-    <div class="clarity-left">
-      <h2 class="clarity-title">
-        <span class="ct ct-1">Ally</span>
-        <span class="ct ct-2"><em>stands for</em></span>
-        <span class="ct ct-3">what it means.</span>
-      </h2>
+  <div class="both-inner">
+    <header class="both-head">
+      <p class="both-eyebrow">Why Ally looks at both</p>
+      <h2 class="both-title">You&rsquo;re building <em>two things</em> at once.</h2>
+      <p class="both-sub">Your business. And yourself as a founder.</p>
+    </header>
 
-      <div class="clarity-rail" aria-label="Ally promise">
-        <span class="rail-line" aria-hidden="true"></span>
-        <span class="rail-item is-on" data-i="0">Clarity</span>
-        <span class="rail-item" data-i="1">Confidence</span>
-        <span class="rail-item" data-i="2">Consistency</span>
+    <div class="both-stage">
+      <article class="both-panel both-panel--you">
+        <p class="both-label">You</p>
+        <p class="both-lead">The founder behind the decisions.</p>
+        <ul class="both-chips">
+          <li>Mind</li>
+          <li>Focus</li>
+          <li>Confidence</li>
+          <li>Decisions</li>
+        </ul>
+      </article>
+
+      <div class="both-core">
+        <span class="both-wire both-wire--l" aria-hidden="true"></span>
+        <span class="both-wire both-wire--r" aria-hidden="true"></span>
+        <span class="both-node" aria-hidden="true"></span>
+        <span class="both-drop" aria-hidden="true"></span>
+        <p class="both-core-label">Context</p>
       </div>
 
-      <p class="clarity-micro">Ally turns your context into clarity, decisions and daily action.</p>
+      <article class="both-panel both-panel--biz">
+        <p class="both-label">Your business</p>
+        <p class="both-lead">The business those decisions shape.</p>
+        <ul class="both-chips">
+          <li>Growth</li>
+          <li>Finance</li>
+          <li>Product</li>
+          <li>Team</li>
+          <li>Operations</li>
+        </ul>
+      </article>
     </div>
 
-    <div class="clarity-right">
-      <div class="clarity-decide">
-        <p class="clarity-line clarity-line--strong">Ally looks at both sides of the equation.</p>
-        <div class="clarity-sides">
-          <div class="clarity-side">
-            <h3>You</h3>
-            <p>Mind · Confidence · Focus · Decisions</p>
-          </div>
-          <div class="clarity-side">
-            <h3>Your Business</h3>
-            <p>Growth · Finance · Product · Team · Operations</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <footer class="both-foot">
+      <p class="both-close">Ally connects both before helping you find direction.</p>
+      <p class="both-note">Because what&rsquo;s happening in the business and what&rsquo;s happening with the founder are rarely completely separate.</p>
+    </footer>
   </div>
 </section>
 
@@ -3909,100 +4093,44 @@ const io = new IntersectionObserver((entries)=>{
 revealEls.forEach(el=>io.observe(el));
 document.querySelectorAll('#problem .reveal').forEach(el=> el.classList.add('in'));
 
-/* ---------- two-things section enter + connector ---------- */
+/* ---------- two things at once: staged entrance ---------- */
 (function(){
   const section = document.getElementById('dimensions');
   if(!section) return;
-  const stage = section.querySelector('.dim-stage');
-  const svg = section.querySelector('.dim-link');
-  const path = svg && svg.querySelector('path');
-  const dot = svg && svg.querySelector('circle');
-  const poles = [...section.querySelectorAll('.dim-pole')];
-  const lead = section.querySelector('.dim-lead');
-  const narrow = window.matchMedia('(max-width: 900px)');
 
-  const dio = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{ if(e.isIntersecting) section.classList.add('is-in'); });
-  }, { threshold: isPhone() ? 0.18 : 0.35 });
-  dio.observe(section);
+  const reveal = () => section.classList.add('is-in');
 
-  function layoutLink(){
-    if(!stage || !svg || !path || !dot || poles.length < 2 || !lead) return;
-    if(narrow.matches){
-      path.removeAttribute('d');
-      return;
-    }
-    const sr = stage.getBoundingClientRect();
-    if(sr.width < 40 || sr.height < 40) return;
-    svg.setAttribute('viewBox', `0 0 ${sr.width} ${sr.height}`);
-    svg.setAttribute('width', String(sr.width));
-    svg.setAttribute('height', String(sr.height));
-
-    const p1 = poles[0].getBoundingClientRect();
-    const p2 = poles[1].getBoundingClientRect();
-    const t = lead.getBoundingClientRect();
-    const x1 = p1.right - sr.left;
-    const y1 = p1.top + p1.height / 2 - sr.top;
-    const x2 = p2.right - sr.left;
-    const y2 = p2.top + p2.height / 2 - sr.top;
-    const x3 = t.left - sr.left + 8;
-    const y3 = t.top + t.height / 2 - sr.top;
-    const elbow = Math.round((Math.max(x1, x2) + x3) / 2);
-    const joinY = (y1 + y2) / 2;
-    const c1 = elbow + Math.max(28, (x3 - elbow) * 0.38);
-    const c2 = x3 - Math.max(28, (x3 - elbow) * 0.22);
-
-    path.setAttribute('d', [
-      `M ${x1} ${y1} H ${elbow}`,
-      `M ${x2} ${y2} H ${elbow}`,
-      `M ${elbow} ${y1} V ${y2}`,
-      `M ${elbow} ${joinY} C ${c1} ${joinY}, ${c2} ${y3}, ${x3} ${y3}`
-    ].join(' '));
-    dot.setAttribute('cx', String(elbow));
-    dot.setAttribute('cy', String(joinY));
+  /* The hidden start state lives behind .will-animate, added here rather than
+     in the stylesheet. Nothing below is allowed to leave a content section at
+     opacity 0: if this script never runs, throws, or the observer never fires,
+     the CSS default is the finished state. */
+  if(!('IntersectionObserver' in window) || reduceMotion.matches){
+    return;                       // render finished, skip the choreography
   }
+  section.classList.add('will-animate');
 
-  /* This runs at parse time, when .dim-stage has no geometry yet, so the
-     `sr.width < 40` guard above returns early and the path is never given a
-     `d`. Nothing re-triggered it afterwards, so the connector simply did not
-     exist until the window was resized. Re-run once after first layout. */
-  layoutLink();
-  requestAnimationFrame(layoutLink);
-  window.addEventListener('load', layoutLink);
-  window.addEventListener('resize', layoutLink);
-  if(typeof ResizeObserver !== 'undefined' && stage){
-    new ResizeObserver(layoutLink).observe(stage);
-  }
-})();
-
-/* ---------- clarity section enter + rail cycle ---------- */
-(function(){
-  const section = document.getElementById('clarity');
-  if(!section) return;
-  const items = [...section.querySelectorAll('.rail-item')];
-  let i = 0;
-  let timer = null;
-  const cio = new IntersectionObserver((entries)=>{
+  /* One class drives the whole sequence; stage timing is in CSS
+     transition-delays rather than a chain of timers, so it cannot drift.
+     Unobserved after first entry — this plays once, not on every scroll past. */
+  const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
-      if(e.isIntersecting){
-        section.classList.add('is-in');
-        // Don't auto-cycle when the OS asks for reduced motion; leave the
-        // first item lit so the section still reads correctly.
-        if(!timer && items.length && !reduceMotion.matches){
-          timer = setInterval(()=>{
-            i = (i + 1) % items.length;
-            items.forEach((el, idx)=> el.classList.toggle('is-on', idx === i));
-          }, 1800);
-        }
-      }else if(timer){
-        // Was running for the life of the page even when scrolled far away.
-        clearInterval(timer);
-        timer = null;
-      }
+      if(!e.isIntersecting) return;
+      reveal();
+      io.unobserve(section);
+      clearTimeout(failsafe);
     });
-  }, { threshold: isPhone() ? 0.18 : 0.35 });
-  cio.observe(section);
+  }, { threshold: isPhone() ? 0.16 : 0.3 });
+  io.observe(section);
+
+  /* Last resort. If the observer has not fired by the time the section is
+     genuinely on screen, show it anyway — a missed animation is a far smaller
+     failure than a blank section. */
+  const failsafe = setTimeout(function check(){
+    const r = section.getBoundingClientRect();
+    if(r.top < window.innerHeight && r.bottom > 0) reveal();
+  }, 2500);
 })();
+
 
 /* ---------- particle network background (Section 1) ---------- */
 const canvas = document.getElementById('network-canvas');
