@@ -4059,7 +4059,13 @@
     .reveal-body{ font-size:14px; margin-bottom:18px; }
     /* top/right here would fight the bottom:100% anchor above and drop the
        control back onto the dashboard's own header. */
-    .reveal-fs{ font-size:11.5px; padding:7px 11px; bottom:calc(100% + 10px); right:0; }
+    .reveal-fs{
+      font-size:11.5px; padding:7px 11px; bottom:calc(100% + 10px); right:0;
+      /* No backdrop blur on phones. It re-blurs whatever is behind the control
+         every frame, and behind it is the moving dashboard. */
+      backdrop-filter:none; -webkit-backdrop-filter:none;
+      background:rgba(4,12,9,0.9);
+    }
     /* A dashboard at 16:10 on a 375px screen is 209px tall and unreadable.
        Taller here so the interface is legible, the way the old mobile frame
        was — width is the constraint on a phone, height is not. */
@@ -5132,20 +5138,26 @@ journeyCards.forEach((c,idx)=>{
      fading while the laptop is already on its way up. */
   const at = (p, a, b) => Math.min(1, Math.max(0, (p - a) / (b - a)));
 
-  let raf = 0;
-  let fsReady = false;
+  const screen = document.getElementById('allyScreen');
+  let raf = 0, shown = 0, target = 0, fsReady = false;
 
-  function apply(){
-    raf = 0;
-    const rect = wrap.getBoundingClientRect();
+  /* easeOutQuad. Linear reads mechanical — the frame arrives at a constant
+     rate and stops dead — so this decelerates into the final position.
+     Deliberately not cubic: cubic had the frame 96% settled by the halfway
+     point, leaving most of the section as dead scroll with nothing moving. */
+  const ease = t => 1 - (1 - t) * (1 - t);
+
+  function measure(){
     const travel = wrap.offsetHeight - window.innerHeight;
-    if(travel <= 0) return;
-
+    if(travel <= 0) return null;
     /* 0 when the wrapper's top reaches the viewport top, 1 when its bottom does. */
-    const p = Math.min(1, Math.max(0, -rect.top / travel));
+    return Math.min(1, Math.max(0, -wrap.getBoundingClientRect().top / travel));
+  }
 
-    stage.style.setProperty('--lp', at(p, 0.10, 0.72).toFixed(4));  // laptop
-    wrap.style.setProperty('--lp',  at(p, 0.10, 0.72).toFixed(4));  // glow
+  function paint(p){
+    const lp = ease(at(p, 0.10, 0.78)).toFixed(4);
+    stage.style.setProperty('--lp', lp);                            // frame
+    wrap.style.setProperty('--lp',  lp);                            // glow
     wrap.style.setProperty('--cp',  at(p, 0.04, 0.26).toFixed(4));  // copy
     stage.style.setProperty('--fp', at(p, 0.78, 0.90).toFixed(4));  // control
 
@@ -5157,9 +5169,38 @@ journeyCards.forEach((c,idx)=>{
     }
   }
 
+  /* Eased catch-up rather than painting the raw scroll value. Chasing the
+     target by a fraction each frame takes the sharp edges off fast flicks and
+     trackpad jitter without decoupling from the scrollbar — the frame is still
+     wherever the scroll position says it should be, it just gets there over
+     ~150ms instead of instantly. Terminates as soon as it arrives, so nothing
+     runs while the page is idle. */
+  function frame(){
+    raf = 0;
+    const d = target - shown;
+    if(Math.abs(d) < 0.0005){ shown = target; paint(shown); return; }
+    shown += d * 0.18;
+    paint(shown);
+    raf = requestAnimationFrame(frame);
+  }
+
   function onScroll(){
-    if(raf) return;
-    raf = requestAnimationFrame(apply);
+    const p = measure();
+    if(p === null) return;
+    target = p;
+    if(!raf) raf = requestAnimationFrame(frame);
+  }
+
+  /* Promote the frame to its own compositor layer while the section is near.
+     Without this the browser can re-rasterise the live dashboard on every
+     frame, which is what makes transformed iframes stutter on cheaper phones;
+     promoted, it is rasterised once and the transform is a GPU operation on
+     that texture. Dropped again when far away, because a permanent
+     will-change holds the memory for the whole visit. */
+  if(screen && 'IntersectionObserver' in window){
+    new IntersectionObserver((entries) => {
+      entries.forEach(e => { screen.style.willChange = e.isIntersecting ? 'transform' : ''; });
+    }, { rootMargin: '60% 0px' }).observe(wrap);
   }
 
   /* Self-heal if frames were requested but never delivered. A backgrounded tab
@@ -5178,7 +5219,9 @@ journeyCards.forEach((c,idx)=>{
      behave exactly as they would without this. */
   window.addEventListener('scroll', onScroll, { passive:true });
   window.addEventListener('resize', onScroll, { passive:true });
-  apply();
+  /* Paint the starting state without easing into it. */
+  target = shown = measure() || 0;
+  paint(shown);
 })();
 
 /* ---------- product viewer ---------- */
