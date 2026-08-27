@@ -3945,23 +3945,26 @@
     perspective:1500px;
     transform-style:preserve-3d;
   }
-  .reveal-laptop{
+  .reveal-screen{
     display:block;
     width:100%;
-    height:auto;
-    max-width:1100px;      /* never scaled past the file's own resolution */
+    max-width:1100px;
+    aspect-ratio:16 / 10;   /* reserves the box before the frame loads */
     margin:0 auto;
+    border-radius:16px;
+    overflow:hidden;
+    border:1px solid rgba(120,220,190,0.18);
+    background:#06140d;
+    box-shadow:0 28px 80px -28px rgba(0,0,0,0.55);
     transform-origin:center center;
     transform:
       translateY(calc((1 - var(--lp, 0)) * var(--ty)))
       rotateX(calc((1 - var(--lp, 0)) * var(--rx)))
       rotateY(calc((1 - var(--lp, 0)) * var(--ry)))
       scale(calc(var(--s0) + var(--lp, 0) * (var(--s1) - var(--s0))));
-    /* Physical drop shadow while it is still angled, easing off as it turns
-       to face the viewer — the cue that it has stopped being an object. */
-    filter:drop-shadow(0 calc((1 - var(--lp, 0)) * 40px)
-                       calc((1 - var(--lp, 0)) * 60px)
-                       rgba(0,0,0,calc((1 - var(--lp, 0)) * 0.55)));
+  }
+  .reveal-screen iframe{
+    width:100%; height:100%; border:0; display:block;
   }
 
   /* ---------- full-screen control ---------- */
@@ -4046,6 +4049,10 @@
     .reveal-eyebrow{ font-size:11px; margin-bottom:12px; }
     .reveal-body{ font-size:14px; margin-bottom:18px; }
     .reveal-fs{ font-size:11.5px; padding:8px 12px; top:8px; right:8px; }
+    /* A dashboard at 16:10 on a 375px screen is 209px tall and unreadable.
+       Taller here so the interface is legible, the way the old mobile frame
+       was — width is the constraint on a phone, height is not. */
+    .reveal-screen{ aspect-ratio:4 / 5; border-radius:12px; }
     .viewer{ padding:8px; }
   }
 
@@ -4056,7 +4063,7 @@
     .reveal-wrap{ height:auto; }
     .reveal-sticky{ position:static; height:auto; padding:64px clamp(20px,5vw,72px); }
     .reveal-copy{ opacity:1 !important; transform:none !important; }
-    .reveal-laptop{ transform:none !important; filter:none !important; }
+    .reveal-screen{ transform:none !important; }
     .reveal-fs{ opacity:1 !important; transform:none !important; pointer-events:auto !important; }
     .reveal-glow{ opacity:0.5 !important; }
   }
@@ -4275,13 +4282,13 @@
       </div>
 
       <div class="reveal-stage">
-        <!-- width/height are the file's own pixels, so the box is reserved
-             before it loads and nothing shifts. -->
-        <img class="reveal-laptop"
-             src="/assets/ally-laptop.v1.jpg"
-             width="1672" height="941"
-             fetchpriority="high"
-             alt="The Ally dashboard on a laptop, showing a founder's top priority, why it matters and the recommended next move.">
+        <!-- The live dashboard, not a still. It is the same element the
+             full-screen viewer borrows, so there is only ever one of these on
+             the page and its state survives opening and closing. -->
+        <div class="reveal-screen" id="allyScreen">
+          <iframe src="/ally-platform.html?preview=1&v=soon23" title="Ally dashboard"
+                  loading="lazy" fetchpriority="low" allow="fullscreen"></iframe>
+        </div>
         <button class="reveal-fs" type="button" data-viewer-open
                 aria-label="Open the Ally dashboard full screen">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
@@ -5096,7 +5103,7 @@ journeyCards.forEach((c,idx)=>{
       '.reveal-wrap{height:210vh!important}' +
       '.reveal-sticky{position:sticky!important;top:0!important;height:100dvh!important;padding:0 clamp(20px,5vw,72px)!important}' +
       '.reveal-copy{opacity:var(--cp,0)!important;transform:translateY(calc((1 - var(--cp,0))*18px))!important}' +
-      '.reveal-laptop{transform:translateY(calc((1 - var(--lp,0))*var(--ty))) rotateX(calc((1 - var(--lp,0))*var(--rx))) rotateY(calc((1 - var(--lp,0))*var(--ry))) scale(calc(var(--s0) + var(--lp,0)*(var(--s1) - var(--s0))))!important;' +
+      '.reveal-screen{transform:translateY(calc((1 - var(--lp,0))*var(--ty))) rotateX(calc((1 - var(--lp,0))*var(--rx))) rotateY(calc((1 - var(--lp,0))*var(--ry))) scale(calc(var(--s0) + var(--lp,0)*(var(--s1) - var(--s0))))!important;' +
       'filter:drop-shadow(0 calc((1 - var(--lp,0))*40px) calc((1 - var(--lp,0))*60px) rgba(0,0,0,calc((1 - var(--lp,0))*0.55)))!important}' +
       '.reveal-fs{opacity:var(--fp,0)!important;transform:translateY(calc((1 - var(--fp,0))*8px))!important}';
     document.head.appendChild(o);
@@ -5172,15 +5179,18 @@ journeyCards.forEach((c,idx)=>{
   const FOCUSABLE = 'a[href], button:not([disabled]), input, select, textarea, iframe, [tabindex]:not([tabindex="-1"])';
   let lastFocus = null;
 
-  function ensureFrame(){
-    if(host.querySelector('iframe')) return;
-    /* Created on first open, so the dashboard's 500 KB never touches the
-       initial page load. */
-    const f = document.createElement('iframe');
-    f.src = '/ally-platform.html?preview=1&v=soon23';
-    f.title = 'Ally dashboard';
-    f.setAttribute('allow','fullscreen');
-    host.appendChild(f);
+  /* The dashboard already exists in the section, so the viewer borrows that
+     element rather than creating a second one. One iframe instead of two means
+     the 500 KB is loaded once, and whatever the visitor was looking at inside
+     it is still there when the viewer opens and again when it closes. */
+  const screen = document.getElementById('allyScreen');
+  function borrowFrame(){
+    const f = screen && screen.querySelector('iframe');
+    if(f) host.appendChild(f);
+  }
+  function returnFrame(){
+    const f = host.querySelector('iframe');
+    if(f && screen) screen.appendChild(f);
   }
 
   function outside(){
@@ -5206,7 +5216,7 @@ journeyCards.forEach((c,idx)=>{
      be <body> there and focus would have nowhere to return to on close. */
   function open(trigger){
     lastFocus = trigger || document.activeElement;
-    ensureFrame();
+    borrowFrame();
     viewer.classList.add('is-open');
     viewer.setAttribute('aria-hidden','false');
     /* Scroll position is untouched: the page is frozen where it stands and
@@ -5226,6 +5236,7 @@ journeyCards.forEach((c,idx)=>{
     document.documentElement.classList.remove('ea-lock');
     document.body.classList.remove('ea-lock');
     document.removeEventListener('keydown', onKey, true);
+    returnFrame();
     /* preventScroll: restoring focus must not move the page. Without it the
        browser scrolls the trigger back into view, which would undo the whole
        point of returning the reader to exactly where they were. */
