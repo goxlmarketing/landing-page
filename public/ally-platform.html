@@ -1861,7 +1861,13 @@ body.preview .view.active,
 body.preview .chat-scroll,
 body.preview .ac-scroll{
   scroll-behavior:auto;
-  overscroll-behavior:contain;
+  /* auto, not contain. Standalone, contain is right: nothing should scroll
+     behind the app. Embedded in the landing page there is no "behind" — the
+     page is the thing you were reading, and contain swallowed the gesture so
+     scrolling over the frame stopped the page dead. auto lets the scroll
+     chain out once this has reached its end: the dashboard scrolls through,
+     then the page carries on. */
+  overscroll-behavior:auto;
   -webkit-overflow-scrolling:touch;
   touch-action:pan-y;
 }
