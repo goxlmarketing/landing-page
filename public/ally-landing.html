@@ -3822,7 +3822,9 @@
          inside the narrow centre column; the reference has them ~88px apart
          over a ~91px drop, close to square, not the tall pinched V a
          column-width box produced. */
-      display:block; position:absolute; bottom:50%; left:-8px; right:-8px;
+      /* +24px stops the arcs on the ring rather than the node centre — at
+         bottom:50% they ran across the top half of the logo and read as an X. */
+      display:block; position:absolute; bottom:calc(50% + 24px); left:-8px; right:-8px;
       width:auto; height:auto; aspect-ratio:120 / 121; overflow:visible;
     }
     .both-curves path{
