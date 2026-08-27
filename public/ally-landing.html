@@ -5083,8 +5083,28 @@ journeyCards.forEach((c,idx)=>{
   const stage = wrap.querySelector('.reveal-stage');
   if(!stage) return;
 
+  /* ===== TEMPORARY PREVIEW OVERRIDE — REMOVE BEFORE SHIPPING =====
+     This machine has Windows animation effects switched off, so the browser
+     reports prefers-reduced-motion:reduce and the static path below is what
+     renders. ?motion=1 forces the animated path so the journey can be looked
+     at without touching an OS accessibility setting. This must not survive
+     review: real reduced-motion visitors have to keep the static view. */
+  const forceMotion = new URLSearchParams(location.search).has('motion');
+  if(forceMotion){
+    const o = document.createElement('style');
+    o.textContent =
+      '.reveal-wrap{height:210vh!important}' +
+      '.reveal-sticky{position:sticky!important;top:0!important;height:100dvh!important;padding:0 clamp(20px,5vw,72px)!important}' +
+      '.reveal-copy{opacity:var(--cp,0)!important;transform:translateY(calc((1 - var(--cp,0))*18px))!important}' +
+      '.reveal-laptop{transform:translateY(calc((1 - var(--lp,0))*var(--ty))) rotateX(calc((1 - var(--lp,0))*var(--rx))) rotateY(calc((1 - var(--lp,0))*var(--ry))) scale(calc(var(--s0) + var(--lp,0)*(var(--s1) - var(--s0))))!important;' +
+      'filter:drop-shadow(0 calc((1 - var(--lp,0))*40px) calc((1 - var(--lp,0))*60px) rgba(0,0,0,calc((1 - var(--lp,0))*0.55)))!important}' +
+      '.reveal-fs{opacity:var(--fp,0)!important;transform:translateY(calc((1 - var(--fp,0))*8px))!important}';
+    document.head.appendChild(o);
+  }
+  /* ===== END TEMPORARY OVERRIDE ===== */
+
   /* Reduced motion gets the finished state from CSS and no scroll work at all. */
-  if(reduceMotion.matches){
+  if(reduceMotion.matches && !forceMotion){
     wrap.setAttribute('data-fs-ready','1');
     return;
   }
@@ -5094,11 +5114,11 @@ journeyCards.forEach((c,idx)=>{
      fading while the laptop is already on its way up. */
   const at = (p, a, b) => Math.min(1, Math.max(0, (p - a) / (b - a)));
 
-  let ticking = false;
+  let raf = 0;
   let fsReady = false;
 
   function apply(){
-    ticking = false;
+    raf = 0;
     const rect = wrap.getBoundingClientRect();
     const travel = wrap.offsetHeight - window.innerHeight;
     if(travel <= 0) return;
@@ -5120,10 +5140,20 @@ journeyCards.forEach((c,idx)=>{
   }
 
   function onScroll(){
-    if(ticking) return;
-    ticking = true;
-    requestAnimationFrame(apply);
+    if(raf) return;
+    raf = requestAnimationFrame(apply);
   }
+
+  /* Self-heal if frames were requested but never delivered. A backgrounded tab
+     throttles requestAnimationFrame, so a scroll right before switching away
+     leaves a frame pending forever — and because the guard above skips while
+     one is pending, every later scroll would be ignored and the laptop would
+     freeze mid-transformation for the rest of the visit. */
+  document.addEventListener('visibilitychange', () => {
+    if(document.hidden) return;
+    if(raf){ cancelAnimationFrame(raf); raf = 0; }
+    onScroll();
+  });
 
   /* Plain scroll listening — nothing is intercepted and nothing calls
      preventDefault, so native scrolling, keyboard paging and momentum all
