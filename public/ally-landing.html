@@ -3547,20 +3547,20 @@
 
 <aside class="mobile-hero-cards" aria-label="Founder questions">
   <p class="mobile-hero-card mobile-hero-card--stuck" data-fq="tl">
-    <span class="mobile-hero-card__label">Founder</span>
-    Why am I stuck?
+    <span class="mobile-hero-card__label">Sales</span>
+    What deserves attention first?
   </p>
   <p class="mobile-hero-card mobile-hero-card--avoid" data-fq="bl">
-    <span class="mobile-hero-card__label">Founder</span>
-    What am I avoiding?
+    <span class="mobile-hero-card__label">Team</span>
+    Is this really the priority?
   </p>
   <p class="mobile-hero-card mobile-hero-card--cash" data-fq="tr">
-    <span class="mobile-hero-card__label">Business</span>
-    Where is cash leaking?
+    <span class="mobile-hero-card__label">Cash</span>
+    Where is the real leak?
   </p>
   <p class="mobile-hero-card mobile-hero-card--growth" data-fq="br">
-    <span class="mobile-hero-card__label">Business</span>
-    What’s blocking growth?
+    <span class="mobile-hero-card__label">Growth</span>
+    What’s actually blocking it?
   </p>
 </aside>
 
@@ -3600,23 +3600,51 @@
 
   <aside class="float-qs" aria-label="Founder questions">
     <p class="float-q float-q--tl" data-fq="tl">
-      <span class="float-q__label">Founder</span>
-      Why am I stuck?
+      <span class="float-q__label">Sales</span>
+      What deserves attention first?
     </p>
     <p class="float-q float-q--bl" data-fq="bl">
-      <span class="float-q__label">Founder</span>
-      What am I avoiding?
+      <span class="float-q__label">Team</span>
+      Is this really the priority?
     </p>
     <p class="float-q float-q--tr" data-fq="tr">
-      <span class="float-q__label">Business</span>
-      Where is cash leaking?
+      <span class="float-q__label">Cash</span>
+      Where is the real leak?
     </p>
     <p class="float-q float-q--br" data-fq="br">
-      <span class="float-q__label">Business</span>
-      What’s blocking growth?
+      <span class="float-q__label">Growth</span>
+      What’s actually blocking it?
     </p>
   </aside>
 
+</section>
+
+
+<!-- =========================================================
+     MEET ALLY — live dashboard
+========================================================== -->
+<section class="meet-ally" id="meet-ally">
+  <div class="meet-stage">
+    <div class="meet-head">
+      <h2 class="meet-title">Meet <em>Ally</em></h2>
+      <button class="meet-fs-btn" type="button" aria-pressed="false" aria-label="Open dashboard full screen">
+        <svg class="meet-fs-expand" viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
+        <svg class="meet-fs-collapse" viewBox="0 0 24 24"><path d="M9 3v6H3M15 3v6h6M9 21v-6H3M15 21v-6h6"/></svg>
+        <span class="meet-fs-label">Full screen</span>
+      </button>
+    </div>
+    <div class="meet-frame">
+      <!-- No `sandbox` attribute. It previously read `allow-scripts
+           allow-same-origin`, which the browser itself warns about: with both
+           flags an iframe can reach into the parent and remove its own sandbox,
+           so it granted nothing while looking like it did. This is first-party
+           content on the same origin and the postMessage handshake below needs
+           same-origin access, so the honest thing is to not claim a sandbox.
+           `fetchpriority=low` keeps this 500 KB document from competing with
+           the hero for bandwidth. -->
+      <iframe src="/ally-platform.html?preview=1&v=soon23" title="Ally dashboard" loading="lazy" fetchpriority="low" allow="fullscreen"></iframe>
+    </div>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -3695,33 +3723,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- =========================================================
-     MEET ALLY — live dashboard
-========================================================== -->
-<section class="meet-ally" id="meet-ally">
-  <div class="meet-stage">
-    <div class="meet-head">
-      <h2 class="meet-title">Meet <em>Ally</em></h2>
-      <button class="meet-fs-btn" type="button" aria-pressed="false" aria-label="Open dashboard full screen">
-        <svg class="meet-fs-expand" viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
-        <svg class="meet-fs-collapse" viewBox="0 0 24 24"><path d="M9 3v6H3M15 3v6h6M9 21v-6H3M15 21v-6h6"/></svg>
-        <span class="meet-fs-label">Full screen</span>
-      </button>
-    </div>
-    <div class="meet-frame">
-      <!-- No `sandbox` attribute. It previously read `allow-scripts
-           allow-same-origin`, which the browser itself warns about: with both
-           flags an iframe can reach into the parent and remove its own sandbox,
-           so it granted nothing while looking like it did. This is first-party
-           content on the same origin and the postMessage handshake below needs
-           same-origin access, so the honest thing is to not claim a sandbox.
-           `fetchpriority=low` keeps this 500 KB document from competing with
-           the hero for bandwidth. -->
-      <iframe src="/ally-platform.html?preview=1&v=soon23" title="Ally dashboard" loading="lazy" fetchpriority="low" allow="fullscreen"></iframe>
     </div>
   </div>
 </section>
