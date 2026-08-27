@@ -3674,7 +3674,9 @@
      rather than a fixed height, so it stays correct however tall the panels
      grow. */
   .both-drop{
-    position:absolute; top:calc(50% + 42px); bottom:0; width:1px;
+    /* -24px so it carries past the panels' foot and meets the ALLY label
+       instead of stopping 29px short of it */
+    position:absolute; top:calc(50% + 42px); bottom:-24px; width:1px;
     background:repeating-linear-gradient(180deg, rgba(47,227,172,0.5) 0 3px, transparent 3px 7px);
     transform-origin:top center;
     transition:transform .45s ease 1.35s;
@@ -3976,7 +3978,11 @@
       </div>
     </div>
 
-    <footer class="both-foot">
+    <!-- A div, not a <footer>. The stylesheet's generic footer rule adds
+         `padding:60px 0 40px` and a background, both of which landed here
+         unintentionally — this is a section's closing block, not a page
+         footer, so the element was wrong as well as the styling. -->
+    <div class="both-foot">
       <p class="both-close">Ally connects both before helping you find direction.</p>
       <div class="both-note">
         <span class="both-note-ic" aria-hidden="true">
@@ -3986,7 +3992,7 @@
         </span>
         <p>Because what&rsquo;s happening in the business and what&rsquo;s happening with the founder are rarely completely separate.</p>
       </div>
-    </footer>
+    </div>
   </div>
 </section>
 
