@@ -3619,7 +3619,6 @@
   /* Phone-only pieces, off by default so the desktop layout is untouched. */
   .both-sprite{ position:absolute; width:0; height:0; overflow:hidden; }
   .both-panel-ic,
-  .both-curves,
   .both-chips li svg{ display:none; }
 
   .both-chips{ list-style:none; display:flex; flex-wrap:wrap; gap:8px; }
@@ -3813,26 +3812,6 @@
       border:0; background:none; padding:0; border-radius:0;
       font-weight:500; color:var(--text);
     }
-    /* curved connectors replace the straight rules */
-    /* bottom:50% puts the SVG's lower edge on the core's vertical midpoint,
-       which is exactly where the node is centred — so the curves land on it
-       at any column width instead of ending 126px above. */
-    .both-curves{
-      /* -8px each side so the dots land on the panel edges rather than
-         inside the narrow centre column; the reference has them ~88px apart
-         over a ~91px drop, close to square, not the tall pinched V a
-         column-width box produced. */
-      /* +24px stops the arcs on the ring rather than the node centre — at
-         bottom:50% they ran across the top half of the logo and read as an X. */
-      display:block; position:absolute; bottom:calc(50% + 24px); left:-8px; right:-8px;
-      width:auto; height:auto; aspect-ratio:120 / 121; overflow:visible;
-    }
-    .both-curves path{
-      stroke:var(--accent); stroke-width:1.4; stroke-linecap:round;
-      stroke-dasharray:3 6; opacity:0.65;
-    }
-    .both-curves circle{ fill:var(--accent); }
-    .both-wire, .both-dot{ display:none; }
 
     .both-stage{ grid-template-columns:1fr 86px 1fr; }
     .both-panel{ padding:14px 11px; }
@@ -4021,14 +4000,6 @@
       </article>
 
       <div class="both-core">
-        <svg class="both-curves" viewBox="0 0 120 121" preserveAspectRatio="xMidYMid meet" fill="none" aria-hidden="true">
-          <path d="M9 9 C 9 62, 50 95, 60 121"/><path d="M111 9 C 111 62, 70 95, 60 121"/>
-          <circle cx="9" cy="9" r="4"/><circle cx="111" cy="9" r="4"/>
-        </svg>
-        <svg class="both-curves" viewBox="0 0 120 80" preserveAspectRatio="xMidYMin meet" fill="none" aria-hidden="true">
-          <path d="M8 8 C 8 48, 60 44, 60 80"/><path d="M112 8 C 112 48, 60 44, 60 80"/>
-          <circle cx="8" cy="8" r="3.4"/><circle cx="112" cy="8" r="3.4"/>
-        </svg>
         <span class="both-wire both-wire--l" aria-hidden="true"></span>
         <span class="both-wire both-wire--r" aria-hidden="true"></span>
         <span class="both-dot both-dot--l" aria-hidden="true"></span>
