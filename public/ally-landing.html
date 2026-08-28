@@ -3194,6 +3194,22 @@
     from{ transform:scale(1);    opacity:1; }
     to  { transform:scale(0.94); opacity:0.45; }
   }
+  /* The arrivals. Each incoming section sweeps in from its own side with a
+     touch of rotation instead of riding straight up — ongoing from the
+     right, trust from the left — so consecutive swaps read as different
+     moves. These are driven by the section's OWN view-timeline, which works
+     here precisely where it could not for the recede: the incoming section
+     is the one in motion during its entry. Settled by entry 88%, so it lands
+     square just before it finishes covering. Scrubbed and linear, so
+     scrolling up plays the exact same path backwards. */
+  @keyframes stackArriveRight{
+    from{ transform:translate3d(8vw, 3vh, 0) rotate(1.4deg); }
+    to  { transform:none; }
+  }
+  @keyframes stackArriveLeft{
+    from{ transform:translate3d(-8vw, 3vh, 0) rotate(-1.4deg); }
+    to  { transform:none; }
+  }
   @media (min-width: 1025px){
     @supports (animation-timeline: view()) and (timeline-scope: --a){
       @media (prefers-reduced-motion: no-preference){
@@ -3203,19 +3219,40 @@
           top:0;
           min-height:100vh;
           background:var(--bg);
+          /* the incoming edge reads as an edge in both directions */
+          box-shadow:0 -24px 60px -12px rgba(0,0,0,0.5);
+          /* Shrink from the top, not the centre. Scaling from the centre
+             pulled the receded section's top edge ~27px down, leaving a
+             strip of raw ground behind the coverer — invisible on the way
+             down, glaring on the way back up as the coverer retreats. */
+          transform-origin:50% 0;
         }
         #ongoing{ view-timeline-name:--stack-2; view-timeline-axis:block; }
         #trust  { view-timeline-name:--stack-3; view-timeline-axis:block; }
         #day-plan,
-        #ongoing{
-          animation-name:stackRecede;
+        #ongoing,
+        #trust{
           animation-duration:auto;
           animation-timing-function:linear;
           animation-fill-mode:both;
+        }
+        /* day-plan only recedes; trust only arrives; ongoing does both —
+           its arrival on its own timeline, its recede on trust's. */
+        #day-plan{
+          animation-name:stackRecede;
+          animation-timeline:--stack-2;
           animation-range:entry 0% entry 100%;
         }
-        #day-plan{ animation-timeline:--stack-2; }   /* driven by the one covering it */
-        #ongoing { animation-timeline:--stack-3; }
+        #ongoing{
+          animation-name:stackArriveRight, stackRecede;
+          animation-timeline:--stack-2, --stack-3;
+          animation-range:entry 0% entry 88%, entry 0% entry 100%;
+        }
+        #trust{
+          animation-name:stackArriveLeft;
+          animation-timeline:--stack-3;
+          animation-range:entry 0% entry 88%;
+        }
       }
     }
   }
