@@ -2964,6 +2964,54 @@
     max-width:1100px;
     justify-self:center;
   }
+  /* ---------- Meet Ally: scroll-driven reveal ----------
+     The first attempt at this ran a scroll listener and wrote CSS variables
+     every frame, which meant style recalc and layout work on the main thread
+     for each one — while transforming a live 500 KB iframe. That was never
+     going to be dependably smooth, and it was dropped.
+
+     This is the same idea with the cause removed. animation-timeline drives
+     the animation off the scroll position with no JavaScript at all, and
+     because only transform and opacity change, it runs on the compositor —
+     the iframe is one already-rastered layer being moved, not re-rendered.
+
+     Guarded twice. @supports because animation-timeline is not Baseline:
+     Chrome and Edge 115+ and Safari 26+ have it, Firefox still keeps it
+     behind layout.css.scroll-driven-animations.enabled as of 152. And
+     prefers-reduced-motion, because this is decoration. Either way the
+     fallback is the finished state — the section simply is what it is when
+     you reach it, which is how it behaves today. */
+  @keyframes allyRevealCopy{
+    from{ opacity:0; transform:translateY(20px); }
+    to  { opacity:1; transform:translateY(0); }
+  }
+  @keyframes allyRevealStage{
+    from{ opacity:0.55; transform:perspective(1400px) translateY(56px) rotateX(7deg) scale(0.94); }
+    to  { opacity:1;    transform:perspective(1400px) translateY(0)    rotateX(0)    scale(1); }
+  }
+  @supports (animation-timeline: view()){
+    @media (prefers-reduced-motion: no-preference){
+      .reveal-copy{
+        animation-name:allyRevealCopy;
+        animation-duration:auto;
+        animation-timing-function:linear;
+        animation-fill-mode:both;
+        /* after the longhands above: animation-timeline is a reset-only value
+           in the animation shorthand, so order matters here. */
+        animation-timeline:view();
+        animation-range:entry 20% cover 45%;
+      }
+      .reveal-stage{
+        animation-name:allyRevealStage;
+        animation-duration:auto;
+        animation-timing-function:linear;
+        animation-fill-mode:both;
+        animation-timeline:view();
+        animation-range:entry 5% cover 48%;
+      }
+    }
+  }
+
   .reveal-screen{
     display:block;
     width:100%;
