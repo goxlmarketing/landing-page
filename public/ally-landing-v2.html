@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>GoXL Ally — The Founder’s Compass</title>
+<meta name="description" content="GoXL Ally helps founders understand what is actually happening, what matters, and what to do next. Register for early access.">
+<!-- v2 preview build. Not indexed until it replaces the root route. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/assets/ally-logo.v1.svg" type="image/svg+xml">
+<meta name="theme-color" content="#f7f1eb">
+
+<!-- The product's own faces: Fraunces for editorial statements, Inter for UI,
+     Inter Tight for figures. Same stylesheet ally-platform.html requests. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700;800&display=swap">
+
+<style>
+/* ============================================================
+   DESIGN TOKENS — single source, taken from ally-platform.html.
+   The uploaded screenshot is the FINAL visual source of truth and
+   ally-platform.html is an older build, so a dedicated visual-sync
+   pass will revisit THIS BLOCK ONLY. Nothing below hard-codes a
+   colour, radius or face — everything reads these tokens.
+   ============================================================ */
+:root{
+  --ivory:#f7f1eb;
+  --ivory-2:#fbf7f2;
+  --ivory-3:#efe6d9;
+  --forest:#1B4332;
+  --forest-2:#143726;
+  --forest-deep:#0E2A1C;
+  --forest-deep-2:#0a2016;
+  --forest-night:#06140d;
+  --emerald:#10B981;
+  --emerald-bright:#34d399;
+  --emerald-glow:#5eead4;
+  --lime-edge:#A8D94A;
+  --ink:#16241c;
+  --muted:#556458;
+  --muted-2:#6c7a70;
+  --bd:#e7e0d6;
+  --bd-2:#d8cfc2;
+  --on-dark:#eaf3ee;
+  --on-dark-muted:#a7c0b4;
+  --on-dark-dim:#7d9488;
+
+  --serif:'Fraunces','Georgia',serif;
+  --body:'Inter',system-ui,sans-serif;
+  --display:'Inter Tight','Inter',system-ui,sans-serif;
+
+  --r-card:16px;
+  --r-pill:999px;
+  --shadow-card:0 1px 2px -1px rgba(6,20,13,.14),0 6px 16px -6px rgba(6,20,13,.18);
+  --shadow-deep:0 2px 6px -2px rgba(0,0,0,.4),0 40px 90px -30px rgba(0,0,0,.6);
+
+  --shell:min(1240px, calc(100% - 96px));
+
+  /* ---- immersion state. Written by the scroll timeline (native path)
+     or by the JS fallback — read in exactly one place each. ---- */
+  --fx:9deg;      /* frame rotateX  */
+  --fy:-8deg;     /* frame rotateY  */
+  --fs:0.84;      /* frame scale    */
+  --fyy:6vh;      /* frame translateY */
+  --env:0;        /* dark environment opacity */
+}
+/* Registered so the native scroll timeline can interpolate them. */
+@property --fx  { syntax:'<angle>';  inherits:true; initial-value:9deg; }
+@property --fy  { syntax:'<angle>';  inherits:true; initial-value:-8deg; }
+@property --fs  { syntax:'<number>'; inherits:true; initial-value:0.84; }
+@property --fyy { syntax:'<length>'; inherits:true; initial-value:0px; }
+@property --env { syntax:'<number>'; inherits:true; initial-value:0; }
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:auto; }
+body{
+  background:var(--ivory);
+  color:var(--ink);
+  font-family:var(--body);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--emerald); color:#fff; }
+a{ color:inherit; text-decoration:none; }
+button{ font:inherit; cursor:pointer; }
+img,svg{ display:block; max-width:100%; }
+:focus{ outline:none; }
+:focus-visible{ outline:2.5px solid var(--emerald-bright); outline-offset:3px; border-radius:8px; }
+
+.shell{ width:var(--shell); margin-inline:auto; }
+
+.eyebrow{
+  font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+  font-weight:700; color:var(--muted);
+}
+em{ font-style:italic; }
+
+/* ============================================================
+   NAV — simple, cream, scrolls away naturally.
+   ============================================================ */
+.nav{
+  height:80px; display:flex; align-items:center; justify-content:space-between;
+  border-bottom:1px solid var(--bd);
+  position:relative; z-index:30;
+}
+.brand{ display:flex; align-items:baseline; gap:10px; }
+.brand-mark{
+  font-family:var(--display); font-weight:800; font-size:22px;
+  letter-spacing:-.02em; color:var(--forest);
+}
+.brand-name{ font-size:15px; font-weight:600; color:var(--muted); }
+.nav-links{ display:flex; gap:32px; font-size:14px; color:var(--muted); }
+.nav-links a:hover{ color:var(--forest); }
+.nav-cta{
+  display:inline-flex; align-items:center; gap:8px;
+  border:1px solid var(--bd-2); border-radius:var(--r-pill);
+  padding:11px 18px; font-size:13.5px; font-weight:600;
+  background:var(--ivory-2); color:var(--forest);
+}
+.nav-cta:hover{ border-color:var(--forest); }
+
+/* ============================================================
+   HERO — calm; a controlled fragment of Ally, not the dashboard.
+   ============================================================ */
+.hero{
+  min-height:calc(100svh - 80px);
+  display:grid; grid-template-columns:1.05fr .95fr;
+  gap:clamp(40px, 5vw, 80px); align-items:center;
+  padding:48px 0 72px;
+}
+.hero h1{
+  font-family:var(--serif); font-weight:500;
+  font-size:clamp(44px, 4.6vw, 72px);
+  line-height:1.04; letter-spacing:-.02em;
+  margin:20px 0 24px; text-wrap:balance;
+}
+.hero h1 em{ color:var(--emerald); font-weight:400; }
+.hero-sub{
+  max-width:560px; font-size:17px; line-height:1.65; color:var(--muted);
+}
+.hero-actions{ display:flex; align-items:center; gap:28px; margin-top:36px; }
+.btn{
+  display:inline-flex; align-items:center; gap:12px;
+  border-radius:var(--r-pill); border:0;
+  padding:15px 24px; font-size:14.5px; font-weight:700;
+  background:var(--forest); color:var(--on-dark);
+  box-shadow:0 10px 28px -10px rgba(27,67,50,.45);
+  transition:background .2s;
+}
+.btn:hover{ background:var(--forest-2); }
+.link-quiet{ font-size:14px; font-weight:600; color:var(--muted); }
+.link-quiet:hover{ color:var(--forest); }
+.hero-steps{
+  display:grid; grid-template-columns:repeat(4,1fr);
+  max-width:560px; margin-top:64px; border-top:1px solid var(--bd);
+}
+.hero-steps div{ padding:16px 14px 0 0; border-right:1px solid var(--bd); }
+.hero-steps div:last-child{ border-right:0; }
+.hero-steps strong{
+  display:block; font-family:var(--display); font-size:11px;
+  letter-spacing:.12em; color:var(--emerald); font-weight:700;
+}
+.hero-steps span{ display:block; margin-top:5px; font-size:13.5px; color:var(--ink); }
+
+/* The fragment: one Ask-Ally bar and one current-state strip, cropped.
+   Foreshadows the dashboard without explaining it. */
+.hero-glimpse{ position:relative; }
+.glimpse-card{
+  background:var(--ivory-2); border:1px solid var(--bd);
+  border-radius:var(--r-card);
+  box-shadow:var(--shadow-card);
+  padding:26px 26px 0; overflow:hidden;
+  transform:perspective(1400px) rotateY(-6deg) rotateX(4deg);
+}
+.glimpse-kicker{
+  font-size:10.5px; letter-spacing:.16em; text-transform:uppercase;
+  font-weight:700; color:var(--muted-2);
+}
+.glimpse-card h3{
+  font-family:var(--serif); font-weight:500; font-size:26px;
+  line-height:1.15; margin:12px 0 18px;
+}
+.glimpse-card h3 em{ color:var(--emerald); }
+.ask-bar{
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  border:1px solid var(--bd); border-radius:var(--r-pill);
+  background:#fff; padding:7px 7px 7px 18px;
+  font-size:13px; color:var(--muted-2);
+}
+.ask-bar b{
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--emerald); color:#fff; font-weight:700; font-size:12.5px;
+  border-radius:var(--r-pill); padding:10px 16px; white-space:nowrap;
+}
+.glimpse-strip{
+  display:grid; grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--bd); margin-top:22px;
+  transform:translateY(1px);
+}
+.glimpse-strip div{ padding:16px 12px 22px 0; border-right:1px solid var(--bd); }
+.glimpse-strip div:last-child{ border-right:0; }
+.glimpse-strip span{
+  display:block; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--muted-2); font-weight:700;
+}
+.glimpse-strip strong{
+  display:block; margin-top:8px; font-family:var(--display);
+  font-size:17px; font-weight:700; color:var(--forest);
+}
+
+/* ============================================================
+   BRIDGE — breathing room; makes the immersion feel inevitable.
+   ============================================================ */
+.bridge{
+  min-height:72svh; display:grid; align-content:center;
+  border-top:1px solid var(--bd);
+  padding:80px 0;
+}
+.bridge .eyebrow{ margin-bottom:28px; }
+.bridge p{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(30px, 3.2vw, 48px); line-height:1.22;
+  letter-spacing:-.015em; max-width:900px; color:var(--muted);
+}
+.bridge p strong{ font-weight:500; color:var(--ink); display:block; margin-top:.4em; }
+.bridge p strong em{ color:var(--emerald); }
+
+/* ============================================================
+   IMMERSION — the centrepiece.
+   A 460vh track with a 100svh sticky viewport. The dashboard frame
+   reads five custom properties for its spatial state; those are
+   driven by the native scroll timeline where supported, or by the
+   JS fallback otherwise. Content stages are pre-rendered layers
+   toggled by one data-stage attribute — the shell never moves.
+   ============================================================ */
+.immersion{ position:relative; timeline-scope:--imm; }
+.immersion-track{ height:460vh; view-timeline-name:--imm; view-timeline-axis:block; }
+.immersion-sticky{
+  position:sticky; top:0; height:100svh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:18px; overflow:hidden;
+}
+/* Dark environment: an overlay, so the darkening is compositor opacity
+   rather than repainting a background. It stays at 1 through release —
+   the sections after the immersion are dark, so the exit is seamless. */
+.env{
+  position:absolute; inset:0; z-index:0;
+  background:
+    radial-gradient(90% 70% at 50% 30%, var(--forest-deep-2), var(--forest-night) 78%);
+  opacity:var(--env);
+  pointer-events:none;
+}
+
+.product-frame{
+  position:relative; z-index:1;
+  width:min(1240px, 94vw);
+  height:clamp(540px, 76svh, 730px);
+  display:grid; grid-template-columns:232px minmax(0,1fr);
+  border-radius:var(--r-card); overflow:hidden;
+  background:var(--ivory);
+  border:1px solid var(--bd-2);
+  box-shadow:var(--shadow-deep);
+  transform:
+    perspective(1600px)
+    rotateX(var(--fx)) rotateY(var(--fy))
+    scale(var(--fs)) translateY(var(--fyy));
+}
+
+/* ---------- sidebar (presentation-only) ---------- */
+.app-side{
+  background:linear-gradient(180deg, var(--forest-deep), var(--forest-night));
+  color:var(--on-dark);
+  display:flex; flex-direction:column;
+  padding:20px 14px 16px;
+  font-size:13px;
+}
+.app-brand{ padding:0 8px; }
+.app-brand strong{
+  font-family:var(--display); font-weight:800; font-size:20px;
+  color:var(--emerald-glow); letter-spacing:-.02em;
+}
+.app-brand small{
+  display:block; font-size:8px; letter-spacing:.22em;
+  color:var(--on-dark-dim); margin-top:2px;
+}
+.ally-live{
+  display:inline-flex; align-items:center; gap:7px;
+  margin:14px 8px 6px; padding:6px 11px;
+  border:1px solid rgba(52,211,153,.3); border-radius:var(--r-pill);
+  background:rgba(16,185,129,.1);
+  font-size:11px; font-weight:600; color:var(--emerald-bright);
+  width:max-content;
+}
+.ally-live i{
+  width:6px; height:6px; border-radius:50%; background:var(--emerald-bright);
+}
+.side-label{
+  font-size:9.5px; letter-spacing:.18em; font-weight:700;
+  color:var(--on-dark-dim); margin:16px 8px 6px;
+}
+.side-item{
+  display:flex; align-items:center; gap:10px;
+  width:100%; text-align:left;
+  padding:9px 10px; border:0; border-radius:10px;
+  background:transparent; color:var(--on-dark-muted);
+  font-size:13px; font-weight:500;
+  position:relative;
+  transition:background .35s, color .35s;
+}
+.side-item svg{
+  width:15px; height:15px; flex:0 0 auto;
+  stroke:currentColor; fill:none; stroke-width:1.8;
+  stroke-linecap:round; stroke-linejoin:round;
+}
+.side-item .lk{ margin-left:auto; opacity:.55; }
+.side-item .lk svg{ width:11px; height:11px; }
+.side-item::before{
+  content:""; position:absolute; left:-14px; top:20%; bottom:20%;
+  width:3px; border-radius:0 3px 3px 0; background:var(--emerald);
+  opacity:0; transition:opacity .35s;
+}
+.side-item.is-on{ background:rgba(16,185,129,.14); color:#fff; }
+.side-item.is-on::before{ opacity:1; }
+/* stage-driven emphasis: exactly one strong focus at a time */
+[data-stage="0"] .side-item[data-s="0"],
+[data-stage="1"] .side-item[data-s="1"],
+[data-stage="2"] .side-item[data-s="2"],
+[data-stage="3"] .side-item[data-s="3"]{
+  background:rgba(16,185,129,.14); color:#fff;
+}
+[data-stage="0"] .side-item[data-s="0"]::before,
+[data-stage="1"] .side-item[data-s="1"]::before,
+[data-stage="2"] .side-item[data-s="2"]::before,
+[data-stage="3"] .side-item[data-s="3"]::before{ opacity:1; }
+
+.side-push{ flex:1; }
+.upgrade{
+  margin:0 4px 12px; padding:13px 14px;
+  border:1px solid rgba(52,211,153,.22); border-radius:12px;
+  background:rgba(16,185,129,.07);
+}
+.upgrade strong{ font-size:12.5px; color:#fff; }
+.upgrade span{
+  display:block; font-size:11px; line-height:1.45;
+  color:var(--on-dark-muted); margin:5px 0 10px;
+}
+.upgrade b{
+  display:inline-block; font-size:11.5px; font-weight:700;
+  color:var(--forest-night);
+  background:linear-gradient(90deg, var(--emerald-bright), var(--lime-edge));
+  border-radius:var(--r-pill); padding:7px 13px;
+}
+.profile{
+  display:flex; align-items:center; gap:10px; padding:10px 8px 0;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.avatar{
+  width:30px; height:30px; border-radius:50%;
+  background:var(--emerald); color:#fff;
+  display:grid; place-items:center;
+  font-size:12px; font-weight:700;
+}
+.profile strong{ display:block; font-size:12px; color:#fff; }
+.profile small{ font-size:10.5px; color:var(--on-dark-dim); }
+
+/* ---------- main pane ---------- */
+.app-main{
+  display:flex; flex-direction:column; min-width:0;
+  background:var(--ivory);
+}
+.app-top{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 26px; border-bottom:1px solid var(--bd);
+  background:var(--ivory-2);
+}
+.app-top .ovl{
+  font-size:10px; letter-spacing:.18em; font-weight:700; color:var(--emerald);
+}
+.top-title{ position:relative; height:24px; min-width:280px; }
+.top-title b{
+  position:absolute; inset:0;
+  font-family:var(--display); font-size:18px; font-weight:700;
+  color:var(--ink); letter-spacing:-.01em;
+  opacity:0; transform:translateY(6px);
+  transition:opacity .35s, transform .35s;
+}
+[data-stage="0"] .top-title b[data-s="0"],
+[data-stage="1"] .top-title b[data-s="1"],
+[data-stage="2"] .top-title b[data-s="2"],
+[data-stage="3"] .top-title b[data-s="3"]{ opacity:1; transform:none; }
+.plan-pill{
+  display:inline-flex; align-items:center; gap:7px;
+  border:1px solid var(--bd-2); border-radius:var(--r-pill);
+  background:#fff; padding:7px 13px;
+  font-size:12px; font-weight:600; color:var(--muted);
+}
+.plan-pill i{ width:7px; height:7px; border-radius:50%; background:var(--emerald); }
+
+.app-content{
+  flex:1; min-height:0; padding:24px 26px 20px;
+  display:flex; flex-direction:column;
+}
+
+/* the four stages: pre-rendered, stacked, crossfaded. The region has one
+   fixed geometry, so nothing ever reflows when the story advances. */
+.stage-zone{ flex:1; min-height:0; display:grid; }
+.stage{
+  grid-area:1 / 1; min-width:0;
+  display:flex; flex-direction:column;
+  opacity:0; transform:translateY(10px);
+  transition:opacity .4s ease, transform .4s ease;
+  pointer-events:none;
+}
+[data-stage="0"] .stage[data-s="0"],
+[data-stage="1"] .stage[data-s="1"],
+[data-stage="2"] .stage[data-s="2"],
+[data-stage="3"] .stage[data-s="3"]{
+  opacity:1; transform:none; pointer-events:auto;
+}
+
+.screen-label{
+  font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+  font-weight:700; color:var(--muted-2);
+}
+.stage h2{
+  font-family:var(--serif); font-weight:500;
+  font-size:clamp(24px, 2.1vw, 32px); line-height:1.16;
+  letter-spacing:-.015em; margin:10px 0 0;
+  min-height:2.4em; /* two lines reserved — headlines may not resize the shell */
+  max-width:640px;
+}
+.stage h2 em{ color:var(--emerald); }
+.insight{
+  margin-top:14px; padding:12px 16px;
+  border:1px solid var(--bd); border-left:3px solid var(--emerald);
+  border-radius:10px; background:var(--ivory-2);
+  font-family:var(--serif); font-style:italic;
+  font-size:14.5px; color:var(--muted);
+  min-height:44px; display:flex; align-items:center;
+}
+.stage .ask-bar{ margin-top:14px; }
+.stage .ask-bar span{
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.state-head{ margin-top:18px; }
+.state-head span{
+  font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  font-weight:700; color:var(--muted-2);
+}
+.state-head h3{
+  font-size:15.5px; font-weight:600; color:var(--ink); margin-top:4px;
+}
+.metric-row{
+  display:grid; grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--bd);
+  margin-top:12px;
+}
+.metric-row article{
+  padding:14px 14px 6px 0; border-right:1px solid var(--bd);
+  min-width:0;
+}
+.metric-row article:last-child{ border-right:0; }
+.metric-row span{
+  display:block; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase;
+  font-weight:700; color:var(--muted-2);
+}
+.metric-row i{
+  display:block; width:22px; height:3px; border-radius:2px;
+  background:var(--forest); margin:9px 0;
+}
+.metric-row strong{
+  display:block; font-family:var(--display);
+  font-size:21px; font-weight:800; color:var(--forest);
+  letter-spacing:-.02em; line-height:1.1;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.metric-row p{
+  font-size:11.5px; line-height:1.45; color:var(--muted);
+  margin-top:6px;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+}
+
+/* caption under the frame */
+.stage-caption{
+  position:relative; z-index:1;
+  width:min(1240px, 94vw);
+  display:grid; grid-template-columns:44px minmax(0,1fr);
+  gap:16px; align-items:start;
+  min-height:58px;
+  opacity:calc(var(--env)); /* only present once we are inside the dark environment */
+}
+.cap-cell{ position:relative; min-height:58px; }
+.cap-cell > div{
+  position:absolute; inset:0;
+  opacity:0; transform:translateY(8px);
+  transition:opacity .4s, transform .4s;
+}
+[data-stage="0"] .cap-cell > div[data-s="0"],
+[data-stage="1"] .cap-cell > div[data-s="1"],
+[data-stage="2"] .cap-cell > div[data-s="2"],
+[data-stage="3"] .cap-cell > div[data-s="3"]{ opacity:1; transform:none; }
+.cap-idx{
+  font-family:var(--display); font-weight:800; font-size:26px;
+  color:var(--emerald-bright);
+}
+.stage-caption strong{
+  display:block; font-size:15px; font-weight:700; color:var(--on-dark);
+}
+.stage-caption p{ font-size:13px; color:var(--on-dark-muted); margin-top:3px; }
+
+/* ---------- the scrub itself: native path ---------- */
+@supports ((animation-timeline: view()) and (view-timeline-name: --a)){
+  @media (prefers-reduced-motion: no-preference){
+    @keyframes immScrub{
+      /* cover 0–7%: still an object in the page, tilted, at rest */
+      0%  { --fx:9deg;  --fy:-8deg; --fs:0.84; --fyy:6vh; --env:0; }
+      7%  { --fx:9deg;  --fy:-8deg; --fs:0.84; --fyy:6vh; --env:0; }
+      /* by 30% of the journey the visitor is inside Ally */
+      30% { --fx:0deg;  --fy:0deg;  --fs:1;    --fyy:0vh; --env:1; }
+      100%{ --fx:0deg;  --fy:0deg;  --fs:1;    --fyy:0vh; --env:1; }
+    }
+    .immersion-sticky{
+      animation:immScrub auto linear both;
+      animation-timeline:--imm;
+      animation-range:cover 0% cover 100%;
+    }
+    body.js-scrub .immersion-sticky{ animation:none; } /* fallback owns the vars */
+  }
+}
+@media (prefers-reduced-motion: reduce){
+  .immersion-sticky{ --fx:0deg; --fy:0deg; --fs:1; --fyy:0vh; --env:1; }
+  .stage, .cap-cell > div, .top-title b{ transition:none; }
+}
+/* no scrub of any kind (old browser, JS off): resolved, readable, dark */
+.no-scrub .immersion-sticky{ --fx:0deg; --fy:0deg; --fs:1; --fyy:0vh; --env:1; }
+
+/* ============================================================
+   AFTER THE IMMERSION — outcome, dark; the exit is continuous.
+   ============================================================ */
+.outcome{
+  background:var(--forest-night); color:var(--on-dark);
+  padding:clamp(90px, 12vh, 150px) 0;
+}
+.outcome-grid{
+  display:grid; grid-template-columns:minmax(280px,.9fr) minmax(0,1.1fr);
+  gap:clamp(36px, 4vw, 72px); align-items:center;
+}
+.outcome .eyebrow{ color:var(--on-dark-dim); }
+.outcome h2{
+  font-family:var(--serif); font-weight:500;
+  font-size:clamp(32px, 3vw, 46px); line-height:1.12;
+  letter-spacing:-.015em; margin-top:16px;
+}
+.outcome h2 em{ color:var(--emerald-bright); }
+.bottleneck{
+  background:var(--ivory); color:var(--ink);
+  border-radius:var(--r-card); border:1px solid var(--bd-2);
+  box-shadow:var(--shadow-deep);
+  padding:clamp(24px, 2.4vw, 36px);
+}
+.bn-top{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+}
+.bn-top span{
+  font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  font-weight:700; color:var(--muted-2);
+}
+.bn-top b{
+  font-size:10.5px; letter-spacing:.1em; font-weight:700;
+  color:var(--forest); background:rgba(16,185,129,.14);
+  border:1px solid rgba(27,67,50,.18);
+  border-radius:var(--r-pill); padding:5px 11px;
+}
+.bottleneck h3{
+  font-family:var(--serif); font-weight:500;
+  font-size:clamp(26px, 2.4vw, 36px); margin:16px 0 12px;
+}
+.bottleneck > p{
+  font-size:15px; line-height:1.6; color:var(--muted); max-width:560px;
+}
+.bn-foot{
+  display:grid; grid-template-columns:1fr 1fr; gap:20px;
+  border-top:1px solid var(--bd); margin-top:22px; padding-top:18px;
+}
+.bn-foot span{
+  display:block; font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+  font-weight:700; color:var(--emerald);
+}
+.bn-foot p{ font-size:13.5px; line-height:1.5; color:var(--ink); margin-top:6px; }
+
+/* ============================================================
+   DIRECTION → TODAY — still the product's language, still dark.
+   ============================================================ */
+.direction{
+  background:var(--forest-night); color:var(--on-dark);
+  padding:0 0 clamp(90px, 12vh, 150px);
+}
+.direction .eyebrow{ color:var(--on-dark-dim); }
+.direction h2{
+  font-family:var(--serif); font-weight:500;
+  font-size:clamp(30px, 2.8vw, 44px); line-height:1.14;
+  letter-spacing:-.015em; margin-top:14px; max-width:760px;
+}
+.direction h2 em{ color:var(--emerald-bright); }
+.dir-grid{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
+  margin-top:44px;
+}
+.dir-grid article{
+  background:var(--forest-deep-2); border:1px solid rgba(94,234,212,.14);
+  border-radius:var(--r-card); padding:22px 22px 24px;
+}
+.dir-grid .step{
+  font-family:var(--display); font-size:12px; font-weight:800;
+  letter-spacing:.12em; color:var(--emerald-bright);
+}
+.dir-grid h3{ font-size:17px; font-weight:600; color:#fff; margin:12px 0 8px; }
+.dir-grid p{ font-size:13.5px; line-height:1.55; color:var(--on-dark-muted); }
+.today{
+  margin-top:14px; border-radius:var(--r-card);
+  background:var(--ivory); color:var(--ink);
+  border:1px solid var(--bd-2); box-shadow:var(--shadow-deep);
+  padding:clamp(22px, 2.2vw, 32px);
+  display:grid; grid-template-columns:minmax(240px,.8fr) minmax(0,1.2fr);
+  gap:clamp(24px, 3vw, 56px); align-items:center;
+}
+.today-kicker span{
+  font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  font-weight:700; color:var(--emerald);
+}
+.today-kicker strong{
+  display:block; font-family:var(--serif); font-weight:500;
+  font-size:clamp(20px, 1.8vw, 26px); line-height:1.25; margin-top:10px;
+}
+.today-list div{
+  display:grid; grid-template-columns:64px minmax(0,1fr) auto;
+  gap:16px; align-items:center;
+  padding:13px 0; border-bottom:1px solid var(--bd);
+}
+.today-list div:last-child{ border-bottom:0; }
+.today-list time{
+  font-family:var(--display); font-size:14px; font-weight:700; color:var(--forest);
+}
+.today-list span{ font-size:14.5px; }
+.today-list i{
+  font-style:normal; font-size:11.5px; color:var(--muted-2);
+  border:1px solid var(--bd); border-radius:var(--r-pill); padding:4px 10px;
+}
+
+/* ============================================================
+   NORTH STAR — one brand moment, geometric, restrained.
+   ============================================================ */
+.north{
+  background:
+    radial-gradient(80% 90% at 70% 40%, var(--forest-deep) 0%, var(--forest-night) 70%);
+  color:var(--on-dark);
+  padding:clamp(100px, 14vh, 170px) 0;
+  overflow:hidden;
+}
+.north-grid{
+  display:grid; grid-template-columns:minmax(0,1.05fr) minmax(300px,.95fr);
+  gap:clamp(40px, 5vw, 90px); align-items:center;
+}
+.north .eyebrow{ color:var(--emerald-bright); }
+.north h2{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(34px, 3.4vw, 54px); line-height:1.12;
+  letter-spacing:-.015em; margin-top:18px;
+}
+.north h2 em{ color:var(--emerald-bright); }
+.north-sub{ margin-top:22px; font-size:15px; color:var(--on-dark-muted); max-width:440px; line-height:1.65; }
+.compass{ position:relative; display:grid; place-items:center; }
+.compass svg{ width:min(430px, 80vw); height:auto; }
+.compass .needle{ transform-origin:210px 210px; }
+@media (prefers-reduced-motion: no-preference){
+  .compass .needle{ animation:needleDrift 14s ease-in-out infinite alternate; }
+  @keyframes needleDrift{
+    from{ transform:rotate(-8deg); }
+    to  { transform:rotate(11deg); }
+  }
+}
+.coords{
+  position:absolute; bottom:-6px; left:50%; transform:translateX(-50%);
+  font-family:var(--display); font-size:10.5px; letter-spacing:.22em;
+  color:var(--on-dark-dim);
+}
+
+/* ============================================================
+   CTA — return to ivory; the real early-access form, inline.
+   ============================================================ */
+.cta{
+  background:var(--ivory);
+  padding:clamp(100px, 14vh, 170px) 0 60px;
+}
+.cta-grid{
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(340px, 460px);
+  gap:clamp(40px, 5vw, 90px); align-items:start;
+}
+.cta h2{
+  font-family:var(--serif); font-weight:500;
+  font-size:clamp(34px, 3.4vw, 52px); line-height:1.1;
+  letter-spacing:-.015em; margin-top:16px;
+}
+.cta h2 em{ color:var(--emerald); }
+.cta-sub{ margin-top:22px; font-size:15.5px; line-height:1.7; color:var(--muted); max-width:440px; }
+.ea-card{
+  background:#fff; border:1px solid var(--bd);
+  border-radius:var(--r-card); box-shadow:var(--shadow-card);
+  padding:26px;
+}
+.ea-form{ display:grid; gap:14px; }
+.ea-form label{ display:grid; gap:6px; font-size:12.5px; font-weight:600; color:var(--ink); }
+.ea-opt{ color:var(--muted-2); font-weight:500; }
+.ea-form input[type="text"],
+.ea-form input[type="email"],
+.ea-form input[type="tel"],
+.ea-form input[type="url"]{
+  border:1px solid var(--bd-2); border-radius:10px;
+  background:var(--ivory-2); color:var(--ink);
+  font:inherit; font-size:14px; padding:11px 13px;
+}
+.ea-form input:focus-visible{ outline-offset:0; border-color:var(--emerald); }
+.ea-consent{ display:grid; grid-template-columns:16px 1fr; gap:10px; font-size:12px; font-weight:400; color:var(--muted); align-items:start; }
+.ea-consent input{ margin-top:2px; accent-color:var(--emerald); }
+.ea-consent a{ text-decoration:underline; color:var(--forest); }
+.ea-optional{ font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-2); font-weight:700; }
+.ea-err{ color:#b3402f; font-size:13px; min-height:1.2em; }
+.ea-done p:first-child{ font-size:18px; font-weight:700; }
+.ea-done__sub{ margin:10px 0 18px; font-size:13.5px; color:var(--muted); line-height:1.55; }
+/* honeypot: off-screen, unreachable, not announced */
+.ea-hp{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+
+.footer{
+  border-top:1px solid var(--bd);
+  padding:28px 0 40px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  font-size:13px; color:var(--muted);
+}
+
+/* ============================================================
+   RESPONSIVE — Phase 2 scope: no catastrophic breakage below
+   desktop. A dedicated mobile pass follows.
+   ============================================================ */
+@media (max-width: 1120px){
+  .product-frame{ grid-template-columns:200px minmax(0,1fr); }
+}
+@media (max-width: 1024px){
+  :root{ --shell:min(1240px, calc(100% - 48px)); }
+  .hero{ grid-template-columns:1fr; min-height:0; padding-bottom:56px; }
+  .hero-glimpse{ max-width:640px; }
+  .glimpse-card{ transform:none; }
+  .metric-row strong{ font-size:18px; }
+}
+@media (max-width: 900px){
+  .product-frame{ grid-template-columns:minmax(0,1fr); height:clamp(500px, 74svh, 640px); }
+  .app-side{ display:none; }
+  .outcome-grid, .north-grid, .cta-grid, .today{ grid-template-columns:1fr; }
+  .dir-grid{ grid-template-columns:1fr; }
+  .nav-links{ display:none; }
+  .metric-row{ grid-template-columns:1fr 1fr; }
+  .metric-row article:nth-child(2n){ border-right:0; }
+  .stage h2{ min-height:0; }
+}
+</style>
+</head>
+<body>
+
+<header class="nav shell">
+  <a class="brand" href="#top" aria-label="GoXL Ally home">
+    <span class="brand-mark">GoXL</span>
+    <span class="brand-name">Ally</span>
+  </a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="#experience">Experience</a>
+    <a href="#how">How it works</a>
+    <a href="#north">Why Ally</a>
+  </nav>
+  <a class="nav-cta" href="#early-access">Early access <span aria-hidden="true">→</span></a>
+</header>
+
+<main id="top">
+
+<!-- ================= HERO ================= -->
+<section class="hero shell">
+  <div>
+    <p class="eyebrow">The Founder&rsquo;s Compass</p>
+    <h1>You don&rsquo;t need more advice. <em>You need to know what actually matters.</em></h1>
+    <p class="hero-sub">Ally understands the founder, the business and the moment &mdash; then turns uncertainty into a clear next move.</p>
+    <div class="hero-actions">
+      <a class="btn" href="#early-access">Start your diagnosis <span aria-hidden="true">→</span></a>
+      <a class="link-quiet" href="#how">See how Ally works ↓</a>
+    </div>
+    <div class="hero-steps" aria-label="The Ally journey">
+      <div><strong>01</strong><span>Understand</span></div>
+      <div><strong>02</strong><span>Diagnose</span></div>
+      <div><strong>03</strong><span>Direct</span></div>
+      <div><strong>04</strong><span>Act</span></div>
+    </div>
+  </div>
+
+  <div class="hero-glimpse" aria-label="A fragment of the Ally interface">
+    <div class="glimpse-card">
+      <p class="glimpse-kicker">Good morning, Founder</p>
+      <h3>Your living map of where you are, and <em>where you&rsquo;re going.</em></h3>
+      <div class="ask-bar" aria-hidden="true">
+        <span>Ask Ally about anything on this page...</span>
+        <b>→ Ask Ally</b>
+      </div>
+      <div class="glimpse-strip">
+        <div><span>Founder clarity</span><strong>64</strong></div>
+        <div><span>Red flags</span><strong>03</strong></div>
+        <div><span>Primary signal</span><strong>Focus</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BRIDGE ================= -->
+<section class="bridge shell" id="how">
+  <p class="eyebrow">01 &mdash; How Ally works</p>
+  <p>Most tools wait for the right question.
+    <strong>Ally first understands <em>what is actually happening.</em></strong></p>
+</section>
+
+<!-- ================= IMMERSION ================= -->
+<section class="immersion" id="experience" aria-label="Inside Ally">
+  <div class="immersion-track">
+    <div class="immersion-sticky">
+      <div class="env" aria-hidden="true"></div>
+
+      <div class="product-frame" id="frame" data-stage="0">
+        <!-- sidebar -->
+        <aside class="app-side" aria-hidden="true">
+          <div class="app-brand">
+            <strong>GoXL</strong>
+            <small>CONSULTING SOLUTIONS</small>
+          </div>
+          <span class="ally-live"><i></i> Ally active</span>
+
+          <p class="side-label">Home</p>
+          <button class="side-item is-on" tabindex="-1">
+            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>
+            Compass</button>
+          <button class="side-item" tabindex="-1">
+            <svg viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H9l-4 4z"/></svg>
+            Talk to Ally</button>
+
+          <p class="side-label">Founder diagnosis</p>
+          <button class="side-item" data-s="0" tabindex="-1">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/></svg>
+            Founder DNA</button>
+          <button class="side-item" tabindex="-1">
+            <svg viewBox="0 0 24 24"><path d="M5 19V10M12 19V5M19 19v-6"/></svg>
+            Business DNA</button>
+          <button class="side-item" data-s="1" tabindex="-1">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 3.5v2M12 18.5v2M3.5 12h2M18.5 12h2M6 6l1.4 1.4M16.6 16.6L18 18M18 6l-1.4 1.4M7.4 16.6L6 18"/></svg>
+            Adaptive diagnosis</button>
+          <button class="side-item" data-s="2" tabindex="-1">
+            <svg viewBox="0 0 24 24"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"/><circle cx="12" cy="12" r="2.6"/></svg>
+            Your Vision</button>
+          <button class="side-item" tabindex="-1">
+            <svg viewBox="0 0 24 24"><path d="M12 21s-6.5-5.2-6.5-10.2a6.5 6.5 0 0 1 13 0C18.5 15.8 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.2"/></svg>
+            Journey</button>
+          <button class="side-item" data-s="3" tabindex="-1">
+            <svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h10M5 18h7"/></svg>
+            Goals</button>
+
+          <span class="side-push"></span>
+
+          <div class="upgrade">
+            <strong>Ally</strong>
+            <span>See deeper patterns across you and your business.</span>
+            <b>↑ Upgrade plan</b>
+          </div>
+          <div class="profile">
+            <span class="avatar">F</span>
+            <div><strong>Founder</strong><small>Your compass</small></div>
+          </div>
+        </aside>
+
+        <!-- main pane -->
+        <div class="app-main">
+          <div class="app-top">
+            <div>
+              <p class="ovl">Overview</p>
+              <div class="top-title" aria-live="polite">
+                <b data-s="0">Good morning, Founder</b>
+                <b data-s="1">Diagnosis</b>
+                <b data-s="2">Direction</b>
+                <b data-s="3">Today</b>
+              </div>
+            </div>
+            <span class="plan-pill"><i></i> Ally</span>
+          </div>
+
+          <div class="app-content">
+            <div class="stage-zone">
+
+              <!-- STAGE 1 · UNDERSTAND THE FOUNDER -->
+              <div class="stage" data-s="0">
+                <p class="screen-label">Founder context &middot; Founder&rsquo;s Compass</p>
+                <h2>Before Ally gives direction, it understands the person <em>carrying the responsibility.</em></h2>
+                <p class="insight">Ally begins with context &mdash; not assumptions.</p>
+                <div class="ask-bar" aria-hidden="true">
+                  <span>Ask Ally about what is creating the noise...</span>
+                  <b>→ Ask Ally</b>
+                </div>
+                <div class="state-head">
+                  <span>Current state</span>
+                  <h3>Understand the founder before the problem</h3>
+                </div>
+                <div class="metric-row">
+                  <article><span>Founder clarity</span><i></i><strong>64</strong><p>Direction exists, but too many competing priorities.</p></article>
+                  <article><span>Decision load</span><i></i><strong>High</strong><p>Too many decisions still depend only on you.</p></article>
+                  <article><span>Current mode</span><i></i><strong>Reactive</strong><p>Urgent work is crowding out important work.</p></article>
+                  <article><span>Primary signal</span><i></i><strong>Focus</strong><p>The next gain comes from removing, not adding.</p></article>
+                </div>
+              </div>
+
+              <!-- STAGE 2 · DIAGNOSE THE SITUATION -->
+              <div class="stage" data-s="1">
+                <p class="screen-label">Adaptive diagnosis &middot; Signals connected</p>
+                <h2>Not every problem deserves your attention. <em>This one does.</em></h2>
+                <p class="insight">Demand is inconsistent, not absent.</p>
+                <div class="ask-bar" aria-hidden="true">
+                  <span>Ask Ally why this signal matters...</span>
+                  <b>→ Ask Ally</b>
+                </div>
+                <div class="state-head">
+                  <span>Current state</span>
+                  <h3>What is actually happening right now</h3>
+                </div>
+                <div class="metric-row">
+                  <article><span>Founder clarity</span><i></i><strong>64</strong><p>Enough clarity to move &mdash; not enough to ignore the noise.</p></article>
+                  <article><span>Dimensions scanned</span><i></i><strong>07</strong><p>Founder, execution, cash, customers, growth, systems.</p></article>
+                  <article><span>Red flags</span><i></i><strong>03</strong><p>Three patterns are creating repeated friction.</p></article>
+                  <article><span>Primary constraint</span><i></i><strong>Acquisition</strong><p>Demand is inconsistent, not absent.</p></article>
+                </div>
+              </div>
+
+              <!-- STAGE 3 · FIND DIRECTION -->
+              <div class="stage" data-s="2">
+                <p class="screen-label">Direction &middot; What deserves attention now</p>
+                <h2>Your next move isn&rsquo;t to do more. <em>It&rsquo;s to fix the right thing.</em></h2>
+                <p class="insight">Your acquisition system is creating inconsistent demand &mdash; every week feels like a restart.</p>
+                <div class="ask-bar" aria-hidden="true">
+                  <span>Ask Ally what to focus on first...</span>
+                  <b>→ Ask Ally</b>
+                </div>
+                <div class="state-head">
+                  <span>Recommended direction</span>
+                  <h3>Current bottleneck: acquisition consistency</h3>
+                </div>
+                <div class="metric-row">
+                  <article><span>Priority 01</span><i></i><strong>Clarify ICP</strong><p>Remove audience segments creating noisy demand.</p></article>
+                  <article><span>Priority 02</span><i></i><strong>One channel</strong><p>Repair one acquisition channel before adding another.</p></article>
+                  <article><span>Priority 03</span><i></i><strong>Pipeline</strong><p>Build a repeatable weekly pipeline rhythm.</p></article>
+                  <article><span>Avoid</span><i></i><strong>More spend</strong><p>Don&rsquo;t scale what you cannot yet repeat.</p></article>
+                </div>
+              </div>
+
+              <!-- STAGE 4 · TURN DIRECTION INTO ACTION -->
+              <div class="stage" data-s="3">
+                <p class="screen-label">Today &middot; Turn direction into action</p>
+                <h2>Clarity only matters when it changes <em>what you do today.</em></h2>
+                <p class="insight">One useful day is better than ten ambitious lists.</p>
+                <div class="ask-bar" aria-hidden="true">
+                  <span>Ask Ally to help plan today...</span>
+                  <b>→ Ask Ally</b>
+                </div>
+                <div class="state-head">
+                  <span>Today&rsquo;s focus</span>
+                  <h3>Protect the work that moves the constraint</h3>
+                </div>
+                <div class="metric-row">
+                  <article><span>09:30</span><i></i><strong>Funnel</strong><p>Review the acquisition path; find the largest leak.</p></article>
+                  <article><span>11:00</span><i></i><strong>Offer</strong><p>Rewrite one offer for the clearest audience segment.</p></article>
+                  <article><span>14:00</span><i></i><strong>Prospects</strong><p>Speak with five recent prospects; capture objections.</p></article>
+                  <article><span>End of day</span><i></i><strong>Review</strong><p>Tell Ally what changed. Recalculate tomorrow.</p></article>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- caption -->
+      <div class="stage-caption" aria-hidden="true">
+        <div class="cap-cell">
+          <div data-s="0"><span class="cap-idx">01</span></div>
+          <div data-s="1"><span class="cap-idx">02</span></div>
+          <div data-s="2"><span class="cap-idx">03</span></div>
+          <div data-s="3"><span class="cap-idx">04</span></div>
+        </div>
+        <div class="cap-cell">
+          <div data-s="0"><strong>Understand the founder.</strong><p>Ally begins with context &mdash; not assumptions.</p></div>
+          <div data-s="1"><strong>Diagnose the situation.</strong><p>Find the signal hiding inside all the noise.</p></div>
+          <div data-s="2"><strong>Choose a direction.</strong><p>Ally narrows the field until the next move becomes clear.</p></div>
+          <div data-s="3"><strong>Turn direction into action.</strong><p>The compass becomes a plan for today.</p></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= OUTCOME ================= -->
+<section class="outcome">
+  <div class="shell outcome-grid">
+    <div>
+      <p class="eyebrow">Not more information</p>
+      <h2>Know what&rsquo;s <em>actually</em> holding you back.</h2>
+    </div>
+    <div class="bottleneck">
+      <div class="bn-top">
+        <span>Your current bottleneck</span>
+        <b>High signal</b>
+      </div>
+      <h3>Acquisition consistency</h3>
+      <p>Your offer isn&rsquo;t the primary problem. Your acquisition system is creating inconsistent demand, making every week feel like a restart.</p>
+      <div class="bn-foot">
+        <div><span>Why it matters</span><p>More spend would amplify the leak.</p></div>
+        <div><span>Next move</span><p>Fix the acquisition loop before scaling campaigns.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DIRECTION → TODAY ================= -->
+<section class="direction">
+  <div class="shell">
+    <p class="eyebrow">From clarity → action</p>
+    <h2>Direction should change what you do <em>today.</em></h2>
+
+    <div class="dir-grid">
+      <article>
+        <span class="step">01</span>
+        <h3>Clarify the ICP</h3>
+        <p>Remove the audience segments creating noise in your acquisition loop.</p>
+      </article>
+      <article>
+        <span class="step">02</span>
+        <h3>Repair one channel</h3>
+        <p>Choose the channel with the strongest signal and rebuild consistency there first.</p>
+      </article>
+      <article>
+        <span class="step">03</span>
+        <h3>Protect today&rsquo;s focus</h3>
+        <p>Turn direction into a small number of actions Ally can help you complete.</p>
+      </article>
+    </div>
+
+    <div class="today">
+      <div class="today-kicker">
+        <span>Today</span>
+        <strong>One useful day is better than ten ambitious lists.</strong>
+      </div>
+      <div class="today-list">
+        <div><time>09:30</time><span>Review acquisition funnel</span><i>45 min</i></div>
+        <div><time>11:00</time><span>Rewrite one audience-specific offer</span><i>60 min</i></div>
+        <div><time>14:00</time><span>Speak with five recent prospects</span><i>45 min</i></div>
+        <div><time>18:00</time><span>Tell Ally what changed</span><i>10 min</i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= NORTH STAR ================= -->
+<section class="north" id="north">
+  <div class="shell north-grid">
+    <div>
+      <p class="eyebrow">Your North Star</p>
+      <h2>Every founder is moving. <em>Ally helps make sure it&rsquo;s in the right direction.</em></h2>
+      <p class="north-sub">The Founder&rsquo;s Compass connects who you are, where the business stands and what the moment demands &mdash; and keeps the needle on what matters.</p>
+    </div>
+    <div class="compass" aria-hidden="true">
+      <svg viewBox="0 0 420 420" fill="none">
+        <circle cx="210" cy="210" r="196" stroke="rgba(94,234,212,.14)"/>
+        <circle cx="210" cy="210" r="150" stroke="rgba(94,234,212,.2)" stroke-dasharray="2 7"/>
+        <circle cx="210" cy="210" r="102" stroke="rgba(94,234,212,.28)"/>
+        <path d="M210 8v22M210 390v22M8 210h22M390 210h22" stroke="rgba(94,234,212,.35)"/>
+        <g class="needle">
+          <path d="M210 116L224 210L210 304L196 210Z" fill="rgba(52,211,153,.9)"/>
+          <circle cx="210" cy="210" r="7" fill="#06140d" stroke="#34d399" stroke-width="2"/>
+        </g>
+        <text x="210" y="46" text-anchor="middle" fill="#5eead4" font-family="Inter Tight, sans-serif" font-size="15" font-weight="800">N</text>
+      </svg>
+      <span class="coords">28.6139° N &nbsp;·&nbsp; 77.2090° E</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA + EARLY ACCESS ================= -->
+<section class="cta" id="early-access">
+  <div class="shell cta-grid">
+    <div>
+      <p class="eyebrow">The Founder&rsquo;s Compass</p>
+      <h2>Find out what deserves your attention <em>next.</em></h2>
+      <p class="cta-sub">Start with the diagnosis. Leave with a clearer view of yourself, your business and your next move.</p>
+    </div>
+
+    <div class="ea-card">
+      <form class="ea-form" id="earlyAccessForm" novalidate>
+        <label>Full Name
+          <input id="eaName" name="name" type="text" autocomplete="name" placeholder="Your full name" minlength="2" maxlength="80" required>
+        </label>
+        <label>Email
+          <input id="eaEmail" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@company.com" maxlength="120" required>
+        </label>
+        <label>Phone Number <span class="ea-opt">(optional)</span>
+          <input id="eaPhone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+91 98765 43210" maxlength="24">
+        </label>
+        <label>LinkedIn Profile <span class="ea-opt">(optional)</span>
+          <input id="eaLinkedin" name="linkedinUrl" type="url" autocomplete="url" inputmode="url" placeholder="linkedin.com/in/yourprofile" maxlength="200">
+        </label>
+        <!-- Honeypot: off-screen, unreachable by keyboard, hidden from screen
+             readers. Only a bot ever puts anything here. -->
+        <div class="ea-hp" aria-hidden="true">
+          <label for="eaCompany">Company</label>
+          <input id="eaCompany" name="company" type="text" tabindex="-1" autocomplete="off">
+        </div>
+        <label class="ea-consent">
+          <input id="eaTerms" name="termsAccepted" type="checkbox" required>
+          <span>I agree to the <a href="/terms.html" target="_blank" rel="noopener noreferrer">Terms of Use</a> and acknowledge the <a href="/privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>. My details will be used to manage my early-access registration.</span>
+        </label>
+        <label class="ea-consent">
+          <input id="eaMarketing" name="marketingConsent" type="checkbox">
+          <span><span class="ea-optional">Optional</span><br>I&rsquo;d like to receive GoXL Ally product updates, founder insights and promotional emails. I can unsubscribe at any time.</span>
+        </label>
+        <p class="ea-err" id="eaErr" role="alert"></p>
+        <button class="btn" type="submit" id="eaSubmit">Register for early access</button>
+      </form>
+      <div class="ea-done" id="eaDone" hidden>
+        <p id="eaDoneMsg">Thank you for registering.</p>
+        <p class="ea-done__sub" id="eaDoneSub">We&rsquo;ve sent a confirmation to your inbox &mdash; check spam if it doesn&rsquo;t arrive. Our team will reach out soon.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer shell">
+  <span><span class="brand-mark" style="font-size:16px">GoXL</span> &nbsp;Ally</span>
+  <span>The Founder&rsquo;s Compass</span>
+  <span>© 2026 GoXL</span>
+</footer>
+
+<script>
+/* ============================================================
+   STAGE ENGINE + SCRUB FALLBACK
+   One scroll listener. Work per event: one getBoundingClientRect
+   on the track, one attribute write when the stage changes, and —
+   only on browsers without scroll timelines — five custom-property
+   writes on one element. No rAF gate: this pane and throttled tabs
+   both taught us rAF can simply never fire, and the per-event work
+   here is small enough not to need it.
+   ============================================================ */
+(function(){
+  var track  = document.querySelector('.immersion-track');
+  var sticky = document.querySelector('.immersion-sticky');
+  var frame  = document.getElementById('frame');
+  if(!track || !sticky || !frame){ document.documentElement.classList.add('no-scrub'); return; }
+
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  var nativeScrub = CSS.supports('animation-timeline', 'view()') &&
+                    CSS.supports('view-timeline-name', '--a');
+  if(!nativeScrub && !reduce.matches) document.body.classList.add('js-scrub');
+
+  /* progress p mirrors the native timeline's `cover` range:
+     0 when the track's top meets the viewport bottom,
+     1 when its bottom passes the viewport top. */
+  function progress(){
+    var r = track.getBoundingClientRect();
+    var vh = innerHeight;
+    var total = r.height + vh;
+    return Math.min(1, Math.max(0, (vh - r.top) / total));
+  }
+
+  /* Stages own cover 30%..96%, after the straighten completes. */
+  var current = -1;
+  function setStage(p){
+    var s;
+    if(p < 0.30) s = 0;
+    else if(p >= 0.96) s = 3;
+    else s = Math.min(3, Math.floor((p - 0.30) / (0.66 / 4)));
+    if(s !== current){ current = s; frame.setAttribute('data-stage', String(s)); }
+  }
+
+  /* Same curve the keyframes describe: flat to 7%, resolved by 30%. */
+  function scrub(p){
+    var t = Math.min(1, Math.max(0, (p - 0.07) / 0.23));
+    sticky.style.setProperty('--fx',  (9  * (1 - t)) + 'deg');
+    sticky.style.setProperty('--fy',  (-8 * (1 - t)) + 'deg');
+    sticky.style.setProperty('--fs',  (0.84 + 0.16 * t).toFixed(4));
+    sticky.style.setProperty('--fyy', (6 * (1 - t)).toFixed(3) + 'vh');
+    sticky.style.setProperty('--env', t.toFixed(4));
+  }
+
+  function update(){
+    var p = progress();
+    setStage(p);
+    if(!nativeScrub && !reduce.matches) scrub(p);
+  }
+
+  addEventListener('scroll', update, { passive:true });
+  addEventListener('resize', update);
+  update();   /* reload mid-page lands on the right stage immediately */
+
+  /* Test hook. The preview harness this is built in delivers no scroll
+     events at all, so the engine cannot be observed there without a way
+     to invoke it directly. Harmless in production. */
+  window.__allyImmersion = { update: update, progress: progress };
+})();
+
+/* ============================================================
+   EARLY ACCESS — same wiring as the live page: same field names,
+   same honeypot, same /api/early-access contract, same duplicate
+   handling. Inline card instead of a modal, so the modal plumbing
+   (focus trap, inert background) has nothing to do here.
+   ============================================================ */
+(function(){
+  var form = document.getElementById('earlyAccessForm');
+  var done = document.getElementById('eaDone');
+  var err = document.getElementById('eaErr');
+  var submit = document.getElementById('eaSubmit');
+  var nameEl = document.getElementById('eaName');
+  var emailEl = document.getElementById('eaEmail');
+  var phoneEl = document.getElementById('eaPhone');
+  var linkedinEl = document.getElementById('eaLinkedin');
+  var doneMsg = document.getElementById('eaDoneMsg');
+  var doneSub = document.getElementById('eaDoneSub');
+  var termsEl = document.getElementById('eaTerms');
+  var marketingEl = document.getElementById('eaMarketing');
+  var companyEl = document.getElementById('eaCompany'); /* honeypot */
+  if(!form || !done || !err || !submit || !nameEl || !emailEl || !termsEl) return;
+
+  var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var submitLabel = submit.textContent;
+
+  function linkedinLooksValid(value){
+    var raw = value.trim();
+    if(!raw) return true;
+    try{
+      var url = new URL(/^https?:\/\//i.test(raw) ? raw : 'https://' + raw);
+      if(url.protocol !== 'https:' && url.protocol !== 'http:') return false;
+      var host = url.hostname.toLowerCase().replace(/^www\./, '');
+      if(host !== 'linkedin.com' && !/\.linkedin\.com$/.test(host)) return false;
+      return url.pathname.replace(/\/+$/, '').length > 1;
+    }catch(_){ return false; }
+  }
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    var name = nameEl.value.trim().replace(/\s+/g, ' ');
+    var email = emailEl.value.trim();
+    var phone = phoneEl.value.trim();
+    var linkedinUrl = linkedinEl.value.trim();
+    var digits = phone.replace(/\D/g, '');
+    err.textContent = '';
+    if(name.length < 2 || name.length > 80){ err.textContent = 'Enter your full name'; nameEl.focus(); return; }
+    if(!emailRe.test(email)){ err.textContent = 'Enter a valid email'; emailEl.focus(); return; }
+    if(phone && (digits.length < 10 || digits.length > 15)){ err.textContent = 'Enter a valid phone number'; phoneEl.focus(); return; }
+    if(!linkedinLooksValid(linkedinUrl)){ err.textContent = 'Enter a valid LinkedIn profile URL'; linkedinEl.focus(); return; }
+    if(!termsEl.checked){ err.textContent = 'Please accept the Terms and acknowledge the Privacy Policy'; termsEl.focus(); return; }
+
+    submit.disabled = true;
+    submit.textContent = 'Registering…';
+    try{
+      var res = await fetch('/api/early-access', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json' },
+        body:JSON.stringify({
+          name:name, email:email, phone:phone, linkedinUrl:linkedinUrl,
+          termsAccepted:true,
+          marketingConsent:marketingEl.checked,
+          policyVersion:'2026-08-15',
+          company:companyEl ? companyEl.value : ''
+        })
+      });
+      var data = await res.json().catch(function(){ return {}; });
+      if(!res.ok || !data.ok){
+        err.textContent = data.error || 'Something went wrong. Please try again.';
+        submit.disabled = false;
+        submit.textContent = submitLabel;
+        return;
+      }
+      if(data.duplicate){
+        doneMsg.textContent = 'You’re already registered.';
+        doneSub.textContent = 'You’re on the list — our team will reach out soon.';
+      }
+      form.hidden = true;
+      done.hidden = false;
+    }catch(_){
+      err.textContent = 'Something went wrong. Please try again.';
+      submit.disabled = false;
+      submit.textContent = submitLabel;
+    }
+  });
+})();
+</script>
+</body>
+</html>
