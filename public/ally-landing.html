@@ -3139,59 +3139,43 @@
   .pitch--flip .pitch-copy{ order:2; }
   .pitch--flip .pitch-visual{ order:1; }
 
-  /* ---------- the pitch sections hold while their card arrives and leaves ----------
-     The section is taller than the screen and its inner block is sticky, so
-     you stay put while the section scrolls past underneath — then the copy
-     and the card come in, hold, and go out again.
+  /* ---------- the heading stays, the card goes past it ----------
+     The earlier attempt pinned the whole section and made the card leave
+     again on the way out. None of the sites worth copying do that:
+     edesigninteractive and scale.com pin nothing at all, and foosh.ai — the
+     closest to this page, and the only one of the three with no animation
+     library — sticks nothing but its small band labels at top:32px while the
+     tiles scroll past them.
 
-     The timeline is named on the section rather than taken from view() on the
-     children. view() measures the element's own travel through the scrollport,
-     and a stuck element does not travel — the timeline would sit still for the
-     whole hold. The section keeps moving, so it is the honest clock.
+     That is where "you stay in one place" actually comes from, and it costs
+     no scroll distance: the copy holds while its card moves through, then
+     the next section takes over. The card arrives and stays. It does not
+     leave — content that fades out on the way past is a thing to read twice
+     and catch neither time.
 
-     Desktop only. On phones each of these is already over a screen tall, and
-     making them 1.6 screens each would undo the compaction; there the sections
-     stay exactly as they are. */
-  @keyframes pitchCopyInOut{
-    0%  { opacity:0; transform:translateY(38px); }
-    22% { opacity:1; transform:translateY(0); }
-    78% { opacity:1; transform:translateY(0); }
-    100%{ opacity:0; transform:translateY(-38px); }
-  }
-  @keyframes pitchVisualInOut{
-    0%  { opacity:0; transform:perspective(1200px) translateY(64px) scale(0.94); }
-    22% { opacity:1; transform:perspective(1200px) translateY(0)    scale(1); }
-    78% { opacity:1; transform:perspective(1200px) translateY(0)    scale(1); }
-    100%{ opacity:0; transform:perspective(1200px) translateY(-52px) scale(0.965); }
-  }
-  @supports (animation-timeline: view()){
-    @media (min-width: 769px) and (prefers-reduced-motion: no-preference){
-      .pitch{
-        min-height:160vh;
-        padding-top:0;
-        padding-bottom:0;
-        view-timeline-name:--pitch;
-        view-timeline-axis:block;
-      }
-      .pitch-inner{
-        position:sticky;
-        top:0;
-        min-height:100vh;
-        align-content:center;
-      }
-      .pitch-copy,
-      .pitch-visual{
-        animation-duration:auto;
-        animation-timing-function:linear;
-        animation-fill-mode:both;
-        /* named, so it keeps running while .pitch-inner is stuck */
-        animation-timeline:--pitch;
-        animation-range:cover 0% cover 100%;
-      }
-      .pitch-copy{ animation-name:pitchCopyInOut; }
-      .pitch-visual{ animation-name:pitchVisualInOut; }
+     align-self:start matters: .pitch-inner centres its items, which sizes the
+     grid area to the content and leaves sticky nothing to travel within.
+     Only above 1024px, where the two columns exist at all. */
+  @media (min-width: 1025px){
+    /* One screen each. At their natural heights the sticky heading had
+       141-245px to hold for and #trust had none at all, so it would have
+       been a thing that technically applied and visibly did nothing. A
+       screen per section is the ordinary rhythm anyway, and it is what
+       gives the copy something to hold through. */
+    .pitch{ min-height:100vh; display:grid; align-content:center; }
+    .pitch-copy{
+      position:sticky;
+      top:clamp(96px, 22vh, 190px);
+      align-self:start;
     }
   }
+
+  /* The card gets a touch of scale on the way in, the way foosh treats a
+     tile rather than a line of text. Same curve and duration as every other
+     .reveal on the page — copying their values instead would leave this one
+     section moving to a different rhythm than the rest. */
+  .pitch-visual.reveal{ transform:translateY(24px) scale(0.985); }
+  .pitch-visual.reveal.in{ transform:translateY(0) scale(1); }
 
   .pitch-eyebrow{
     font-size:12px; letter-spacing:0.18em; text-transform:uppercase;
@@ -3521,7 +3505,7 @@
 ========================================================== -->
 <section class="pitch" id="outcome">
   <div class="pitch-inner">
-    <div class="pitch-copy">
+    <div class="pitch-copy reveal">
       <p class="pitch-eyebrow">From uncertainty<br>to a clear next move.</p>
       <h2 class="pitch-title">Here&rsquo;s what clarity with Ally actually looks like.</h2>
       <ul class="pitch-list">
@@ -3532,7 +3516,7 @@
       </ul>
     </div>
 
-    <div class="pitch-visual">
+    <div class="pitch-visual reveal">
       <div class="card">
         <div class="card-top">
           <div>
@@ -3692,13 +3676,13 @@
 ========================================================== -->
 <section class="pitch" id="diagnosis">
   <div class="pitch-inner">
-    <div class="pitch-copy">
+    <div class="pitch-copy reveal">
       <h2 class="pitch-title">Ally doesn&rsquo;t start with advice.<br>It starts by <em>understanding.</em></h2>
       <p class="pitch-body">A 20-minute structured diagnosis that maps your Founder DNA and Business DNA to find the real root cause.</p>
       <span class="pitch-badge">~20 minutes</span>
     </div>
 
-    <div class="pitch-visual">
+    <div class="pitch-visual reveal">
       <div class="card">
         <div class="card-top">
           <p class="card-name">Diagnosis in progress</p>
@@ -3865,12 +3849,12 @@
 ========================================================== -->
 <section class="pitch pitch--flip" id="day-plan">
   <div class="pitch-inner">
-    <div class="pitch-copy">
+    <div class="pitch-copy reveal">
       <h2 class="pitch-title">Clarity is only useful if it changes what you <em>do today.</em></h2>
       <p class="pitch-body">Ally turns direction into a focused plan for your day.</p>
     </div>
 
-    <div class="pitch-visual">
+    <div class="pitch-visual reveal">
       <div class="card">
         <div class="card-top">
           <p class="card-name">Your Day Plan</p>
@@ -3906,12 +3890,12 @@
 ========================================================== -->
 <section class="pitch" id="ongoing">
   <div class="pitch-inner">
-    <div class="pitch-copy">
+    <div class="pitch-copy reveal">
       <h2 class="pitch-title">And tomorrow, Ally doesn&rsquo;t start from <em>zero.</em></h2>
       <p class="pitch-body">Ask anything. Ally remembers what matters.</p>
     </div>
 
-    <div class="pitch-visual">
+    <div class="pitch-visual reveal">
       <div class="card">
         <div class="card-top">
           <p class="card-name">Chat with Ally</p>
@@ -3937,7 +3921,7 @@
 ========================================================== -->
 <section class="pitch pitch--flip" id="trust">
   <div class="pitch-inner">
-    <div class="pitch-copy">
+    <div class="pitch-copy reveal">
       <h2 class="pitch-title">Built for founders.<br>Backed by <em>methodology.</em></h2>
       <ul class="pitch-list">
         <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.6 12.2l2.4 2.4 4.4-4.8"/></svg>Built by GoXL</li>
@@ -3947,7 +3931,7 @@
       </ul>
     </div>
 
-    <div class="pitch-visual">
+    <div class="pitch-visual reveal">
       <div class="card">
         <div class="quote-who">
           <span class="quote-av" aria-hidden="true"></span>
