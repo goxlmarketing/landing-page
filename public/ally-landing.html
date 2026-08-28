@@ -2981,13 +2981,21 @@
      prefers-reduced-motion, because this is decoration. Either way the
      fallback is the finished state — the section simply is what it is when
      you reach it, which is how it behaves today. */
+  /* In and back out, and the way out is the way in mirrored: whatever the
+     copy and the frame rise out of on the way up, they sink into on the way
+     down — same distance, same tilt, same scale, opposite sign. Anything
+     else and leaving would read as a different move than arriving. */
   @keyframes allyRevealCopy{
-    from{ opacity:0; transform:translateY(20px); }
-    to  { opacity:1; transform:translateY(0); }
+    0%  { opacity:0; transform:translateY(20px); }
+    46% { opacity:1; transform:translateY(0); }
+    76% { opacity:1; transform:translateY(0); }
+    100%{ opacity:0; transform:translateY(-20px); }
   }
   @keyframes allyRevealStage{
-    from{ opacity:0.55; transform:perspective(1400px) translateY(56px) rotateX(7deg) scale(0.94); }
-    to  { opacity:1;    transform:perspective(1400px) translateY(0)    rotateX(0)    scale(1); }
+    0%  { opacity:0.55; transform:perspective(1400px) translateY(56px)  rotateX(7deg)  scale(0.94); }
+    46% { opacity:1;    transform:perspective(1400px) translateY(0)     rotateX(0)     scale(1); }
+    76% { opacity:1;    transform:perspective(1400px) translateY(0)     rotateX(0)     scale(1); }
+    100%{ opacity:0.55; transform:perspective(1400px) translateY(-56px) rotateX(-7deg) scale(0.94); }
   }
   @supports (animation-timeline: view()){
     @media (prefers-reduced-motion: no-preference){
@@ -2999,7 +3007,10 @@
         /* after the longhands above: animation-timeline is a reset-only value
            in the animation shorthand, so order matters here. */
         animation-timeline:view();
-        animation-range:entry 20% cover 45%;
+        /* the whole journey now, not just the arrival — the range has to
+           reach the exit for there to be an exit to animate. The 46% stop
+           above lands where "cover 45%" used to, so the way in is unchanged. */
+        animation-range:cover 0% cover 100%;
       }
       .reveal-stage{
         animation-name:allyRevealStage;
@@ -3007,7 +3018,7 @@
         animation-timing-function:linear;
         animation-fill-mode:both;
         animation-timeline:view();
-        animation-range:entry 5% cover 48%;
+        animation-range:cover 0% cover 100%;
       }
     }
   }
