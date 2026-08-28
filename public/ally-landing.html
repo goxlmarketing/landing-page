@@ -3139,6 +3139,60 @@
   .pitch--flip .pitch-copy{ order:2; }
   .pitch--flip .pitch-visual{ order:1; }
 
+  /* ---------- the pitch sections hold while their card arrives and leaves ----------
+     The section is taller than the screen and its inner block is sticky, so
+     you stay put while the section scrolls past underneath — then the copy
+     and the card come in, hold, and go out again.
+
+     The timeline is named on the section rather than taken from view() on the
+     children. view() measures the element's own travel through the scrollport,
+     and a stuck element does not travel — the timeline would sit still for the
+     whole hold. The section keeps moving, so it is the honest clock.
+
+     Desktop only. On phones each of these is already over a screen tall, and
+     making them 1.6 screens each would undo the compaction; there the sections
+     stay exactly as they are. */
+  @keyframes pitchCopyInOut{
+    0%  { opacity:0; transform:translateY(38px); }
+    22% { opacity:1; transform:translateY(0); }
+    78% { opacity:1; transform:translateY(0); }
+    100%{ opacity:0; transform:translateY(-38px); }
+  }
+  @keyframes pitchVisualInOut{
+    0%  { opacity:0; transform:perspective(1200px) translateY(64px) scale(0.94); }
+    22% { opacity:1; transform:perspective(1200px) translateY(0)    scale(1); }
+    78% { opacity:1; transform:perspective(1200px) translateY(0)    scale(1); }
+    100%{ opacity:0; transform:perspective(1200px) translateY(-52px) scale(0.965); }
+  }
+  @supports (animation-timeline: view()){
+    @media (min-width: 769px) and (prefers-reduced-motion: no-preference){
+      .pitch{
+        min-height:160vh;
+        padding-top:0;
+        padding-bottom:0;
+        view-timeline-name:--pitch;
+        view-timeline-axis:block;
+      }
+      .pitch-inner{
+        position:sticky;
+        top:0;
+        min-height:100vh;
+        align-content:center;
+      }
+      .pitch-copy,
+      .pitch-visual{
+        animation-duration:auto;
+        animation-timing-function:linear;
+        animation-fill-mode:both;
+        /* named, so it keeps running while .pitch-inner is stuck */
+        animation-timeline:--pitch;
+        animation-range:cover 0% cover 100%;
+      }
+      .pitch-copy{ animation-name:pitchCopyInOut; }
+      .pitch-visual{ animation-name:pitchVisualInOut; }
+    }
+  }
+
   .pitch-eyebrow{
     font-size:12px; letter-spacing:0.18em; text-transform:uppercase;
     color:var(--accent); font-weight:600; line-height:1.7; margin-bottom:14px;
