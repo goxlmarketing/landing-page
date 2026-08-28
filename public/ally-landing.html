@@ -3199,6 +3199,50 @@
     text-wrap:balance;
   }
   .pitch-title em{ font-style:normal; color:var(--accent); }
+
+  /* ---------- the claim line paces itself ----------
+     Taken from scale.com's "90% of the world's leading..." panel, where the
+     sentence brightens word by word as you scroll it into place. It is the
+     one effect in that recording that helps the reader rather than
+     decorating around them: it sets the reading pace and puts the weight on
+     the line carrying the claim.
+
+     Applied to every .pitch-title rather than a chosen few. Three out of
+     five would read as an oversight; belonging to the section type reads as
+     a decision.
+
+     The timeline is named on the heading, not taken from view() on each
+     word: the words sit on the same few lines and would all measure nearly
+     the same position. The stagger is in animation-range instead, 3.2% of
+     the range per word.
+
+     The dim state clears AA on its own — see the measured note below — so
+     nothing here depends on the animation finishing, or running at all. */
+  @keyframes titleWordLift{
+    from{ opacity:var(--word-dim); }
+    to  { opacity:1; }
+  }
+  @supports (animation-timeline: view()){
+    @media (prefers-reduced-motion: no-preference){
+      .pitch-title{
+        view-timeline-name:--title;
+        view-timeline-axis:block;
+      }
+      .pitch-title .w{
+        /* 0.62 over the section ground is 6.06:1 — above AA at this size
+           even at its dimmest, so a visitor who lands mid-page, scrolls
+           past too fast, or never triggers it still reads normal text. */
+        --word-dim:0.62;
+        opacity:var(--word-dim);
+        animation-name:titleWordLift;
+        animation-duration:auto;
+        animation-timing-function:linear;
+        animation-fill-mode:both;
+        animation-timeline:--title;
+        animation-range:entry calc(26% + var(--i) * 3.2%) entry calc(54% + var(--i) * 3.2%);
+      }
+    }
+  }
   .pitch-body{
     margin-top:14px;
     font-size:clamp(14px, 1.15vw, 16px); line-height:1.6;
@@ -4072,6 +4116,42 @@ const io = new IntersectionObserver((entries)=>{
 }, isPhone() ? { threshold:0.06, rootMargin:'80px 0px' } : { threshold:0.15 });
 revealEls.forEach(el=>io.observe(el));
 document.querySelectorAll('#problem .reveal').forEach(el=> el.classList.add('in'));
+
+/* ---------- split the claim lines into words ----------
+   Runtime rather than hand-authored spans in the HTML: these headlines get
+   edited, and word spans written by hand would need rebuilding on every
+   copy change — the first person to forget would ship a broken sentence.
+   Splitting from the live text means the copy stays the source of truth.
+   <em> and <br> are walked through rather than flattened, so the accent
+   words and the line breaks survive. If this never runs, the headline is
+   an ordinary heading. */
+(function(){
+  let i = 0;
+  function split(node){
+    [...node.childNodes].forEach(n => {
+      if(n.nodeType === 3){
+        /* split on a literal space, not a whitespace class: these are
+           single-line headings, and it keeps the pattern free of escapes. */
+        const parts = n.textContent.split(' ');
+        if(!parts.some(t => t.trim())) return;
+        const frag = document.createDocumentFragment();
+        parts.forEach((t, idx) => {
+          if(idx) frag.appendChild(document.createTextNode(' '));
+          if(!t.trim()) return;
+          const w = document.createElement('span');
+          w.className = 'w';
+          w.style.setProperty('--i', i++);
+          w.textContent = t;
+          frag.appendChild(w);
+        });
+        n.replaceWith(frag);
+      }else if(n.nodeType === 1 && n.tagName !== 'BR'){
+        split(n);                      // <em> keeps its colour, words inside it still stagger
+      }
+    });
+  }
+  document.querySelectorAll('.pitch-title').forEach(h => { i = 0; split(h); });
+})();
 
 /* ---------- two things at once: staged entrance ---------- */
 (function(){
