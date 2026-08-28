@@ -3190,9 +3190,20 @@
      Desktop only. Stacking full-viewport layers on a phone costs memory for
      an effect that needs a tall window to read, and these sections were
      compacted for phones on purpose. */
+  /* ---- why these use translate/rotate/scale instead of transform ----
+     Each of these sections runs TWO animations on TWO different timelines:
+     an arrival on its own, a recede on the next section's. When two
+     animations touch the same property, the one later in animation-name
+     wins outright — so while all of this was written as transform:, the
+     recede silently ate every arrival. #trust was the only section that
+     looked right because it is last and has no recede to lose to.
+
+     The individual transform properties compose instead of overwriting:
+     the arrival takes translate and rotate, the recede takes scale, and
+     both survive. */
   @keyframes stackRecede{
-    from{ transform:scale(1);    opacity:1; }
-    to  { transform:scale(0.94); opacity:0.45; }
+    from{ scale:1;    opacity:1; }
+    to  { scale:0.94; opacity:0.45; }
   }
   /* The arrivals. Each incoming section sweeps in from its own side with a
      touch of rotation instead of riding straight up — ongoing from the
@@ -3209,22 +3220,31 @@
      from the left. Exact mirrors of each other — same 8vw, same 3vh, same
      1.4deg with the sign flipped — so the two read as one move and its
      answer rather than as two unrelated slides. */
+  /* No opacity in the arrivals: the recede owns opacity for the same
+     reason it owned transform, and a panel that covers another one has no
+     business being see-through while it does it. */
   @keyframes stackArriveTilt{
-    from{ transform:perspective(1200px) translateY(5vh) rotateX(-7deg); opacity:0.6; }
-    to  { transform:none; opacity:1; }
+    from{ translate:0 5vh; rotate:x -7deg; }
+    to  { translate:none;  rotate:none; }
   }
   @keyframes stackArriveRight{
-    from{ transform:translate3d(8vw, 3vh, 0) rotate(1.4deg); }
-    to  { transform:none; }
+    from{ translate:8vw 3vh;  rotate:1.4deg; }
+    to  { translate:none;     rotate:none; }
   }
   @keyframes stackArriveLeft{
-    from{ transform:translate3d(-8vw, 3vh, 0) rotate(-1.4deg); }
-    to  { transform:none; }
+    from{ translate:-8vw 3vh; rotate:-1.4deg; }
+    to  { translate:none;     rotate:none; }
   }
   @media (min-width: 1025px){
     @supports (animation-timeline: view()) and (timeline-scope: --a){
       @media (prefers-reduced-motion: no-preference){
-        .stack{ timeline-scope:--stack-2, --stack-3; }
+        .stack{
+          timeline-scope:--stack-2, --stack-3;
+          /* day-plan's rotate:x needs depth to read as a tilt rather than a
+             vertical squash. Verified not to disturb sticky: at 1200px into
+             the stack both earlier sections still pin at top 0. */
+          perspective:1200px;
+        }
         .stack > .pitch{
           position:sticky;
           top:0;
