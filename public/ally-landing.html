@@ -3202,9 +3202,20 @@
      is the one in motion during its entry. Settled by entry 88%, so it lands
      square just before it finishes covering. Scrubbed and linear, so
      scrolling up plays the exact same path backwards. */
-  @keyframes stackArriveRight{
-    from{ transform:translate3d(8vw, 3vh, 0) rotate(1.4deg); }
-    to  { transform:none; }
+  /* Three sections, three different moves — the award-site card stacks all
+     do this: vary the move per card, keep each one small. day-plan tilts up
+     out of perspective and straightens, like a card being stood upright.
+     ongoing lands from the front — starts a touch larger and settles down
+     onto the pile, the gradual zoom the pattern guides recommend (small
+     range, never dramatic). trust sweeps in from the side, which was the
+     one everyone agreed already worked. */
+  @keyframes stackArriveTilt{
+    from{ transform:perspective(1200px) translateY(5vh) rotateX(-7deg); opacity:0.6; }
+    to  { transform:none; opacity:1; }
+  }
+  @keyframes stackArriveFront{
+    from{ transform:scale(1.06) translateY(2vh); opacity:0.6; }
+    to  { transform:none; opacity:1; }
   }
   @keyframes stackArriveLeft{
     from{ transform:translate3d(-8vw, 3vh, 0) rotate(-1.4deg); }
@@ -3236,15 +3247,18 @@
           animation-timing-function:linear;
           animation-fill-mode:both;
         }
-        /* day-plan only recedes; trust only arrives; ongoing does both —
-           its arrival on its own timeline, its recede on trust's. */
+        /* Every section arrives on its OWN view() — it is the moving thing
+           during its entry — and recedes on the NEXT section's scoped
+           timeline. day-plan gets an arrival too now: it was the only one
+           entering as a plain scrolling block, which is why the first two
+           swaps read as the same move. */
         #day-plan{
-          animation-name:stackRecede;
-          animation-timeline:--stack-2;
-          animation-range:entry 0% entry 100%;
+          animation-name:stackArriveTilt, stackRecede;
+          animation-timeline:view(), --stack-2;
+          animation-range:entry 0% entry 85%, entry 0% entry 100%;
         }
         #ongoing{
-          animation-name:stackArriveRight, stackRecede;
+          animation-name:stackArriveFront, stackRecede;
           animation-timeline:--stack-2, --stack-3;
           animation-range:entry 0% entry 88%, entry 0% entry 100%;
         }
