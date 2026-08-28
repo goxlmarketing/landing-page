@@ -3205,17 +3205,17 @@
   /* Three sections, three different moves — the award-site card stacks all
      do this: vary the move per card, keep each one small. day-plan tilts up
      out of perspective and straightens, like a card being stood upright.
-     ongoing lands from the front — starts a touch larger and settles down
-     onto the pile, the gradual zoom the pattern guides recommend (small
-     range, never dramatic). trust sweeps in from the side, which was the
-     one everyone agreed already worked. */
+     Then a mirrored pair of sweeps: ongoing in from the right, trust in
+     from the left. Exact mirrors of each other — same 8vw, same 3vh, same
+     1.4deg with the sign flipped — so the two read as one move and its
+     answer rather than as two unrelated slides. */
   @keyframes stackArriveTilt{
     from{ transform:perspective(1200px) translateY(5vh) rotateX(-7deg); opacity:0.6; }
     to  { transform:none; opacity:1; }
   }
-  @keyframes stackArriveFront{
-    from{ transform:scale(1.06) translateY(2vh); opacity:0.6; }
-    to  { transform:none; opacity:1; }
+  @keyframes stackArriveRight{
+    from{ transform:translate3d(8vw, 3vh, 0) rotate(1.4deg); }
+    to  { transform:none; }
   }
   @keyframes stackArriveLeft{
     from{ transform:translate3d(-8vw, 3vh, 0) rotate(-1.4deg); }
@@ -3258,7 +3258,7 @@
           animation-range:entry 0% entry 85%, entry 0% entry 100%;
         }
         #ongoing{
-          animation-name:stackArriveFront, stackRecede;
+          animation-name:stackArriveRight, stackRecede;
           animation-timeline:--stack-2, --stack-3;
           animation-range:entry 0% entry 88%, entry 0% entry 100%;
         }
