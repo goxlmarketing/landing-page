@@ -25,26 +25,52 @@
    colour, radius or face — everything reads these tokens.
    ============================================================ */
 :root{
-  --ivory:#f7f1eb;
-  --ivory-2:#fbf7f2;
-  --ivory-3:#efe6d9;
-  --forest:#1B4332;
-  --forest-2:#143726;
-  --forest-deep:#0E2A1C;
+  /* ======== CURRENT VISUAL TOKENS — tuned against the uploaded
+     screenshot of the current dashboard, which is the visual source
+     of truth. This block is the ONLY tuning surface; everything
+     below aliases into it. ======== */
+  --ally-page:#f7f1eb;            /* main canvas ivory */
+  --ally-surface:#fbf7f2;         /* raised ivory surfaces */
+  --ally-surface-2:#efe6d9;
+  --ally-sidebar:#0E2A1C;         /* sidebar gradient, top */
+  --ally-sidebar-deep:#06140d;    /* sidebar gradient, bottom */
+  --ally-sidebar-active:rgba(16,185,129,.15);
+  --ally-accent:#10B981;          /* emerald — buttons, active bar */
+  --ally-accent-bright:#34d399;   /* emphasis on dark */
+  --ally-accent-glow:#5eead4;
+  --ally-lime:#A8D94A;            /* upgrade-button gradient end */
+  --ally-forest:#1B4332;
+  --ally-forest-2:#143726;
+  --ally-text:#16241c;
+  --ally-muted:#556458;
+  --ally-muted-2:#6c7a70;
+  --ally-border:#e7e0d6;
+  --ally-border-2:#d8cfc2;
+  --ally-on-dark:#eaf3ee;
+  --ally-on-dark-muted:#a7c0b4;
+  --ally-on-dark-dim:#7d9488;
+
+  /* aliases — the file below reads these */
+  --ivory:var(--ally-page);
+  --ivory-2:var(--ally-surface);
+  --ivory-3:var(--ally-surface-2);
+  --forest:var(--ally-forest);
+  --forest-2:var(--ally-forest-2);
+  --forest-deep:var(--ally-sidebar);
   --forest-deep-2:#0a2016;
-  --forest-night:#06140d;
-  --emerald:#10B981;
-  --emerald-bright:#34d399;
-  --emerald-glow:#5eead4;
-  --lime-edge:#A8D94A;
-  --ink:#16241c;
-  --muted:#556458;
-  --muted-2:#6c7a70;
-  --bd:#e7e0d6;
-  --bd-2:#d8cfc2;
-  --on-dark:#eaf3ee;
-  --on-dark-muted:#a7c0b4;
-  --on-dark-dim:#7d9488;
+  --forest-night:var(--ally-sidebar-deep);
+  --emerald:var(--ally-accent);
+  --emerald-bright:var(--ally-accent-bright);
+  --emerald-glow:var(--ally-accent-glow);
+  --lime-edge:var(--ally-lime);
+  --ink:var(--ally-text);
+  --muted:var(--ally-muted);
+  --muted-2:var(--ally-muted-2);
+  --bd:var(--ally-border);
+  --bd-2:var(--ally-border-2);
+  --on-dark:var(--ally-on-dark);
+  --on-dark-muted:var(--ally-on-dark-muted);
+  --on-dark-dim:var(--ally-on-dark-dim);
 
   --serif:'Fraunces','Georgia',serif;
   --body:'Inter',system-ui,sans-serif;
@@ -171,9 +197,25 @@ em{ font-style:italic; }
   background:var(--ivory-2); border:1px solid var(--bd);
   border-radius:var(--r-card);
   box-shadow:var(--shadow-card);
-  padding:26px 26px 0; overflow:hidden;
+  display:grid; grid-template-columns:56px minmax(0,1fr);
+  overflow:hidden;
   transform:perspective(1400px) rotateY(-6deg) rotateX(4deg);
 }
+.glimpse-side{
+  background:linear-gradient(180deg, var(--ally-sidebar), var(--ally-sidebar-deep));
+  display:flex; flex-direction:column; align-items:center;
+  padding:18px 0; gap:16px;
+}
+.glimpse-side b{
+  font-family:var(--display); font-weight:800; font-size:13px;
+  color:var(--ally-accent-glow);
+}
+.glimpse-side i{
+  width:18px; height:18px; border-radius:5px;
+  border:1px solid rgba(167,192,180,.4);
+}
+.glimpse-side i.on{ background:var(--ally-accent); border-color:var(--ally-accent); }
+.glimpse-main{ padding:24px 24px 0; min-width:0; }
 .glimpse-kicker{
   font-size:10.5px; letter-spacing:.16em; text-transform:uppercase;
   font-weight:700; color:var(--muted-2);
@@ -186,13 +228,14 @@ em{ font-style:italic; }
 .ask-bar{
   display:flex; align-items:center; justify-content:space-between; gap:14px;
   border:1px solid var(--bd); border-radius:var(--r-pill);
-  background:#fff; padding:7px 7px 7px 18px;
-  font-size:13px; color:var(--muted-2);
+  background:#fff; padding:8px 8px 8px 22px;
+  font-size:13.5px; color:var(--muted-2);
+  box-shadow:0 1px 2px -1px rgba(6,20,13,.1), 0 8px 22px -14px rgba(6,20,13,.18);
 }
 .ask-bar b{
   display:inline-flex; align-items:center; gap:8px;
   background:var(--emerald); color:#fff; font-weight:700; font-size:12.5px;
-  border-radius:var(--r-pill); padding:10px 16px; white-space:nowrap;
+  border-radius:var(--r-pill); padding:11px 18px; white-space:nowrap;
 }
 .glimpse-strip{
   display:grid; grid-template-columns:repeat(3,1fr);
@@ -236,7 +279,7 @@ em{ font-style:italic; }
    toggled by one data-stage attribute — the shell never moves.
    ============================================================ */
 .immersion{ position:relative; timeline-scope:--imm; }
-.immersion-track{ height:460vh; view-timeline-name:--imm; view-timeline-axis:block; }
+.immersion-track{ height:420vh; view-timeline-name:--imm; view-timeline-axis:block; }
 .immersion-sticky{
   position:sticky; top:0; height:100svh;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -276,7 +319,13 @@ em{ font-style:italic; }
   padding:20px 14px 16px;
   font-size:13px;
 }
-.app-brand{ padding:0 8px; }
+.app-brand{ padding:0 8px; display:flex; align-items:flex-start; justify-content:space-between; }
+.app-collapse{
+  width:26px; height:26px; border-radius:8px;
+  border:1px solid rgba(255,255,255,.12);
+  display:grid; place-items:center;
+  color:var(--ally-on-dark-dim); font-size:11px;
+}
 .app-brand strong{
   font-family:var(--display); font-weight:800; font-size:20px;
   color:var(--emerald-glow); letter-spacing:-.02em;
@@ -297,8 +346,8 @@ em{ font-style:italic; }
   width:6px; height:6px; border-radius:50%; background:var(--emerald-bright);
 }
 .side-label{
-  font-size:9.5px; letter-spacing:.18em; font-weight:700;
-  color:var(--on-dark-dim); margin:16px 8px 6px;
+  font-size:9.5px; letter-spacing:.2em; font-weight:700;
+  color:var(--on-dark-dim); margin:20px 8px 8px;
 }
 .side-item{
   display:flex; align-items:center; gap:10px;
@@ -321,14 +370,14 @@ em{ font-style:italic; }
   width:3px; border-radius:0 3px 3px 0; background:var(--emerald);
   opacity:0; transition:opacity .35s;
 }
-.side-item.is-on{ background:rgba(16,185,129,.14); color:#fff; }
+.side-item.is-on{ background:var(--ally-sidebar-active); color:#fff; }
 .side-item.is-on::before{ opacity:1; }
 /* stage-driven emphasis: exactly one strong focus at a time */
 [data-stage="0"] .side-item[data-s="0"],
 [data-stage="1"] .side-item[data-s="1"],
 [data-stage="2"] .side-item[data-s="2"],
 [data-stage="3"] .side-item[data-s="3"]{
-  background:rgba(16,185,129,.14); color:#fff;
+  background:var(--ally-sidebar-active); color:#fff;
 }
 [data-stage="0"] .side-item[data-s="0"]::before,
 [data-stage="1"] .side-item[data-s="1"]::before,
@@ -342,6 +391,7 @@ em{ font-style:italic; }
   background:rgba(16,185,129,.07);
 }
 .upgrade strong{ font-size:12.5px; color:#fff; }
+.upgrade b{ width:100%; text-align:center; }
 .upgrade span{
   display:block; font-size:11px; line-height:1.45;
   color:var(--on-dark-muted); margin:5px 0 10px;
@@ -390,16 +440,23 @@ em{ font-style:italic; }
 [data-stage="1"] .top-title b[data-s="1"],
 [data-stage="2"] .top-title b[data-s="2"],
 [data-stage="3"] .top-title b[data-s="3"]{ opacity:1; transform:none; }
+.top-actions{ display:flex; align-items:center; gap:10px; }
 .plan-pill{
   display:inline-flex; align-items:center; gap:7px;
   border:1px solid var(--bd-2); border-radius:var(--r-pill);
-  background:#fff; padding:7px 13px;
+  background:#fff; padding:8px 14px;
   font-size:12px; font-weight:600; color:var(--muted);
 }
 .plan-pill i{ width:7px; height:7px; border-radius:50%; background:var(--emerald); }
+.bell{
+  width:34px; height:34px; border-radius:50%;
+  background:#fff; border:1px solid var(--bd-2);
+  display:grid; place-items:center;
+}
+.bell svg{ width:15px; height:15px; stroke:var(--muted); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
 
 .app-content{
-  flex:1; min-height:0; padding:24px 26px 20px;
+  flex:1; min-height:0; padding:30px 34px 24px;
   display:flex; flex-direction:column;
 }
 
@@ -426,39 +483,41 @@ em{ font-style:italic; }
 }
 .stage h2{
   font-family:var(--serif); font-weight:500;
-  font-size:clamp(24px, 2.1vw, 32px); line-height:1.16;
-  letter-spacing:-.015em; margin:10px 0 0;
+  font-size:clamp(26px, 2.5vw, 38px); line-height:1.18;
+  letter-spacing:-.015em; margin:14px 0 0;
   min-height:2.4em; /* two lines reserved — headlines may not resize the shell */
-  max-width:640px;
+  max-width:700px;
 }
+.stage h2 em{ font-weight:400; }
 .stage h2 em{ color:var(--emerald); }
 .insight{
-  margin-top:14px; padding:12px 16px;
+  margin-top:20px; padding:15px 20px;
   border:1px solid var(--bd); border-left:3px solid var(--emerald);
-  border-radius:10px; background:var(--ivory-2);
+  border-radius:12px; background:var(--ivory-2);
   font-family:var(--serif); font-style:italic;
-  font-size:14.5px; color:var(--muted);
-  min-height:44px; display:flex; align-items:center;
+  font-size:15.5px; color:var(--muted);
+  min-height:52px; display:flex; align-items:center;
 }
-.stage .ask-bar{ margin-top:14px; }
+.stage .ask-bar{ margin-top:18px; }
 .stage .ask-bar span{
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 .state-head{ margin-top:18px; }
 .state-head span{
-  font-size:11px; letter-spacing:.14em; text-transform:uppercase;
-  font-weight:700; color:var(--muted-2);
+  font-size:13.5px; color:var(--muted-2);
 }
 .state-head h3{
-  font-size:15.5px; font-weight:600; color:var(--ink); margin-top:4px;
+  font-family:var(--display);
+  font-size:19px; font-weight:700; color:var(--ink); margin-top:5px;
+  letter-spacing:-.01em;
 }
 .metric-row{
   display:grid; grid-template-columns:repeat(4,1fr);
   border-top:1px solid var(--bd);
-  margin-top:12px;
+  margin-top:16px;
 }
 .metric-row article{
-  padding:14px 14px 6px 0; border-right:1px solid var(--bd);
+  padding:15px 18px 4px 0; border-right:1px solid var(--bd);
   min-width:0;
 }
 .metric-row article:last-child{ border-right:0; }
@@ -480,6 +539,17 @@ em{ font-style:italic; }
   font-size:11.5px; line-height:1.45; color:var(--muted);
   margin-top:6px;
   display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+}
+
+/* the shared north-star line under every stage */
+.ns-line{
+  margin-top:auto; padding-top:16px;
+  border-top:1px solid var(--bd);
+}
+.ns-line span{ font-size:13px; color:var(--muted-2); }
+.ns-line p{
+  font-family:var(--serif); font-size:16.5px; color:var(--ink);
+  margin-top:4px;
 }
 
 /* caption under the frame */
@@ -681,11 +751,6 @@ em{ font-style:italic; }
     to  { transform:rotate(11deg); }
   }
 }
-.coords{
-  position:absolute; bottom:-6px; left:50%; transform:translateX(-50%);
-  font-family:var(--display); font-size:10.5px; letter-spacing:.22em;
-  color:var(--on-dark-dim);
-}
 
 /* ============================================================
    CTA — return to ivory; the real early-access form, inline.
@@ -802,7 +867,12 @@ em{ font-style:italic; }
 
   <div class="hero-glimpse" aria-label="A fragment of the Ally interface">
     <div class="glimpse-card">
-      <p class="glimpse-kicker">Good morning, Founder</p>
+      <div class="glimpse-side" aria-hidden="true">
+        <b>G</b>
+        <i class="on"></i><i></i><i></i><i></i>
+      </div>
+      <div class="glimpse-main">
+      <p class="glimpse-kicker">Good morning, Founder &middot; Founder&rsquo;s Compass</p>
       <h3>Your living map of where you are, and <em>where you&rsquo;re going.</em></h3>
       <div class="ask-bar" aria-hidden="true">
         <span>Ask Ally about anything on this page...</span>
@@ -812,6 +882,7 @@ em{ font-style:italic; }
         <div><span>Founder clarity</span><strong>64</strong></div>
         <div><span>Red flags</span><strong>03</strong></div>
         <div><span>Primary signal</span><strong>Focus</strong></div>
+      </div>
       </div>
     </div>
   </div>
@@ -834,13 +905,16 @@ em{ font-style:italic; }
         <!-- sidebar -->
         <aside class="app-side" aria-hidden="true">
           <div class="app-brand">
-            <strong>GoXL</strong>
-            <small>CONSULTING SOLUTIONS</small>
+            <div>
+              <strong>GoXL</strong>
+              <small>CONSULTING SOLUTIONS</small>
+            </div>
+            <span class="app-collapse" aria-hidden="true">&laquo;</span>
           </div>
           <span class="ally-live"><i></i> Ally active</span>
 
           <p class="side-label">Home</p>
-          <button class="side-item is-on" tabindex="-1">
+          <button class="side-item" tabindex="-1">
             <svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>
             Compass</button>
           <button class="side-item" tabindex="-1">
@@ -862,7 +936,12 @@ em{ font-style:italic; }
             Your Vision</button>
           <button class="side-item" tabindex="-1">
             <svg viewBox="0 0 24 24"><path d="M12 21s-6.5-5.2-6.5-10.2a6.5 6.5 0 0 1 13 0C18.5 15.8 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.2"/></svg>
-            Journey</button>
+            Journey
+            <span class="lk"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3"/></svg></span></button>
+          <button class="side-item" tabindex="-1">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="4.5"/><path d="M8.5 12.8L7 21l5-2.6L17 21l-1.5-8.2"/></svg>
+            Your Achievements
+            <span class="lk"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3"/></svg></span></button>
           <button class="side-item" data-s="3" tabindex="-1">
             <svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h10M5 18h7"/></svg>
             Goals</button>
@@ -870,13 +949,14 @@ em{ font-style:italic; }
           <span class="side-push"></span>
 
           <div class="upgrade">
-            <strong>Ally</strong>
-            <span>See deeper patterns across you and your business.</span>
+            <strong>Ally Free</strong>
+            <span>Unlock deeper diagnosis, unlimited chat and Founder MRI.</span>
             <b>↑ Upgrade plan</b>
           </div>
           <div class="profile">
             <span class="avatar">F</span>
             <div><strong>Founder</strong><small>Your compass</small></div>
+            <svg viewBox="0 0 24 24" style="width:14px;height:14px;margin-left:auto;stroke:#7d9488;fill:none;stroke-width:1.8"><circle cx="12" cy="12" r="3"/><path d="M12 4.2v-1M12 20.8v-1M19.5 12h1M3.5 12h1M17.3 6.7l.7-.7M6 18l.7-.7M17.3 17.3l.7.7M6 6l.7.7"/></svg>
           </div>
         </aside>
 
@@ -892,7 +972,10 @@ em{ font-style:italic; }
                 <b data-s="3">Today</b>
               </div>
             </div>
-            <span class="plan-pill"><i></i> Ally</span>
+            <div class="top-actions">
+              <span class="plan-pill"><i></i> Ally Free</span>
+              <span class="bell" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10.3 20a2 2 0 0 0 3.4 0"/></svg></span>
+            </div>
           </div>
 
           <div class="app-content">
@@ -983,6 +1066,11 @@ em{ font-style:italic; }
               </div>
 
             </div>
+
+            <div class="ns-line">
+              <span>Your north star</span>
+              <p>Build a company that grows without making every decision feel heavy.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -1008,7 +1096,7 @@ em{ font-style:italic; }
 </section>
 
 <!-- ================= OUTCOME ================= -->
-<section class="outcome">
+<section class="outcome" id="outcome">
   <div class="shell outcome-grid">
     <div>
       <p class="eyebrow">Not more information</p>
@@ -1088,7 +1176,6 @@ em{ font-style:italic; }
         </g>
         <text x="210" y="46" text-anchor="middle" fill="#5eead4" font-family="Inter Tight, sans-serif" font-size="15" font-weight="800">N</text>
       </svg>
-      <span class="coords">28.6139° N &nbsp;·&nbsp; 77.2090° E</span>
     </div>
   </div>
 </section>
@@ -1214,6 +1301,39 @@ em{ font-style:italic; }
      events at all, so the engine cannot be observed there without a way
      to invoke it directly. Harmless in production. */
   window.__allyImmersion = { update: update, progress: progress };
+
+  /* Screenshot rig, ?shot= only: headless Chrome can screenshot solely the
+     initial viewport, so this pins the immersion at a chosen state. Inert
+     unless the parameter is present; never linked from anywhere. */
+  var shot = new URLSearchParams(location.search).get('shot');
+  if(shot !== null){
+    var css = document.createElement('style');
+    css.textContent = '*{transition:none!important;animation:none!important}';
+    document.head.appendChild(css);
+    var m = /^stage(\d)$/.exec(shot);
+    if(m){
+      sticky.style.position = 'fixed';
+      sticky.style.inset = '0';
+      sticky.style.zIndex = '99';
+      ['--fx','0deg','--fy','0deg','--fs','1','--fyy','0vh','--env','1']
+        .forEach(function(v,i,a){ if(i%2===0) sticky.style.setProperty(v, a[i+1]); });
+      frame.setAttribute('data-stage', m[1]);
+    }else if(shot === 'enter'){
+      sticky.style.position = 'fixed';
+      sticky.style.inset = '0';
+      sticky.style.zIndex = '99';
+      sticky.style.setProperty('--env','0.35');
+      /* tilted arrival state, part-way through the straighten */
+      sticky.style.setProperty('--fx','6deg');
+      sticky.style.setProperty('--fy','-5.5deg');
+      sticky.style.setProperty('--fs','0.88');
+      sticky.style.setProperty('--fyy','4vh');
+    }else if(shot){
+      /* headless --screenshot always captures from the document top, so a
+         scrolled capture is impossible — isolate the section instead */
+      css.textContent += 'main > section:not(#' + shot + '), .nav, footer{ display:none !important }';
+    }
+  }
 })();
 
 /* ============================================================
