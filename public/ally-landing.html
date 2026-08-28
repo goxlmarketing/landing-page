@@ -3167,6 +3167,59 @@
      align-self:start matters: .pitch-inner centres its items, which sizes the
      grid area to the content and leaves sticky nothing to travel within.
      Only above 1024px, where the two columns exist at all. */
+  /* ---------- three sections, one place ----------
+     Consecutive sticky siblings inside a single containing block pile up
+     instead of scrolling away: each one holds at the top while the next
+     rises over it. The reader stays put; the page underneath changes.
+
+     The receding section shrinks and dims while it is being covered, which
+     is what stops the swap reading as one flat card sliding over another.
+     Its timeline cannot come from itself — a stuck element does not move, so
+     view() on it would sit still for exactly the stretch that needs to
+     animate. timeline-scope solves it: each section is driven by the
+     view-timeline of the one arriving over it, which is the thing actually
+     in motion, and entry 0%-100% is precisely the window where the cover
+     happens.
+
+     linear, not an ease: scroll position is the timing. An eased curve on a
+     scrubbed animation makes the motion lag the finger.
+
+     The sections need an opaque background to cover at all — they had none,
+     since the page ground came from body.
+
+     Desktop only. Stacking full-viewport layers on a phone costs memory for
+     an effect that needs a tall window to read, and these sections were
+     compacted for phones on purpose. */
+  @keyframes stackRecede{
+    from{ transform:scale(1);    opacity:1; }
+    to  { transform:scale(0.94); opacity:0.45; }
+  }
+  @media (min-width: 1025px){
+    @supports (animation-timeline: view()) and (timeline-scope: --a){
+      @media (prefers-reduced-motion: no-preference){
+        .stack{ timeline-scope:--stack-2, --stack-3; }
+        .stack > .pitch{
+          position:sticky;
+          top:0;
+          min-height:100vh;
+          background:var(--bg);
+        }
+        #ongoing{ view-timeline-name:--stack-2; view-timeline-axis:block; }
+        #trust  { view-timeline-name:--stack-3; view-timeline-axis:block; }
+        #day-plan,
+        #ongoing{
+          animation-name:stackRecede;
+          animation-duration:auto;
+          animation-timing-function:linear;
+          animation-fill-mode:both;
+          animation-range:entry 0% entry 100%;
+        }
+        #day-plan{ animation-timeline:--stack-2; }   /* driven by the one covering it */
+        #ongoing { animation-timeline:--stack-3; }
+      }
+    }
+  }
+
   @media (min-width: 1025px){
     /* One screen each. At their natural heights the sticky heading had
        141-245px to hold for and #trust had none at all, so it would have
@@ -3900,6 +3953,17 @@
      SECTION 4 — FINAL / EARLY ACCESS
 ========================================================== -->
 <!-- =========================================================
+     07-09 — THE STACK
+     Three sections that share one place. Each sticks to the top of the
+     viewport and the next slides up over it, so the reader never leaves the
+     spot they are standing in while the content underneath them changes.
+     The wrapper exists only to be the containing block sticky is measured
+     against; without it each section would release at its own bottom edge
+     and there would be nothing to stack.
+========================================================== -->
+<div class="stack">
+
+<!-- =========================================================
      07 — DAY PLANNING
 ========================================================== -->
 <section class="pitch pitch--flip" id="day-plan">
@@ -4001,6 +4065,8 @@
     </div>
   </div>
 </section>
+
+</div><!-- /.stack -->
 
 <section class="manifesto" id="early-access">
   <div class="final-glow" aria-hidden="true"></div>
