@@ -855,9 +855,21 @@ em{ font-style:italic; }
 
 .footer{
   border-top:1px solid var(--bd);
-  padding:28px 0 40px;
-  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding:30px 0 44px;
+  display:grid; grid-template-columns:auto 1fr auto;
+  align-items:center; gap:20px 32px;
   font-size:13px; color:var(--muted);
+}
+.foot-brand{ display:flex; align-items:baseline; gap:8px; }
+.foot-links{
+  display:flex; align-items:center; justify-content:center;
+  gap:14px; flex-wrap:wrap;
+}
+.foot-links a{ color:var(--muted); }
+.foot-links a:hover{ color:var(--forest); }
+.foot-links .divider{ color:var(--bd-2); }
+@media (max-width: 900px){
+  .footer{ grid-template-columns:1fr; justify-items:center; text-align:center; }
 }
 
 /* ============================================================
@@ -1330,8 +1342,19 @@ em{ font-style:italic; }
 </main>
 
 <footer class="footer shell">
-  <span><span class="brand-mark" style="font-size:16px">GoXL</span> &nbsp;Ally</span>
-  <span>The Founder&rsquo;s Compass</span>
+  <span class="foot-brand">
+    <span class="brand-mark" style="font-size:16px">GoXL</span>
+    <span>Ally &middot; The Founder&rsquo;s Compass</span>
+  </span>
+
+  <nav class="foot-links" aria-label="Footer">
+    <a href="/privacy.html">Privacy</a><span class="divider" aria-hidden="true">|</span>
+    <a href="/terms.html">Terms</a><span class="divider" aria-hidden="true">|</span>
+    <a href="/about.html">Our Story</a><span class="divider" aria-hidden="true">|</span>
+    <a href="https://www.instagram.com/goxl_ally?igsh=MWgzYXZxaHU5cGw2bA%3D%3D&amp;igsi=MWgzYXZxaHU5cGw2bA%3D%3D" target="_blank" rel="noopener noreferrer">Instagram</a><span class="divider" aria-hidden="true">|</span>
+    <a href="https://www.linkedin.com/showcase/goxl-ally-ai" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  </nav>
+
   <span>© 2026 GoXL</span>
 </footer>
 
