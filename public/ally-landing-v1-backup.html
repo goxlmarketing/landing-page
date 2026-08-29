@@ -1,0 +1,5065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+<title>GoXL Ally — The Founder’s Compass</title>
+<meta name="description" content="GoXL Ally helps founders turn context into clarity, better decisions, and daily action. Register for early access.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://join.goxlally.ai/">
+<link rel="icon" href="/assets/ally-logo.v1.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/ally-logo.v1.png">
+<!-- The product's fonts. Scoped to the card plates below so the rest of the
+     page keeps its own type. Same stylesheet ally-platform.html already loads,
+     so it is warm in cache by the time the dashboard opens. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700;800&display=swap">
+<meta name="theme-color" content="#040705">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="GoXL Ally">
+<meta property="og:title" content="GoXL Ally — The Founder’s Compass">
+<meta property="og:description" content="GoXL Ally helps founders turn context into clarity, better decisions, and daily action. Register for early access.">
+<meta property="og:url" content="https://join.goxlally.ai/">
+<meta property="og:image" content="https://join.goxlally.ai/assets/hero-bg.v1.jpeg">
+<meta property="og:image:alt" content="GoXL Ally — The Founder’s Compass">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GoXL Ally — The Founder’s Compass">
+<meta name="twitter:description" content="GoXL Ally helps founders turn context into clarity, better decisions, and daily action. Register for early access.">
+<meta name="twitter:image" content="https://join.goxlally.ai/assets/hero-bg.v1.jpeg">
+<script type="application/ld+json">
+</script>
+<style>
+  :root{
+    --bg:#040705;
+    --bg-2:#060b09;
+    --panel:rgba(255,255,255,0.035);
+    --panel-strong:rgba(255,255,255,0.06);
+    --border:rgba(120,220,190,0.16);
+    --border-strong:rgba(120,220,190,0.4);
+    --accent:#2fe3ac;
+    --accent-2:#7ffcd1;
+    --accent-dim:#17614c;
+    --text:#eef4f1;
+    --text-dim:#a9bab3;
+    /* 5.58:1 on the section grounds. Was #647a72 (4.26–4.43:1), which failed
+       WCAG 1.4.3 everywhere it was used at 12–13px. */
+    --text-mute:#7a8b84;
+    --font-display: 'Avenir Next', 'Segoe UI Semibold', 'Century Gothic', ui-sans-serif, system-ui, sans-serif;
+    --font-body: 'Segoe UI', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:auto; }
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--accent); color:#04120c; }
+
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  /* Skip link. Off-screen until it takes keyboard focus, so pointer users
+     never see it and keyboard users get a way past the full-height hero. */
+  .skip-link{
+    position:absolute;
+    left:-9999px;
+    top:0;
+    z-index:200;
+    background:var(--accent);
+    color:#04120c;
+    padding:12px 18px;
+    border-radius:0 0 8px 0;
+    font-weight:700;
+    font-size:14px;
+  }
+  .skip-link:focus{ left:0; }
+
+  /* Keyboard focus, site-wide.
+     :focus-visible only, so pointer clicks never show a ring — which is what
+     the old blanket `outline:none` was for. --accent-2 on these grounds is
+     well past the 3:1 that WCAG 1.4.11 asks of a state indicator, and 2px
+     satisfies the 2.4.11 perimeter requirement. */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible{
+    outline:2px solid var(--accent-2);
+    outline-offset:2px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+
+  /* ---------- utility ---------- */
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--accent);
+  }
+  .reveal{
+    opacity:0;
+    transform:translateY(24px);
+    transition:opacity 0.9s cubic-bezier(.2,.7,.3,1), transform 0.9s cubic-bezier(.2,.7,.3,1);
+  }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  /* =========================================================
+     SECTION 1 — THE PROBLEM
+  ========================================================== */
+  .problem{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:
+      linear-gradient(180deg, rgba(2,4,3,0.55) 0%, rgba(2,4,3,0.22) 30%, rgba(2,4,3,0.78) 100%),
+      radial-gradient(ellipse 60% 55% at 50% 38%, rgba(2,4,3,0.12), rgba(2,4,3,0.65) 100%),
+      url("/assets/hero-bg.v1.jpeg") center 18% / cover no-repeat;
+  }
+  #network-canvas{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    display:block;
+    mix-blend-mode:screen;
+  }
+  .mobile-hero-light{ display:none; }
+
+  .problem-inner{
+    position:relative;
+    z-index:2;
+    width:min(1240px, 92vw);
+    display:grid;
+    grid-template-columns:280px 1fr 280px;
+    align-items:center;
+    gap:24px;
+    padding:100px 0 60px;
+    min-height:80vh;
+  }
+
+  .figure-wrap{
+    grid-column:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-end;
+    position:relative;
+    min-height:520px;
+  }
+  .figure-caption{
+    margin-top:auto;
+    padding-bottom:6px;
+    text-align:center;
+    color:var(--text-dim);
+    font-size:14px;
+    letter-spacing:0.02em;
+    max-width:360px;
+    text-shadow:0 2px 12px rgba(0,0,0,0.6);
+  }
+  .figure-caption b{ color:var(--text); font-weight:600; }
+
+  .card-col{
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+  }
+  .card-col.left{ grid-column:1; align-items:flex-start; }
+  .card-col.right{ grid-column:3; align-items:flex-end; }
+
+  .qnum{
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--accent);
+    letter-spacing:0.14em;
+    display:block;
+    margin-bottom:2px;
+  }
+  .qtitle{ font-size:12px; color:var(--text-mute); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:3px; }
+  .qtext{ font-size:14.5px; color:var(--text); line-height:1.4; }
+
+  .scroll-cue{
+    position:absolute;
+    bottom:28px; left:50%;
+    transform:translateX(-50%);
+    color:var(--text-mute);
+    font-size:11px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    z-index:2;
+  }
+  .scroll-cue .chev{
+    width:9px; height:9px;
+    border-right:1.5px solid var(--text-mute);
+    border-bottom:1.5px solid var(--text-mute);
+    transform:rotate(45deg);
+    animation:bounceDown 1.8s ease-in-out infinite;
+  }
+  @keyframes bounceDown{
+    0%,100%{ transform:rotate(45deg) translate(0,0); opacity:.5; }
+    50%{ transform:rotate(45deg) translate(4px,4px); opacity:1; }
+  }
+
+  @media (max-width: 920px){
+    .problem-inner{ grid-template-columns:1fr; padding-top:70px; }
+    .card-col.left, .card-col.right{ grid-column:1; align-items:center; }
+    .card-col{ flex-direction:row; flex-wrap:wrap; justify-content:center; }
+    .figure-wrap{ grid-column:1; order:-1; margin-bottom:10px; }
+  }
+
+  /* =========================================================
+     SECTION 2 — CLARITY HERO
+  ========================================================== */
+  .wrap{ width:min(1160px, 90vw); margin:0 auto; position:relative; z-index:2; }
+
+  h1.headline{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(36px, 5.4vw, 60px);
+    line-height:1.05;
+    letter-spacing:-0.01em;
+  }
+  h1.headline .accent{ color:var(--accent); }
+
+  .value-row{
+    display:flex; gap:14px; align-items:center;
+    margin:26px 0 34px;
+    color:var(--text-dim);
+    font-size:14px;
+    letter-spacing:0.03em;
+  }
+  .value-row .sep{ color:var(--text-mute); }
+
+  .cta{
+    display:inline-flex; align-items:center; gap:10px;
+    background:var(--accent);
+    color:#04120c;
+    font-weight:700;
+    font-size:15px;
+    padding:14px 22px;
+    border:none;
+    border-radius:10px;
+    transition:transform .3s cubic-bezier(.3,.9,.4,1), box-shadow .3s, background .3s;
+    box-shadow:0 10px 30px -10px rgba(47,227,172,0.5);
+  }
+  .cta:hover{ transform:translateY(-3px); box-shadow:0 16px 40px -12px rgba(47,227,172,0.65); }
+  .cta:active{ transform:translateY(-1px) scale(0.98); }
+  .cta svg{ width:16px; height:16px; transition:transform .3s; }
+  .cta:hover svg{ transform:translateX(4px); }
+
+
+  /* rotating pinwheel logo mark */
+  .mark-wrap{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:18px;
+  }
+  #pinwheel{ width:min(260px,60vw); height:auto; }
+  .mark-blade{ transform-origin:170px 170px; }
+  #pinwheel-group{
+    animation:spinSlow 26s linear infinite;
+    transform-origin:170px 170px;
+  }
+  @keyframes spinSlow{ to{ transform:rotate(360deg); } }
+  #pinwheel-spark{
+    animation:sparkPulse 2.4s ease-in-out infinite;
+    transform-origin:170px 170px;
+  }
+  @keyframes sparkPulse{
+    0%,100%{ transform:scale(1); opacity:.9; }
+    50%{ transform:scale(1.25); opacity:1; }
+  }
+  .mark-caption{ text-align:center; font-size:14px; color:var(--text-dim); max-width:280px; }
+  .mark-caption .accent{ color:var(--accent); font-weight:600; }
+
+  @media (max-width:860px){
+    .value-row{ justify-content:center; }
+    .mark-wrap{ margin-top:20px; }
+  }
+
+  /* =========================================================
+     SECTION 3 — FLOW / STEPS
+  ========================================================== */
+  .flow{ padding:70px 0 100px; }
+  .flow-top{
+    display:grid;
+    grid-template-columns:0.9fr 1.4fr;
+    gap:50px;
+    align-items:start;
+    margin-bottom:46px;
+  }
+  h2.big{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(28px,3.6vw,40px);
+    line-height:1.15;
+  }
+  h2.big .accent{ color:var(--accent); }
+  .flow-sub{ color:var(--text-dim); font-size:14.5px; margin-top:10px; }
+
+  .stepper{
+    display:flex; align-items:center; gap:0;
+    margin-top:28px;
+  }
+  /* Real <button> elements so they are keyboard-reachable and announced.
+     These declarations strip the UA button chrome so the rendering is
+     byte-for-byte what the old <div> produced; the :focus-visible ring
+     defined at the top of this sheet still applies. */
+  .step{
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    position:relative; flex:1;
+    cursor:pointer;
+    appearance:none;
+    background:none;
+    border:0;
+    padding:0;
+    margin:0;
+    font:inherit;
+    color:inherit;
+    text-align:center;
+  }
+  .step .dot{
+    width:34px; height:34px; border-radius:50%;
+    border:1.5px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--text-mute);
+    background:var(--bg-2);
+    transition:all .4s ease;
+    font-size:14px;
+  }
+  .step .lbl{ font-size:12px; color:var(--text-mute); transition:color .4s; }
+  .step:not(:last-child)::after{
+    content:'';
+    position:absolute; top:17px; left:calc(50% + 17px); right:calc(-50% + 17px);
+    height:1.5px; background:var(--border);
+    z-index:0;
+  }
+  .step.active .dot{ border-color:var(--accent); color:var(--accent); box-shadow:0 0 0 4px rgba(47,227,172,0.12); }
+  .step.active .lbl{ color:var(--accent); }
+  .step.done::after{ background:var(--accent); }
+
+  /* cards grid */
+  .cards4{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:18px;
+  }
+  @media (max-width:980px){ .cards4{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:600px){ .cards4{ grid-template-columns:1fr; } }
+  @media (max-width:900px){ .flow-top{ grid-template-columns:1fr; } }
+
+  .fcard{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:20px;
+    min-height:260px;
+    display:flex; flex-direction:column;
+    transition:transform .4s cubic-bezier(.2,.8,.3,1), border-color .3s, box-shadow .4s;
+  }
+  .fcard:hover{
+    transform:translateY(-8px);
+    border-color:var(--border-strong);
+    box-shadow:0 22px 50px -22px rgba(47,227,172,0.4);
+  }
+  .fcard .fnum{ font-family:var(--font-mono); color:var(--accent); font-size:11px; letter-spacing:0.14em; }
+  .fcard h3{ font-size:16px; margin:6px 0 6px; font-weight:700; }
+  .fcard p.desc{ font-size:13px; color:var(--text-dim); margin-bottom:16px; line-height:1.4; }
+
+  /* card 1: diagnosis pills */
+  .pills{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:auto; }
+  .pill{
+    font-size:12px; padding:7px 12px; border-radius:20px;
+    border:1px solid var(--border); color:var(--text-dim);
+    background:transparent; transition:all .25s;
+  }
+  .pill.active{ background:var(--accent); color:#04120c; border-color:var(--accent); font-weight:700; }
+  .pill:hover:not(.active){ border-color:var(--border-strong); color:var(--text); }
+  .go-btn{
+    align-self:flex-end; margin-top:16px;
+    width:38px; height:38px; border-radius:10px;
+    background:var(--accent); border:none; color:#04120c;
+    display:flex; align-items:center; justify-content:center;
+    transition:transform .3s;
+  }
+  .go-btn:hover{ transform:translateX(3px); }
+  .go-btn svg{ width:16px; height:16px; }
+
+  /* card 2: insight skeleton */
+  .skel-row{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .skel-bar{
+    height:9px; border-radius:5px; flex:1;
+    background:linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(47,227,172,0.18) 37%, rgba(255,255,255,0.05) 63%);
+    background-size:400% 100%;
+    animation:shimmer 2.6s ease-in-out infinite;
+  }
+  @keyframes shimmer{
+    0%{ background-position:100% 0; }
+    100%{ background-position:0 0; }
+  }
+  .skel-dot{
+    width:6px; height:6px; border-radius:50%; background:var(--accent);
+    opacity:.25; animation:dotPulse 1.8s ease-in-out infinite;
+  }
+  .skel-row:nth-child(1) .skel-dot{ animation-delay:0s; }
+  .skel-row:nth-child(2) .skel-dot{ animation-delay:.25s; }
+  .skel-row:nth-child(3) .skel-dot{ animation-delay:.5s; }
+  .skel-row:nth-child(4) .skel-dot{ animation-delay:.75s; }
+  @keyframes dotPulse{ 0%,100%{ opacity:.2; } 50%{ opacity:1; } }
+
+  /* card 3: direction options */
+  .opt-row{
+    display:flex; align-items:center; gap:12px;
+    padding:12px; border-radius:10px;
+    border:1px solid var(--border);
+    margin-bottom:10px;
+    font-size:13px;
+    transition:border-color .3s, background .3s, transform .3s;
+  }
+  .opt-row:hover{ border-color:var(--border-strong); background:rgba(47,227,172,0.06); transform:translateX(3px); }
+  .opt-row .oicon{ color:var(--accent); flex:0 0 auto; }
+  .opt-row .oicon svg{ width:16px; height:16px; }
+
+  /* card 4: action checklist */
+  .check-row{
+    display:flex; align-items:center; gap:10px;
+    padding:8px 0; font-size:13.5px; color:var(--text-dim);
+    cursor:pointer; user-select:none;
+  }
+  /* The real control. These <label>s previously wrapped nothing at all, so
+     they toggled only via a JS click handler — no keyboard path, and nothing
+     for a screen reader to announce as checkable. The input is taken out of
+     flow rather than hidden, so it stays focusable and the flex `gap` is
+     unchanged; .box remains the entire visual. */
+  .check-row .check-input{
+    position:absolute;
+    width:1px; height:1px;
+    margin:0; padding:0; border:0;
+    opacity:0;
+    pointer-events:none;
+  }
+  /* Keyboard focus lands on the invisible input, so show the ring on the box. */
+  .check-row .check-input:focus-visible + .box{
+    outline:2px solid var(--accent-2);
+    outline-offset:2px;
+  }
+  .check-row .box{
+    width:16px; height:16px; border-radius:5px; flex:0 0 auto;
+    border:1.5px solid var(--border-strong);
+    display:flex; align-items:center; justify-content:center;
+    transition:all .25s;
+  }
+  .check-row .box svg{ width:10px; height:10px; opacity:0; transition:opacity .2s; stroke:#04120c; }
+  .check-row.done .box{ background:var(--accent); border-color:var(--accent); }
+  .check-row.done .box svg{ opacity:1; }
+  .check-row.done span.label{ text-decoration:line-through; color:var(--text-mute); }
+  .progress-track{
+    margin-top:auto; height:5px; border-radius:4px; background:rgba(255,255,255,0.06); overflow:hidden;
+  }
+  .progress-fill{ height:100%; width:0%; background:var(--accent); transition:width .5s cubic-bezier(.3,.8,.3,1); }
+  .progress-label{ font-size:11px; color:var(--text-mute); margin-top:8px; }
+
+  /* =========================================================
+     SECTION 4 — DIVIDER / MANIFESTO
+  ========================================================== */
+  .manifesto{
+    position:relative;
+    padding:150px 0 130px;
+    text-align:center;
+    overflow:hidden;
+    background:#030503;
+  }
+  .manifesto .mountains{
+    position:absolute; bottom:0; left:0; right:0; height:60%;
+    background:
+      linear-gradient(180deg, transparent, rgba(4,7,5,0.4) 60%, var(--bg) 100%),
+      linear-gradient(150deg, #0d1a14 10%, transparent 60%),
+      linear-gradient(210deg, #0a1310 10%, transparent 55%);
+    clip-path:polygon(0% 100%, 0% 55%, 12% 40%, 24% 58%, 38% 30%, 52% 52%, 66% 22%, 80% 48%, 92% 34%, 100% 55%, 100% 100%);
+    opacity:.9;
+  }
+  .manifesto .horizon-glow{
+    position:absolute; bottom:14%; left:50%; transform:translateX(-50%);
+    width:260px; height:260px; border-radius:50%;
+    background:radial-gradient(circle, rgba(47,227,172,0.5), transparent 70%);
+    filter:blur(30px);
+    animation:pulseGlow 6s ease-in-out infinite;
+  }
+  .manifesto h2{
+    position:relative; z-index:2;
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(22px,3.4vw,32px);
+    line-height:1.5;
+    color:var(--text-dim);
+  }
+  .manifesto h2 .accent{ color:var(--accent); }
+
+  /* =========================================================
+     FOOTER
+  ========================================================== */
+  footer{
+    padding:60px 0 40px;
+    text-align:center;
+    background:var(--bg);
+  }
+  .foot-links{ display:flex; justify-content:center; gap:22px; font-size:12.5px; color:var(--text-dim); }
+  .foot-links a{ transition:color .2s; position:relative; }
+  /* Tap target. The links render 16px tall, under the 24px WCAG 2.5.8 floor.
+     Extending the hit area with a pseudo-element rather than padding keeps the
+     footer's height and spacing exactly as they were. All five are already
+     wider than 24px, so only the vertical axis needs help. */
+  .foot-links a::after{
+    content:'';
+    position:absolute;
+    left:0; right:0; top:50%;
+    height:24px;
+    transform:translateY(-50%);
+  }
+  .foot-links a:hover{ color:var(--accent); }
+  .foot-links .divider{ color:var(--text-mute); }
+
+
+  /* ===== floating Qs + scrollbar + logo ===== */
+  html{
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+    scroll-snap-type:none;
+  }
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar{ width:0; height:0; display:none; }
+  body{ scrollbar-width:none; -ms-overflow-style:none; }
+
+  .problem,
+  .manifesto{
+    min-height:100vh;
+    min-height:100dvh;
+    height:100vh;
+    height:100dvh;
+    max-height:100dvh;
+    overflow:hidden;
+    scroll-snap-align:none;
+    scroll-snap-stop:normal;
+    box-sizing:border-box;
+  }
+  .flow{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .top-brand{
+    position:absolute; top:28px; left:max(22px,4vw);
+    z-index:40; isolation:isolate; display:flex; align-items:center; gap:10px;
+    font-family:var(--font-display); font-weight:700; font-size:18px;
+    letter-spacing:-0.02em; color:#fff !important;
+    padding:6px 14px 6px 6px;
+    border-radius:999px;
+    background:rgba(8,16,12,0.72);
+    border:1px solid rgba(255,255,255,0.28);
+    box-shadow:0 8px 28px -12px rgba(0,0,0,.7);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+  }
+  .top-brand span{ color:#fff !important; }
+  .top-brand img{
+    width:32px; height:32px; object-fit:contain;
+    border-radius:0;
+    background:transparent;
+    filter:none;
+    mix-blend-mode:screen;
+  }
+
+  .qnum{ letter-spacing:0.12em; }
+
+  .mark-wrap{
+    display:flex; flex-direction:column; align-items:center; gap:18px;
+  }
+  .mark-wrap .brand-logo,
+  #pinwheel{ display:none !important; }
+
+  .manifesto{ position:relative; }
+  footer{
+    /* keep readable */
+  }
+
+
+  /* ===== full data-map polish ===== */
+  html{
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+    scroll-snap-type:none;
+  }
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar{ width:0; height:0; display:none; }
+  body{ scrollbar-width:none; -ms-overflow-style:none; }
+
+  .problem,
+  .manifesto{
+    min-height:100vh;
+    min-height:100dvh;
+    height:100vh;
+    height:100dvh;
+    max-height:100dvh;
+    overflow:hidden;
+    scroll-snap-align:none;
+    scroll-snap-stop:normal;
+    box-sizing:border-box;
+  }
+  .flow{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .top-brand{
+    position:absolute; top:28px; left:max(22px,4vw);
+    z-index:40; isolation:isolate; display:flex; align-items:center; gap:10px;
+    font-family:var(--font-display); font-weight:700; font-size:18px;
+    letter-spacing:-0.02em; color:#fff !important;
+    padding:6px 14px 6px 6px;
+    border-radius:999px;
+    background:rgba(8,16,12,0.72);
+    border:1px solid rgba(255,255,255,0.28);
+    box-shadow:0 8px 28px -12px rgba(0,0,0,.7);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+  }
+  .top-brand span{ color:#fff !important; }
+  .top-brand img{
+    width:32px; height:32px; object-fit:contain; border-radius:0;
+    background:transparent;
+    filter:none;
+    mix-blend-mode:screen;
+  }
+  .hero-preview{
+    position:absolute;
+    top:28px;
+    right:max(22px,4vw);
+    z-index:40;
+    height:44px;
+    width:112px;
+    max-width:min(200px, 38vw);
+    overflow:hidden;
+    padding:0;
+    border-radius:999px;
+    background:rgba(8,16,12,0.72);
+    border:1px solid rgba(255,255,255,0.28);
+    box-shadow:0 8px 28px -12px rgba(0,0,0,.7);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    pointer-events:none;
+  }
+  .hero-preview img{
+    position:absolute;
+    left:50%;
+    top:55%;
+    width:87px;
+    height:87px;
+    max-width:none;
+    object-fit:contain;
+    transform:translate(-50%,-50%);
+  }
+
+  .hero-statement{
+    text-align:center; max-width:440px; padding:0 12px 8px;
+    text-shadow:0 2px 18px rgba(0,0,0,0.55);
+  }
+  .hero-lead{
+    font-family:var(--font-display);
+    font-size:clamp(28px, 3.6vw, 44px);
+    font-weight:600; line-height:1.12; letter-spacing:-0.03em;
+    color:#fff; margin:0 0 14px;
+  }
+  .hero-ask{
+    color:var(--accent); font-size:clamp(15px, 1.6vw, 20px);
+    line-height:1.4; margin:0 0 22px; font-weight:400;
+  }
+  .cta-outline{
+    background:transparent !important; color:var(--text) !important;
+    border:1px solid rgba(238,244,241,0.35) !important;
+  }
+  .cta-outline:hover{
+    background:var(--accent) !important; color:#04120c !important;
+    border-color:var(--accent) !important;
+  }
+  a.cta{ display:inline-flex; text-decoration:none; }
+  .cta-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    /* 8px against 56px of space above the CTA read as cramped — a 7x
+       asymmetry in the same stack. */
+    gap:18px;
+  }
+  .cta-limit{
+    margin:0;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:6px 10px;
+    border:1px solid rgba(47,227,172,0.24);
+    border-radius:999px;
+    background:rgba(47,227,172,0.07);
+    box-shadow:0 0 22px rgba(47,227,172,0.08);
+    font-size:10.5px;
+    font-weight:650;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:rgba(127,252,209,0.9);
+  }
+  .cta-limit::before{
+    content:'';
+    width:5px;
+    height:5px;
+    flex:0 0 auto;
+    border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 9px rgba(47,227,172,0.85);
+    animation:slotPulse 2.2s ease-in-out infinite;
+  }
+  @keyframes slotPulse{
+    0%,100%{ opacity:.55; transform:scale(.85); }
+    50%{ opacity:1; transform:scale(1.15); }
+  }
+
+  .micro{
+    color:var(--text-mute); font-size:14px; line-height:1.55;
+    max-width:36ch; margin:0 0 22px;
+  }
+  h2.headline{
+    font-family:var(--font-display);
+    font-size:clamp(40px, 5vw, 72px);
+    font-weight:500; line-height:1.08; letter-spacing:-0.03em;
+  }
+  h2.headline .accent{ color:var(--accent); }
+
+  .mark-wrap .brand-logo{
+    width:min(200px, 48vw); height:auto; object-fit:contain;
+    border-radius:16px;
+    filter:drop-shadow(0 12px 28px rgba(0,0,0,0.45));
+  }
+  #pinwheel{ display:none !important; }
+
+  .manifesto{
+    position:relative;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:0 24px 110px;
+  }
+  .manifesto-sub{
+    margin-top:18px; color:var(--text-dim); font-size:16px;
+  }
+
+
+
+  /* ===== final section: one composition (not two blocks) ===== */
+  .manifesto{
+    position:relative !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    text-align:center !important;
+    padding:0 24px !important;
+    overflow:hidden !important;
+    background:
+      radial-gradient(ellipse 42% 30% at 50% 58%, rgba(11, 59, 44, 0.35), transparent 70%),
+      linear-gradient(180deg, #020605 0%, #030806 48%, #04110c 100%) !important;
+  }
+  .manifesto .mountains,
+  .manifesto .horizon-glow{
+    display:none !important;
+  }
+  .final-glow{
+    position:absolute;
+    left:50%;
+    bottom:28%;
+    transform:translateX(-50%);
+    width:min(420px, 70vw);
+    height:220px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(47,227,172,0.28), transparent 70%);
+    filter:blur(28px);
+    pointer-events:none;
+    z-index:0;
+  }
+  .final-horizon{
+    position:absolute;
+    left:12%;
+    right:12%;
+    bottom:26%;
+    height:1px;
+    background:linear-gradient(90deg, transparent, rgba(232,242,238,0.16) 20%, rgba(47,227,172,0.28) 50%, rgba(232,242,238,0.16) 80%, transparent);
+    pointer-events:none;
+    z-index:0;
+  }
+  .final-spark{
+    position:absolute;
+    left:50%;
+    bottom:calc(26% - 3px);
+    width:6px; height:6px;
+    margin-left:-3px;
+    border-radius:50%;
+    background:rgba(47,227,172,0.9);
+    box-shadow:0 0 14px rgba(47,227,172,0.5);
+    pointer-events:none;
+    z-index:0;
+  }
+  .final-stack{
+    position:relative;
+    z-index:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0;
+    max-width:920px;
+    width:100%;
+  }
+  .manifesto h2{
+    margin:0 !important;
+    font-size:clamp(34px, 5.2vw, 64px) !important;
+    line-height:1.18 !important;
+  }
+  .manifesto-sub{
+    margin:18px 0 0 !important;
+    color:rgba(232,242,238,0.55) !important;
+    font-size:16px !important;
+  }
+  .manifesto .cta{
+    margin-top:28px !important;
+  }
+  .final-brand{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    margin-top:48px;
+  }
+  .final-brand .brand-logo{
+    width:48px;
+    height:48px;
+    border-radius:12px;
+    object-fit:contain;
+  }
+  .final-brand__text{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:4px;
+    text-align:left;
+  }
+  .final-brand__name{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:22px;
+    letter-spacing:-0.02em;
+    color:#fff;
+    line-height:1;
+  }
+  .final-brand__tag{
+    font-size:12px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:rgba(47,227,172,0.85);
+  }
+  .manifesto .foot-links{
+    margin-top:36px;
+    opacity:0.45;
+    font-size:12px;
+    gap:14px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+
+
+  /* ===== footer links pinned to bottom of final screen ===== */
+  .manifesto{
+    position:relative !important;
+  }
+  .final-stack{
+    padding-bottom:72px; /* room above footer */
+  }
+  .manifesto .foot-links{
+    position:absolute !important;
+    left:0;
+    right:0;
+    bottom:22px !important;
+    margin-top:0 !important;
+    /* 0.42 put these links at 2.5:1 — the ancestor opacity dims the text
+       without dimming the ground behind it, so the contrast collapses. 0.7
+       gives 5.2:1 and matches what the mobile rule below already used. */
+    opacity:0.7 !important;
+    z-index:2;
+  }
+  .final-horizon{
+    bottom:8% !important;
+  }
+  .final-spark{
+    bottom:calc(8% - 3px) !important;
+  }
+  .final-glow{
+    bottom:12% !important;
+  }
+  .final-brand{
+    margin-top:40px !important;
+  }
+
+
+  /* ===== final brand: logo + ally only ===== */
+  .manifesto .final-access{
+    margin-top:28px;
+    position:relative;
+    z-index:3;
+  }
+  .manifesto .final-access .cta{
+    display:inline-flex !important;
+    background:var(--accent) !important;
+    color:#04120c !important;
+    border:1px solid var(--accent) !important;
+    font-weight:700 !important;
+    box-shadow:0 12px 32px -8px rgba(47,227,172,0.75), 0 0 0 0 rgba(47,227,172,0.4) !important;
+    animation:eaGlow 2.4s ease-in-out infinite;
+  }
+  .manifesto .final-access .cta:hover{
+    background:#7ffcd1 !important;
+    color:#04120c !important;
+    border-color:#7ffcd1 !important;
+    transform:translateY(-2px) !important;
+  }
+  @keyframes eaGlow{
+    0%,100%{ box-shadow:0 12px 32px -8px rgba(47,227,172,0.7), 0 0 0 0 rgba(47,227,172,0.38); }
+    50%{ box-shadow:0 16px 42px -8px rgba(47,227,172,0.95), 0 0 0 12px rgba(47,227,172,0); }
+  }
+  .final-brand{
+    margin-top:56px !important;
+    gap:12px !important;
+  }
+  .final-brand__text{
+    align-items:center !important;
+  }
+  .final-brand__name{
+    font-size:28px !important;
+    font-weight:600 !important;
+  }
+  
+
+
+  
+
+  /* ===== final headline: noise one line, clarity next ===== */
+  .manifesto h2{
+    margin:0 !important;
+    max-width:none !important;
+    width:100% !important;
+    font-family:var(--font-display) !important;
+    font-weight:500 !important;
+    line-height:1.18 !important;
+    letter-spacing:-0.028em !important;
+    color:rgba(255,255,255,0.96) !important;
+  }
+  .manifesto h2 .line-noise{
+    display:block;
+    white-space:nowrap;
+    font-size:clamp(28px, 5.2vw, 64px) !important;
+    font-weight:600 !important;
+  }
+  .manifesto h2 .line-clarity{
+    display:block;
+    margin-top:0.28em;
+    font-size:clamp(26px, 4.4vw, 52px) !important;
+    font-weight:500 !important;
+    white-space:nowrap;
+  }
+  .manifesto h2 .accent{
+    color:var(--accent) !important;
+  }
+  .manifesto-sub{
+    margin:24px 0 0 !important;
+    max-width:32ch !important;
+    font-size:clamp(15px, 1.5vw, 18px) !important;
+    line-height:1.55 !important;
+    color:rgba(232,242,238,0.58) !important;
+  }
+  @media (max-width:520px){
+    .manifesto h2 .line-noise,
+    .manifesto h2 .line-clarity{
+      white-space:normal;
+    }
+  }
+
+
+  /* ===== final headline bigger ===== */
+  .manifesto h2 .line-noise{
+    font-size:clamp(34px, 6.4vw, 84px) !important;
+    font-weight:600 !important;
+  }
+  .manifesto h2 .line-clarity{
+    font-size:clamp(30px, 5.4vw, 68px) !important;
+    font-weight:500 !important;
+    margin-top:0.22em !important;
+  }
+
+
+  /* ===== last page closing copy (from original final) ===== */
+  .final-brand{
+    margin-top:48px !important;
+    flex-direction:column !important;
+    gap:10px !important;
+  }
+  .final-brand__text{
+    align-items:center !important;
+    text-align:center !important;
+    gap:6px !important;
+  }
+  .final-brand__name{
+    font-size:clamp(28px, 3vw, 40px) !important;
+    white-space:nowrap;
+  }
+  .final-brand__tag{
+    display:block !important;
+    font-size:14px !important;
+    letter-spacing:0.04em !important;
+    text-transform:none !important;
+    color:rgba(232,242,238,0.88) !important;
+  }
+  .final-brand .brand-logo{
+    width:56px !important;
+    height:56px !important;
+    border-radius:0 !important;
+    object-fit:contain !important;
+    background:transparent !important;
+  }
+  .manifesto-sub{
+    display:none !important; /* short line; use journey copy instead */
+  }
+
+  /* ===== journey line on final ===== */
+  .final-journey{
+    margin:40px auto 0 !important;
+    max-width:42rem !important;
+    font-size:clamp(15px, 1.45vw, 18px) !important;
+    line-height:1.7 !important;
+    letter-spacing:0.01em !important;
+    color:rgba(232,242,238,0.78) !important;
+    text-align:center !important;
+  }
+
+
+  /* ===== last page: quiet polish ===== */
+  .manifesto{
+    background:
+      radial-gradient(ellipse 48% 36% at 50% 42%, rgba(14,52,40,0.38), transparent 72%),
+      radial-gradient(ellipse 30% 22% at 50% 88%, rgba(47,227,172,0.06), transparent 70%),
+      linear-gradient(180deg, #020605 0%, #030806 48%, #04110c 100%) !important;
+  }
+  .manifesto h2 .line-noise{
+    text-shadow:0 8px 40px rgba(0,0,0,0.35);
+  }
+  .manifesto h2 .accent{
+    text-shadow:0 0 28px rgba(47,227,172,0.28);
+  }
+  .final-brand .brand-logo{
+    width:64px !important;
+    height:64px !important;
+    filter:drop-shadow(0 10px 24px rgba(47,227,172,0.18));
+  }
+  .final-brand__name{
+    letter-spacing:-0.03em !important;
+  }
+  .final-brand__tag{
+    opacity:0.9;
+  }
+  .final-journey{
+    max-width:38rem !important;
+    color:rgba(232,242,238,0.62) !important;
+  }
+  .final-horizon{
+    left:18% !important;
+    right:18% !important;
+    opacity:0.85;
+  }
+  .final-spark{
+    animation:finalSpark 3.2s ease-in-out infinite;
+  }
+  .final-glow{
+    animation:finalGlow 6s ease-in-out infinite;
+  }
+  @keyframes finalSpark{
+    0%,100%{ opacity:0.65; transform:scale(1); box-shadow:0 0 10px rgba(47,227,172,0.35); }
+    50%{ opacity:1; transform:scale(1.15); box-shadow:0 0 18px rgba(47,227,172,0.6); }
+  }
+  @keyframes finalGlow{
+    0%,100%{ opacity:0.7; }
+    50%{ opacity:1; }
+  }
+  .manifesto .foot-links a:hover{
+    color:rgba(47,227,172,0.9) !important;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .final-spark, .final-glow{ animation:none !important; }
+  }
+
+
+  /* ===== hero: center-bottom cinematic ===== */
+  .figure-wrap{
+    justify-content:flex-end !important;
+    padding-bottom:clamp(16px, 3vh, 36px) !important;
+  }
+  .problem-inner{
+    display:flex !important;
+    align-items:stretch !important;
+    justify-content:center !important;
+    grid-template-columns:none !important;
+    width:min(920px, 92vw) !important;
+  }
+  .problem-inner .figure-wrap{
+    grid-column:auto !important;
+    width:100% !important;
+  }
+  .problem .card-col,
+
+  .hero-statement{
+    text-align:center !important;
+    max-width:640px !important;
+    width:100% !important;
+    margin:0 auto !important;
+    padding:0 12px !important;
+    transform:translateY(88px) !important;
+  }
+  .hero-lead{
+    font-size:clamp(36px, 5.2vw, 64px) !important;
+    font-weight:600 !important;
+    line-height:1.08 !important;
+    letter-spacing:-0.035em !important;
+    margin:0 0 16px !important;
+    max-width:none !important;
+  }
+  .hero-ask{
+    margin:0 auto 26px !important;
+    font-size:clamp(16px, 1.7vw, 22px) !important;
+    line-height:1.4 !important;
+    font-weight:400 !important;
+    /* 28ch broke this 61-character line into three, orphaning "next." on its
+       own. 34ch fits it in two, and `balance` evens their lengths instead of
+       leaving a long first line and a short second. */
+    max-width:34ch;
+    text-wrap:balance;
+  }
+  .hero-cta{
+    margin:0 auto;
+    background:var(--accent) !important;
+    color:#04120c !important;
+    border:1px solid var(--accent) !important;
+    font-weight:700 !important;
+    box-shadow:0 10px 28px -10px rgba(47,227,172,0.65), 0 0 0 1px rgba(47,227,172,0.15) !important;
+  }
+  .hero-cta:hover{
+    background:#7ffcd1 !important;
+    color:#04120c !important;
+    border-color:#7ffcd1 !important;
+    transform:translateY(-2px) !important;
+    box-shadow:0 14px 34px -10px rgba(47,227,172,0.75) !important;
+  }
+
+  /* ===== hero: 4 soft floating questions (drag to place) ===== */
+  .float-qs{
+    position:absolute;
+    inset:0;
+    z-index:3;
+    pointer-events:none;
+  }
+  .float-q{
+    position:absolute;
+    margin:0;
+    max-width:230px;
+    padding:14px 16px;
+    border-radius:14px;
+    border:1px solid rgba(232,242,238,0.14);
+    background:rgba(6,12,10,0.45);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    color:rgba(238,244,241,0.9);
+    font-family:var(--font-display);
+    font-size:clamp(14px, 1.2vw, 16px);
+    font-weight:500;
+    line-height:1.35;
+    letter-spacing:-0.01em;
+    text-shadow:0 2px 14px rgba(0,0,0,0.45);
+    animation:floatQ 7s ease-in-out infinite;
+    pointer-events:auto;
+    user-select:none;
+    touch-action:none;
+    right:auto;
+    bottom:auto;
+  }
+  .float-q__label{
+    display:block;
+    margin-bottom:6px;
+    font-family:var(--font-body);
+    font-size:10px;
+    font-weight:500;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:rgba(47,227,172,0.75);
+  }
+  /* baked from float-q-lock.json */
+  .float-q--tl{ top:8.8%; left:24.7%; animation-delay:0s; }
+  .float-q--bl{ top:39.5%; left:17.2%; animation-delay:1.1s; }
+  .float-q--tr{ top:5.2%; left:61.4%; animation-delay:0.55s; }
+  .float-q--br{ top:37.4%; left:70.8%; animation-delay:1.65s; }
+  @keyframes floatQ{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-7px); }
+  }
+
+  .float-edit-bar{
+    position:absolute;
+    top:22px;
+    right:max(16px, 3vw);
+    z-index:20;
+    display:none;
+    gap:8px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+  }
+  body.is-float-edit .float-edit-bar{ display:flex; }
+  .float-edit-bar button{
+    border:1px solid rgba(232,242,238,0.28);
+    background:rgba(6,12,10,0.72);
+    color:rgba(238,244,241,0.92);
+    font-size:12px;
+    font-weight:600;
+    padding:8px 12px;
+    border-radius:8px;
+    backdrop-filter:blur(8px);
+    cursor:pointer;
+  }
+  .float-edit-bar button:hover{
+    border-color:rgba(47,227,172,0.55);
+    color:var(--accent);
+  }
+  .float-edit-bar button.is-primary{
+    background:var(--accent);
+    color:#04120c;
+    border-color:var(--accent);
+  }
+  .float-edit-bar button.is-primary:hover{
+    filter:brightness(1.06);
+    color:#04120c;
+  }
+  .float-edit-hint{
+    position:absolute;
+    top:62px;
+    right:max(16px, 3vw);
+    z-index:20;
+    font-size:11px;
+    color:rgba(232,242,238,0.55);
+    background:rgba(6,12,10,0.65);
+    border:1px solid rgba(232,242,238,0.12);
+    padding:6px 10px;
+    border-radius:8px;
+    display:none;
+  }
+  body.is-float-edit .problem.is-editing-floats .float-edit-hint{ display:block; }
+  .problem.is-editing-floats .float-q{
+    animation:none !important;
+    cursor:grab;
+    outline:1px dashed rgba(47,227,172,0.45);
+    box-shadow:0 10px 28px -14px rgba(47,227,172,0.45);
+  }
+  .problem.is-editing-floats .float-q.is-dragging{
+    cursor:grabbing;
+    outline-color:var(--accent);
+    z-index:30;
+  }
+  .problem.is-editing-floats .float-qs{ pointer-events:auto; }
+
+  @media (max-width:900px){
+    .float-edit-bar{ top:70px; }
+    .float-q{ max-width:42vw; font-size:13px; padding:12px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .float-q{ animation:none !important; }
+  }
+
+
+  /* ===== third page: progressive journey ===== */
+  .flow{
+    background:
+      radial-gradient(ellipse 60% 50% at 68% 45%, rgba(11,59,44,0.32), transparent 70%),
+      linear-gradient(180deg, #040908 0%, #030706 55%, #020605 100%) !important;
+    /* This section is no longer locked to 100dvh — its content is only ~400px
+       tall, so at full height it filled 52% of the screen with 191px of dead
+       space above and below, against 89% and 93% for the sections either side.
+       It sizes to its content now, with padding in the same range as those. */
+    padding:clamp(72px, 9vh, 112px) 24px !important;
+  }
+  .flow-wrap{
+    width:min(1380px, 94vw) !important;
+    display:grid !important;
+    grid-template-columns:minmax(260px, 0.9fr) minmax(0, 1.85fr) !important;
+    gap:clamp(32px, 4vw, 64px) !important;
+    align-items:center !important;
+  }
+  .flow-head .big{
+    font-size:clamp(56px, 6.8vw, 92px) !important;
+    font-weight:600 !important;
+    line-height:1.02 !important;
+    letter-spacing:-0.04em !important;
+    color:#fff !important;
+  }
+  .flow-head .big .accent{
+    color:var(--accent) !important;
+  }
+  .flow-head .flow-sub{
+    margin-top:18px !important;
+    max-width:30ch !important;
+    color:rgba(232,242,238,0.55) !important;
+    font-size:clamp(15px, 1.25vw, 17px) !important;
+    line-height:1.55 !important;
+  }
+  .flow .stepper{
+    margin-top:36px !important;
+    max-width:380px;
+  }
+  .flow .step{ opacity:0.34; transition:opacity .35s ease; }
+  .flow .step .dot{
+    width:40px !important;
+    height:40px !important;
+    font-size:15px !important;
+  }
+  .flow .step .lbl{ font-size:13px !important; }
+  .flow .step:not(:last-child)::after{
+    top:20px !important;
+    left:calc(50% + 20px) !important;
+    right:calc(-50% + 20px) !important;
+  }
+  .flow .step.active{ opacity:1; }
+  .flow .step.active .dot{
+    border-color:rgba(47,227,172,0.75);
+    color:var(--accent);
+    box-shadow:0 0 0 4px rgba(47,227,172,0.12);
+  }
+  .flow .step.active .lbl{ color:var(--accent); }
+  .flow .step.done::after{ background:rgba(47,227,172,0.5); }
+
+  .flow .cards4{
+    gap:14px !important;
+    align-items:stretch !important;
+  }
+  .flow .fcard{
+    min-height:340px !important;
+    padding:28px 22px !important;
+    border-radius:16px !important;
+    border:1px solid rgba(232,242,238,0.09) !important;
+    background:rgba(8,14,12,0.55) !important;
+    opacity:0.42;
+    transform:scale(0.97);
+    box-shadow:none !important;
+    gap:14px !important;
+    transition:opacity .45s ease, transform .45s cubic-bezier(.2,.8,.3,1), border-color .4s ease, background .4s ease, box-shadow .45s ease !important;
+  }
+  /* The stepper doesn't auto-cycle when reduced motion is requested, so the
+     three inactive cards would sit dimmed to 0.42 forever and never become
+     readable. Show every card at full strength instead — the same information,
+     presented all at once rather than over time. */
+  @media (prefers-reduced-motion: reduce){
+    .flow .fcard{
+      opacity:1 !important;
+      transform:none !important;
+    }
+  }
+  .flow .fcard:hover{
+    transform:scale(0.99) !important;
+    opacity:0.78;
+    box-shadow:none !important;
+  }
+  .flow .fcard.is-active{
+    opacity:1 !important;
+    transform:scale(1.05) !important;
+    border-color:rgba(47,227,172,0.38) !important;
+    background:rgba(11,20,17,0.96) !important;
+    box-shadow:
+      0 0 0 1px rgba(47,227,172,0.08),
+      0 28px 60px -28px rgba(47,227,172,0.35) !important;
+    z-index:2;
+  }
+  .flow .fcard-top{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    margin-bottom:4px;
+  }
+  .flow .fcard .fnum{
+    /* Muted grey by design, but at 0.62 not the old 0.4 — that measured
+       3.43:1 and failed WCAG 1.4.3. No !important needed: this selector is
+       already more specific than the base `.fcard .fnum` rule. */
+    color:rgba(232,242,238,0.62);
+    font-size:13px !important;
+    letter-spacing:0.1em !important;
+  }
+  .flow .fcard.is-active .fnum{ color:var(--accent) !important; }
+  .flow .fcard h3{
+    margin:0 !important;
+    font-size:clamp(17px, 1.35vw, 19px) !important;
+    font-weight:600 !important;
+    color:rgba(232,242,238,0.94) !important;
+  }
+  .flow .fcard p.desc{
+    margin:0 0 6px !important;
+    font-size:clamp(14px, 1.15vw, 15.5px) !important;
+    line-height:1.5 !important;
+    color:rgba(232,242,238,0.72) !important;
+    flex:1;
+  }
+  .flow .pills{ gap:8px !important; }
+  .flow .pill{
+    font-size:12px !important;
+    padding:7px 12px !important;
+    background:transparent !important;
+    color:rgba(232,242,238,0.58) !important;
+    border-color:rgba(232,242,238,0.16) !important;
+  }
+  .flow .pill.active{
+    background:rgba(47,227,172,0.12) !important;
+    color:var(--accent) !important;
+    border-color:rgba(47,227,172,0.5) !important;
+    font-weight:600 !important;
+  }
+  .flow .skel-row{ margin-bottom:12px; }
+  .flow .skel-bar{
+    height:8px !important;
+    border-radius:6px !important;
+    animation:none !important;
+    background:linear-gradient(90deg, rgba(47,227,172,0.16), rgba(47,227,172,0.38)) !important;
+    background-size:auto !important;
+  }
+  .flow .fcard.is-active .skel-bar{
+    animation:shimmer 2.6s ease-in-out infinite !important;
+    background:linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(47,227,172,0.28) 37%, rgba(255,255,255,0.06) 63%) !important;
+    background-size:400% 100% !important;
+  }
+  .flow .opt-row{
+    margin-bottom:10px !important;
+    padding:14px 14px !important;
+    font-size:13.5px !important;
+    border-radius:10px !important;
+    border-color:rgba(232,242,238,0.1) !important;
+    background:rgba(11,59,44,0.12) !important;
+    color:rgba(232,242,238,0.82) !important;
+  }
+  .flow .opt-row:hover{
+    transform:none !important;
+    border-color:rgba(47,227,172,0.3) !important;
+  }
+  .flow .check-row{ font-size:14px !important; padding:8px 0 !important; gap:12px !important; }
+  .flow .check-row .box{
+    width:18px !important;
+    height:18px !important;
+  }
+  .flow .progress-track{ margin-top:16px !important; height:6px !important; }
+  .flow .progress-label{ font-size:12px !important; margin-top:10px !important; }
+
+  @media (max-width:980px){
+    .flow-wrap{
+      grid-template-columns:1fr !important;
+      gap:28px !important;
+    }
+    .flow-head .big{
+      font-size:clamp(42px, 9vw, 64px) !important;
+    }
+    .flow .fcard{
+      min-height:0 !important;
+      opacity:1 !important;
+      transform:none !important;
+    }
+    .flow .fcard.is-active{
+      transform:none !important;
+      box-shadow:0 18px 40px -24px rgba(47,227,172,0.3) !important;
+    }
+  }
+
+
+  /* ===== second page: clarity — big left + decide right ===== */
+
+
+
+
+
+
+
+
+  .decision-path{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+    margin-top:10px;
+  }
+  .decision-path span{
+    display:inline-flex;
+    align-items:center;
+    min-height:32px;
+    padding:7px 10px;
+    border:1px solid rgba(47,227,172,0.18);
+    border-radius:999px;
+    background:rgba(47,227,172,0.055);
+    color:rgba(127,252,209,0.82);
+    font-family:var(--font-mono);
+    font-size:10px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+  }
+
+
+  @media (max-width:900px){
+  }
+
+  @media (prefers-reduced-motion: reduce){
+  }
+
+
+  /* =========================================================
+     SECTION — TWO THINGS AT ONCE
+  ========================================================== */
+
+
+
+
+  /* These are static labels, not controls. A full rounded border plus padding
+     read as a button and invited clicks that do nothing. A single left rule
+     keeps them grouped and legible without promising interactivity. */
+
+
+  @media (max-width:900px){
+  }
+
+  /* =========================================================
+     MEET ALLY — live dashboard preview
+  ========================================================== */
+  @media (max-width:900px){
+  }
+
+  /* =========================================================
+     PHONE ONLY — laptop / desktop layout is unchanged
+  ========================================================== */
+  @media (max-width: 768px){
+    html{
+      scroll-snap-type:none !important;
+      scroll-behavior:auto !important;
+      overflow-x:hidden;
+      overflow-y:auto;
+      overscroll-behavior-y:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+    body{
+      overflow-x:hidden;
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+      -webkit-text-size-adjust:100%;
+      touch-action:pan-y;
+    }
+    .problem,
+    .manifesto{
+      height:100svh !important;
+      min-height:100svh !important;
+      max-height:100svh !important;
+      overflow:hidden !important;
+      scroll-snap-align:none !important;
+      scroll-snap-stop:normal !important;
+      margin:0 !important;
+    }
+    /* .flow moved down here for the same reason as on desktop: locked to the
+       viewport it filled 55% of the screen, 178px empty above and 186px below. */
+    .flow,
+    .problem{ isolation:isolate; }
+    #network-canvas{
+      display:none !important;
+      mix-blend-mode:normal !important;
+    }
+    .flow,
+    .manifesto{
+      padding:max(28px, env(safe-area-inset-top)) 20px max(36px, env(safe-area-inset-bottom)) !important;
+    }
+    .reveal{
+      transition:opacity .55s cubic-bezier(.2,.7,.3,1), transform .55s cubic-bezier(.2,.7,.3,1) !important;
+    }
+    .hero-statement.reveal{
+      opacity:1 !important;
+    }
+    .float-q{
+      touch-action:pan-y !important;
+      animation:floatQPhone 5.5s ease-in-out infinite !important;
+      will-change:transform;
+      contain:layout paint;
+      backdrop-filter:blur(5px) !important;
+      -webkit-backdrop-filter:blur(5px) !important;
+    }
+    .problem.is-editing-floats .float-q{
+      touch-action:none !important;
+      animation:none !important;
+    }
+    @keyframes floatQPhone{
+      0%,100%{ transform:translate3d(0,0,0); }
+      50%{ transform:translate3d(0,-5px,0); }
+    }
+
+    .top-brand{
+      top:max(14px, env(safe-area-inset-top)) !important;
+      left:max(14px, env(safe-area-inset-left)) !important;
+      font-size:15px !important;
+      font-weight:700 !important;
+      gap:8px !important;
+      padding:6px 12px 6px 6px !important;
+      color:#fff !important;
+      background:#101c18 !important;
+      border:1px solid rgba(255,255,255,0.42) !important;
+      box-shadow:0 6px 20px rgba(0,0,0,.55) !important;
+      backdrop-filter:none !important;
+      -webkit-backdrop-filter:none !important;
+    }
+    .top-brand span{ color:#fff !important; }
+    .top-brand img{ width:28px !important; height:28px !important; filter:none !important; mix-blend-mode:screen !important; }
+    .hero-preview{
+      top:max(14px, env(safe-area-inset-top)) !important;
+      right:max(14px, env(safe-area-inset-right)) !important;
+      height:36px !important;
+      width:92px !important;
+      max-width:min(132px, 38vw) !important;
+      padding:0 !important;
+      background:#101c18 !important;
+      border:1px solid rgba(255,255,255,0.42) !important;
+      box-shadow:0 6px 20px rgba(0,0,0,.55) !important;
+      backdrop-filter:none !important;
+      -webkit-backdrop-filter:none !important;
+    }
+    .hero-preview img{ width:72px !important; height:72px !important; }
+
+    /* --- hero --- */
+    .problem-inner{
+      width:100% !important;
+      min-height:100% !important;
+      padding:0 !important;
+      align-items:flex-end !important;
+    }
+    .figure-wrap{
+      min-height:0 !important;
+      height:100% !important;
+      justify-content:flex-end !important;
+      padding-bottom:max(32px, env(safe-area-inset-bottom)) !important;
+    }
+    .hero-statement{
+      transform:none !important;
+      max-width:100% !important;
+      padding:0 20px 8px !important;
+    }
+    .hero-lead{
+      font-size:clamp(26px, 7.4vw, 34px) !important;
+      line-height:1.12 !important;
+      margin:0 0 12px !important;
+    }
+    .hero-ask{
+      font-size:15px !important;
+      /* 22ch capped this at 178px on a 375px screen — under half the width,
+         which forced three cramped lines. 30ch (243px) fits two and still
+         leaves a comfortable margin. */
+      max-width:30ch !important;
+      margin:0 auto 20px !important;
+    }
+    .hero-cta{
+      min-height:48px;
+      padding:13px 18px !important;
+      font-size:14px !important;
+      touch-action:manipulation;
+    }
+
+    .float-qs{
+      position:absolute !important;
+      inset:0 !important;
+      display:block !important;
+      height:auto !important;
+    }
+    .float-q{
+      position:absolute !important;
+      max-width:min(176px, 46vw) !important;
+      width:auto !important;
+      font-size:12px !important;
+      line-height:1.3 !important;
+      padding:10px 12px !important;
+      border-radius:12px !important;
+    }
+    .float-q--tl{ top:48.7%; left:2.2%; right:auto; }
+    .float-q--tr{ top:14.6%; left:2.2%; right:auto; }
+    .float-q--bl{ top:5.4%; left:51.7%; right:auto; }
+    .float-q--br{ top:47%; left:51.7%; right:auto; }
+    .float-q__label{
+      font-size:9px !important;
+      margin-bottom:4px !important;
+    }
+    .float-edit-bar{
+      top:max(52px, calc(env(safe-area-inset-top) + 40px)) !important;
+      right:max(10px, env(safe-area-inset-right)) !important;
+    }
+    .float-edit-bar button{
+      min-height:40px;
+      padding:10px 12px !important;
+      font-size:13px !important;
+    }
+    .problem.is-editing-floats .float-q{
+      touch-action:none;
+    }
+
+    /* --- two things --- */
+
+    /* --- meet ally --- */
+
+    /* --- clarity --- */
+    .flow .step,
+    .flow .pill,
+    .check-row{
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .decision-path{
+      justify-content:center;
+      gap:6px;
+      margin-top:8px;
+    }
+    .decision-path span{
+      min-height:29px;
+      padding:6px 8px;
+      font-size:8.5px;
+    }
+
+    /* --- product journey: one card at a time --- */
+    .flow{
+      overflow:hidden !important;
+    }
+    .flow-wrap{
+      grid-template-columns:1fr !important;
+      gap:16px !important;
+      width:min(100%, 92vw) !important;
+      padding:12px 0 16px !important;
+      align-content:center !important;
+    }
+    .flow-head{ text-align:center; }
+    .flow-head .big{
+      font-size:clamp(32px, 9.2vw, 42px) !important;
+    }
+    .flow-head .flow-sub{
+      margin-left:auto !important;
+      margin-right:auto !important;
+      margin-top:14px !important;
+      font-size:14px !important;
+    }
+    .flow .stepper{
+      margin:16px auto 0 !important;
+      max-width:100% !important;
+    }
+    .flow .step .dot{
+      width:32px !important;
+      height:32px !important;
+      font-size:13px !important;
+    }
+    .flow .step .lbl{ font-size:11px !important; }
+    .flow .cards4{
+      grid-template-columns:1fr !important;
+      gap:0 !important;
+    }
+    .flow .fcard{
+      display:none !important;
+      min-height:0 !important;
+      padding:20px 18px !important;
+      transform:none !important;
+    }
+    .flow .fcard.is-active{
+      display:flex !important;
+      opacity:1 !important;
+      transform:none !important;
+      box-shadow:0 18px 40px -24px rgba(47,227,172,0.3) !important;
+    }
+    .flow .fcard h3{ font-size:18px !important; }
+    .flow .pill{ padding:8px 12px; min-height:36px; }
+
+    /* --- final --- */
+    .manifesto{
+      padding:40px 22px 72px !important;
+    }
+    .final-stack{ padding-bottom:64px !important; }
+    .final-horizon{
+      left:8% !important;
+      right:8% !important;
+      bottom:max(48px, calc(env(safe-area-inset-bottom) + 38px)) !important;
+      height:1px !important;
+      opacity:1 !important;
+      z-index:2 !important;
+      background:linear-gradient(90deg, transparent, rgba(232,242,238,0.28) 18%, rgba(47,227,172,0.85) 50%, rgba(232,242,238,0.28) 82%, transparent) !important;
+    }
+    .final-spark{
+      bottom:max(45px, calc(env(safe-area-inset-bottom) + 35px)) !important;
+      width:8px !important;
+      height:8px !important;
+      margin-left:-4px !important;
+      opacity:1 !important;
+      z-index:3 !important;
+      background:rgba(47,227,172,1) !important;
+      box-shadow:0 0 16px rgba(47,227,172,0.85), 0 0 28px rgba(47,227,172,0.4) !important;
+    }
+    .final-glow{
+      bottom:max(36px, calc(env(safe-area-inset-bottom) + 24px)) !important;
+      width:min(320px, 78vw) !important;
+      height:140px !important;
+      opacity:1 !important;
+      z-index:1 !important;
+    }
+    .manifesto h2 .line-noise{
+      font-size:clamp(26px, 7.6vw, 34px) !important;
+      white-space:normal !important;
+    }
+    .manifesto h2 .line-clarity{
+      font-size:clamp(24px, 7vw, 32px) !important;
+      white-space:normal !important;
+      margin-top:0.18em !important;
+    }
+    .final-brand{ margin-top:24px !important; }
+    .final-brand .brand-logo{
+      width:48px !important;
+      height:48px !important;
+    }
+    .final-brand__name{ font-size:24px !important; }
+    .final-journey{
+      margin-top:18px !important;
+      font-size:14px !important;
+      line-height:1.6 !important;
+      max-width:32ch !important;
+    }
+    .manifesto .final-access{ margin-top:22px !important; }
+    .manifesto .final-access .cta{
+      min-height:46px;
+      padding:12px 18px;
+      font-size:14px;
+    }
+    .manifesto .foot-links{
+      bottom:max(12px, env(safe-area-inset-bottom)) !important;
+      font-size:12px !important;
+      gap:8px !important;
+      padding:0 12px !important;
+      opacity:0.7 !important;
+    }
+  }
+
+  @media (max-width: 768px) and (hover:none),
+         (max-width: 768px) and (pointer:coarse){
+    .fcard:hover,
+    .cta:hover,
+  }
+
+  /* =========================================================
+     SECTION BLEND — same canvas so snaps don't look like new pages
+  ========================================================== */
+  html, body{
+    background:#020605 !important;
+  }
+  html{
+    scroll-snap-type:none !important;
+    scroll-behavior:auto;
+  }
+  #network-canvas{ z-index:0; }
+  .problem{
+    background:
+      linear-gradient(180deg, rgba(2,6,5,0.04) 0%, rgba(2,6,5,0.07) 32%, rgba(2,6,5,0.72) 72%, #020605 100%),
+      radial-gradient(ellipse 60% 55% at 50% 52%, rgba(2,6,5,0.03), rgba(2,6,5,0.36) 100%),
+      url("/assets/hero-bg.v1.jpeg") center 18% / cover no-repeat !important;
+  }
+  .problem::after{
+    content:'';
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:min(240px, 32vh);
+    background:linear-gradient(180deg, rgba(2,6,5,0) 0%, #020605 88%, #020605 100%);
+    pointer-events:none;
+    z-index:1;
+  }
+  .flow,
+  .manifesto{
+    background:#020605 !important;
+    box-shadow:none !important;
+    border:0 !important;
+  }
+  .flow::before,
+  .manifesto::before,
+  .flow::after,
+  .manifesto::after{
+    content:'';
+    position:absolute;
+    left:0; right:0;
+    height:min(150px, 20vh);
+    pointer-events:none;
+    z-index:1;
+    display:block !important;
+    filter:none !important;
+    width:auto !important;
+    border-radius:0 !important;
+    transform:none !important;
+  }
+  .flow::before,
+  .manifesto::before{
+    top:-2px;
+    background:linear-gradient(180deg, #020605 0%, rgba(2,6,5,0) 100%);
+  }
+  .flow::after,
+  .manifesto::after{
+    bottom:-2px;
+    top:auto;
+    background:linear-gradient(180deg, rgba(2,6,5,0) 0%, #020605 100%);
+  }
+  .flow,
+  .manifesto{
+    margin-top:-2px;
+  }
+  .flow::before{
+    background:
+      linear-gradient(180deg, #020605 0%, rgba(2,6,5,0) 100%),
+      radial-gradient(ellipse 46% 28% at 50% 52%, rgba(14,48,38,0.22), transparent 72%);
+    height:100%;
+    top:0;
+    opacity:1;
+  }
+  .manifesto::before{
+    background:
+      linear-gradient(180deg, #020605 0%, rgba(2,6,5,0) 100%);
+  }
+  @media (max-width: 768px){
+    .problem{
+      background:#020605 !important;
+    }
+    .problem::before{
+      content:'';
+      position:absolute;
+      inset:-1%;
+      z-index:0;
+      background:
+        linear-gradient(180deg, rgba(2,6,5,0) 0%, rgba(2,6,5,0.02) 38%, rgba(2,6,5,0.44) 76%, #020605 100%),
+        radial-gradient(ellipse 96% 68% at 50% 31%, rgba(27,112,84,0.20) 0%, rgba(8,38,29,0.08) 48%, rgba(2,6,5,0) 76%),
+        url("/assets/hero-bg.v1.jpeg") center 12% / cover no-repeat;
+      filter:brightness(1.38) saturate(1.08);
+      pointer-events:none;
+    }
+    .problem::after{
+      height:min(104px, 15svh);
+      background:linear-gradient(180deg, rgba(2,6,5,0) 0%, rgba(2,6,5,0.78) 70%, #020605 100%);
+    }
+    .problem .mobile-hero-light{
+      display:block;
+      position:absolute;
+      inset:0 0 auto;
+      height:58%;
+      z-index:1;
+      pointer-events:none;
+      background:
+        radial-gradient(ellipse 92% 72% at 50% 38%, rgba(126,255,214,.32) 0%, rgba(48,190,143,.18) 48%, rgba(0,0,0,0) 78%),
+        linear-gradient(180deg, rgba(110,248,203,.27) 0%, rgba(37,155,117,.14) 56%, rgba(0,0,0,0) 100%);
+      mix-blend-mode:screen;
+    }
+    .problem .top-brand{
+      isolation:isolate;
+      z-index:60 !important;
+      background:#101c18 !important;
+      border:1px solid rgba(255,255,255,0.55) !important;
+      box-shadow:0 8px 24px rgba(0,0,0,.5) !important;
+    }
+    .problem .top-brand span{
+      color:#fff !important;
+      text-shadow:none;
+    }
+    .problem .top-brand img{
+      mix-blend-mode:screen;
+    }
+    .problem .hero-preview{
+      z-index:60 !important;
+      background:#101c18 !important;
+      border:1px solid rgba(255,255,255,0.55) !important;
+      box-shadow:0 8px 24px rgba(0,0,0,.5) !important;
+      filter:none !important;
+    }
+    .problem .float-q{
+      color:#f5faf8 !important;
+      background:rgba(11,70,52,.96) !important;
+      border-color:rgba(126,238,201,.72) !important;
+      box-shadow:0 8px 22px rgba(0,0,0,.38) !important;
+      text-shadow:0 1px 8px rgba(0,0,0,.45);
+    }
+    .problem .float-q--tr,
+    .problem .float-q--bl{
+      color:#071410 !important;
+      background:rgba(223,248,238,.98) !important;
+      border-color:rgba(223,248,238,.92) !important;
+      text-shadow:none;
+    }
+    .problem .float-q--tr .float-q__label,
+    .problem .float-q--bl .float-q__label{ color:#087050 !important; }
+    .problem .float-q--bl{ top:9.5% !important; }
+    .problem .float-q__label{ color:#35dba2 !important; }
+    .flow::before,
+    .manifesto::before,
+    .flow::after,
+    .manifesto::after{
+      height:min(110px, 16svh);
+    }
+    .flow::before{ height:100%; }
+    .flow,
+    .manifesto{
+      margin-top:0 !important;
+    }
+  }
+
+  /* Phone hero visibility: keep the full CTA stack inside short viewports. */
+  @media (max-width: 768px){
+    .problem::before{
+      background:
+        linear-gradient(180deg, rgba(2,6,5,0.02) 0%, rgba(2,6,5,0.03) 44%, rgba(2,6,5,0.30) 75%, #020605 100%),
+        radial-gradient(ellipse 104% 72% at 50% 27%, rgba(84,238,186,0.13) 0%, rgba(31,145,105,0.06) 42%, rgba(5,35,25,0.02) 68%, rgba(2,6,5,0) 82%),
+        url("/assets/hero-bg.v1.jpeg") center 12% / cover no-repeat;
+      filter:brightness(1.42) saturate(1.06) contrast(1.02);
+    }
+    .problem .mobile-hero-light{
+      height:58%;
+      opacity:.42 !important;
+      background:
+        radial-gradient(ellipse 104% 76% at 50% 24%, rgba(139,255,217,.18) 0%, rgba(55,210,158,.08) 44%, rgba(0,0,0,0) 80%),
+        linear-gradient(180deg, rgba(102,247,199,.10) 0%, rgba(38,166,123,.05) 52%, rgba(0,0,0,0) 100%);
+      mix-blend-mode:screen !important;
+    }
+    .problem-inner{
+      z-index:12 !important;
+    }
+    .problem .hero-statement{
+      position:absolute !important;
+      left:0 !important;
+      right:0 !important;
+      bottom:max(16px, env(safe-area-inset-bottom)) !important;
+      z-index:30 !important;
+      opacity:1 !important;
+      filter:none !important;
+      transform:none !important;
+    }
+    .problem .hero-lead{
+      color:#fff !important;
+      opacity:1 !important;
+      text-shadow:0 3px 20px rgba(0,0,0,.82) !important;
+    }
+    .problem .hero-ask{
+      color:#35efb8 !important;
+      opacity:1 !important;
+      text-shadow:0 2px 14px rgba(0,0,0,.82) !important;
+    }
+    .problem .hero-cta,
+    .problem .cta-limit{
+      opacity:1 !important;
+      filter:none !important;
+    }
+    .problem .top-brand,
+    .problem .float-q{
+      opacity:1 !important;
+      filter:none !important;
+    }
+    .problem .top-brand{
+      z-index:200 !important;
+      background:rgba(3,13,10,.96) !important;
+      border-color:rgba(127,252,209,.76) !important;
+      box-shadow:0 8px 24px rgba(0,0,0,.56), 0 0 0 1px rgba(47,227,172,.22), 0 0 24px rgba(47,227,172,.2) !important;
+    }
+    .problem .hero-preview{
+      z-index:200 !important;
+      opacity:1 !important;
+      filter:none !important;
+      height:44px !important;
+      width:112px !important;
+      background:rgba(3,13,10,.96) !important;
+      border-color:rgba(127,252,209,.76) !important;
+      box-shadow:0 8px 24px rgba(0,0,0,.56), 0 0 0 1px rgba(47,227,172,.22), 0 0 24px rgba(47,227,172,.2) !important;
+    }
+    .problem .top-brand span{
+      color:#fff !important;
+      -webkit-text-fill-color:#fff !important;
+      opacity:1 !important;
+      text-shadow:0 1px 10px rgba(255,255,255,.3), 0 0 14px rgba(47,227,172,.16) !important;
+    }
+    .problem .top-brand img{
+      opacity:1 !important;
+      padding:0 !important;
+      border-radius:0 !important;
+      background:transparent !important;
+      mix-blend-mode:normal !important;
+      filter:brightness(2.2) saturate(1.55) contrast(1.12) drop-shadow(0 0 7px rgba(47,227,172,.55)) !important;
+    }
+    .problem .hero-preview img{
+      opacity:1 !important;
+      width:96px !important;
+      height:96px !important;
+      mix-blend-mode:normal !important;
+      filter:brightness(3) saturate(1.7) contrast(1.14) drop-shadow(0 0 8px rgba(47,227,172,.48)) !important;
+    }
+    .problem .float-q--tr,
+    .problem .float-q--bl{
+      color:#06140d !important;
+      background:#f1fff9 !important;
+      border-color:rgba(151,255,219,.9) !important;
+      box-shadow:0 8px 22px rgba(0,0,0,.36), 0 0 18px rgba(47,227,172,.14) !important;
+      font-weight:650 !important;
+    }
+    .problem .float-q--tr .float-q__label,
+    .problem .float-q--bl .float-q__label{
+      color:#087050 !important;
+      opacity:1 !important;
+    }
+    .problem .float-qs{
+      z-index:20 !important;
+      opacity:1 !important;
+    }
+  }
+  @media (max-width: 768px) and (max-height: 720px){
+    .problem .hero-statement{
+      bottom:max(10px, env(safe-area-inset-bottom)) !important;
+      padding-bottom:0 !important;
+    }
+    .problem .hero-lead{
+      font-size:clamp(24px, 6.8vw, 30px) !important;
+      margin-bottom:8px !important;
+    }
+    .problem .hero-ask{
+      font-size:14px !important;
+      line-height:1.32 !important;
+      margin-bottom:12px !important;
+    }
+    .problem .hero-cta{
+      min-height:44px !important;
+      padding:11px 16px !important;
+      font-size:13px !important;
+    }
+    .problem .cta-wrap{ gap:6px !important; }
+    .problem .cta-limit{
+      padding:5px 8px !important;
+      font-size:9.5px !important;
+    }
+    .problem .float-q{
+      max-width:min(164px, 44vw) !important;
+      padding:8px 10px !important;
+      font-size:11.5px !important;
+    }
+    .problem .float-q--tl,
+    .problem .float-q--br{ top:39% !important; }
+  }
+
+  /* Keep the phone brand marks outside the hero image/overlay stacking context. */
+  .mobile-hero-brands,
+  .mobile-hero-cards{ display:none; }
+
+  @media (max-width: 768px){
+    .problem > .top-brand,
+    .problem > .hero-preview,
+    .problem > .float-qs{
+      display:none !important;
+    }
+    .mobile-hero-brands{
+      position:absolute;
+      top:max(14px, env(safe-area-inset-top));
+      left:max(14px, env(safe-area-inset-left));
+      right:max(14px, env(safe-area-inset-right));
+      z-index:300;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      pointer-events:none;
+      isolation:isolate;
+    }
+    .mobile-hero-brands > *{
+      flex:0 0 auto;
+      opacity:1;
+      filter:none;
+      mix-blend-mode:normal;
+    }
+    .mobile-ally-brand{
+      height:42px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:5px 12px 5px 6px;
+      border:1px solid rgba(127,252,209,.72);
+      border-radius:999px;
+      background:#06140f;
+      box-shadow:0 8px 24px rgba(0,0,0,.36), inset 0 0 0 1px rgba(255,255,255,.04);
+      color:#fff;
+      font-family:Inter,Arial,sans-serif;
+      font-size:15px;
+      font-weight:750;
+      line-height:1;
+      text-decoration:none;
+      pointer-events:auto;
+    }
+    .mobile-ally-brand img{
+      width:30px;
+      height:30px;
+      display:block;
+      object-fit:contain;
+      opacity:1;
+      filter:brightness(1.2) saturate(1.15);
+      mix-blend-mode:normal;
+    }
+    .mobile-goxl-brand{
+      position:relative;
+      width:107px;
+      height:40px;
+      display:block;
+      overflow:hidden;
+      border:1px solid rgba(127,252,209,.72);
+      border-radius:999px;
+      background:#06140f;
+      box-shadow:0 8px 24px rgba(0,0,0,.36), inset 0 0 0 1px rgba(255,255,255,.04);
+    }
+    .mobile-goxl-brand img{
+      position:absolute;
+      top:54%;
+      left:50%;
+      width:73px;
+      height:73px;
+      max-width:none;
+      display:block;
+      object-fit:contain;
+      opacity:1;
+      filter:brightness(1.65) saturate(1.28);
+      mix-blend-mode:normal;
+      transform:translate(-50%,-50%);
+    }
+    .mobile-hero-cards{
+      position:absolute;
+      inset:0 0 auto;
+      z-index:250;
+      display:block;
+      width:100%;
+      height:100svh;
+      overflow:hidden;
+      pointer-events:none;
+    }
+    body.is-editing-mobile-cards .mobile-hero-cards{ pointer-events:auto; }
+    .mobile-hero-card{
+      position:absolute;
+      max-width:min(176px, 46vw);
+      margin:0;
+      padding:10px 12px;
+      border:1px solid rgba(105,230,189,.9);
+      border-radius:12px;
+      background:#0a654b;
+      box-shadow:0 9px 24px rgba(0,0,0,.42), 0 0 16px rgba(47,227,172,.2);
+      color:#f7fffc;
+      font-family:var(--font-display);
+      font-size:12px;
+      font-weight:650;
+      line-height:1.3;
+      letter-spacing:-.01em;
+      text-shadow:0 1px 8px rgba(0,0,0,.46);
+    }
+    body.is-editing-mobile-cards .mobile-hero-card{
+      cursor:grab;
+      touch-action:none;
+      user-select:none;
+      -webkit-user-select:none;
+      outline:1px dashed rgba(127,252,209,.72);
+    }
+    body.is-editing-mobile-cards .mobile-hero-card.is-dragging{
+      z-index:20;
+      cursor:grabbing;
+      outline-color:#7ffcd1;
+      box-shadow:0 12px 32px rgba(0,0,0,.52),0 0 22px rgba(47,227,172,.34);
+    }
+    .mobile-hero-card__label{
+      display:block;
+      margin-bottom:4px;
+      color:#49f1ba;
+      font-family:var(--font-body);
+      font-size:9px;
+      font-weight:650;
+      letter-spacing:.14em;
+      line-height:1.2;
+      text-transform:uppercase;
+    }
+    .mobile-hero-card--avoid{
+      top:9.5%;
+      left:51.7%;
+    }
+    .mobile-hero-card--cash{
+      top:14.6%;
+      left:2.2%;
+    }
+    .mobile-hero-card--stuck{
+      top:48.7%;
+      left:2.2%;
+    }
+    .mobile-hero-card--growth{
+      top:47%;
+      left:51.7%;
+    }
+    .problem .float-qs{
+      z-index:40 !important;
+    }
+    .problem .float-q{
+      color:#f7fffc !important;
+      background:#0a654b !important;
+      border-color:rgba(105,230,189,.9) !important;
+      box-shadow:0 9px 24px rgba(0,0,0,.42), 0 0 16px rgba(47,227,172,.2) !important;
+      font-weight:650 !important;
+      filter:none !important;
+      backdrop-filter:none !important;
+      -webkit-backdrop-filter:none !important;
+      animation:none !important;
+      text-shadow:0 1px 8px rgba(0,0,0,.46) !important;
+    }
+    .problem .float-q .float-q__label{
+      color:#49f1ba !important;
+      font-weight:650 !important;
+      opacity:1 !important;
+    }
+    .problem .float-q--tr,
+    .problem .float-q--bl{
+      color:#020b08 !important;
+      background:#fff !important;
+      border-color:#7ffcd1 !important;
+      box-shadow:0 9px 24px rgba(0,0,0,.38), 0 0 18px rgba(47,227,172,.22) !important;
+      text-shadow:none !important;
+    }
+    .problem .float-q--tr .float-q__label,
+    .problem .float-q--bl .float-q__label{
+      color:#087050 !important;
+    }
+    body.is-float-edit .float-edit-bar{
+      position:fixed;
+      top:auto !important;
+      right:auto !important;
+      bottom:max(14px, env(safe-area-inset-bottom));
+      left:50%;
+      z-index:6000;
+      width:max-content;
+      max-width:calc(100vw - 24px);
+      transform:translateX(-50%);
+      justify-content:center;
+    }
+    body.is-float-edit .problem.is-editing-floats .float-edit-hint{
+      position:fixed;
+      top:auto;
+      right:auto;
+      bottom:max(68px, calc(env(safe-area-inset-bottom) + 54px));
+      left:50%;
+      z-index:6000;
+      transform:translateX(-50%);
+      white-space:nowrap;
+    }
+  }
+
+  @media (max-width: 768px) and (max-height: 720px){
+    .mobile-hero-card--stuck,
+    .mobile-hero-card--growth{
+      top:39%;
+    }
+  }
+
+  /* ---------- early access modal ---------- */
+  html.ea-lock,
+  body.ea-lock{ overflow:hidden !important; }
+  .ea-modal{
+    position:fixed; inset:0; z-index:5000;
+    display:flex; align-items:center; justify-content:center;
+    padding:22px 16px;
+    opacity:0; visibility:hidden; pointer-events:none;
+    transition:opacity .28s ease, visibility .28s ease;
+  }
+  .ea-modal.is-open{ opacity:1; visibility:visible; pointer-events:auto; }
+  .ea-backdrop{
+    position:absolute; inset:0;
+    background:rgba(2,6,5,.72);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+  }
+  .ea-dialog{
+    position:relative; z-index:1;
+    width:min(440px, 100%);
+    max-height:calc(100dvh - 32px);
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    padding:28px 26px 24px;
+    border-radius:18px;
+    border:1px solid rgba(120,220,190,0.22);
+    background:linear-gradient(180deg, rgba(10,22,17,.97), rgba(5,12,10,.98));
+    box-shadow:0 30px 80px -24px rgba(0,0,0,.7), 0 0 0 1px rgba(47,227,172,0.06);
+  }
+  .ea-x{
+    position:absolute; top:12px; right:12px;
+    width:36px; height:36px;
+    border:none; border-radius:10px;
+    background:transparent; color:var(--text-dim);
+    display:grid; place-items:center;
+  }
+  .ea-x:hover{ color:#fff; background:rgba(255,255,255,.06); }
+  .ea-x svg{ width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; }
+  .ea-eye{
+    font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--accent); margin:0 0 8px;
+  }
+  .ea-dialog h3{
+    font-family:var(--font-display);
+    font-size:clamp(22px, 3vw, 28px);
+    font-weight:600; letter-spacing:-.03em;
+    color:#fff; margin:0 0 8px; line-height:1.15;
+  }
+  .ea-sub{
+    margin:0 0 22px; font-size:14px; line-height:1.5;
+    color:rgba(232,242,238,.62);
+  }
+  .ea-form{ display:flex; flex-direction:column; gap:12px; }
+  .ea-form label{
+    display:flex; flex-direction:column; gap:6px;
+    font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    color:rgba(232,242,238,.55);
+  }
+  .ea-form label .ea-opt{
+    text-transform:none; letter-spacing:0; font-weight:500;
+    color:rgba(232,242,238,.62); /* .35 gave 2.84:1 — well below AA */
+  }
+  /* Honeypot. Positioned off-screen rather than display:none — most bots skip
+     fields that are display:none or hidden, which defeats the point. */
+  .ea-hp{
+    position:absolute !important;
+    left:-9999px !important;
+    top:auto !important;
+    width:1px !important;
+    height:1px !important;
+    overflow:hidden !important;
+  }
+  .ea-form input:not([type="checkbox"]){
+    width:100%;
+    background:rgba(255,255,255,.04);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px 14px;
+    color:var(--text);
+    font-size:15px;
+    font-family:inherit;
+    letter-spacing:0;
+    text-transform:none;
+    font-weight:500;
+    transition:border-color .2s;
+  }
+  .ea-form input:not([type="checkbox"]):focus{ border-color:var(--border-strong); }
+  .ea-consent{
+    display:grid !important;
+    grid-template-columns:18px minmax(0,1fr);
+    align-items:start;
+    gap:10px !important;
+    color:rgba(232,242,238,.72) !important;
+    font-size:12px !important;
+    font-weight:500 !important;
+    letter-spacing:0 !important;
+    line-height:1.45;
+    text-transform:none !important;
+    cursor:pointer;
+  }
+  .ea-consent input{
+    appearance:none;
+    -webkit-appearance:none;
+    width:18px;
+    height:18px;
+    margin:1px 0 0;
+    border:1px solid rgba(127,252,209,.48);
+    border-radius:5px;
+    background:rgba(255,255,255,.04);
+    cursor:pointer;
+  }
+  .ea-consent input:checked{
+    background:var(--accent);
+    border-color:var(--accent);
+    box-shadow:inset 0 0 0 3px #07130f;
+  }
+  .ea-consent input:focus-visible{
+    outline:2px solid var(--accent-2);
+    outline-offset:2px;
+  }
+  .ea-consent a{
+    color:var(--accent-2);
+    text-decoration:underline;
+    text-underline-offset:2px;
+  }
+  .ea-optional{
+    color:rgba(127,252,209,.7);
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .ea-err{
+    margin:0; min-height:0;
+    font-size:13px; color:#ff8b8b;
+  }
+  .ea-err:empty{ display:none; }
+  .ea-form .cta{
+    margin-top:6px; justify-content:center; width:100%;
+  }
+  .ea-form .cta[disabled]{ opacity:.65; cursor:wait; transform:none; }
+  .ea-done{ text-align:center; padding:8px 0 4px; }
+  .ea-done[hidden],
+  .ea-form[hidden]{ display:none !important; }
+  .ea-done p{
+    margin:0 0 18px; font-size:16px; line-height:1.5;
+    color:rgba(232,242,238,.88);
+  }
+  .ea-done .ea-done__sub{
+    margin:-10px 0 18px; font-size:14px;
+    color:rgba(232,242,238,.62);
+  }
+  .ea-done .ea-done__sub:empty{ display:none; }
+  .ea-done .cta{ justify-content:center; width:100%; }
+  button.cta-limit{
+    font:inherit;
+    cursor:pointer;
+  }
+  @media (max-width:768px){
+    .ea-dialog{ padding:24px 18px 20px; }
+  }
+
+
+  /* =========================================================
+     TWO THINGS AT ONCE — merged section
+     Replaces .dim-* and .clarity-*. The connector is built from CSS boxes
+     rather than a measured SVG path: the old .dim-link needed JS to compute
+     its geometry, which silently produced no line at all until a resize.
+  ========================================================== */
+  .both{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:64px 24px;
+    overflow:hidden;
+  }
+  .both-inner{
+    position:relative;
+    z-index:2;
+    width:100%;
+    max-width:1180px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:clamp(28px, 4.5vh, 56px);
+  }
+
+  /* ambient wash — one orb behind each panel */
+  .both-atm{ position:absolute; inset:0; z-index:0; pointer-events:none; }
+  .both-orb{
+    position:absolute; top:50%; width:46vw; height:46vw;
+    max-width:620px; max-height:620px;
+    transform:translateY(-50%);
+    border-radius:50%;
+    filter:blur(90px);
+    opacity:0.5;
+  }
+  .both-orb--you{ left:-10vw; background:radial-gradient(circle, rgba(47,227,172,0.16), transparent 68%); }
+  .both-orb--biz{ right:-10vw; background:radial-gradient(circle, rgba(127,252,209,0.11), transparent 68%); }
+
+  /* ---------- head ---------- */
+  .both-head{ text-align:center; max-width:60ch; }
+  .both-eyebrow{
+    font-size:12px; letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:14px; font-weight:600;
+  }
+  .both-title{
+    font-family:var(--font-display);
+    font-size:clamp(30px, 4.4vw, 60px);
+    line-height:1.06; font-weight:600; letter-spacing:-0.02em;
+    text-wrap:balance;
+  }
+  .both-title em{ font-style:italic; color:var(--accent); }
+  .both-sub{
+    margin-top:14px;
+    font-size:clamp(15px, 1.5vw, 20px);
+    color:rgba(232,242,238,0.72);
+    text-wrap:balance;
+  }
+
+  /* ---------- stage: panel | core | panel ---------- */
+  .both-stage{
+    position:relative;
+    width:100%;
+    display:grid;
+    grid-template-columns:1fr minmax(150px, 220px) 1fr;
+    align-items:stretch;
+    /* room under the panel row for the ALLY label and its pill */
+    padding-bottom:84px;
+  }
+  /* Centred on the stage, so its width is free of the narrow centre column. */
+  .both-meet{
+    position:absolute; left:0; right:0; bottom:0;
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+  }
+  .both-panel{
+    border:1px solid rgba(120,220,190,0.16);
+    border-radius:18px;
+    background:linear-gradient(160deg, rgba(10,22,18,0.72), rgba(6,12,10,0.5));
+    padding:clamp(18px, 2.2vw, 30px);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+  }
+  .both-label{
+    font-size:11px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--accent); font-weight:600; margin-bottom:10px;
+  }
+  .both-lead{
+    font-size:clamp(15px, 1.35vw, 19px);
+    font-weight:600; line-height:1.35; color:var(--text);
+    margin-bottom:16px;
+  }
+  /* Phone-only pieces, off by default so the desktop layout is untouched. */
+  .both-sprite{ position:absolute; width:0; height:0; overflow:hidden; }
+  .both-panel-ic,
+  .both-chips li svg{ display:none; }
+
+  .both-chips{ list-style:none; display:flex; flex-wrap:wrap; gap:8px; }
+  .both-chips li{
+    font-size:13px;
+    padding:6px 12px;
+    border-radius:999px;
+    border:1px solid rgba(120,220,190,0.2);
+    background:rgba(255,255,255,0.03);
+    color:rgba(232,242,238,0.82);
+    white-space:nowrap;
+  }
+
+  /* ---------- centre ---------- */
+  /* Stretches to the panel row so the dotted drop can run all the way to the
+     bottom of the panels rather than stopping in mid-air. */
+  .both-core{
+    position:relative;
+    align-self:stretch;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+  }
+  /* the two runs into the node. scaleX from the outer edge so they read as
+     travelling inward when the section enters. */
+  .both-wire{
+    position:absolute; top:50%; height:1px;
+    background:linear-gradient(90deg, rgba(47,227,172,0), rgba(47,227,172,0.55));
+    transition:transform .7s cubic-bezier(.2,.8,.3,1) .45s;
+  }
+  .both-wire--l{ left:0; right:calc(50% + 32px); transform-origin:left center; }
+  .both-wire--r{ right:0; left:calc(50% + 32px); transform-origin:right center;
+    background:linear-gradient(270deg, rgba(47,227,172,0), rgba(47,227,172,0.55)); }
+
+  /* The Ally mark sits where the two sides meet — the section's whole point,
+     so the centre carries the brand rather than an anonymous dot. The rings
+     are the same concentric glow the plain node had. */
+  .both-node{
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+    width:64px; height:64px; border-radius:50%;
+    background:radial-gradient(circle, rgba(10,32,25,0.95), rgba(4,12,9,0.88));
+    border:1px solid rgba(47,227,172,0.3);
+    box-shadow:0 0 0 10px rgba(47,227,172,0.05), 0 0 30px rgba(47,227,172,0.32),
+               inset 0 0 16px rgba(47,227,172,0.1);
+    transition:transform .5s cubic-bezier(.34,1.56,.64,1) 1.05s;
+  }
+  .both-node img{ width:34px; height:34px; display:block; }
+  /* Where each wire leaves its panel. */
+  .both-dot{
+    position:absolute; top:50%; width:7px; height:7px; margin-top:-3.5px;
+    border-radius:50%; background:var(--accent);
+    box-shadow:0 0 10px rgba(47,227,172,0.7);
+    transition:opacity .35s ease .4s;
+  }
+  .both-dot--l{ left:-3px; }
+  .both-dot--r{ right:-3px; }
+  /* Runs from just under the node to the foot of the panel row — `bottom:0`
+     rather than a fixed height, so it stays correct however tall the panels
+     grow. */
+  .both-drop{
+    /* -24px so it carries past the panels' foot and meets the ALLY label
+       instead of stopping 29px short of it */
+    position:absolute; top:calc(50% + 42px); bottom:-24px; width:1px;
+    background:repeating-linear-gradient(180deg, rgba(47,227,172,0.5) 0 3px, transparent 3px 7px);
+    transform-origin:top center;
+    transition:transform .45s ease 1.35s;
+  }
+  .both-core-label{
+    font-size:11px; letter-spacing:0.2em; text-transform:uppercase;
+    color:var(--accent); font-weight:600;
+    transition:opacity .4s ease 1.5s;
+  }
+
+  /* ---------- foot ---------- */
+  .both-foot{ text-align:center; max-width:62ch; }
+  .both-close{
+    font-family:var(--font-display);
+    font-size:clamp(19px, 2.2vw, 30px);
+    line-height:1.25; font-weight:600; letter-spacing:-0.01em;
+    text-wrap:balance;
+  }
+  .both-pill{
+    font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--accent); font-weight:600;
+    padding:7px 15px; border-radius:999px;
+    border:1px solid rgba(47,227,172,0.35);
+    background:rgba(47,227,172,0.06);
+    white-space:nowrap;
+    transition:opacity .4s ease 1.6s;
+  }
+  .both-note{
+    margin:18px auto 0; max-width:620px;
+    display:flex; align-items:center; gap:16px;
+    text-align:left;
+    padding:16px 20px; border-radius:16px;
+    border:1px solid rgba(120,220,190,0.14);
+    background:rgba(255,255,255,0.025);
+  }
+  .both-note-ic{
+    flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+    width:44px; height:44px; border-radius:50%;
+    color:var(--accent);
+    background:rgba(47,227,172,0.08);
+    border:1px solid rgba(120,220,190,0.18);
+  }
+  .both-note-ic svg{ width:22px; height:22px; }
+  .both-note p{
+    font-size:clamp(13px, 1.15vw, 15px);
+    line-height:1.6;
+    color:rgba(232,242,238,0.62);
+  }
+
+  /* ---------- staged entrance ----------
+     Everything here is gated behind .will-animate, which only JS adds. If the
+     script never runs, errors, or the observer never fires, the section simply
+     renders in its final state — the hidden-by-default version would leave a
+     whole content section invisible. */
+  .both.will-animate .both-head,
+  .both.will-animate .both-panel,
+  .both.will-animate .both-foot{
+    opacity:0;
+    transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.3,1);
+  }
+  .both.will-animate .both-panel--you{ transform:translateX(-28px); }
+  .both.will-animate .both-panel--biz{ transform:translateX(28px); }
+  .both.will-animate .both-head{ transform:translateY(16px); }
+  .both.will-animate .both-foot{ transform:translateY(16px); }
+  .both.will-animate .both-wire{ transform:scaleX(0); }
+  .both.will-animate .both-node{ transform:scale(0); }
+  .both.will-animate .both-drop{ transform:scaleY(0); }
+  .both.will-animate .both-core-label{ opacity:0; }
+  .both.will-animate .both-dot{ opacity:0; }
+
+  .both.is-in .both-head{ opacity:1; transform:none; }                       /* stage 1 */
+  .both.is-in .both-panel{ opacity:1; transform:none; transition-delay:.25s; } /* stage 2 */
+  .both.is-in .both-wire{ transform:scaleX(1); }                             /* stage 3 */
+  .both.is-in .both-node{ transform:scale(1); }                              /* stage 4 */
+  .both.is-in .both-drop{ transform:scaleY(1); }
+    .both.is-in .both-dot{ opacity:1; }
+  .both.is-in .both-core-label{ opacity:1; }
+  .both.is-in .both-foot{ opacity:1; transform:none; transition-delay:1.55s; }
+
+  /* Everything visible immediately, no staging, when motion is not wanted. */
+  @media (prefers-reduced-motion: reduce){
+    .both-head, .both-panel, .both-foot{ opacity:1 !important; transform:none !important; }
+    .both-wire{ transform:scaleX(1) !important; }
+    .both-node{ transform:scale(1) !important; }
+    .both-dot{ opacity:1 !important; }
+    .both-drop{ transform:scaleY(1) !important; }
+    .both-core-label, .both-pill{ opacity:1 !important; }
+  }
+
+  @media (max-width: 900px){
+    .both{ padding:48px 16px; }
+    .both-stage{ grid-template-columns:1fr minmax(96px, 130px) 1fr; }
+    .both-panel{ padding:16px 14px; border-radius:14px; }
+    .both-chips{ gap:6px; }
+    .both-chips li{ font-size:12px; padding:5px 9px; }
+    .both-node{ width:54px; height:54px; }
+    .both-node img{ width:29px; height:29px; }
+  }
+
+  @media (max-width: 560px){
+    /* ---- phone treatment ----
+       Icons, the divider and the curved connectors exist only here. Above
+       560px the desktop pill layout is untouched, which is the point: the
+       two should not drift apart. */
+    .both-panel-ic{
+      display:flex; align-items:center; justify-content:center;
+      width:38px; height:38px; border-radius:50%;
+      background:rgba(47,227,172,0.09);
+      border:1px solid rgba(120,220,190,0.18);
+      margin-bottom:12px;
+    }
+    .both-panel-ic svg{ width:19px; height:19px; }
+    .both-chips li svg{ display:block; width:15px; height:15px; flex:0 0 auto; }
+    .both-panel-ic svg, .both-chips li svg{
+      fill:none; stroke:var(--accent); stroke-width:1.7;
+      stroke-linecap:round; stroke-linejoin:round;
+    }
+    /* items become a plain list under a rule, not pills */
+    .both-lead{
+      padding-bottom:12px;
+      border-bottom:1px solid rgba(120,220,190,0.12);
+      margin-bottom:0 !important;
+    }
+    .both-chips{ margin-top:12px; gap:11px !important; }
+    .both-chips li{
+      display:flex; align-items:center; gap:9px;
+      border:0; background:none; padding:0; border-radius:0;
+      font-weight:500; color:var(--text);
+    }
+
+    .both-stage{ grid-template-columns:1fr 86px 1fr; }
+    .both-panel{ padding:14px 11px; }
+    .both-lead{ font-size:14px; margin-bottom:12px; }
+    .both-chips{ flex-direction:column; gap:5px; align-items:flex-start; }
+    .both-chips li{ font-size:12px; padding:4px 9px; }
+    .both-node{ width:56px; height:56px; }
+    .both-node img{ width:30px; height:30px; }
+    .both-wire--l{ right:calc(50% + 26px); }
+    .both-wire--r{ left:calc(50% + 26px); }
+    .both-drop{ top:calc(50% + 34px); }
+    .both-core-label{ font-size:10px; letter-spacing:0.16em; }
+    .both-stage{ padding-bottom:76px; }
+    .both-pill{ font-size:10px; padding:6px 13px; }
+    .both-note{ gap:12px; padding:14px; }
+    .both-note-ic{ width:38px; height:38px; }
+    .both-note-ic svg{ width:19px; height:19px; }
+  }
+  /* On phones the four steps are a swipe carousel. This replaces two
+     workarounds at once: showing one card at a time on a 2.8s timer, and the
+     reduced-motion rule that stacked all four so that timer wouldn't leave
+     those visitors on step one of four — which is what made the section
+     1355px tall. All four are present, the section stays short, and it reads
+     the same whether or not reduced motion is on.
+     .flow .cards4 .fcard outranks the .flow .fcard rules above. */
+  @media (max-width: 768px){
+    .flow .cards4{
+      display:flex !important;
+      grid-template-columns:none !important;
+      gap:12px !important;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      overscroll-behavior-x:contain;
+      -webkit-overflow-scrolling:touch;
+      padding:6px 0 14px;              /* the scroll box would clip the ring */
+      scrollbar-width:none;
+    }
+    .flow .cards4::-webkit-scrollbar{ display:none; }
+    .flow .cards4 .fcard{
+      display:flex !important;
+      flex:0 0 86%;                    /* the next card peeks, so it reads as more */
+      scroll-snap-align:center;
+      /* Full strength, not 0.42. A card half on screen still has to be
+         readable, and dimmed body text on this background fails contrast. */
+      opacity:1 !important;
+      transform:none !important;
+      min-height:0 !important;
+      padding:20px 18px !important;
+    }
+    .flow .cards4 .fcard.is-active{
+      transform:none !important;
+      box-shadow:0 18px 40px -24px rgba(47,227,172,0.3) !important;
+    }
+  }
+
+  /* =========================================================
+     MEET ALLY — scroll-driven product reveal
+     A plain section: copy on the left, the live dashboard on the right.
+  ========================================================== */
+  .reveal-wrap{
+    position:relative;
+    padding:clamp(56px, 8vh, 96px) 0;
+  }
+  .reveal-inner{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0 clamp(20px, 5vw, 72px);
+  }
+
+  /* Ambient forest glow that strengthens as the laptop arrives. Kept as one
+     soft radial rather than a filter, so it costs nothing to animate. */
+  .reveal-glow{
+    position:absolute;
+    left:50%; top:56%;
+    /* Capped to the viewport, not 120vw. Nothing here clips it, so a wider
+       glow put 88px of horizontal scroll on the page at 1024px. */
+    width:min(1200px, 100vw); height:min(760px, 80vh);
+    transform:translate(-50%,-50%);
+    background:radial-gradient(ellipse at center,
+      rgba(47,227,172,0.13) 0%,
+      rgba(20,90,70,0.07) 38%,
+      rgba(0,0,0,0) 72%);
+    opacity:0.55;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .reveal-grid{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:1440px;
+    display:grid;
+    grid-template-columns:minmax(240px, 340px) minmax(0, 1fr);
+    align-items:center;
+    gap:clamp(24px, 4vw, 64px);
+  }
+
+  /* ---------- copy ---------- */
+  .reveal-eyebrow{
+    font-size:12px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--accent); font-weight:600; line-height:1.7;
+    margin-bottom:18px;
+  }
+  .reveal-title{
+    font-family:var(--font-display);
+    font-size:clamp(34px, 3.6vw, 52px);
+    line-height:1.05; font-weight:600; letter-spacing:-0.02em;
+    margin-bottom:16px;
+  }
+  .reveal-title em{ font-style:normal; color:var(--accent); }
+  .reveal-body{
+    font-size:clamp(14px, 1.15vw, 16px);
+    line-height:1.6;
+    color:rgba(232,242,238,0.68);
+    max-width:34ch;
+    margin-bottom:22px;
+  }
+  .reveal-link{
+    display:inline-flex; align-items:center; gap:9px;
+    background:none; border:0; padding:0;
+    font-family:inherit; font-size:14px; font-weight:600;
+    color:var(--accent); cursor:pointer;
+    transition:gap .25s ease;
+  }
+  .reveal-link svg{ width:17px; height:17px; }
+  .reveal-link:hover{ gap:14px; }
+
+  /* ---------- the laptop ---------- */
+  .reveal-stage{
+    position:relative;
+    /* The cap lives here rather than on the frame so the stage box and the
+       frame box are the same width — the control anchors to the stage, and
+       anything else would leave it floating away from the frame edge.
+       width:100% with justify-self, not margin:0 auto: auto margins on a grid
+       item drop it out of stretch and size it to its content, which collapsed
+       the frame from 898px to 302px. */
+    width:100%;
+    max-width:1100px;
+    justify-self:center;
+  }
+  /* ---------- Meet Ally: scroll-driven reveal ----------
+     The first attempt at this ran a scroll listener and wrote CSS variables
+     every frame, which meant style recalc and layout work on the main thread
+     for each one — while transforming a live 500 KB iframe. That was never
+     going to be dependably smooth, and it was dropped.
+
+     This is the same idea with the cause removed. animation-timeline drives
+     the animation off the scroll position with no JavaScript at all, and
+     because only transform and opacity change, it runs on the compositor —
+     the iframe is one already-rastered layer being moved, not re-rendered.
+
+     Guarded twice. @supports because animation-timeline is not Baseline:
+     Chrome and Edge 115+ and Safari 26+ have it, Firefox still keeps it
+     behind layout.css.scroll-driven-animations.enabled as of 152. And
+     prefers-reduced-motion, because this is decoration. Either way the
+     fallback is the finished state — the section simply is what it is when
+     you reach it, which is how it behaves today. */
+  /* In and back out, and the way out is the way in mirrored: whatever the
+     copy and the frame rise out of on the way up, they sink into on the way
+     down — same distance, same tilt, same scale, opposite sign. Anything
+     else and leaving would read as a different move than arriving. */
+  @keyframes allyRevealCopy{
+    0%  { opacity:0; transform:translateY(20px); }
+    46% { opacity:1; transform:translateY(0); }
+    76% { opacity:1; transform:translateY(0); }
+    100%{ opacity:0; transform:translateY(-20px); }
+  }
+  @keyframes allyRevealStage{
+    0%  { opacity:0.55; transform:perspective(1400px) translateY(56px)  rotateX(7deg)  scale(0.94); }
+    46% { opacity:1;    transform:perspective(1400px) translateY(0)     rotateX(0)     scale(1); }
+    76% { opacity:1;    transform:perspective(1400px) translateY(0)     rotateX(0)     scale(1); }
+    100%{ opacity:0.55; transform:perspective(1400px) translateY(-56px) rotateX(-7deg) scale(0.94); }
+  }
+  @supports (animation-timeline: view()){
+    @media (prefers-reduced-motion: no-preference){
+      .reveal-copy{
+        animation-name:allyRevealCopy;
+        animation-duration:auto;
+        animation-timing-function:linear;
+        animation-fill-mode:both;
+        /* after the longhands above: animation-timeline is a reset-only value
+           in the animation shorthand, so order matters here. */
+        animation-timeline:view();
+        /* the whole journey now, not just the arrival — the range has to
+           reach the exit for there to be an exit to animate. The 46% stop
+           above lands where "cover 45%" used to, so the way in is unchanged. */
+        animation-range:cover 0% cover 100%;
+      }
+      .reveal-stage{
+        animation-name:allyRevealStage;
+        animation-duration:auto;
+        animation-timing-function:linear;
+        animation-fill-mode:both;
+        animation-timeline:view();
+        animation-range:cover 0% cover 100%;
+      }
+    }
+  }
+
+  .reveal-screen{
+    display:block;
+    width:100%;
+    aspect-ratio:16 / 10;   /* reserves the box before the frame loads */
+    border-radius:16px;
+    overflow:hidden;
+    border:1px solid rgba(120,220,190,0.18);
+    background:#06140d;
+    box-shadow:0 28px 80px -28px rgba(0,0,0,0.55);
+  }
+  .reveal-screen iframe{
+    width:100%; height:100%; border:0; display:block;
+  }
+
+  /* ---------- full-screen control ---------- */
+  .reveal-fs{
+    /* Above the frame, not on it. Inside the frame it sat on top of the
+       dashboard's own header controls. */
+    position:absolute;
+    bottom:calc(100% + 14px);
+    right:0;
+    z-index:3;
+    display:inline-flex; align-items:center; gap:8px;
+    padding:9px 15px;
+    border-radius:999px;
+    border:1px solid rgba(120,220,190,0.28);
+    background:rgba(4,12,9,0.72);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    color:var(--accent);
+    font-family:inherit; font-size:12.5px; font-weight:600;
+    letter-spacing:0.02em;
+    cursor:pointer;
+  }
+  .reveal-fs svg{ width:15px; height:15px; }
+
+  /* ---------- product viewer ---------- */
+  .viewer{
+    position:fixed; inset:0; z-index:120;
+    display:none;
+    align-items:center; justify-content:center;
+    padding:clamp(12px, 3vw, 40px);
+  }
+  .viewer.is-open{ display:flex; }
+  .viewer-backdrop{
+    position:absolute; inset:0;
+    background:rgba(2,6,5,0.92);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+  }
+  .viewer-panel{
+    position:relative;
+    width:100%; height:100%;
+    max-width:1500px;
+    border-radius:14px;
+    overflow:hidden;
+    border:1px solid rgba(120,220,190,0.18);
+    background:#040a08;
+    box-shadow:0 30px 90px rgba(0,0,0,0.6);
+  }
+  .viewer-frame{ width:100%; height:100%; }
+  .viewer-frame iframe{ width:100%; height:100%; border:0; display:block; }
+  .viewer-x{
+    position:absolute; top:12px; right:12px; z-index:2;
+    display:inline-flex; align-items:center; justify-content:center;
+    width:38px; height:38px; border-radius:50%;
+    border:1px solid rgba(120,220,190,0.25);
+    background:rgba(4,12,9,0.85);
+    color:var(--accent);
+    cursor:pointer;
+  }
+  .viewer-x svg{ width:18px; height:18px; }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 1024px){
+    .reveal-grid{
+      grid-template-columns:minmax(0,1fr);
+      gap:clamp(18px, 3vh, 32px);
+      max-width:760px;
+    }
+    .reveal-copy{ text-align:center; }
+    .reveal-body{ margin-left:auto; margin-right:auto; }
+  }
+  @media (max-width: 768px){
+    .reveal-inner{ padding:0 16px; }
+    .reveal-title{ font-size:clamp(28px, 8vw, 38px); }
+    .reveal-eyebrow{ font-size:11px; margin-bottom:12px; }
+    .reveal-body{ font-size:14px; margin-bottom:18px; }
+    /* top/right here would fight the bottom:100% anchor above and drop the
+       control back onto the dashboard's own header. */
+    .reveal-fs{
+      font-size:11.5px; padding:7px 11px; bottom:calc(100% + 10px); right:0;
+      /* No backdrop blur on phones. It re-blurs whatever is behind the control
+         every frame, and behind it is the moving dashboard. */
+      backdrop-filter:none; -webkit-backdrop-filter:none;
+      background:rgba(4,12,9,0.9);
+    }
+    /* A dashboard at 16:10 on a 375px screen is 209px tall and unreadable.
+       Taller here so the interface is legible, the way the old mobile frame
+       was — width is the constraint on a phone, height is not. */
+    .reveal-screen{ aspect-ratio:4 / 5; border-radius:12px; }
+    .viewer{ padding:8px; }
+  }
+
+  /* =========================================================
+     PITCH SECTIONS — outcome, diagnosis, day plan, chat, trust
+     One pattern: a copy column and a product card. The card primitives below
+     are shared so the five sections look like one system rather than five
+     separate designs, and so a change to the card style lands everywhere.
+  ========================================================== */
+  .pitch{
+    position:relative;
+    padding:clamp(56px, 8vh, 100px) clamp(20px, 5vw, 72px);
+  }
+  .pitch-inner{
+    width:100%;
+    max-width:1180px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:minmax(260px, 380px) minmax(0, 1fr);
+    align-items:center;
+    gap:clamp(28px, 4vw, 64px);
+  }
+  .pitch--flip .pitch-inner{ grid-template-columns:minmax(0,1fr) minmax(260px,380px); }
+  .pitch--flip .pitch-copy{ order:2; }
+  .pitch--flip .pitch-visual{ order:1; }
+
+  /* ---------- the heading stays, the card goes past it ----------
+     The earlier attempt pinned the whole section and made the card leave
+     again on the way out. None of the sites worth copying do that:
+     edesigninteractive and scale.com pin nothing at all, and foosh.ai — the
+     closest to this page, and the only one of the three with no animation
+     library — sticks nothing but its small band labels at top:32px while the
+     tiles scroll past them.
+
+     That is where "you stay in one place" actually comes from, and it costs
+     no scroll distance: the copy holds while its card moves through, then
+     the next section takes over. The card arrives and stays. It does not
+     leave — content that fades out on the way past is a thing to read twice
+     and catch neither time.
+
+     align-self:start matters: .pitch-inner centres its items, which sizes the
+     grid area to the content and leaves sticky nothing to travel within.
+     Only above 1024px, where the two columns exist at all. */
+  /* ---------- three sections, one place ----------
+     Consecutive sticky siblings inside a single containing block pile up
+     instead of scrolling away: each one holds at the top while the next
+     rises over it. The reader stays put; the page underneath changes.
+
+     The receding section shrinks and dims while it is being covered, which
+     is what stops the swap reading as one flat card sliding over another.
+     Its timeline cannot come from itself — a stuck element does not move, so
+     view() on it would sit still for exactly the stretch that needs to
+     animate. timeline-scope solves it: each section is driven by the
+     view-timeline of the one arriving over it, which is the thing actually
+     in motion, and entry 0%-100% is precisely the window where the cover
+     happens.
+
+     linear, not an ease: scroll position is the timing. An eased curve on a
+     scrubbed animation makes the motion lag the finger.
+
+     The sections need an opaque background to cover at all — they had none,
+     since the page ground came from body.
+
+     Desktop only. Stacking full-viewport layers on a phone costs memory for
+     an effect that needs a tall window to read, and these sections were
+     compacted for phones on purpose. */
+  /* ---- why these use translate/rotate/scale instead of transform ----
+     Each of these sections runs TWO animations on TWO different timelines:
+     an arrival on its own, a recede on the next section's. When two
+     animations touch the same property, the one later in animation-name
+     wins outright — so while all of this was written as transform:, the
+     recede silently ate every arrival. #trust was the only section that
+     looked right because it is last and has no recede to lose to.
+
+     The individual transform properties compose instead of overwriting:
+     the arrival takes translate and rotate, the recede takes scale, and
+     both survive. */
+  @keyframes stackRecede{
+    from{ scale:1;    opacity:1; }
+    to  { scale:0.94; opacity:0.45; }
+  }
+  /* The arrivals. Each incoming section sweeps in from its own side with a
+     touch of rotation instead of riding straight up — ongoing from the
+     right, trust from the left — so consecutive swaps read as different
+     moves. These are driven by the section's OWN view-timeline, which works
+     here precisely where it could not for the recede: the incoming section
+     is the one in motion during its entry. Settled by entry 88%, so it lands
+     square just before it finishes covering. Scrubbed and linear, so
+     scrolling up plays the exact same path backwards. */
+  /* Three sections, three different moves — the award-site card stacks all
+     do this: vary the move per card, keep each one small. day-plan tilts up
+     out of perspective and straightens, like a card being stood upright.
+     Then a mirrored pair of sweeps: ongoing in from the right, trust in
+     from the left. Exact mirrors of each other — same 8vw, same 3vh, same
+     1.4deg with the sign flipped — so the two read as one move and its
+     answer rather than as two unrelated slides. */
+  /* No opacity in the arrivals: the recede owns opacity for the same
+     reason it owned transform, and a panel that covers another one has no
+     business being see-through while it does it. */
+  @keyframes stackArriveTilt{
+    from{ translate:0 5vh; rotate:x -7deg; }
+    to  { translate:none;  rotate:none; }
+  }
+  @keyframes stackArriveRight{
+    from{ translate:8vw 3vh;  rotate:1.4deg; }
+    to  { translate:none;     rotate:none; }
+  }
+  @keyframes stackArriveLeft{
+    from{ translate:-8vw 3vh; rotate:-1.4deg; }
+    to  { translate:none;     rotate:none; }
+  }
+  @media (min-width: 1025px){
+    @supports (animation-timeline: view()) and (timeline-scope: --a){
+      @media (prefers-reduced-motion: no-preference){
+        .stack{
+          timeline-scope:--stack-2, --stack-3;
+          /* day-plan's rotate:x needs depth to read as a tilt rather than a
+             vertical squash. Verified not to disturb sticky: at 1200px into
+             the stack both earlier sections still pin at top 0. */
+          perspective:1200px;
+        }
+        .stack > .pitch{
+          position:sticky;
+          top:0;
+          min-height:100vh;
+          background:var(--bg);
+          /* the incoming edge reads as an edge in both directions */
+          box-shadow:0 -24px 60px -12px rgba(0,0,0,0.5);
+          /* Shrink from the top, not the centre. Scaling from the centre
+             pulled the receded section's top edge ~27px down, leaving a
+             strip of raw ground behind the coverer — invisible on the way
+             down, glaring on the way back up as the coverer retreats. */
+          transform-origin:50% 0;
+        }
+        #ongoing{ view-timeline-name:--stack-2; view-timeline-axis:block; }
+        #trust  { view-timeline-name:--stack-3; view-timeline-axis:block; }
+        #day-plan,
+        #ongoing,
+        #trust{
+          animation-duration:auto;
+          animation-timing-function:linear;
+          animation-fill-mode:both;
+        }
+        /* Every section arrives on its OWN view() — it is the moving thing
+           during its entry — and recedes on the NEXT section's scoped
+           timeline. day-plan gets an arrival too now: it was the only one
+           entering as a plain scrolling block, which is why the first two
+           swaps read as the same move. */
+        #day-plan{
+          animation-name:stackArriveTilt, stackRecede;
+          animation-timeline:view(), --stack-2;
+          animation-range:entry 0% entry 85%, entry 0% entry 100%;
+        }
+        #ongoing{
+          animation-name:stackArriveRight, stackRecede;
+          animation-timeline:--stack-2, --stack-3;
+          animation-range:entry 0% entry 88%, entry 0% entry 100%;
+        }
+        #trust{
+          animation-name:stackArriveLeft;
+          animation-timeline:--stack-3;
+          animation-range:entry 0% entry 88%;
+        }
+      }
+    }
+  }
+
+  @media (min-width: 1025px){
+    /* One screen each. At their natural heights the sticky heading had
+       141-245px to hold for and #trust had none at all, so it would have
+       been a thing that technically applied and visibly did nothing. A
+       screen per section is the ordinary rhythm anyway, and it is what
+       gives the copy something to hold through. */
+    .pitch{ min-height:100vh; display:grid; align-content:center; }
+    .pitch-copy{
+      position:sticky;
+      top:clamp(96px, 22vh, 190px);
+      align-self:start;
+    }
+  }
+
+  /* The card gets a touch of scale on the way in, the way foosh treats a
+     tile rather than a line of text. Same curve and duration as every other
+     .reveal on the page — copying their values instead would leave this one
+     section moving to a different rhythm than the rest. */
+  .pitch-visual.reveal{ transform:translateY(24px) scale(0.985); }
+  .pitch-visual.reveal.in{ transform:translateY(0) scale(1); }
+
+  .pitch-eyebrow{
+    font-size:12px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--accent); font-weight:600; line-height:1.7; margin-bottom:14px;
+  }
+  .pitch-title{
+    font-family:var(--font-display);
+    font-size:clamp(26px, 3vw, 40px);
+    line-height:1.12; font-weight:600; letter-spacing:-0.02em;
+    text-wrap:balance;
+  }
+  .pitch-title em{ font-style:normal; color:var(--accent); }
+
+  /* ---------- the claim line paces itself ----------
+     Taken from scale.com's "90% of the world's leading..." panel, where the
+     sentence brightens word by word as you scroll it into place. It is the
+     one effect in that recording that helps the reader rather than
+     decorating around them: it sets the reading pace and puts the weight on
+     the line carrying the claim.
+
+     Applied to every .pitch-title rather than a chosen few. Three out of
+     five would read as an oversight; belonging to the section type reads as
+     a decision.
+
+     The timeline is named on the heading, not taken from view() on each
+     word: the words sit on the same few lines and would all measure nearly
+     the same position. The stagger is in animation-range instead, 3.2% of
+     the range per word.
+
+     The dim state clears AA on its own — see the measured note below — so
+     nothing here depends on the animation finishing, or running at all. */
+  @keyframes titleWordLift{
+    from{ opacity:var(--word-dim); }
+    to  { opacity:1; }
+  }
+  @supports (animation-timeline: view()){
+    @media (prefers-reduced-motion: no-preference){
+      .pitch-title{
+        view-timeline-name:--title;
+        view-timeline-axis:block;
+      }
+      .pitch-title .w{
+        /* 0.62 over the section ground is 6.06:1 — above AA at this size
+           even at its dimmest, so a visitor who lands mid-page, scrolls
+           past too fast, or never triggers it still reads normal text. */
+        --word-dim:0.62;
+        opacity:var(--word-dim);
+        animation-name:titleWordLift;
+        animation-duration:auto;
+        animation-timing-function:linear;
+        animation-fill-mode:both;
+        animation-timeline:--title;
+        animation-range:entry calc(26% + var(--i) * 3.2%) entry calc(54% + var(--i) * 3.2%);
+      }
+    }
+  }
+  .pitch-body{
+    margin-top:14px;
+    font-size:clamp(14px, 1.15vw, 16px); line-height:1.6;
+    color:rgba(232,242,238,0.66);
+    max-width:38ch;
+  }
+  .pitch-badge{
+    display:inline-block; margin-top:18px;
+    font-size:11px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--accent); font-weight:600;
+    padding:7px 14px; border-radius:999px;
+    border:1px solid rgba(47,227,172,0.32);
+    background:rgba(47,227,172,0.06);
+  }
+
+  /* checklist used in the outcome and trust columns */
+  .pitch-list{ list-style:none; margin-top:22px; display:flex; flex-direction:column; gap:13px; }
+  .pitch-list li{
+    display:flex; align-items:flex-start; gap:11px;
+    font-size:clamp(13.5px, 1.1vw, 15px); line-height:1.45;
+    color:rgba(232,242,238,0.82);
+  }
+  .pitch-list svg{ width:17px; height:17px; flex:0 0 auto; margin-top:1px; stroke:var(--accent); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+
+  /* ---------- card primitives ----------
+     These are pieces of the product, so they carry the dashboard's palette
+     rather than the landing page's. Values taken from ally-platform.html:
+     ivory surfaces, forest ink, emerald accent. Dark cards here read as
+     landing-page graphics rather than a look at the real thing. */
+  /* The plate the card sits on. In the product a white card sits on an ivory
+     page, and that pair is most of what makes it read as an app screen. A
+     single cream card dropped straight onto the dark page has no pair, which
+     is why it looked like a landing-page graphic instead of the thing itself.
+     The plate is what floats here, so the deep shadow belongs to it. */
+  .pitch-visual{
+    background:#f7f1eb;                 /* --ivory   */
+    border:1px solid #d8cfc2;           /* --bd-2    */
+    border-radius:20px;
+    padding:clamp(13px, 1.3vw, 19px);
+    box-shadow:0 2px 6px -2px rgba(0,0,0,.4), 0 30px 70px -24px rgba(0,0,0,.55);
+  }
+
+  .card{
+    --c-surface:#ffffff;
+    --c-surface-2:#fbf7f2;              /* --ivory-2 */
+    --c-ink:#16241c;
+    --c-muted:#556458;                  /* --muted. --muted-2 (#6c7a70) is
+                                           what the dashboard uses here, but
+                                           on the tile fill it is 4.23:1 —
+                                           under AA. This clears it. */
+    --c-line:#e7e0d6;                   /* --bd      */
+    --c-forest:#1B4332;
+    --c-emerald:#10B981;
+    font-family:'Inter', system-ui, sans-serif;
+    border:1px solid var(--c-line);
+    border-radius:16px;
+    background:var(--c-surface);
+    color:var(--c-ink);
+    padding:clamp(16px, 1.6vw, 22px);
+    /* --shadow-card, verbatim. Tight and close, not a dramatic float — an
+       app surface sits on its page, it does not hover over it. */
+    box-shadow:0 1px 2px -1px rgba(6,20,13,.14), 0 6px 16px -6px rgba(6,20,13,.18);
+  }
+  .card-top{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:12px; padding-bottom:13px; margin-bottom:15px;
+    border-bottom:1px solid var(--c-line);
+  }
+  .card-eye{
+    font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--c-forest); font-weight:700;
+  }
+  .card-name{
+    font-family:'Inter Tight','Inter',system-ui,sans-serif;
+    font-size:14.5px; font-weight:700; letter-spacing:-0.01em;
+    color:var(--c-ink); margin-top:3px;
+  }
+  .card-meta{ font-size:11px; color:var(--c-muted); }
+
+  /* a labelled block inside a card */
+  .tile{
+    border:1px solid var(--c-line);
+    border-radius:12px;
+    background:var(--c-surface-2);
+    padding:13px 14px;
+  }
+  .tile + .tile{ margin-top:9px; }
+  /* .t-lbl from the dashboard. The uppercase tracked eyebrow is a
+     landing-page device the product never uses, and it was the loudest
+     thing in the card. */
+  .tile .tile-eye{
+    font-size:11.5px; font-weight:600; color:var(--c-muted);
+    letter-spacing:normal; text-transform:none; margin-bottom:7px;
+  }
+  .tile p{ font-size:12.5px; line-height:1.5; color:var(--c-muted); }
+  .tile strong{
+    font-family:'Inter Tight','Inter',system-ui,sans-serif;
+    color:var(--c-forest); font-weight:700; letter-spacing:-0.01em;
+  }
+  /* .t-val: the dashboard states a number large and lets it carry the tile. */
+  .t-val{
+    font-family:'Inter Tight','Inter',system-ui,sans-serif;
+    font-size:26px; font-weight:800; color:var(--c-forest);
+    letter-spacing:-0.02em; line-height:1;
+  }
+  .t-val .u{ font-size:13px; color:var(--c-muted); font-weight:600; }
+
+  .card-grid{ display:grid; grid-template-columns:1fr 1fr; gap:9px; align-items:start; }
+  .card-cols{ display:grid; grid-template-columns:1fr 1fr; gap:11px; }
+  .tile--gap{ margin-top:11px; }
+
+  /* small rows with a leading check or dot */
+  .row{ display:flex; align-items:center; gap:9px; font-size:12.5px; color:var(--c-ink); padding:5px 0; }
+  .row svg{ width:14px; height:14px; flex:0 0 auto; stroke:var(--c-emerald); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .row-num{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:18px; height:18px; flex:0 0 auto; border-radius:50%;
+    font-size:10px; font-weight:700; color:var(--c-forest);
+    border:1px solid rgba(27,67,50,0.22); background:rgba(16,185,129,0.12);
+  }
+
+  .tile--locked{ opacity:0.72; }
+  .tile-lock{
+    display:flex; align-items:center; gap:7px; margin-top:10px;
+    font-size:10.5px; letter-spacing:0.04em;
+    color:var(--c-muted);
+  }
+  .tile-lock svg{ width:13px; height:13px; flex:0 0 auto; stroke:var(--c-muted); fill:none; stroke-width:1.7; }
+
+  .chip{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:11px; padding:5px 10px; border-radius:999px;
+    border:1px solid rgba(27,67,50,0.18);
+    background:rgba(16,185,129,0.1);
+    color:var(--c-forest); font-weight:600;
+  }
+  .chip-row{ display:flex; flex-wrap:wrap; gap:7px; margin-top:10px; }
+
+  /* progress ring for the outcome card */
+  .ring{ position:relative; width:74px; height:74px; flex:0 0 auto; }
+  .ring svg{ width:100%; height:100%; transform:rotate(-90deg); }
+  .ring circle{ fill:none; stroke-width:6; }
+  .ring .ring-bg{ stroke:rgba(27,67,50,0.12); }
+  .ring .ring-fg{ stroke:var(--c-emerald); stroke-linecap:round; }
+  .ring b{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size:17px; font-weight:700; color:var(--c-ink);
+  }
+
+  /* horizontal bar used for focus time */
+  .bar{ height:6px; border-radius:99px; background:rgba(27,67,50,0.12); overflow:hidden; margin-top:8px; }
+  .bar i{ display:block; height:100%; border-radius:99px; background:var(--c-emerald); }
+
+  /* chat bubbles */
+  .bubble{
+    max-width:88%; padding:11px 13px; border-radius:14px;
+    font-size:12.5px; line-height:1.5;
+  }
+  .bubble--me{
+    margin-left:auto; background:var(--c-forest); color:#eaf3ee; font-weight:600;
+    border-bottom-right-radius:5px;
+  }
+  .bubble--ally{
+    background:var(--c-surface-2); color:var(--c-muted);
+    border:1px solid var(--c-line); border-bottom-left-radius:5px;
+  }
+  .bubble-stack{ display:flex; flex-direction:column; gap:10px; }
+  .fake-input{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    margin-top:13px; padding:10px 12px; border-radius:999px;
+    border:1px solid var(--c-line); background:var(--c-surface-2);
+    font-size:12px; color:var(--c-muted);
+  }
+  .fake-input svg{ width:15px; height:15px; stroke:var(--c-emerald); fill:none; stroke-width:2; }
+
+  /* testimonial */
+  .quote-who{ display:flex; align-items:center; gap:10px; margin-bottom:13px; }
+  .quote-av{
+    width:34px; height:34px; border-radius:50%; flex:0 0 auto;
+    background:linear-gradient(140deg, #34d399, #1B4332);
+    border:1px solid rgba(27,67,50,0.2);
+  }
+  .quote-name{ font-size:12.5px; font-weight:600; color:var(--c-ink); }
+  .quote-role{ font-size:11px; color:var(--c-muted); }
+  .quote-text{ font-size:14.5px; line-height:1.55; color:var(--c-ink); }
+  .quote-foot{ margin-top:14px; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--c-muted); }
+
+  @media (max-width: 1024px){
+    .pitch-inner,
+    .pitch--flip .pitch-inner{ grid-template-columns:minmax(0,1fr); max-width:640px; }
+    .pitch--flip .pitch-copy{ order:1; }
+    .pitch--flip .pitch-visual{ order:2; }
+    .pitch-body{ max-width:none; }
+  }
+  @media (max-width: 560px){
+    .pitch{ padding:clamp(40px, 6vh, 64px) 16px; }
+    .card-cols{ grid-template-columns:1fr; }
+    .card-grid{ grid-template-columns:1fr; }
+    .pitch-title{ font-size:clamp(24px, 7vw, 32px); }
+
+    /* Everything that is side by side on desktop stacks here, so #outcome's
+       six tiles became one 842px column — a screen and a half of card. The
+       card is the same surface, just seen smaller: type down a step, padding
+       and gaps in, line-height tighter. Nothing is dropped. */
+    .pitch-visual{ padding:10px; border-radius:16px; }
+    .card{ padding:12px; border-radius:14px; }
+    .card-top{ padding-bottom:10px; margin-bottom:12px; }
+    .card-cols{ gap:9px; }
+    .tile--gap{ margin-top:9px; }
+    .tile{ padding:10px 11px; border-radius:11px; }
+    .tile .tile-eye{ font-size:10.5px; margin-bottom:5px; }
+    .tile p{ font-size:11.5px; line-height:1.42; }
+    .row{ font-size:11.5px; padding:3px 0; gap:8px; }
+    .chip-row{ gap:6px; }
+    .bubble-stack{ gap:8px; }
+    .t-val{ font-size:22px; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#content">Skip to content</a>
+<main id="content">
+
+<!-- =========================================================
+     SECTION 1 — HERO
+========================================================== -->
+<div class="mobile-hero-brands" aria-label="GoXL brands">
+  <a class="mobile-ally-brand" href="#problem">
+    <img src="/assets/logo-123.v1.png" alt="" />
+    <span>GoXL Ally</span>
+  </a>
+  <span class="mobile-goxl-brand">
+    <img src="/assets/goxl-entrepreneurship.v1.png" alt="GoXL Entrepreneurship" />
+  </span>
+</div>
+
+<aside class="mobile-hero-cards" aria-label="Founder questions">
+  <p class="mobile-hero-card mobile-hero-card--stuck" data-fq="tl">
+    <span class="mobile-hero-card__label">Founder</span>
+    What deserves attention first?
+  </p>
+  <p class="mobile-hero-card mobile-hero-card--avoid" data-fq="bl">
+    <span class="mobile-hero-card__label">Founder</span>
+    Is this really the priority?
+  </p>
+  <p class="mobile-hero-card mobile-hero-card--cash" data-fq="tr">
+    <span class="mobile-hero-card__label">Business</span>
+    Where is the real leak?
+  </p>
+  <p class="mobile-hero-card mobile-hero-card--growth" data-fq="br">
+    <span class="mobile-hero-card__label">Business</span>
+    What’s actually blocking it?
+  </p>
+</aside>
+
+<section class="problem" id="problem">
+  <canvas id="network-canvas"></canvas>
+  <div class="mobile-hero-light" aria-hidden="true"></div>
+
+  <a class="top-brand" href="#problem">
+    <img src="/assets/logo-123.v1.png" alt="" />
+    <span>GoXL Ally</span>
+  </a>
+
+  <div class="problem-inner">
+    <div class="figure-wrap">
+      <div id="figure-anchor"></div>
+      <div class="hero-statement reveal">
+        <h1 class="hero-lead">Know what matters.<br>Know your next move.</h1>
+        <p class="hero-ask">Ally helps you uncover what matters now — and what to do next.</p>
+        <div class="cta-wrap">
+          <a class="cta cta-outline hero-cta" href="#early-access" data-early-access>
+            Register for Early Access
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <button class="cta-limit" type="button" data-early-access>Limited slots only</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="float-edit-bar">
+    <button type="button" id="floatEditBtn">Edit cards</button>
+    <button type="button" id="floatSaveBtn" class="is-primary" hidden>Set positions</button>
+    <button type="button" id="floatResetBtn" hidden>Reset</button>
+  </div>
+  <div class="float-edit-hint">Drag cards → then click Set positions</div>
+
+  <aside class="float-qs" aria-label="Founder questions">
+    <p class="float-q float-q--tl" data-fq="tl">
+      <span class="float-q__label">Founder</span>
+      What deserves attention first?
+    </p>
+    <p class="float-q float-q--bl" data-fq="bl">
+      <span class="float-q__label">Founder</span>
+      Is this really the priority?
+    </p>
+    <p class="float-q float-q--tr" data-fq="tr">
+      <span class="float-q__label">Business</span>
+      Where is the real leak?
+    </p>
+    <p class="float-q float-q--br" data-fq="br">
+      <span class="float-q__label">Business</span>
+      What’s actually blocking it?
+    </p>
+  </aside>
+
+</section>
+
+
+<!-- =========================================================
+     02 — OUTCOME + PRODUCT PROOF
+     Real Ally output this early, before any explanation of how it works.
+========================================================== -->
+<section class="pitch" id="outcome">
+  <div class="pitch-inner">
+    <div class="pitch-copy reveal">
+      <p class="pitch-eyebrow">From uncertainty<br>to a clear next move.</p>
+      <h2 class="pitch-title">Here&rsquo;s what clarity with Ally actually looks like.</h2>
+      <ul class="pitch-list">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.6 12.2l2.4 2.4 4.4-4.8"/></svg>Understand what&rsquo;s really happening</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.6 12.2l2.4 2.4 4.4-4.8"/></svg>Identify the real root cause</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.6 12.2l2.4 2.4 4.4-4.8"/></svg>Know what deserves your attention now</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.6 12.2l2.4 2.4 4.4-4.8"/></svg>Take action with confidence</li>
+      </ul>
+    </div>
+
+    <div class="pitch-visual reveal">
+      <div class="card">
+        <div class="card-top">
+          <div>
+            <p class="card-eye">Your clarity overview</p>
+            <p class="card-name">Good evening, User</p>
+          </div>
+          <p class="card-meta">Diagnosis completed &middot; 1 day ago</p>
+        </div>
+
+        <div class="card-grid">
+          <div>
+            <div class="tile">
+              <p class="tile-eye">What&rsquo;s really happening</p>
+              <p>Retention is dropping because new users aren&rsquo;t reaching the first meaningful experience fast enough.</p>
+            </div>
+            <div class="tile">
+              <p class="tile-eye">Root cause</p>
+              <p>Onboarding is not leading to activation. Users get lost before they see value.</p>
+            </div>
+            <div class="tile">
+              <p class="tile-eye">What matters now</p>
+              <p>Fix onboarding before increasing acquisition.</p>
+            </div>
+            <div class="tile">
+              <p class="tile-eye">Your next 3 moves</p>
+              <p class="row"><span class="row-num">1</span>Talk to 3 recently churned users</p>
+              <p class="row"><span class="row-num">2</span>Review first-session drop-off</p>
+              <p class="row"><span class="row-num">3</span>Test a shorter onboarding path</p>
+            </div>
+          </div>
+
+          <div>
+            <div class="tile">
+              <p class="tile-eye">Today&rsquo;s priority</p>
+              <p style="margin-bottom:12px">Understand where activation breaks.</p>
+              <div class="ring">
+                <svg viewBox="0 0 80 80" aria-hidden="true">
+                  <circle class="ring-bg" cx="40" cy="40" r="33"/>
+                  <circle class="ring-fg" cx="40" cy="40" r="33"
+                          stroke-dasharray="207" stroke-dashoffset="72"/>
+                </svg>
+                <b>65%</b>
+              </div>
+            </div>
+            <div class="tile">
+              <p class="tile-eye">Day plan</p>
+              <p><strong>3 tasks</strong> planned for today</p>
+              <span class="chip" style="margin-top:10px">View Day Plan &rarr;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION — TWO THINGS AT ONCE
+     Merges the old #dimensions and #clarity sections. Both were explaining
+     the same idea (founder + business) across two full screens; this states
+     it once, and the connector diagram carries the argument instead of prose.
+========================================================== -->
+<section class="both" id="dimensions">
+  <div class="both-atm" aria-hidden="true">
+    <div class="both-orb both-orb--you"></div>
+    <div class="both-orb both-orb--biz"></div>
+  </div>
+
+  <!-- Icons for the phone layout, defined once and referenced with <use>.
+       Hidden above 560px, where the desktop pill treatment is used. -->
+  <svg class="both-sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-you" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M5.5 19.5c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/></symbol>
+    <symbol id="i-biz" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 9.5h17M8 3.5v3M16 3.5v3"/></symbol>
+    <symbol id="i-mind" viewBox="0 0 24 24"><path d="M12 5.5v13M12 5.5a3 3 0 0 0-5.6 1.4A2.8 2.8 0 0 0 5 12a2.9 2.9 0 0 0 1.7 4.8A3 3 0 0 0 12 18.5M12 5.5a3 3 0 0 1 5.6 1.4A2.8 2.8 0 0 1 19 12a2.9 2.9 0 0 1-1.7 4.8A3 3 0 0 1 12 18.5"/></symbol>
+    <symbol id="i-focus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol>
+    <symbol id="i-confidence" viewBox="0 0 24 24"><path d="M12 3.5l7 2.8v5.2c0 4.2-2.9 7.4-7 9-4.1-1.6-7-4.8-7-9V6.3z"/></symbol>
+    <symbol id="i-decisions" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2"/><path d="M8.4 12.2l2.5 2.5 4.7-5"/></symbol>
+    <symbol id="i-growth" viewBox="0 0 24 24"><path d="M4 20V10M10 20V5M16 20v-7M22 20H2"/></symbol>
+    <symbol id="i-finance" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2"/><path d="M12 7.4v9.2M14.4 9.6c-.5-.8-1.4-1.2-2.4-1.2-1.4 0-2.4.8-2.4 1.9 0 2.6 4.9 1.4 4.9 4 0 1.2-1.1 2-2.5 2-1.1 0-2-.4-2.5-1.3"/></symbol>
+    <symbol id="i-product" viewBox="0 0 24 24"><path d="M12 3.2l7.5 4.1v9.4L12 20.8 4.5 16.7V7.3z"/><path d="M4.7 7.4L12 11.5l7.3-4.1M12 11.5v9.1"/></symbol>
+    <symbol id="i-team" viewBox="0 0 24 24"><circle cx="9" cy="9" r="3.1"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M16.2 7.2a3 3 0 0 1 0 5.6M17.5 19c0-2.2-.9-3.9-2.4-4.7"/></symbol>
+    <symbol id="i-ops" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 4.2v-1M12 20.8v-1M19.5 12h1M3.5 12h1M17.3 6.7l.7-.7M6 18l.7-.7M17.3 17.3l.7.7M6 6l.7.7"/></symbol>
+  </svg>
+
+  <div class="both-inner">
+    <header class="both-head">
+      <p class="both-eyebrow">Why Ally looks at both</p>
+      <h2 class="both-title">You&rsquo;re building <em>two things</em> at once.</h2>
+      <p class="both-sub">Your business. And yourself as a founder.</p>
+    </header>
+
+    <div class="both-stage">
+      <article class="both-panel both-panel--you">
+        <span class="both-panel-ic" aria-hidden="true"><svg><use href="#i-you"/></svg></span>
+        <p class="both-label">You</p>
+        <p class="both-lead">The founder behind the decisions.</p>
+        <ul class="both-chips">
+          <li><svg aria-hidden="true"><use href="#i-mind"/></svg>Mind</li>
+          <li><svg aria-hidden="true"><use href="#i-focus"/></svg>Focus</li>
+          <li><svg aria-hidden="true"><use href="#i-confidence"/></svg>Confidence</li>
+          <li><svg aria-hidden="true"><use href="#i-decisions"/></svg>Decisions</li>
+        </ul>
+      </article>
+
+      <div class="both-core">
+        <span class="both-wire both-wire--l" aria-hidden="true"></span>
+        <span class="both-wire both-wire--r" aria-hidden="true"></span>
+        <span class="both-dot both-dot--l" aria-hidden="true"></span>
+        <span class="both-dot both-dot--r" aria-hidden="true"></span>
+        <span class="both-node" aria-hidden="true">
+          <img src="/assets/ally-logo.v1.svg" alt="" width="34" height="34">
+        </span>
+        <span class="both-drop" aria-hidden="true"></span>
+      </div>
+
+      <article class="both-panel both-panel--biz">
+        <span class="both-panel-ic" aria-hidden="true"><svg><use href="#i-biz"/></svg></span>
+        <p class="both-label">Your business</p>
+        <p class="both-lead">The business those decisions shape.</p>
+        <ul class="both-chips">
+          <li><svg aria-hidden="true"><use href="#i-growth"/></svg>Growth</li>
+          <li><svg aria-hidden="true"><use href="#i-finance"/></svg>Finance</li>
+          <li><svg aria-hidden="true"><use href="#i-product"/></svg>Product</li>
+          <li><svg aria-hidden="true"><use href="#i-team"/></svg>Team</li>
+          <li><svg aria-hidden="true"><use href="#i-ops"/></svg>Operations</li>
+        </ul>
+      </article>
+
+      <!-- Sits below the panel row, not inside the centre column: the pill is
+           wider than that column and would spill over both panels. -->
+      <div class="both-meet">
+        <p class="both-core-label">Ally</p>
+        <span class="both-pill">Connects both</span>
+      </div>
+    </div>
+
+    <!-- A div, not a <footer>. The stylesheet's generic footer rule adds
+         `padding:60px 0 40px` and a background, both of which landed here
+         unintentionally — this is a section's closing block, not a page
+         footer, so the element was wrong as well as the styling. -->
+    <div class="both-foot">
+      <p class="both-close">Ally connects both before helping you find direction.</p>
+      <div class="both-note">
+        <span class="both-note-ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="8.4"/><path d="M15.4 8.6l-2 4.8-4.8 2 2-4.8z"/>
+          </svg>
+        </span>
+        <p>Because what&rsquo;s happening in the business and what&rsquo;s happening with the founder are rarely completely separate.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- =========================================================
+     04 — ALLY STARTS BY UNDERSTANDING
+     The diagnosis gets its own moment, and the 4-step journey is shown.
+========================================================== -->
+<section class="pitch" id="diagnosis">
+  <div class="pitch-inner">
+    <div class="pitch-copy reveal">
+      <h2 class="pitch-title">Ally doesn&rsquo;t start with advice.<br>It starts by <em>understanding.</em></h2>
+      <p class="pitch-body">A 20-minute structured diagnosis that maps your Founder DNA and Business DNA to find the real root cause.</p>
+      <span class="pitch-badge">~20 minutes</span>
+    </div>
+
+    <div class="pitch-visual reveal">
+      <div class="card">
+        <div class="card-top">
+          <p class="card-name">Diagnosis in progress</p>
+          <p class="card-meta">Step 1 of 4</p>
+        </div>
+
+        <div class="chip-row" style="margin-top:0; margin-bottom:16px">
+          <span class="chip"><span class="row-num">1</span>Founder DNA</span>
+          <span class="chip"><span class="row-num">2</span>Business DNA</span>
+          <span class="chip"><span class="row-num">3</span>Patterns</span>
+          <span class="chip"><span class="row-num">4</span>Root Cause</span>
+        </div>
+
+        <div class="card-cols">
+          <div class="tile">
+            <p class="tile-eye">Founder DNA</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 4v2M12 18v2M4 12h2M18 12h2"/></svg>Mindset</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17l5-5 4 3 7-8"/></svg>Decision Patterns</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l6 2.4v4.5c0 3.6-2.5 6.4-6 7.7-3.5-1.3-6-4.1-6-7.7V6.4z"/></svg>Strengths</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"/><circle cx="12" cy="12" r="2.5"/></svg>Blind Spots</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></svg>Energy &amp; Focus</p>
+          </div>
+
+          <div class="tile">
+            <p class="tile-eye">Business DNA</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V11M10 19V5M16 19v-6M21 19H3"/></svg>Growth</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l7 3.9v8.9L12 20.2 5 16.3V7.4z"/></svg>Product</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M14 9.8c-.5-.7-1.3-1-2.2-1-1.3 0-2.2.7-2.2 1.7 0 2.4 4.5 1.3 4.5 3.7 0 1.1-1 1.9-2.3 1.9-1 0-1.9-.4-2.3-1.2"/></svg>Finance</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M16.5 7.5a2.9 2.9 0 0 1 0 5.4"/></svg>Team</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 4.2v-1M12 20.8v-1M19.5 12h1M3.5 12h1M17.3 6.7l.7-.7M6 18l.7-.7M17.3 17.3l.7.7M6 6l.7.7"/></svg>Operations</p>
+          </div>
+        </div>
+
+        <div class="tile tile--gap">
+          <p class="tile-eye">Root cause</p>
+          <p>Both sides are read together before Ally suggests anything.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     MEET ALLY — scroll-driven product reveal
+     Copy on the left, the live dashboard on the right. Full screen borrows
+     the same frame rather than creating a second one.
+========================================================== -->
+<section class="reveal-wrap" id="meet-ally">
+  <div class="reveal-inner">
+    <div class="reveal-glow" aria-hidden="true"></div>
+
+    <div class="reveal-grid">
+      <div class="reveal-copy">
+        <p class="reveal-eyebrow">See what<br>clarity looks like.</p>
+        <h2 class="reveal-title">Meet <em>Ally</em></h2>
+        <p class="reveal-body">Your AI companion that helps you diagnose what&rsquo;s really happening, find the real priority, and plan your next move.</p>
+        <button class="reveal-link" type="button" data-viewer-open>
+          Explore the experience
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <div class="reveal-stage">
+        <!-- The live dashboard, not a still. It is the same element the
+             full-screen viewer borrows, so there is only ever one of these on
+             the page and its state survives opening and closing. -->
+        <div class="reveal-screen" id="allyScreen">
+          <iframe src="/ally-platform.html?preview=1&v=soon23" title="Ally dashboard"
+                  loading="lazy" fetchpriority="low" allow="fullscreen"></iframe>
+        </div>
+        <button class="reveal-fs" type="button" data-viewer-open
+                aria-label="Open the Ally dashboard full screen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
+          <span>Full screen</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 3 — PRODUCT FLOW
+========================================================== -->
+
+<section class="flow" id="product">
+  <div class="wrap flow-wrap">
+    <div class="flow-head reveal">
+      <h2 class="big">How Ally<br><span class="accent">works</span></h2>
+      <p class="flow-sub">From context to action — one deliberate progression.</p>
+      <!-- Was aria-hidden="true" with click handlers on <div>s: invisible to
+           screen readers and unreachable by keyboard, while still being the
+           control that drives the cards below. -->
+      <div class="stepper" id="stepper" aria-label="Highlight a step">
+        <button class="step active" type="button" data-step="0" aria-pressed="true"><span class="dot" aria-hidden="true">1</span><span class="lbl">Diagnosis</span></button>
+        <button class="step"        type="button" data-step="1" aria-pressed="false"><span class="dot" aria-hidden="true">2</span><span class="lbl">Root cause</span></button>
+        <button class="step"        type="button" data-step="2" aria-pressed="false"><span class="dot" aria-hidden="true">3</span><span class="lbl">Direction</span></button>
+        <button class="step"        type="button" data-step="3" aria-pressed="false"><span class="dot" aria-hidden="true">4</span><span class="lbl">Action</span></button>
+      </div>
+    </div>
+
+    <div class="cards4 reveal" id="journey">
+      <div class="fcard is-active" data-step="0">
+        <div class="fcard-top">
+          <span class="fnum">01</span>
+          <h3>Diagnosis</h3>
+        </div>
+        <p class="desc">Where are you &amp; your business right now?</p>
+        <div class="pills" id="pillGroup">
+          <button class="pill active" type="button">Growth</button>
+          <button class="pill" type="button">Product</button>
+          <button class="pill" type="button">Team</button>
+          <button class="pill" type="button">Finance</button>
+          <button class="pill" type="button">Operations</button>
+          <button class="pill" type="button">Other</button>
+        </div>
+      </div>
+
+      <div class="fcard" data-step="1">
+        <div class="fcard-top">
+          <span class="fnum">02</span>
+          <h3>Root cause</h3>
+        </div>
+        <p class="desc">What actually matters?</p>
+        <div class="skel-row"><div class="skel-bar" style="width:92%"></div></div>
+        <div class="skel-row"><div class="skel-bar" style="width:70%"></div></div>
+        <div class="skel-row"><div class="skel-bar" style="width:82%"></div></div>
+        <div class="skel-row"><div class="skel-bar" style="width:55%"></div></div>
+      </div>
+
+      <div class="fcard" data-step="2">
+        <div class="fcard-top">
+          <span class="fnum">03</span>
+          <h3>Direction</h3>
+        </div>
+        <p class="desc">What should you focus on?</p>
+        <div class="opt-row">Clarify your positioning</div>
+        <div class="opt-row">Improve onboarding flow</div>
+      </div>
+
+      <div class="fcard" data-step="3">
+        <div class="fcard-top">
+          <span class="fnum">04</span>
+          <h3>Action</h3>
+        </div>
+        <p class="desc">What should you do today?</p>
+        <div id="checklist">
+          <label class="check-row"><input class="check-input" type="checkbox"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></span><span class="label">Talk to 3 users</span></label>
+          <label class="check-row"><input class="check-input" type="checkbox"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></span><span class="label">Review onboarding</span></label>
+          <label class="check-row"><input class="check-input" type="checkbox"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></span><span class="label">Analyze churn</span></label>
+          <label class="check-row"><input class="check-input" type="checkbox"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></span><span class="label">Plan pricing test</span></label>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+        <div class="progress-label" id="progLabel">0 of 4 done today</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 4 — FINAL / EARLY ACCESS
+========================================================== -->
+<!-- =========================================================
+     07-09 — THE STACK
+     Three sections that share one place. Each sticks to the top of the
+     viewport and the next slides up over it, so the reader never leaves the
+     spot they are standing in while the content underneath them changes.
+     The wrapper exists only to be the containing block sticky is measured
+     against; without it each section would release at its own bottom edge
+     and there would be nothing to stack.
+========================================================== -->
+<div class="stack">
+
+<!-- =========================================================
+     07 — DAY PLANNING
+========================================================== -->
+<section class="pitch pitch--flip" id="day-plan">
+  <div class="pitch-inner">
+    <div class="pitch-copy reveal">
+      <h2 class="pitch-title">Clarity is only useful if it changes what you <em>do today.</em></h2>
+      <p class="pitch-body">Ally turns direction into a focused plan for your day.</p>
+    </div>
+
+    <div class="pitch-visual reveal">
+      <div class="card">
+        <div class="card-top">
+          <p class="card-name">Your Day Plan</p>
+          <p class="card-meta">Today</p>
+        </div>
+
+        <div class="tile">
+          <p class="tile-eye">Today&rsquo;s priority</p>
+          <p><strong>Improve onboarding activation</strong></p>
+        </div>
+
+        <div class="card-cols" style="margin-top:11px">
+          <div class="tile">
+            <p class="tile-eye">Your 3 moves for today</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l4.5 4.5L20 6.5"/></svg>Talk to 3 recently churned users</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l4.5 4.5L20 6.5"/></svg>Review first-session drop-off data</p>
+            <p class="row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l4.5 4.5L20 6.5"/></svg>Map the new onboarding flow</p>
+          </div>
+          <div class="tile">
+            <p class="tile-eye">Focus time</p>
+            <p><span class="t-val">90<span class="u"> mins</span></span></p>
+            <div class="bar"><i style="width:62%"></i></div>
+            <p class="card-meta" style="margin-top:9px">9am &nbsp;&middot;&nbsp; 12pm &nbsp;&middot;&nbsp; 3pm &nbsp;&middot;&nbsp; 6pm</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     08 — ONGOING ALLY, CHAT WITH CONTEXT
+========================================================== -->
+<section class="pitch" id="ongoing">
+  <div class="pitch-inner">
+    <div class="pitch-copy reveal">
+      <h2 class="pitch-title">And tomorrow, Ally doesn&rsquo;t start from <em>zero.</em></h2>
+      <p class="pitch-body">Ask anything. Ally remembers what matters.</p>
+    </div>
+
+    <div class="pitch-visual reveal">
+      <div class="card">
+        <div class="card-top">
+          <p class="card-name">Chat with Ally</p>
+          <p class="card-meta">Context on</p>
+        </div>
+
+        <div class="bubble-stack">
+          <p class="bubble bubble--me">Why is retention still dropping?</p>
+          <p class="bubble bubble--ally">Based on your diagnosis and recent data, the main issue is still users not reaching the &ldquo;aha&rdquo; moment. Onboarding changes haven&rsquo;t reduced time-to-value yet. Let&rsquo;s look at the new funnel.</p>
+        </div>
+
+        <div class="fake-input">
+          <span>Ask anything&hellip;</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     09 — TRUST / PROOF
+========================================================== -->
+<section class="pitch pitch--flip" id="trust">
+  <div class="pitch-inner">
+    <div class="pitch-copy reveal">
+      <h2 class="pitch-title">Built for founders.<br>Backed by <em>methodology.</em></h2>
+      <ul class="pitch-list">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.6 12.2l2.4 2.4 4.4-4.8"/></svg>Built by GoXL</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.6 12.2l2.4 2.4 4.4-4.8"/></svg>Founder-first methodology</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.6 12.2l2.4 2.4 4.4-4.8"/></svg>Privacy by design</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.6 12.2l2.4 2.4 4.4-4.8"/></svg>Your data. Your context.</li>
+      </ul>
+    </div>
+
+    <div class="pitch-visual reveal">
+      <div class="card">
+        <div class="quote-who">
+          <span class="quote-av" aria-hidden="true"></span>
+          <span>
+            <span class="quote-name">Karan</span>
+            <span class="quote-role">SaaS Founder</span>
+          </span>
+        </div>
+        <p class="quote-text">&ldquo;Ally helped me see the real problem. Not just the symptoms.&rdquo;</p>
+        <p class="quote-foot">Early access &middot; Founder</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /.stack -->
+
+<section class="manifesto" id="early-access">
+  <div class="final-glow" aria-hidden="true"></div>
+  <div class="final-horizon" aria-hidden="true"></div>
+  <div class="final-spark" aria-hidden="true"></div>
+
+  <div class="final-stack">
+    <h2 class="reveal">
+      <span class="line-noise">You don’t need more noise.</span>
+      <span class="line-clarity">You need <span class="accent">clarity.</span></span>
+    </h2>
+
+    <div class="final-brand reveal">
+      <img class="brand-logo" src="/assets/logo-123.v1.png" alt="" />
+      <div class="final-brand__text">
+        <span class="final-brand__name">GoXL Ally</span>
+        <span class="final-brand__tag">The Founder’s Compass</span>
+</div>
+    </div>
+        <p class="final-journey reveal">Your ideas. Your challenges. Your journey. GoXL Ally stands beside you — helping you find clarity, make better decisions, and move forward.</p>
+        <div class="cta-wrap final-access reveal">
+          <button class="cta" type="button" data-early-access>
+            Register for Early Access
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </button>
+          <button class="cta-limit" type="button" data-early-access>Limited slots only</button>
+        </div>
+</div>
+
+    <nav class="foot-links reveal" aria-label="Legal">
+      <a href="/privacy.html">Privacy</a><span class="divider">|</span>
+      <a href="/terms.html">Terms</a><span class="divider">|</span>
+      <a href="/about.html">Our Story</a><span class="divider">|</span>
+      <a href="https://www.instagram.com/goxl_ally?igsh=MWgzYXZxaHU5cGw2bA%3D%3D&amp;igsi=MWgzYXZxaHU5cGw2bA%3D%3D" target="_blank" rel="noopener noreferrer">Instagram</a><span class="divider">|</span>
+      <a href="https://www.linkedin.com/showcase/goxl-ally-ai" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </nav>
+  </section>
+
+</main>
+
+<div class="ea-modal" id="earlyAccessModal" aria-hidden="true">
+  <div class="ea-backdrop" data-ea-close></div>
+  <div class="ea-dialog" role="dialog" aria-modal="true" aria-labelledby="eaTitle">
+    <button class="ea-x" type="button" data-ea-close aria-label="Close">
+      <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <p class="ea-eye">Early access</p>
+    <h3 id="eaTitle">Register for Early Access</h3>
+    <p class="ea-sub">Limited slots. Share a few details — we’ll reach out when your early access is ready.</p>
+    <form class="ea-form" id="earlyAccessForm" novalidate>
+      <label>Full Name
+        <input id="eaName" name="name" type="text" autocomplete="name" placeholder="Your full name" minlength="2" maxlength="80" required>
+      </label>
+      <label>Email
+        <input id="eaEmail" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@company.com" maxlength="120" required>
+      </label>
+      <label>Phone Number <span class="ea-opt">(optional)</span>
+        <input id="eaPhone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+91 98765 43210" maxlength="24">
+      </label>
+      <label>LinkedIn Profile <span class="ea-opt">(optional)</span>
+        <input id="eaLinkedin" name="linkedinUrl" type="url" autocomplete="url" inputmode="url" placeholder="linkedin.com/in/yourprofile" maxlength="200">
+      </label>
+      <!-- Honeypot: off-screen, unreachable by keyboard, hidden from screen
+           readers, and never autofilled. Only a bot ever puts anything here. -->
+      <div class="ea-hp" aria-hidden="true">
+        <label for="eaCompany">Company</label>
+        <input id="eaCompany" name="company" type="text" tabindex="-1" autocomplete="off">
+      </div>
+      <label class="ea-consent">
+        <input id="eaTerms" name="termsAccepted" type="checkbox" required>
+        <span>I agree to the <a href="/terms.html" target="_blank" rel="noopener noreferrer">Terms of Use</a> and acknowledge the <a href="/privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>. My details will be used to manage my early-access registration.</span>
+      </label>
+      <label class="ea-consent">
+        <input id="eaMarketing" name="marketingConsent" type="checkbox">
+        <span><span class="ea-optional">Optional</span><br>I’d like to receive GoXL Ally product updates, founder insights and promotional emails. I can unsubscribe at any time.</span>
+      </label>
+      <p class="ea-err" id="eaErr" role="alert"></p>
+      <button class="cta" type="submit" id="eaSubmit">Register for Early Access</button>
+    </form>
+    <div class="ea-done" id="eaDone" hidden>
+      <p id="eaDoneMsg">Thank you for registering.</p>
+      <p class="ea-done__sub" id="eaDoneSub">We’ve sent a confirmation to your inbox — check spam if it doesn’t arrive. Our team will reach out soon.</p>
+      <button class="cta" type="button" data-ea-close>Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Product viewer. Holds the real dashboard rather than the still, so what
+     opens is the live interface. The iframe has no src until the first open,
+     which keeps its 500 KB off the initial page load entirely. -->
+<div class="viewer" id="allyViewer" aria-hidden="true">
+  <div class="viewer-backdrop" data-viewer-close></div>
+  <div class="viewer-panel" role="dialog" aria-modal="true" aria-label="Ally dashboard">
+    <button class="viewer-x" type="button" data-viewer-close aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="viewer-frame" id="allyViewerFrame"></div>
+  </div>
+</div>
+
+<script>
+const isPhone = () => window.matchMedia('(max-width: 768px)').matches;
+
+/* The CSS @media (prefers-reduced-motion) block only zeroes transition and
+   animation durations — it can't stop a setInterval from swapping classes.
+   Both auto-cycling sections below check this before starting a timer. */
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+/* ---------- reveal on scroll ---------- */
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+}, isPhone() ? { threshold:0.06, rootMargin:'80px 0px' } : { threshold:0.15 });
+revealEls.forEach(el=>io.observe(el));
+document.querySelectorAll('#problem .reveal').forEach(el=> el.classList.add('in'));
+
+/* ---------- split the claim lines into words ----------
+   Runtime rather than hand-authored spans in the HTML: these headlines get
+   edited, and word spans written by hand would need rebuilding on every
+   copy change — the first person to forget would ship a broken sentence.
+   Splitting from the live text means the copy stays the source of truth.
+   <em> and <br> are walked through rather than flattened, so the accent
+   words and the line breaks survive. If this never runs, the headline is
+   an ordinary heading. */
+(function(){
+  let i = 0;
+  function split(node){
+    [...node.childNodes].forEach(n => {
+      if(n.nodeType === 3){
+        /* split on a literal space, not a whitespace class: these are
+           single-line headings, and it keeps the pattern free of escapes. */
+        const parts = n.textContent.split(' ');
+        if(!parts.some(t => t.trim())) return;
+        const frag = document.createDocumentFragment();
+        parts.forEach((t, idx) => {
+          if(idx) frag.appendChild(document.createTextNode(' '));
+          if(!t.trim()) return;
+          const w = document.createElement('span');
+          w.className = 'w';
+          w.style.setProperty('--i', i++);
+          w.textContent = t;
+          frag.appendChild(w);
+        });
+        n.replaceWith(frag);
+      }else if(n.nodeType === 1 && n.tagName !== 'BR'){
+        split(n);                      // <em> keeps its colour, words inside it still stagger
+      }
+    });
+  }
+  document.querySelectorAll('.pitch-title').forEach(h => { i = 0; split(h); });
+})();
+
+/* ---------- two things at once: staged entrance ---------- */
+(function(){
+  const section = document.getElementById('dimensions');
+  if(!section) return;
+
+  const reveal = () => section.classList.add('is-in');
+
+  /* The hidden start state lives behind .will-animate, added here rather than
+     in the stylesheet. Nothing below is allowed to leave a content section at
+     opacity 0: if this script never runs, throws, or the observer never fires,
+     the CSS default is the finished state. */
+  if(!('IntersectionObserver' in window) || reduceMotion.matches){
+    return;                       // render finished, skip the choreography
+  }
+  section.classList.add('will-animate');
+
+  /* One class drives the whole sequence; stage timing is in CSS
+     transition-delays rather than a chain of timers, so it cannot drift.
+     Unobserved after first entry — this plays once, not on every scroll past. */
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      reveal();
+      io.unobserve(section);
+      clearTimeout(failsafe);
+    });
+  }, { threshold: isPhone() ? 0.16 : 0.3 });
+  io.observe(section);
+
+  /* Last resort. If the observer has not fired by the time the section is
+     genuinely on screen, show it anyway — a missed animation is a far smaller
+     failure than a blank section. */
+  const failsafe = setTimeout(function check(){
+    const r = section.getBoundingClientRect();
+    if(r.top < window.innerHeight && r.bottom > 0) reveal();
+  }, 2500);
+})();
+
+
+/* ---------- particle network background (Section 1) ---------- */
+const canvas = document.getElementById('network-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, points = [];
+const POINT_COUNT = isPhone() ? 28 : 70;
+const MAX_DIST = isPhone() ? 90 : 140;
+let mouse = { x:-9999, y:-9999 };
+let heroVisible = true;
+const heroSection = document.getElementById('problem');
+if(heroSection){
+  const heroIo = new IntersectionObserver((entries)=>{
+    heroVisible = entries.some(e=>e.isIntersecting);
+  }, { threshold:0.05 });
+  heroIo.observe(heroSection);
+}
+
+function resize(){
+  const problem = document.getElementById('problem');
+  /* Draw at device resolution, not CSS pixels. The backing store was sized to
+     clientWidth/Height, so on any HiDPI screen the browser was upscaling the
+     particle field and it rendered soft. Capped at 2x — beyond that the extra
+     pixels cost more than they show. */
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  W = problem.clientWidth;
+  H = problem.clientHeight;
+  canvas.width = Math.round(W * dpr);
+  canvas.height = Math.round(H * dpr);
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  // All drawing below stays in CSS-pixel coordinates.
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+function initPoints(){
+  points = [];
+  for(let i=0;i<POINT_COUNT;i++){
+    points.push({
+      x: Math.random()*W,
+      y: Math.random()*H,
+      vx: (Math.random()-0.5)*0.25,
+      vy: (Math.random()-0.5)*0.25,
+      r: Math.random()*1.4+0.6
+    });
+  }
+}
+function step(){
+  if(!heroVisible){
+    requestAnimationFrame(step);
+    return;
+  }
+  ctx.clearRect(0,0,W,H);
+  for(const p of points){
+    p.x += p.vx; p.y += p.vy;
+    if(p.x < 0 || p.x > W) p.vx *= -1;
+    if(p.y < 0 || p.y > H) p.vy *= -1;
+
+    // gentle attraction/repulsion near cursor
+    const dx = p.x - mouse.x, dy = p.y - mouse.y;
+    const d = Math.sqrt(dx*dx+dy*dy);
+    if(d < 160){
+      const force = (160-d)/160*0.02;
+      p.x += dx*force; p.y += dy*force;
+    }
+  }
+  for(let i=0;i<points.length;i++){
+    for(let j=i+1;j<points.length;j++){
+      const a = points[i], b = points[j];
+      const dx = a.x-b.x, dy = a.y-b.y;
+      const dist = Math.sqrt(dx*dx+dy*dy);
+      if(dist < MAX_DIST){
+        const nearMouse = Math.min(
+          Math.hypot(a.x-mouse.x, a.y-mouse.y),
+          Math.hypot(b.x-mouse.x, b.y-mouse.y)
+        );
+        let alpha = (1 - dist/MAX_DIST) * 0.22;
+        if(nearMouse < 180) alpha += (1 - nearMouse/180) * 0.35;
+        ctx.strokeStyle = `rgba(47,227,172,${Math.min(alpha,0.55)})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+        ctx.stroke();
+      }
+    }
+  }
+  for(const p of points){
+    const dMouse = Math.hypot(p.x-mouse.x, p.y-mouse.y);
+    const glow = dMouse < 160 ? (1 - dMouse/160) : 0;
+    ctx.fillStyle = `rgba(127,252,209,${0.5+glow*0.5})`;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r+glow*1.4,0,Math.PI*2);
+    ctx.fill();
+  }
+  requestAnimationFrame(step);
+}
+/* Debounced. `resize` fires continuously while the mobile URL bar shows and
+   hides, and initPoints() rebuilds every particle — so the field visibly
+   teleported on each tick. Re-seed only once the size has settled. */
+let resizeTimer = null;
+window.addEventListener('resize', ()=>{
+  resize();                                   // keep the canvas correctly sized
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(initPoints, 150);  // re-seed only after it settles
+}, { passive:true });
+document.getElementById('problem').addEventListener('mousemove', (e)=>{
+  const rect = e.currentTarget.getBoundingClientRect();
+  mouse.x = e.clientX - rect.left;
+  mouse.y = e.clientY - rect.top;
+});
+document.getElementById('problem').addEventListener('mouseleave', ()=>{ mouse.x=-9999; mouse.y=-9999; });
+resize(); initPoints(); step();
+
+/* Removed: positionBeams(). It targeted `.qcard` / `#beam-*` elements that no
+   longer exist in the markup, so it did nothing — while still running on every
+   `load` and `resize`, and re-registering mouseenter/mouseleave handlers inside
+   its own loop each time it ran. */
+
+/* ---------- pill toggle (diagnosis card) ---------- */
+document.querySelectorAll('#pillGroup .pill').forEach(p=>{
+  p.addEventListener('click', ()=>{
+    document.querySelectorAll('#pillGroup .pill').forEach(o=>o.classList.remove('active'));
+    p.classList.add('active');
+  });
+});
+/* ---------- checklist (action card) ---------- */
+const rows = document.querySelectorAll('#checklist .check-row');
+const progFill = document.getElementById('progFill');
+const progLabel = document.getElementById('progLabel');
+function updateProgress(){
+  const done = document.querySelectorAll('#checklist .check-row.done').length;
+  if(progFill) progFill.style.width = (done/rows.length*100)+'%';
+  if(progLabel) progLabel.textContent = `${done} of ${rows.length} done today`;
+}
+/* Driven by the checkbox's own `change`, not a click handler on the label.
+   Clicking the label toggles the input natively, and Space on a focused
+   checkbox now works too — which it could not before. */
+rows.forEach(r=>{
+  const input = r.querySelector('.check-input');
+  if(!input) return;
+  input.addEventListener('change', ()=>{
+    r.classList.toggle('done', input.checked);
+    updateProgress();
+  });
+});
+
+/* ---------- stepper + journey cards ---------- */
+const steps = document.querySelectorAll('#stepper .step');
+const journeyCards = document.querySelectorAll('#journey .fcard');
+/* On phones #journey is a swipe carousel rather than a timed slideshow: the
+   stepper is its pagination, and the swipe is the control. */
+const journeyTrack = document.getElementById('journey');
+function isCarousel(){
+  return !!journeyTrack && journeyTrack.scrollWidth > journeyTrack.clientWidth + 4;
+}
+function scrollToCard(i){
+  const c = journeyCards[i];
+  if(!c || !journeyTrack) return;
+  journeyTrack.scrollTo({
+    left: c.offsetLeft - (journeyTrack.clientWidth - c.offsetWidth) / 2,
+    behavior: reduceMotion.matches ? 'auto' : 'smooth'
+  });
+}
+let activeStep = 0;
+let stepperTimer = null;
+function setStep(i){
+  steps.forEach((s,idx)=>{
+    s.classList.toggle('active', idx===i);
+    s.classList.toggle('done', idx<i);
+    s.setAttribute('aria-pressed', idx===i ? 'true' : 'false');
+  });
+  journeyCards.forEach((c,idx)=>{
+    c.classList.toggle('is-active', idx===i);
+  });
+  activeStep = i;
+}
+function startStepper(){
+  clearInterval(stepperTimer);
+  if(reduceMotion.matches) return;   // honour the OS setting
+  if(isCarousel()) return;           // a timer would fight the swipe
+  stepperTimer = setInterval(()=>{ setStep((activeStep+1)%steps.length); }, 2800);
+}
+/* Stop burning cycles while the section is off-screen or the tab is hidden.
+   Previously this interval ran for the life of the page. */
+document.addEventListener('visibilitychange', ()=>{
+  if(document.hidden) clearInterval(stepperTimer);
+  else startStepper();
+});
+const flowSection = document.getElementById('product');
+if(flowSection && 'IntersectionObserver' in window){
+  new IntersectionObserver((entries)=>{
+    entries.forEach(e=> e.isIntersecting ? startStepper() : clearInterval(stepperTimer));
+  }, { threshold: 0 }).observe(flowSection);
+}
+setStep(0);
+startStepper();
+steps.forEach((s,idx)=>{
+  s.addEventListener('click', ()=>{
+    setStep(idx);
+    if(isCarousel()) scrollToCard(idx); else startStepper();
+  });
+});
+journeyCards.forEach((c,idx)=>{
+  /* Hover is a pointer idea. On the carousel a tap fires mouseenter too,
+     which would move the stepper away from the card being swiped to. */
+  c.addEventListener('mouseenter', ()=>{ if(isCarousel()) return; setStep(idx); clearInterval(stepperTimer); });
+  c.addEventListener('mouseleave', ()=>{ startStepper(); });
+});
+
+if(journeyTrack){
+  /* Swiping moves the stepper: whichever card is nearest the middle wins. */
+  let jTick = 0;
+  journeyTrack.addEventListener('scroll', ()=>{
+    if(jTick) return;
+    jTick = requestAnimationFrame(()=>{
+      jTick = 0;
+      if(!isCarousel()) return;
+      const mid = journeyTrack.scrollLeft + journeyTrack.clientWidth / 2;
+      let best = 0, bestD = Infinity;
+      journeyCards.forEach((c,i)=>{
+        const d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid);
+        if(d < bestD){ bestD = d; best = i; }
+      });
+      if(best !== activeStep) setStep(best);
+    });
+  }, { passive:true });
+
+  /* A scroll container is only reachable by keyboard if it can take focus,
+     and only announced as one thing if it is labelled. Neither is wanted on
+     desktop, where it is an ordinary grid. */
+  function syncTrackRole(){
+    if(isCarousel()){
+      journeyTrack.setAttribute('tabindex','0');
+      journeyTrack.setAttribute('role','group');
+      journeyTrack.setAttribute('aria-label','How Ally works — swipe through the four steps');
+    }else{
+      journeyTrack.removeAttribute('tabindex');
+      journeyTrack.removeAttribute('role');
+      journeyTrack.removeAttribute('aria-label');
+    }
+  }
+  syncTrackRole();
+  /* ResizeObserver, not resize: the resize event fires before the new layout
+     is measurable, so isCarousel() still reported the old width and the
+     carousel came out of a desktop-width page with no tabindex on it. */
+  if('ResizeObserver' in window){
+    new ResizeObserver(()=>{ syncTrackRole(); startStepper(); }).observe(journeyTrack);
+  }else{
+    addEventListener('resize', ()=>{ setTimeout(()=>{ syncTrackRole(); startStepper(); }, 150); });
+  }
+}
+
+/* ---------- floating cards: load locked positions (+ optional ?edit=1) ---------- */
+(function(){
+  const section = document.getElementById('problem');
+  const mobileHost = document.querySelector('.mobile-hero-cards');
+  const desktopCards = [...document.querySelectorAll('.float-q[data-fq]')];
+  const mobileCards = [...document.querySelectorAll('.mobile-hero-card[data-fq]')];
+  const allCards = [...desktopCards, ...mobileCards];
+  const editBtn = document.getElementById('floatEditBtn');
+  const saveBtn = document.getElementById('floatSaveBtn');
+  const resetBtn = document.getElementById('floatResetBtn');
+  if(!section || !mobileHost || !desktopCards.length || !mobileCards.length) return;
+
+  const phoneMq = window.matchMedia('(max-width: 768px)');
+  const isPhoneView = () => phoneMq.matches;
+  const isPhoneLandscape = () => isPhoneView() && window.matchMedia('(orientation: landscape)').matches;
+  const STORAGE_KEY = 'ally-float-q-positions';
+  const STORAGE_KEY_PHONE = 'ally-float-q-positions-phone';
+  const STORAGE_KEY_PHONE_LANDSCAPE = 'ally-float-q-positions-phone-landscape';
+  const defaults = {
+    tl: { top: 8.8, left: 24.7 },
+    bl: { top: 39.5, left: 17.2 },
+    tr: { top: 5.2, left: 61.4 },
+    br: { top: 37.4, left: 70.8 },
+  };
+  const phoneDefaults = {
+    tl: { top: 48.7, left: 2.2 },
+    tr: { top: 14.6, left: 2.2 },
+    bl: { top: 5.4, left: 51.7 },
+    br: { top: 47, left: 51.7 },
+  };
+  /* ?edit exposes the drag-to-position toolbar. Restricted to local dev: the
+     save endpoint already 403s in production, but the toolbar itself used to
+     appear for anyone who guessed the query string, and positions still
+     persisted to their localStorage. */
+  const isLocalHost = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)
+                   || /^192\.168\./.test(location.hostname);
+  const editMode = isLocalHost && new URLSearchParams(location.search).has('edit');
+  if(editMode) document.body.classList.add('is-float-edit');
+
+  let editing = false;
+  let drag = null;
+
+  function activeViewport(){
+    if(isPhoneLandscape()) return 'phone-landscape';
+    return isPhoneView() ? 'phone' : 'desktop';
+  }
+  function activeDefaults(){
+    return isPhoneView() ? phoneDefaults : defaults;
+  }
+  function activeStorageKey(){
+    if(isPhoneLandscape()) return STORAGE_KEY_PHONE_LANDSCAPE;
+    return isPhoneView() ? STORAGE_KEY_PHONE : STORAGE_KEY;
+  }
+  function activeCards(){
+    return isPhoneView() ? mobileCards : desktopCards;
+  }
+  function activeHost(){
+    return isPhoneView() ? mobileHost : section;
+  }
+
+  function applyPositions(map){
+    activeCards().forEach(card=>{
+      const key = card.dataset.fq;
+      const pos = map[key];
+      if(!pos) return;
+      card.style.top = pos.top + '%';
+      card.style.left = pos.left + '%';
+      card.style.right = 'auto';
+      card.style.bottom = 'auto';
+    });
+  }
+
+  function readPositions(){
+    const rect = activeHost().getBoundingClientRect();
+    const out = {};
+    activeCards().forEach(card=>{
+      const key = card.dataset.fq;
+      const r = card.getBoundingClientRect();
+      const top = ((r.top - rect.top) / rect.height) * 100;
+      const left = ((r.left - rect.left) / rect.width) * 100;
+      out[key] = {
+        top: Math.round(Math.min(92, Math.max(2, top)) * 10) / 10,
+        left: Math.round(Math.min(88, Math.max(1, left)) * 10) / 10,
+      };
+    });
+    return out;
+  }
+
+  async function loadPositions(){
+    const viewport = activeViewport();
+    try{
+      const res = await fetch('/float-q-lock.json', { cache: 'no-store' });
+      if(res.ok){
+        const data = await res.json();
+        const locked = viewport === 'phone-landscape'
+          ? (data.phoneLandscapePositions || data.phonePositions)
+          : viewport === 'phone'
+            ? data.phonePositions
+            : data.positions;
+        if(locked){
+          applyPositions(locked);
+          return;
+        }
+      }
+    }catch(_){}
+    try{
+      const raw = localStorage.getItem(activeStorageKey());
+      if(raw){ applyPositions(JSON.parse(raw)); return; }
+    }catch(_){}
+    applyPositions(activeDefaults());
+  }
+  let lastViewportMode = activeViewport();
+  window.addEventListener('resize', ()=>{
+    const nextViewportMode = activeViewport();
+    if(nextViewportMode === lastViewportMode) return;
+    lastViewportMode = nextViewportMode;
+    document.body.classList.toggle('is-editing-mobile-cards', editing && nextViewportMode !== 'desktop');
+    loadPositions();
+  }, { passive:true });
+
+  if(editMode && editBtn && saveBtn && resetBtn){
+    function setEditing(on){
+      editing = on;
+      section.classList.toggle('is-editing-floats', on);
+      document.body.classList.toggle('is-editing-mobile-cards', on && isPhoneView());
+      editBtn.textContent = on ? 'Cancel edit' : 'Edit cards';
+      saveBtn.hidden = !on;
+      resetBtn.hidden = !on;
+    }
+    editBtn.addEventListener('click', ()=> setEditing(!editing));
+    resetBtn.addEventListener('click', ()=>{
+      applyPositions(activeDefaults());
+      localStorage.removeItem(activeStorageKey());
+    });
+    saveBtn.addEventListener('click', async ()=>{
+      const positions = readPositions();
+      applyPositions(positions);
+      localStorage.setItem(activeStorageKey(), JSON.stringify(positions));
+      saveBtn.textContent = 'Saving…';
+      try{
+        const res = await fetch('/api/float-q-lock', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            positions,
+            viewport: activeViewport(),
+            savedAt: new Date().toISOString(),
+          }),
+        });
+        const data = await res.json();
+        if(!res.ok || !data.ok) throw new Error(data.error || 'Save failed');
+        saveBtn.textContent = 'Set ✓';
+        setEditing(false);
+        setTimeout(()=>{ saveBtn.textContent = 'Set positions'; }, 1200);
+      }catch(err){
+        console.error(err);
+        saveBtn.textContent = 'Set locally ✓';
+        setEditing(false);
+        setTimeout(()=>{ saveBtn.textContent = 'Set positions'; }, 1400);
+      }
+    });
+    function onPointerDown(e){
+      if(!editing) return;
+      const card = e.currentTarget;
+      const rect = activeHost().getBoundingClientRect();
+      const cardRect = card.getBoundingClientRect();
+      drag = {
+        card,
+        offsetX: e.clientX - cardRect.left,
+        offsetY: e.clientY - cardRect.top,
+        rect,
+      };
+      card.classList.add('is-dragging');
+      card.setPointerCapture?.(e.pointerId);
+      e.preventDefault();
+    }
+    function onPointerMove(e){
+      if(!drag) return;
+      const { card, offsetX, offsetY, rect } = drag;
+      let leftPx = e.clientX - rect.left - offsetX;
+      let topPx = e.clientY - rect.top - offsetY;
+      leftPx = Math.min(rect.width - card.offsetWidth - 8, Math.max(8, leftPx));
+      topPx = Math.min(rect.height - card.offsetHeight - 8, Math.max(8, topPx));
+      card.style.left = (leftPx / rect.width) * 100 + '%';
+      card.style.top = (topPx / rect.height) * 100 + '%';
+      card.style.right = 'auto';
+      card.style.bottom = 'auto';
+    }
+    function onPointerUp(e){
+      if(!drag) return;
+      drag.card.classList.remove('is-dragging');
+      try{ drag.card.releasePointerCapture?.(e.pointerId); }catch(_){}
+      drag = null;
+    }
+    allCards.forEach(card=>{
+      card.addEventListener('pointerdown', onPointerDown, { passive: false });
+      card.addEventListener('pointermove', onPointerMove);
+      card.addEventListener('pointerup', onPointerUp);
+      card.addEventListener('pointercancel', onPointerUp);
+    });
+    if(isPhoneView()) setEditing(true);
+  }
+
+  loadPositions();
+})();
+
+/* ---------- early access form ---------- */
+(function(){
+  const modal = document.getElementById('earlyAccessModal');
+  const form = document.getElementById('earlyAccessForm');
+  const done = document.getElementById('eaDone');
+  const err = document.getElementById('eaErr');
+  const submit = document.getElementById('eaSubmit');
+  const nameEl = document.getElementById('eaName');
+  const emailEl = document.getElementById('eaEmail');
+  const phoneEl = document.getElementById('eaPhone');
+  const linkedinEl = document.getElementById('eaLinkedin');
+  const doneMsg = document.getElementById('eaDoneMsg');
+  const doneSub = document.getElementById('eaDoneSub');
+  const termsEl = document.getElementById('eaTerms');
+  const marketingEl = document.getElementById('eaMarketing');
+  const companyEl = document.getElementById('eaCompany'); // honeypot — always empty for humans
+  if(!modal || !form || !done || !err || !submit || !nameEl || !emailEl || !phoneEl || !linkedinEl || !termsEl || !marketingEl) return;
+
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const submitLabel = submit.textContent;
+  let lastFocus = null;
+
+  /* shape-only check, mirrors the server; nothing is fetched or verified */
+  function linkedinLooksValid(value){
+    const raw = value.trim();
+    if(!raw) return true;
+    try{
+      const url = new URL(/^https?:\/\//i.test(raw) ? raw : 'https://' + raw);
+      if(url.protocol !== 'https:' && url.protocol !== 'http:') return false;
+      const host = url.hostname.toLowerCase().replace(/^www\./, '');
+      if(host !== 'linkedin.com' && !host.endsWith('.linkedin.com')) return false;
+      return url.pathname.replace(/\/+$/, '').length > 1;
+    }catch(_){
+      return false;
+    }
+  }
+
+  /* Everything outside the dialog, so it can be made inert while the dialog is
+     open. Without this, Tab walks straight out of the modal into the page
+     behind it — the content is still focusable and still announced. */
+  const outsideModal = () => [...document.body.children].filter(el => el !== modal);
+
+  function setBackgroundInert(on){
+    outsideModal().forEach(el => {
+      if(on){ el.setAttribute('inert', ''); el.setAttribute('aria-hidden', 'true'); }
+      else  { el.removeAttribute('inert'); el.removeAttribute('aria-hidden'); }
+    });
+  }
+
+  /* Fallback wrap-around for browsers without `inert`. */
+  const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]):not([tabindex="-1"]), select, textarea, [tabindex]:not([tabindex="-1"])';
+  function trapTab(e){
+    if(e.key !== 'Tab' || !modal.classList.contains('is-open')) return;
+    const items = [...modal.querySelectorAll(FOCUSABLE)].filter(el => el.offsetParent !== null);
+    if(!items.length) return;
+    const first = items[0], last = items[items.length - 1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  }
+
+  function openModal(){
+    lastFocus = document.activeElement;
+    form.hidden = false;
+    done.hidden = true;
+    err.textContent = '';
+    form.reset();
+    submit.disabled = false;
+    submit.textContent = submitLabel;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.documentElement.classList.add('ea-lock');
+    document.body.classList.add('ea-lock');
+    setBackgroundInert(true);
+    document.addEventListener('keydown', trapTab, true);
+    setTimeout(()=> nameEl.focus(), 40);
+  }
+  function closeModal(){
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.documentElement.classList.remove('ea-lock');
+    document.body.classList.remove('ea-lock');
+    setBackgroundInert(false);
+    document.removeEventListener('keydown', trapTab, true);
+    if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+  }
+
+  document.querySelectorAll('[data-early-access]').forEach((el)=>{
+    el.addEventListener('click', (e)=>{
+      e.preventDefault();
+      openModal();
+    });
+  });
+  modal.addEventListener('click', (e)=>{
+    if(e.target.closest('[data-ea-close]')) closeModal();
+  });
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+  });
+
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const name = nameEl.value.trim().replace(/\s+/g, ' ');
+    const email = emailEl.value.trim();
+    const phone = phoneEl.value.trim();
+    const linkedinUrl = linkedinEl.value.trim();
+    const digits = phone.replace(/\D/g, '');
+    err.textContent = '';
+    if(name.length < 2 || name.length > 80){ err.textContent = 'Enter your full name'; nameEl.focus(); return; }
+    if(!emailRe.test(email)){ err.textContent = 'Enter a valid email'; emailEl.focus(); return; }
+    if(phone && (digits.length < 10 || digits.length > 15)){ err.textContent = 'Enter a valid phone number'; phoneEl.focus(); return; }
+    if(!linkedinLooksValid(linkedinUrl)){ err.textContent = 'Enter a valid LinkedIn profile URL'; linkedinEl.focus(); return; }
+    if(!termsEl.checked){ err.textContent = 'Please accept the Terms and acknowledge the Privacy Policy'; termsEl.focus(); return; }
+
+    submit.disabled = true;
+    submit.textContent = 'Registering…';
+    try{
+      const res = await fetch('/api/early-access', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          linkedinUrl,
+          termsAccepted: true,
+          marketingConsent: marketingEl.checked,
+          policyVersion: '2026-08-15',
+          company: companyEl ? companyEl.value : ''
+        })
+      });
+      const data = await res.json().catch(()=>({}));
+      if(!res.ok || !data.ok){
+        err.textContent = data.error || 'Something went wrong. Please try again.';
+        submit.disabled = false;
+        submit.textContent = submitLabel;
+        return;
+      }
+      if(doneMsg && doneSub){
+        if(data.duplicate){
+          // No second row and no second email, so don't promise one.
+          doneMsg.textContent = 'You’re already registered.';
+          doneSub.textContent = 'You’re on the list — our team will reach out soon.';
+        }else{
+          doneMsg.textContent = 'Thank you for registering.';
+          doneSub.textContent = 'We’ve sent a confirmation to your inbox — check spam if it doesn’t arrive. Our team will reach out soon.';
+        }
+      }
+      form.hidden = true;
+      done.hidden = false;
+    }catch(_){
+      err.textContent = 'Something went wrong. Please try again.';
+      submit.disabled = false;
+      submit.textContent = submitLabel;
+    }
+  });
+})();
+</script>
+<script>
+/* ---------- product viewer ---------- */
+(function(){
+  const viewer = document.getElementById('allyViewer');
+  const host = document.getElementById('allyViewerFrame');
+  if(!viewer || !host) return;
+
+  const FOCUSABLE = 'a[href], button:not([disabled]), input, select, textarea, iframe, [tabindex]:not([tabindex="-1"])';
+  let lastFocus = null;
+
+  /* The dashboard already exists in the section, so the viewer borrows that
+     element rather than creating a second one. One iframe instead of two means
+     the 500 KB is loaded once, and whatever the visitor was looking at inside
+     it is still there when the viewer opens and again when it closes. */
+  const screen = document.getElementById('allyScreen');
+  function borrowFrame(){
+    const f = screen && screen.querySelector('iframe');
+    if(f) host.appendChild(f);
+  }
+  function returnFrame(){
+    const f = host.querySelector('iframe');
+    if(f && screen) screen.appendChild(f);
+  }
+
+  function outside(){
+    return [...document.body.children].filter(el => el !== viewer);
+  }
+
+  function trap(e){
+    if(e.key !== 'Tab') return;
+    const items = [...viewer.querySelectorAll(FOCUSABLE)].filter(el => el.offsetParent !== null);
+    if(!items.length) return;
+    const first = items[0], last = items[items.length - 1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  }
+
+  function onKey(e){
+    if(e.key === 'Escape'){ close(); return; }
+    trap(e);
+  }
+
+  /* The trigger is passed in rather than read from document.activeElement:
+     Safari does not focus a button when it is clicked, so activeElement would
+     be <body> there and focus would have nowhere to return to on close. */
+  function open(trigger){
+    lastFocus = trigger || document.activeElement;
+    borrowFrame();
+    viewer.classList.add('is-open');
+    viewer.setAttribute('aria-hidden','false');
+    /* Scroll position is untouched: the page is frozen where it stands and
+       restored to the same place, so closing returns you mid-transformation
+       exactly where you left. */
+    outside().forEach(el => { el.setAttribute('inert',''); el.setAttribute('aria-hidden','true'); });
+    document.documentElement.classList.add('ea-lock');
+    document.body.classList.add('ea-lock');
+    document.addEventListener('keydown', onKey, true);
+    setTimeout(() => viewer.querySelector('.viewer-x')?.focus(), 40);
+  }
+
+  function close(){
+    viewer.classList.remove('is-open');
+    viewer.setAttribute('aria-hidden','true');
+    outside().forEach(el => { el.removeAttribute('inert'); el.removeAttribute('aria-hidden'); });
+    document.documentElement.classList.remove('ea-lock');
+    document.body.classList.remove('ea-lock');
+    document.removeEventListener('keydown', onKey, true);
+    returnFrame();
+    /* preventScroll: restoring focus must not move the page. Without it the
+       browser scrolls the trigger back into view, which would undo the whole
+       point of returning the reader to exactly where they were. */
+    if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus({ preventScroll:true });
+  }
+
+  document.querySelectorAll('[data-viewer-open]').forEach(b => b.addEventListener('click', () => open(b)));
+  viewer.addEventListener('click', e => { if(e.target.closest('[data-viewer-close]')) close(); });
+
+  /* ---------- hand the scroll back at the frame's ends ----------
+     overscroll-behavior:auto is necessary but not sufficient. Chrome latches
+     a wheel gesture to the scroller it began in and will not chain out of an
+     iframe part-way through, and the dashboard's own body is overflow:hidden,
+     which absorbs what does get past. The result was the page stopping dead
+     at both ends of the frame.
+
+     Same origin, so the overflow can simply be forwarded: when the scroller
+     under the pointer is already at the limit the wheel is pushing towards,
+     cancel it and move the page by the same amount instead. Touch is left to
+     the CSS — touch scrolling chains out of iframes on its own. */
+  function scrollerAt(node, doc){
+    for(let n = node; n && n !== doc.documentElement; n = n.parentElement){
+      const oy = doc.defaultView.getComputedStyle(n).overflowY;
+      if((oy === 'auto' || oy === 'scroll') && n.scrollHeight > n.clientHeight + 1) return n;
+    }
+    return null;
+  }
+
+  function wireChain(frame){
+    const doc = frame.contentDocument;
+    if(!doc || doc.__allyChained) return;
+    doc.__allyChained = true;                     // survives the frame moving
+    doc.addEventListener('wheel', e => {
+      if(viewer.classList.contains('is-open')) return;   // full screen keeps its own scroll
+      const sc = scrollerAt(e.target, doc);
+      const past = !sc
+        || (e.deltaY < 0 && sc.scrollTop <= 0)
+        || (e.deltaY > 0 && sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 1);
+      if(!past) return;
+      e.preventDefault();
+      window.scrollBy(0, e.deltaY);
+    }, { passive:false });
+  }
+
+  const inlineFrame = screen && screen.querySelector('iframe');
+  if(inlineFrame){
+    /* load may already have fired for a cached frame, so try both. */
+    inlineFrame.addEventListener('load', () => wireChain(inlineFrame));
+    try{ if(inlineFrame.contentDocument && inlineFrame.contentDocument.readyState !== 'loading') wireChain(inlineFrame); }catch(_){}
+  }
+})();
+</script>
+</body>
+</html>

@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>GoXL Ally — The Founder’s Compass</title>
 <meta name="description" content="GoXL Ally helps founders understand what is actually happening, what matters, and what to do next. Register for early access.">
-<!-- v2 preview build. Not indexed until it replaces the root route. -->
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://join.goxlally.ai/">
 <link rel="icon" href="/assets/ally-logo.v1.svg" type="image/svg+xml">
 <meta name="theme-color" content="#f7f1eb">
 
@@ -1428,38 +1428,6 @@ em{ font-style:italic; }
      to invoke it directly. Harmless in production. */
   window.__allyImmersion = { update: update, progress: progress, gotoP: gotoP };
 
-  /* Screenshot rig, ?shot= only: headless Chrome can screenshot solely the
-     initial viewport, so this pins the immersion at a chosen state. Inert
-     unless the parameter is present; never linked from anywhere. */
-  var shot = new URLSearchParams(location.search).get('shot');
-  if(shot !== null){
-    var css = document.createElement('style');
-    css.textContent = '*{transition:none!important;animation:none!important}';
-    document.head.appendChild(css);
-    var m = /^stage(\d)$/.exec(shot);
-    if(m){
-      sticky.style.position = 'fixed';
-      sticky.style.inset = '0';
-      sticky.style.zIndex = '99';
-      ['--fx','0deg','--fy','0deg','--fs','1','--fyy','0vh','--env','1']
-        .forEach(function(v,i,a){ if(i%2===0) sticky.style.setProperty(v, a[i+1]); });
-      frame.setAttribute('data-stage', m[1]);
-    }else if(shot === 'enter'){
-      sticky.style.position = 'fixed';
-      sticky.style.inset = '0';
-      sticky.style.zIndex = '99';
-      sticky.style.setProperty('--env','0.35');
-      /* tilted arrival state, part-way through the straighten */
-      sticky.style.setProperty('--fx','6deg');
-      sticky.style.setProperty('--fy','-5.5deg');
-      sticky.style.setProperty('--fs','0.88');
-      sticky.style.setProperty('--fyy','4vh');
-    }else if(shot){
-      /* headless --screenshot always captures from the document top, so a
-         scrolled capture is impossible — isolate the section instead */
-      css.textContent += 'main > section:not(#' + shot + '), .nav, footer{ display:none !important }';
-    }
-  }
 })();
 
 /* ============================================================
