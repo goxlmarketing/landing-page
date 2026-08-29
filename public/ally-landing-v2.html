@@ -388,7 +388,16 @@ em{ font-style:italic; }
   stroke:currentColor; fill:none; stroke-width:1.7;
   stroke-linecap:round; stroke-linejoin:round;
 }
-.side-item.locked{ opacity:.62; }
+.side-item.locked{ opacity:.62; cursor:default; }
+.side-item[data-goto]{ cursor:pointer; }
+.side-item[data-goto]:hover{ background:rgba(255,255,255,.05); color:#fff; }
+@keyframes askPulse{
+  0%  { box-shadow:0 0 0 0 rgba(16,185,129,.45); }
+  100%{ box-shadow:0 0 0 14px rgba(16,185,129,0); }
+}
+@media (prefers-reduced-motion: no-preference){
+  .ask-bar.is-pulsing{ animation:askPulse .9s ease-out 2; }
+}
 .side-item .lk{ margin-left:auto; opacity:.55; }
 .side-item .lk svg{ width:13px; height:13px; stroke-width:2; }
 /* the product's active bar: 20px tall, emerald-to-lime */
@@ -960,37 +969,37 @@ em{ font-style:italic; }
           <span class="ally-live"><i></i> Ally active</span>
 
           <p class="side-label">Home</p>
-          <button class="side-item" tabindex="-1">
+          <button class="side-item" data-goto="0.33">
             <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
             Compass</button>
-          <button class="side-item" tabindex="-1">
+          <button class="side-item" data-goto="0.55" data-pulse-ask>
             <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             Talk to Ally</button>
 
           <p class="side-label">Founder diagnosis</p>
-          <button class="side-item" data-s="0" tabindex="-1">
+          <button class="side-item" data-s="0" data-goto="0.36">
             <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
             Founder DNA</button>
-          <button class="side-item" tabindex="-1">
+          <button class="side-item" data-goto="0.36">
             <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg>
             Business DNA</button>
-          <button class="side-item" data-s="1" tabindex="-1">
+          <button class="side-item" data-s="1" data-goto="0.55">
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3m-3.5-7.5-2.1 2.1M7.6 16.4l-2.1 2.1m0-12.9 2.1 2.1m8.7 8.7 2.1 2.1"/></svg>
             Adaptive diagnosis</button>
-          <button class="side-item" tabindex="-1">
+          <button class="side-item" data-goto="0.88">
             <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             Your Vision</button>
           <button class="side-item locked" tabindex="-1">
             <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             Journey
             <span class="lk"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span></button>
-          <button class="side-item" tabindex="-1">
+          <button class="side-item" data-goto="0.88">
             <svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
             Goals</button>
-          <button class="side-item" data-s="2" tabindex="-1">
+          <button class="side-item" data-s="2" data-goto="0.71">
             <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             Next steps</button>
-          <button class="side-item" data-s="3" tabindex="-1">
+          <button class="side-item" data-s="3" data-goto="0.88">
             <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
             Plan Your Day</button>
 
@@ -1354,10 +1363,37 @@ em{ font-style:italic; }
   addEventListener('resize', update);
   update();   /* reload mid-page lands on the right stage immediately */
 
+  /* ---- sidebar navigation: every unlocked item goes to its story
+     moment. The story's own active item then lights via the stage
+     engine, exactly as it would on a plain scroll — clicking is just a
+     faster way of scrolling there. Locked items stay inert. ---- */
+  function gotoP(target){
+    var r = track.getBoundingClientRect();
+    var top = r.top + scrollY;
+    var total = r.height + innerHeight;
+    var y = Math.max(0, top - innerHeight + target * total);
+    scrollTo({ top: y, behavior: reduce.matches ? 'auto' : 'smooth' });
+  }
+  document.querySelectorAll('.side-item[data-goto]').forEach(function(b){
+    b.addEventListener('click', function(){
+      gotoP(parseFloat(b.getAttribute('data-goto')));
+      if(b.hasAttribute('data-pulse-ask')){
+        /* Talk to Ally: draw the eye to the Ask Ally bar once we land */
+        setTimeout(function(){
+          var bar = frame.querySelector('.stage[data-s="' + frame.getAttribute('data-stage') + '"] .ask-bar');
+          if(!bar) return;
+          bar.classList.remove('is-pulsing');
+          void bar.offsetWidth;
+          bar.classList.add('is-pulsing');
+        }, reduce.matches ? 80 : 700);
+      }
+    });
+  });
+
   /* Test hook. The preview harness this is built in delivers no scroll
      events at all, so the engine cannot be observed there without a way
      to invoke it directly. Harmless in production. */
-  window.__allyImmersion = { update: update, progress: progress };
+  window.__allyImmersion = { update: update, progress: progress, gotoP: gotoP };
 
   /* Screenshot rig, ?shot= only: headless Chrome can screenshot solely the
      initial viewport, so this pins the immersion at a chosen state. Inert
