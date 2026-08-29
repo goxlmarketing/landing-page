@@ -293,7 +293,7 @@ em{ font-style:italic; }
    toggled by one data-stage attribute — the shell never moves.
    ============================================================ */
 .immersion{ position:relative; timeline-scope:--imm; }
-.immersion-track{ height:420vh; view-timeline-name:--imm; view-timeline-axis:block; }
+.immersion-track{ height:470vh; view-timeline-name:--imm; view-timeline-axis:block; }
 .immersion-sticky{
   position:sticky; top:0; height:100svh;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -411,17 +411,20 @@ em{ font-style:italic; }
 [data-stage="0"] .side-item[data-s="0"],
 [data-stage="1"] .side-item[data-s="1"],
 [data-stage="2"] .side-item[data-s="2"],
-[data-stage="3"] .side-item[data-s="3"]{
+[data-stage="3"] .side-item[data-s="3"],
+[data-stage="4"] .side-item[data-s="4"]{
   background:var(--ally-nav-active); color:#fff;
 }
 [data-stage="0"] .side-item[data-s="0"] svg,
 [data-stage="1"] .side-item[data-s="1"] svg,
 [data-stage="2"] .side-item[data-s="2"] svg,
 [data-stage="3"] .side-item[data-s="3"] svg{ stroke:var(--emerald-bright); }
+[data-stage="4"] .side-item[data-s="4"] svg{ stroke:var(--emerald-bright); }
 [data-stage="0"] .side-item[data-s="0"]::before,
 [data-stage="1"] .side-item[data-s="1"]::before,
 [data-stage="2"] .side-item[data-s="2"]::before,
-[data-stage="3"] .side-item[data-s="3"]::before{ opacity:1; }
+[data-stage="3"] .side-item[data-s="3"]::before,
+[data-stage="4"] .side-item[data-s="4"]::before{ opacity:1; }
 
 .side-push{ flex:1; }
 .upgrade{
@@ -480,7 +483,8 @@ em{ font-style:italic; }
 [data-stage="0"] .top-title b[data-s="0"],
 [data-stage="1"] .top-title b[data-s="1"],
 [data-stage="2"] .top-title b[data-s="2"],
-[data-stage="3"] .top-title b[data-s="3"]{ opacity:1; transform:none; }
+[data-stage="3"] .top-title b[data-s="3"],
+[data-stage="4"] .top-title b[data-s="4"]{ opacity:1; transform:none; }
 .top-actions{ display:flex; align-items:center; gap:10px; }
 .plan-pill{
   display:inline-flex; align-items:center; gap:8px;
@@ -517,7 +521,8 @@ em{ font-style:italic; }
 [data-stage="0"] .stage[data-s="0"],
 [data-stage="1"] .stage[data-s="1"],
 [data-stage="2"] .stage[data-s="2"],
-[data-stage="3"] .stage[data-s="3"]{
+[data-stage="3"] .stage[data-s="3"],
+[data-stage="4"] .stage[data-s="4"]{
   opacity:1; transform:none; pointer-events:auto;
 }
 
@@ -543,6 +548,7 @@ em{ font-style:italic; }
   font-size:15px; color:var(--forest);
   min-height:52px; display:flex; align-items:center; gap:12px;
 }
+.stage[data-s="3"] .insight::after{ content:"\2014\00a0 Your one-year vision"; }
 .insight::after{
   content:"\2014\00a0 Ally";
   font-family:var(--display); font-style:normal; font-weight:700;
@@ -619,7 +625,8 @@ em{ font-style:italic; }
 [data-stage="0"] .cap-cell > div[data-s="0"],
 [data-stage="1"] .cap-cell > div[data-s="1"],
 [data-stage="2"] .cap-cell > div[data-s="2"],
-[data-stage="3"] .cap-cell > div[data-s="3"]{ opacity:1; transform:none; }
+[data-stage="3"] .cap-cell > div[data-s="3"],
+[data-stage="4"] .cap-cell > div[data-s="4"]{ opacity:1; transform:none; }
 .cap-idx{
   font-family:var(--display); font-weight:800; font-size:26px;
   color:var(--emerald-bright);
@@ -972,7 +979,7 @@ em{ font-style:italic; }
           <button class="side-item" data-goto="0.33">
             <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
             Compass</button>
-          <button class="side-item" data-goto="0.55" data-pulse-ask>
+          <button class="side-item" data-goto="0.50" data-pulse-ask>
             <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             Talk to Ally</button>
 
@@ -983,23 +990,23 @@ em{ font-style:italic; }
           <button class="side-item" data-goto="0.36">
             <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg>
             Business DNA</button>
-          <button class="side-item" data-s="1" data-goto="0.55">
+          <button class="side-item" data-s="1" data-goto="0.50">
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3m-3.5-7.5-2.1 2.1M7.6 16.4l-2.1 2.1m0-12.9 2.1 2.1m8.7 8.7 2.1 2.1"/></svg>
             Adaptive diagnosis</button>
-          <button class="side-item" data-goto="0.88">
+          <button class="side-item" data-s="3" data-goto="0.76">
             <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             Your Vision</button>
           <button class="side-item locked" tabindex="-1">
             <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             Journey
             <span class="lk"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span></button>
-          <button class="side-item" data-goto="0.88">
+          <button class="side-item" data-goto="0.89">
             <svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
             Goals</button>
-          <button class="side-item" data-s="2" data-goto="0.71">
+          <button class="side-item" data-s="2" data-goto="0.63">
             <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             Next steps</button>
-          <button class="side-item" data-s="3" data-goto="0.88">
+          <button class="side-item" data-s="4" data-goto="0.89">
             <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
             Plan Your Day</button>
 
@@ -1026,7 +1033,8 @@ em{ font-style:italic; }
                 <b data-s="0">Good morning, Founder</b>
                 <b data-s="1">Diagnosis</b>
                 <b data-s="2">Direction</b>
-                <b data-s="3">Today</b>
+                <b data-s="3">Vision</b>
+                <b data-s="4">Today</b>
               </div>
             </div>
             <div class="top-actions">
@@ -1110,8 +1118,31 @@ em{ font-style:italic; }
                 </div>
               </div>
 
-              <!-- STAGE 4 · TURN DIRECTION INTO ACTION -->
+              <!-- STAGE 4 · VISION — Q11, the real screen copy as the
+                   headline; the insight is the founder's own answer, so
+                   its attribution flips from Ally to You. -->
               <div class="stage" data-s="3">
+                <p class="screen-label">Where you&rsquo;re headed &middot; One-year vision</p>
+                <h2>What does success look like <em>one year from today?</em></h2>
+                <p class="insight">A predictable acquisition engine that consistently creates qualified opportunities.</p>
+                <div class="ask-bar" aria-hidden="true">
+                  <span>Ask Ally what this vision asks of you now...</span>
+                  <b>→ Ask Ally</b>
+                </div>
+                <div class="state-head">
+                  <span>Where you&rsquo;re trying to go</span>
+                  <h3>The heading that decides what matters now</h3>
+                </div>
+                <div class="metric-row">
+                  <article><span>Horizon</span><strong>1 year</strong><p>Success, described in your own words.</p></article>
+                  <article><span>First milestone</span><strong>90 days</strong><p>The one thing to achieve first.</p></article>
+                  <article><span>Priorities set</span><strong>03</strong><p>The next 90 days, already sequenced.</p></article>
+                  <article><span>Heading</span><strong>Acquisition</strong><p>Every move should serve the heading.</p></article>
+                </div>
+              </div>
+
+              <!-- STAGE 5 · TURN DIRECTION INTO ACTION -->
+              <div class="stage" data-s="4">
                 <p class="screen-label">Where you&rsquo;re headed &middot; Today</p>
                 <h2>Clarity only matters when it changes <em>what you do today.</em></h2>
                 <p class="insight">One useful day is better than ten ambitious lists.</p>
@@ -1148,12 +1179,14 @@ em{ font-style:italic; }
           <div data-s="1"><span class="cap-idx">02</span></div>
           <div data-s="2"><span class="cap-idx">03</span></div>
           <div data-s="3"><span class="cap-idx">04</span></div>
+          <div data-s="4"><span class="cap-idx">05</span></div>
         </div>
         <div class="cap-cell">
           <div data-s="0"><strong>Understand the founder.</strong><p>Ally begins with context &mdash; not assumptions.</p></div>
           <div data-s="1"><strong>Diagnose the situation.</strong><p>Find the signal hiding inside all the noise.</p></div>
           <div data-s="2"><strong>Choose a direction.</strong><p>Ally narrows the field until the next move becomes clear.</p></div>
-          <div data-s="3"><strong>Turn direction into action.</strong><p>The compass becomes a plan for today.</p></div>
+          <div data-s="3"><strong>Set the heading.</strong><p>Where you&rsquo;re trying to go decides what matters now.</p></div>
+          <div data-s="4"><strong>Turn direction into action.</strong><p>The compass becomes a plan for today.</p></div>
         </div>
       </div>
 
@@ -1338,8 +1371,8 @@ em{ font-style:italic; }
   function setStage(p){
     var s;
     if(p < 0.30) s = 0;
-    else if(p >= 0.96) s = 3;
-    else s = Math.min(3, Math.floor((p - 0.30) / (0.66 / 4)));
+    else if(p >= 0.96) s = 4;
+    else s = Math.min(4, Math.floor((p - 0.30) / (0.66 / 5)));
     if(s !== current){ current = s; frame.setAttribute('data-stage', String(s)); }
   }
 
