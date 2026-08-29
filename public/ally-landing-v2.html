@@ -14,7 +14,7 @@
      Inter Tight for figures. Same stylesheet ally-platform.html requests. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700;800&family=Montserrat:wght@600;700;800&display=swap">
 
 <style>
 /* ============================================================
@@ -74,7 +74,17 @@
 
   --serif:'Fraunces','Georgia',serif;
   --body:'Inter',system-ui,sans-serif;
-  --display:'Inter Tight','Inter',system-ui,sans-serif;
+  --display:'Montserrat','Inter Tight',system-ui,sans-serif;        /* new dashboard */
+  --display-tight:'Inter Tight','Inter',system-ui,sans-serif;
+
+  /* structural tokens lifted from allydashboard.html */
+  --ally-sb-grad:radial-gradient(120% 60% at 0% 0%, #123a27, var(--ally-sidebar) 55%, var(--ally-sidebar-deep));
+  --ally-nav-active:rgba(16,185,129,.16);
+  --ally-group-label:#4d6557;
+  --ally-btn-ink:#06231a;                       /* dark text on emerald buttons */
+  --ally-active-bar:linear-gradient(180deg,#34d399,#A8D94A);
+  --ally-av-grad:linear-gradient(135deg,#34d399,#A8D94A);
+  --r-btn:11px;
 
   --r-card:16px;
   --r-pill:999px;
@@ -207,9 +217,10 @@ em{ font-style:italic; }
   padding:18px 0; gap:16px;
 }
 .glimpse-side b{
-  font-family:var(--display); font-weight:800; font-size:13px;
-  color:var(--ally-accent-glow);
+  font-family:var(--display-tight); font-weight:800; font-size:12px;
+  color:#fff; letter-spacing:-.02em;
 }
+.glimpse-side b i{ font-style:normal; color:var(--ally-accent); }
 .glimpse-side i{
   width:18px; height:18px; border-radius:5px;
   border:1px solid rgba(167,192,180,.4);
@@ -221,8 +232,8 @@ em{ font-style:italic; }
   font-weight:700; color:var(--muted-2);
 }
 .glimpse-card h3{
-  font-family:var(--serif); font-weight:500; font-size:26px;
-  line-height:1.15; margin:12px 0 18px;
+  font-family:var(--serif); font-weight:400; font-size:24px;
+  line-height:1.26; margin:12px 0 18px; color:var(--forest-deep);
 }
 .glimpse-card h3 em{ color:var(--emerald); }
 .ask-bar{
@@ -234,23 +245,26 @@ em{ font-style:italic; }
 }
 .ask-bar b{
   display:inline-flex; align-items:center; gap:8px;
-  background:var(--emerald); color:#fff; font-weight:700; font-size:12.5px;
-  border-radius:var(--r-pill); padding:11px 18px; white-space:nowrap;
+  background:var(--emerald); color:var(--ally-btn-ink);
+  font-weight:600; font-size:12.5px;
+  border-radius:10px; padding:10px 15px; white-space:nowrap;
+  box-shadow:0 10px 26px -8px rgba(16,185,129,.5);
 }
 .glimpse-strip{
   display:grid; grid-template-columns:repeat(3,1fr);
   border-top:1px solid var(--bd); margin-top:22px;
   transform:translateY(1px);
 }
-.glimpse-strip div{ padding:16px 12px 22px 0; border-right:1px solid var(--bd); }
-.glimpse-strip div:last-child{ border-right:0; }
+.glimpse-strip div{ padding:16px 12px 22px 16px; border-left:1px solid var(--bd); }
+.glimpse-strip div:first-child{ border-left:0; padding-left:0; }
 .glimpse-strip span{
   display:block; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase;
   color:var(--muted-2); font-weight:700;
 }
 .glimpse-strip strong{
-  display:block; margin-top:8px; font-family:var(--display);
-  font-size:17px; font-weight:700; color:var(--forest);
+  display:block; margin-top:8px; font-family:var(--body);
+  font-size:19px; font-weight:600; color:var(--forest-deep);
+  letter-spacing:-.02em;
 }
 
 /* ============================================================
@@ -313,11 +327,20 @@ em{ font-style:italic; }
 
 /* ---------- sidebar (presentation-only) ---------- */
 .app-side{
-  background:linear-gradient(180deg, var(--forest-deep), var(--forest-night));
+  background:var(--ally-sb-grad);
   color:var(--on-dark);
   display:flex; flex-direction:column;
-  padding:20px 14px 16px;
-  font-size:13px;
+  padding:20px 14px 12px;
+  font-size:13.5px;
+  border-right:1px solid rgba(255,255,255,.08);
+  position:relative; overflow:hidden;
+}
+/* the product's soft emerald glow behind the brand */
+.app-side::before{
+  content:""; position:absolute; top:-120px; left:-80px;
+  width:300px; height:300px; border-radius:50%;
+  background:radial-gradient(circle, rgba(16,185,129,.28), transparent 70%);
+  filter:blur(70px); pointer-events:none;
 }
 .app-brand{ padding:0 8px; display:flex; align-items:flex-start; justify-content:space-between; }
 .app-collapse{
@@ -327,58 +350,65 @@ em{ font-style:italic; }
   color:var(--ally-on-dark-dim); font-size:11px;
 }
 .app-brand strong{
-  font-family:var(--display); font-weight:800; font-size:20px;
-  color:var(--emerald-glow); letter-spacing:-.02em;
+  font-family:var(--display-tight); font-weight:800; font-size:22px;
+  color:#fff; letter-spacing:-.02em;
 }
+.app-brand strong b{ color:var(--ally-accent); font-weight:800; }
 .app-brand small{
-  display:block; font-size:8px; letter-spacing:.22em;
-  color:var(--on-dark-dim); margin-top:2px;
+  display:block; font-size:7.5px; letter-spacing:.16em; font-weight:600;
+  color:var(--on-dark-dim); margin-top:3px; text-transform:uppercase;
 }
 .ally-live{
-  display:inline-flex; align-items:center; gap:7px;
-  margin:14px 8px 6px; padding:6px 11px;
-  border:1px solid rgba(52,211,153,.3); border-radius:var(--r-pill);
-  background:rgba(16,185,129,.1);
-  font-size:11px; font-weight:600; color:var(--emerald-bright);
-  width:max-content;
+  display:inline-flex; align-items:center; gap:6px;
+  margin:12px 8px 4px; padding:4px 10px;
+  border:1px solid rgba(16,185,129,.32); border-radius:var(--r-pill);
+  background:rgba(16,185,129,.14);
+  font-size:11px; font-weight:700; color:var(--emerald-bright);
+  letter-spacing:.04em; width:max-content;
 }
 .ally-live i{
   width:6px; height:6px; border-radius:50%; background:var(--emerald-bright);
 }
 .side-label{
-  font-size:9.5px; letter-spacing:.2em; font-weight:700;
-  color:var(--on-dark-dim); margin:20px 8px 8px;
+  font-size:9.5px; letter-spacing:.15em; font-weight:700;
+  text-transform:uppercase;
+  color:var(--ally-group-label); margin:13px 8px 5px;
 }
 .side-item{
-  display:flex; align-items:center; gap:10px;
+  display:flex; align-items:center; gap:11px;
   width:100%; text-align:left;
-  padding:9px 10px; border:0; border-radius:10px;
+  padding:7px 12px; border:0; border-radius:11px;
   background:transparent; color:var(--on-dark-muted);
-  font-size:13px; font-weight:500;
+  font-size:13.5px; font-weight:500;
   position:relative;
   transition:background .35s, color .35s;
 }
 .side-item svg{
-  width:15px; height:15px; flex:0 0 auto;
-  stroke:currentColor; fill:none; stroke-width:1.8;
+  width:18px; height:18px; flex:0 0 auto;
+  stroke:currentColor; fill:none; stroke-width:1.7;
   stroke-linecap:round; stroke-linejoin:round;
 }
+.side-item.locked{ opacity:.62; }
 .side-item .lk{ margin-left:auto; opacity:.55; }
-.side-item .lk svg{ width:11px; height:11px; }
+.side-item .lk svg{ width:13px; height:13px; stroke-width:2; }
+/* the product's active bar: 20px tall, emerald-to-lime */
 .side-item::before{
-  content:""; position:absolute; left:-14px; top:20%; bottom:20%;
-  width:3px; border-radius:0 3px 3px 0; background:var(--emerald);
+  content:""; position:absolute; left:-14px; top:50%;
+  width:3px; height:20px; transform:translateY(-50%);
+  border-radius:0 3px 3px 0; background:var(--ally-active-bar);
   opacity:0; transition:opacity .35s;
 }
-.side-item.is-on{ background:var(--ally-sidebar-active); color:#fff; }
-.side-item.is-on::before{ opacity:1; }
 /* stage-driven emphasis: exactly one strong focus at a time */
 [data-stage="0"] .side-item[data-s="0"],
 [data-stage="1"] .side-item[data-s="1"],
 [data-stage="2"] .side-item[data-s="2"],
 [data-stage="3"] .side-item[data-s="3"]{
-  background:var(--ally-sidebar-active); color:#fff;
+  background:var(--ally-nav-active); color:#fff;
 }
+[data-stage="0"] .side-item[data-s="0"] svg,
+[data-stage="1"] .side-item[data-s="1"] svg,
+[data-stage="2"] .side-item[data-s="2"] svg,
+[data-stage="3"] .side-item[data-s="3"] svg{ stroke:var(--emerald-bright); }
 [data-stage="0"] .side-item[data-s="0"]::before,
 [data-stage="1"] .side-item[data-s="1"]::before,
 [data-stage="2"] .side-item[data-s="2"]::before,
@@ -386,31 +416,33 @@ em{ font-style:italic; }
 
 .side-push{ flex:1; }
 .upgrade{
-  margin:0 4px 12px; padding:13px 14px;
-  border:1px solid rgba(52,211,153,.22); border-radius:12px;
-  background:rgba(16,185,129,.07);
+  margin:0 2px 10px; padding:14px;
+  border:1px solid rgba(16,185,129,.28); border-radius:14px;
+  background:linear-gradient(155deg, rgba(16,185,129,.16), rgba(16,185,129,.04));
 }
-.upgrade strong{ font-size:12.5px; color:#fff; }
-.upgrade b{ width:100%; text-align:center; }
+.upgrade strong{
+  font-family:var(--display-tight); font-size:12.5px; font-weight:750; color:#fff;
+}
 .upgrade span{
   display:block; font-size:11px; line-height:1.45;
-  color:var(--on-dark-muted); margin:5px 0 10px;
+  color:var(--on-dark-muted); margin:5px 0 11px;
 }
 .upgrade b{
-  display:inline-block; font-size:11.5px; font-weight:700;
-  color:var(--forest-night);
-  background:linear-gradient(90deg, var(--emerald-bright), var(--lime-edge));
-  border-radius:var(--r-pill); padding:7px 13px;
+  display:flex; align-items:center; justify-content:center;
+  width:100%; font-size:12px; font-weight:750;
+  color:var(--ally-btn-ink);
+  background:linear-gradient(150deg, var(--emerald-bright), var(--lime-edge));
+  border-radius:10px; padding:9px;
 }
 .profile{
   display:flex; align-items:center; gap:10px; padding:10px 8px 0;
   border-top:1px solid rgba(255,255,255,.08);
 }
 .avatar{
-  width:30px; height:30px; border-radius:50%;
-  background:var(--emerald); color:#fff;
+  width:32px; height:32px; border-radius:50%;
+  background:var(--ally-av-grad); color:var(--ally-btn-ink);
   display:grid; place-items:center;
-  font-size:12px; font-weight:700;
+  font-size:11.5px; font-weight:700;
 }
 .profile strong{ display:block; font-size:12px; color:#fff; }
 .profile small{ font-size:10.5px; color:var(--on-dark-dim); }
@@ -431,8 +463,8 @@ em{ font-style:italic; }
 .top-title{ position:relative; height:24px; min-width:280px; }
 .top-title b{
   position:absolute; inset:0;
-  font-family:var(--display); font-size:18px; font-weight:700;
-  color:var(--ink); letter-spacing:-.01em;
+  font-family:var(--display-tight); font-size:19px; font-weight:700;
+  color:var(--forest); letter-spacing:-.02em;
   opacity:0; transform:translateY(6px);
   transition:opacity .35s, transform .35s;
 }
@@ -442,12 +474,15 @@ em{ font-style:italic; }
 [data-stage="3"] .top-title b[data-s="3"]{ opacity:1; transform:none; }
 .top-actions{ display:flex; align-items:center; gap:10px; }
 .plan-pill{
-  display:inline-flex; align-items:center; gap:7px;
-  border:1px solid var(--bd-2); border-radius:var(--r-pill);
-  background:#fff; padding:8px 14px;
-  font-size:12px; font-weight:600; color:var(--muted);
+  display:inline-flex; align-items:center; gap:8px;
+  border:1px solid #d7ccb8; border-radius:var(--r-pill);
+  background:#f7f1e2; padding:9px 14px;
+  font-size:12.5px; font-weight:700; color:#6d6041;
 }
-.plan-pill i{ width:7px; height:7px; border-radius:50%; background:var(--emerald); }
+.plan-pill i{
+  width:8px; height:8px; border-radius:50%; background:#8d9167;
+  box-shadow:0 0 0 3px rgba(141,145,103,.12);
+}
 .bell{
   width:34px; height:34px; border-radius:50%;
   background:#fff; border:1px solid var(--bd-2);
@@ -482,62 +517,67 @@ em{ font-style:italic; }
   font-weight:700; color:var(--muted-2);
 }
 .stage h2{
-  font-family:var(--serif); font-weight:500;
-  font-size:clamp(26px, 2.5vw, 38px); line-height:1.18;
-  letter-spacing:-.015em; margin:14px 0 0;
-  min-height:2.4em; /* two lines reserved — headlines may not resize the shell */
-  max-width:700px;
+  /* the current product's compass-headline: Fraunces 400, calmer scale */
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(24px, 2.2vw, 31px); line-height:1.28;
+  letter-spacing:-.01em; margin:13px 0 0;
+  min-height:2.56em; /* two lines reserved — headlines may not resize the shell */
+  max-width:34ch;
+  color:var(--forest-deep);
 }
-.stage h2 em{ font-weight:400; }
 .stage h2 em{ color:var(--emerald); }
 .insight{
-  margin-top:20px; padding:15px 20px;
+  margin-top:18px; padding:14px 20px;
   border:1px solid var(--bd); border-left:3px solid var(--emerald);
   border-radius:12px; background:var(--ivory-2);
   font-family:var(--serif); font-style:italic;
-  font-size:15.5px; color:var(--muted);
-  min-height:52px; display:flex; align-items:center;
+  font-size:15px; color:var(--forest);
+  min-height:52px; display:flex; align-items:center; gap:12px;
+}
+.insight::after{
+  content:"\2014\00a0 Ally";
+  font-family:var(--display); font-style:normal; font-weight:700;
+  font-size:11px; letter-spacing:.02em; color:var(--muted-2);
+  margin-left:auto; white-space:nowrap;
 }
 .stage .ask-bar{ margin-top:18px; }
 .stage .ask-bar span{
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
-.state-head{ margin-top:18px; }
+.state-head{ margin-top:20px; }
 .state-head span{
-  font-size:13.5px; color:var(--muted-2);
+  font-size:10px; font-weight:600; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--muted);
 }
 .state-head h3{
   font-family:var(--display);
-  font-size:19px; font-weight:700; color:var(--ink); margin-top:5px;
+  font-size:18px; font-weight:600; color:var(--ink); margin-top:7px;
   letter-spacing:-.01em;
 }
 .metric-row{
   display:grid; grid-template-columns:repeat(4,1fr);
-  border-top:1px solid var(--bd);
-  margin-top:16px;
+  border-top:1px solid var(--bd); border-bottom:1px solid var(--bd);
+  margin-top:14px;
 }
 .metric-row article{
-  padding:15px 18px 4px 0; border-right:1px solid var(--bd);
+  padding:16px 20px 14px; border-left:1px solid var(--bd);
   min-width:0;
 }
-.metric-row article:last-child{ border-right:0; }
+.metric-row article:first-child{ border-left:0; padding-left:0; }
 .metric-row span{
-  display:block; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase;
-  font-weight:700; color:var(--muted-2);
-}
-.metric-row i{
-  display:block; width:22px; height:3px; border-radius:2px;
-  background:var(--forest); margin:9px 0;
+  display:block; font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+  font-weight:600; color:var(--muted);
 }
 .metric-row strong{
-  display:block; font-family:var(--display);
-  font-size:21px; font-weight:800; color:var(--forest);
-  letter-spacing:-.02em; line-height:1.1;
+  display:block; font-family:var(--body);
+  font-size:27px; font-weight:600; color:var(--forest-deep);
+  letter-spacing:-.03em; line-height:1;
+  font-variant-numeric:tabular-nums;
+  margin:10px 0 8px;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 .metric-row p{
-  font-size:11.5px; line-height:1.45; color:var(--muted);
-  margin-top:6px;
+  font-size:12px; line-height:1.45; color:var(--muted);
   display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
 }
 
@@ -808,6 +848,12 @@ em{ font-style:italic; }
    RESPONSIVE — Phase 2 scope: no catastrophic breakage below
    desktop. A dedicated mobile pass follows.
    ============================================================ */
+/* Shorter viewports: the product sidebar scrolls; this presentation
+   clips, so the upsell card yields before any nav item does. */
+@media (max-height: 850px){
+  .upgrade{ display:none; }
+}
+
 @media (max-width: 1120px){
   .product-frame{ grid-template-columns:200px minmax(0,1fr); }
 }
@@ -868,7 +914,7 @@ em{ font-style:italic; }
   <div class="hero-glimpse" aria-label="A fragment of the Ally interface">
     <div class="glimpse-card">
       <div class="glimpse-side" aria-hidden="true">
-        <b>G</b>
+        <b>Go<i>XL</i></b>
         <i class="on"></i><i></i><i></i><i></i>
       </div>
       <div class="glimpse-main">
@@ -906,45 +952,47 @@ em{ font-style:italic; }
         <aside class="app-side" aria-hidden="true">
           <div class="app-brand">
             <div>
-              <strong>GoXL</strong>
-              <small>CONSULTING SOLUTIONS</small>
+              <strong>Go<b>XL</b></strong>
+              <small>Consulting Solutions</small>
             </div>
-            <span class="app-collapse" aria-hidden="true">&laquo;</span>
+            <span class="app-collapse" aria-hidden="true"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/></svg></span>
           </div>
           <span class="ally-live"><i></i> Ally active</span>
 
           <p class="side-label">Home</p>
           <button class="side-item" tabindex="-1">
-            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
             Compass</button>
           <button class="side-item" tabindex="-1">
-            <svg viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H9l-4 4z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             Talk to Ally</button>
 
           <p class="side-label">Founder diagnosis</p>
           <button class="side-item" data-s="0" tabindex="-1">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/></svg>
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
             Founder DNA</button>
           <button class="side-item" tabindex="-1">
-            <svg viewBox="0 0 24 24"><path d="M5 19V10M12 19V5M19 19v-6"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg>
             Business DNA</button>
           <button class="side-item" data-s="1" tabindex="-1">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 3.5v2M12 18.5v2M3.5 12h2M18.5 12h2M6 6l1.4 1.4M16.6 16.6L18 18M18 6l-1.4 1.4M7.4 16.6L6 18"/></svg>
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3m-3.5-7.5-2.1 2.1M7.6 16.4l-2.1 2.1m0-12.9 2.1 2.1m8.7 8.7 2.1 2.1"/></svg>
             Adaptive diagnosis</button>
-          <button class="side-item" data-s="2" tabindex="-1">
-            <svg viewBox="0 0 24 24"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"/><circle cx="12" cy="12" r="2.6"/></svg>
+          <button class="side-item" tabindex="-1">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             Your Vision</button>
-          <button class="side-item" tabindex="-1">
-            <svg viewBox="0 0 24 24"><path d="M12 21s-6.5-5.2-6.5-10.2a6.5 6.5 0 0 1 13 0C18.5 15.8 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.2"/></svg>
+          <button class="side-item locked" tabindex="-1">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             Journey
-            <span class="lk"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3"/></svg></span></button>
+            <span class="lk"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span></button>
           <button class="side-item" tabindex="-1">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="4.5"/><path d="M8.5 12.8L7 21l5-2.6L17 21l-1.5-8.2"/></svg>
-            Your Achievements
-            <span class="lk"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3"/></svg></span></button>
-          <button class="side-item" data-s="3" tabindex="-1">
-            <svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h10M5 18h7"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
             Goals</button>
+          <button class="side-item" data-s="2" tabindex="-1">
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            Next steps</button>
+          <button class="side-item" data-s="3" tabindex="-1">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Plan Your Day</button>
 
           <span class="side-push"></span>
 
@@ -995,10 +1043,10 @@ em{ font-style:italic; }
                   <h3>Understand the founder before the problem</h3>
                 </div>
                 <div class="metric-row">
-                  <article><span>Founder clarity</span><i></i><strong>64</strong><p>Direction exists, but too many competing priorities.</p></article>
-                  <article><span>Decision load</span><i></i><strong>High</strong><p>Too many decisions still depend only on you.</p></article>
-                  <article><span>Current mode</span><i></i><strong>Reactive</strong><p>Urgent work is crowding out important work.</p></article>
-                  <article><span>Primary signal</span><i></i><strong>Focus</strong><p>The next gain comes from removing, not adding.</p></article>
+                  <article><span>Founder clarity</span><strong>64</strong><p>Direction exists, but too many competing priorities.</p></article>
+                  <article><span>Decision load</span><strong>High</strong><p>Too many decisions still depend only on you.</p></article>
+                  <article><span>Current mode</span><strong>Reactive</strong><p>Urgent work is crowding out important work.</p></article>
+                  <article><span>Primary signal</span><strong>Focus</strong><p>The next gain comes from removing, not adding.</p></article>
                 </div>
               </div>
 
@@ -1016,10 +1064,10 @@ em{ font-style:italic; }
                   <h3>What is actually happening right now</h3>
                 </div>
                 <div class="metric-row">
-                  <article><span>Founder clarity</span><i></i><strong>64</strong><p>Enough clarity to move &mdash; not enough to ignore the noise.</p></article>
-                  <article><span>Dimensions scanned</span><i></i><strong>07</strong><p>Founder, execution, cash, customers, growth, systems.</p></article>
-                  <article><span>Red flags</span><i></i><strong>03</strong><p>Three patterns are creating repeated friction.</p></article>
-                  <article><span>Primary constraint</span><i></i><strong>Acquisition</strong><p>Demand is inconsistent, not absent.</p></article>
+                  <article><span>Founder clarity</span><strong>64</strong><p>Enough clarity to move &mdash; not enough to ignore the noise.</p></article>
+                  <article><span>Dimensions scanned</span><strong>07</strong><p>Founder, execution, cash, customers, growth, systems.</p></article>
+                  <article><span>Red flags</span><strong>03</strong><p>Three patterns are creating repeated friction.</p></article>
+                  <article><span>Primary constraint</span><strong>Acquisition</strong><p>Demand is inconsistent, not absent.</p></article>
                 </div>
               </div>
 
@@ -1037,10 +1085,10 @@ em{ font-style:italic; }
                   <h3>Current bottleneck: acquisition consistency</h3>
                 </div>
                 <div class="metric-row">
-                  <article><span>Priority 01</span><i></i><strong>Clarify ICP</strong><p>Remove audience segments creating noisy demand.</p></article>
-                  <article><span>Priority 02</span><i></i><strong>One channel</strong><p>Repair one acquisition channel before adding another.</p></article>
-                  <article><span>Priority 03</span><i></i><strong>Pipeline</strong><p>Build a repeatable weekly pipeline rhythm.</p></article>
-                  <article><span>Avoid</span><i></i><strong>More spend</strong><p>Don&rsquo;t scale what you cannot yet repeat.</p></article>
+                  <article><span>Priority 01</span><strong>Clarify ICP</strong><p>Remove audience segments creating noisy demand.</p></article>
+                  <article><span>Priority 02</span><strong>One channel</strong><p>Repair one acquisition channel before adding another.</p></article>
+                  <article><span>Priority 03</span><strong>Pipeline</strong><p>Build a repeatable weekly pipeline rhythm.</p></article>
+                  <article><span>Avoid</span><strong>More spend</strong><p>Don&rsquo;t scale what you cannot yet repeat.</p></article>
                 </div>
               </div>
 
@@ -1058,10 +1106,10 @@ em{ font-style:italic; }
                   <h3>Protect the work that moves the constraint</h3>
                 </div>
                 <div class="metric-row">
-                  <article><span>09:30</span><i></i><strong>Funnel</strong><p>Review the acquisition path; find the largest leak.</p></article>
-                  <article><span>11:00</span><i></i><strong>Offer</strong><p>Rewrite one offer for the clearest audience segment.</p></article>
-                  <article><span>14:00</span><i></i><strong>Prospects</strong><p>Speak with five recent prospects; capture objections.</p></article>
-                  <article><span>End of day</span><i></i><strong>Review</strong><p>Tell Ally what changed. Recalculate tomorrow.</p></article>
+                  <article><span>09:30</span><strong>Funnel</strong><p>Review the acquisition path; find the largest leak.</p></article>
+                  <article><span>11:00</span><strong>Offer</strong><p>Rewrite one offer for the clearest audience segment.</p></article>
+                  <article><span>14:00</span><strong>Prospects</strong><p>Speak with five recent prospects; capture objections.</p></article>
+                  <article><span>End of day</span><strong>Review</strong><p>Tell Ally what changed. Recalculate tomorrow.</p></article>
                 </div>
               </div>
 
