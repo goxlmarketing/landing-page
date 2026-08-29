@@ -651,6 +651,18 @@ em{ font-style:italic; }
   white-space:nowrap; box-shadow:0 10px 26px -8px rgba(16,185,129,.5);
 }
 
+/* Stage 3's four cells stopped being metrics when their copy became
+   sentences: at 27px nowrap in a 194px column, every one of them
+   ellipsised — 'Make one way of getting customers work' needs 509px —
+   and the descriptions lost their third line. They wrap here instead.
+   Scoped to this stage so the readout treatment the other four use,
+   which matches the product, is untouched. */
+.stage[data-s="2"] .metric-row strong{
+  white-space:normal; overflow:visible; text-overflow:clip;
+  font-size:19px; line-height:1.2;
+}
+.stage[data-s="2"] .metric-row p{ -webkit-line-clamp:3; }
+
 /* the shared north-star line under every stage */
 .ns-line{
   margin-top:auto; padding-top:16px;
@@ -1168,20 +1180,20 @@ em{ font-style:italic; }
               <div class="stage" data-s="2">
                 <p class="screen-label">Where you&rsquo;re headed &middot; Biggest challenge</p>
                 <h2>Your next move isn&rsquo;t to do more. <em>It&rsquo;s to fix the right thing.</em></h2>
-                <p class="insight">You said: getting customers, marketing, decision making. Underneath all three is one system.</p>
+                <p class="insight">You said: getting customers, marketing and making decisions feel hard. Ally noticed they may be connected.</p>
                 <div class="ask-bar" aria-hidden="true">
                   <span>Ask Ally what to focus on first...</span>
                   <b>→ Ask Ally</b>
                 </div>
                 <div class="state-head">
-                  <span>You said &rarr; Ally found</span>
-                  <h3>Primary bottleneck: acquisition consistency</h3>
+                  <span>What Ally noticed</span>
+                  <h3>Getting customers isn&rsquo;t consistent yet.</h3>
                 </div>
                 <div class="metric-row">
-                  <article><span>Priority 01</span><strong>Clarify ICP</strong><p>Remove audience segments creating noisy demand.</p></article>
-                  <article><span>Priority 02</span><strong>One channel</strong><p>Repair one acquisition channel before adding another.</p></article>
-                  <article><span>Priority 03</span><strong>Pipeline</strong><p>Create a repeatable weekly pipeline rhythm.</p></article>
-                  <article><span>Avoid</span><strong>More spend</strong><p>Don&rsquo;t scale what you cannot yet repeat.</p></article>
+                  <article><span>Priority 01</span><strong>Get clear on your customer</strong><p>Know who needs your product most and who you should stop trying to reach.</p></article>
+                  <article><span>Priority 02</span><strong>Make one way of getting customers work</strong><p>Choose the approach already showing promise and improve that first.</p></article>
+                  <article><span>Priority 03</span><strong>Make it repeatable</strong><p>Build a simple weekly routine so growth doesn&rsquo;t restart every week.</p></article>
+                  <article><span>Avoid</span><strong>Adding more too soon</strong><p>Don&rsquo;t add more campaigns, channels or work before one system is working.</p></article>
                 </div>
               </div>
 
