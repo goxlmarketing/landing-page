@@ -600,6 +600,57 @@ em{ font-style:italic; }
   display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
 }
 
+/* ---- Plan Your Day, as the product actually builds it: two mode
+   tabs and a capture box. Values lifted from allydashboard.html. ---- */
+.pl-tabs{ display:flex; gap:14px; margin-top:18px; }
+.pl-tab{
+  flex:1; display:flex; align-items:center; gap:12px;
+  background:#fff; border:1px solid var(--bd); border-radius:14px;
+  padding:12px 16px; text-align:left;
+}
+.pl-tab.is-on{ border-color:var(--emerald); box-shadow:0 0 0 1px rgba(16,185,129,.3); }
+.pl-tab-ic{
+  width:34px; height:34px; border-radius:10px; flex:0 0 auto;
+  display:grid; place-items:center;
+  background:var(--ivory-3); color:var(--forest);
+}
+.pl-tab.is-on .pl-tab-ic{ background:rgba(16,185,129,.1); color:var(--emerald); }
+.pl-tab-ic svg{ width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.8; }
+.pl-tab b{
+  display:block; font-family:var(--display);
+  font-size:13.5px; font-weight:700; color:var(--ink);
+}
+.pl-tab span{ display:block; font-size:11px; color:var(--muted-2); margin-top:2px; }
+
+.pl-card{
+  margin-top:14px; padding:18px 20px;
+  background:#fff; border:1px solid var(--bd); border-radius:16px;
+  box-shadow:var(--shadow-card);
+}
+.pl-card-head{ display:flex; align-items:center; gap:12px; }
+.pl-av{
+  width:32px; height:32px; border-radius:50%; flex:0 0 auto;
+  display:grid; place-items:center;
+  background:var(--ally-av-grad); color:var(--ally-btn-ink);
+  font-size:12px; font-weight:700;
+}
+.pl-card-head b{ display:block; font-family:var(--display); font-size:13.5px; font-weight:700; color:var(--ink); }
+.pl-card-head span{ display:block; font-size:11.5px; color:var(--muted-2); margin-top:2px; }
+.pl-field{
+  margin-top:12px; padding:11px 14px; min-height:60px;
+  border:1px solid var(--bd); border-radius:12px;
+  background:var(--ivory-2);
+  font-size:13.5px; color:var(--muted-2);
+}
+.pl-foot{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px; }
+.pl-hint{ display:flex; align-items:center; gap:7px; font-size:11.5px; color:var(--muted); }
+.pl-hint i{ width:6px; height:6px; border-radius:50%; background:var(--emerald); flex:0 0 auto; }
+.pl-btn{
+  font-size:12.5px; font-weight:600; color:var(--ally-btn-ink);
+  background:var(--emerald); border-radius:10px; padding:9px 16px;
+  white-space:nowrap; box-shadow:0 10px 26px -8px rgba(16,185,129,.5);
+}
+
 /* the shared north-star line under every stage */
 .ns-line{
   margin-top:auto; padding-top:16px;
@@ -1161,20 +1212,31 @@ em{ font-style:italic; }
               <div class="stage" data-s="4">
                 <p class="screen-label">Where you&rsquo;re headed &middot; Today</p>
                 <h2>Clarity only matters when it changes <em>what you do today.</em></h2>
-                <p class="insight">One useful day is better than ten ambitious lists.</p>
+                <p class="insight">Set what matters today. Ally keeps the list honest and reminds you what is due.</p>
                 <div class="ask-bar" aria-hidden="true">
                   <span>Ask Ally to help plan today...</span>
                   <b>→ Ask Ally</b>
                 </div>
-                <div class="state-head">
-                  <span>Today&rsquo;s focus</span>
-                  <h3>Protect the work that moves the constraint</h3>
+                <div class="pl-tabs">
+                  <div class="pl-tab is-on">
+                    <span class="pl-tab-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+                    <span><b>Plan with Ally</b><span>List them with commas &mdash; I&rsquo;ll add each one.</span></span>
+                  </div>
+                  <div class="pl-tab">
+                    <span class="pl-tab-ic"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
+                    <span><b>Plan manually</b><span>Create tasks yourself.</span></span>
+                  </div>
                 </div>
-                <div class="metric-row">
-                  <article><span>09:30</span><strong>Funnel</strong><p>Review the acquisition path; find the largest leak.</p></article>
-                  <article><span>11:00</span><strong>Offer</strong><p>Rewrite one offer for the clearest audience segment.</p></article>
-                  <article><span>14:00</span><strong>Prospects</strong><p>Speak with five recent prospects; capture objections.</p></article>
-                  <article><span>End of day</span><strong>Review</strong><p>Tell Ally what changed. Recalculate tomorrow.</p></article>
+                <div class="pl-card">
+                  <div class="pl-card-head">
+                    <span class="pl-av">A</span>
+                    <span><b>What&rsquo;s on today?</b><span>Comma-separate them and I&rsquo;ll add each as its own task.</span></span>
+                  </div>
+                  <p class="pl-field">Talk to two customers who went quiet, decide what actually needs me today, write down what felt stuck</p>
+                  <div class="pl-foot">
+                    <span class="pl-hint"><i></i> Comma-separate a few things and I&rsquo;ll add them as separate tasks.</span>
+                    <span class="pl-btn">Plan my day</span>
+                  </div>
                 </div>
               </div>
 
