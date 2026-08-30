@@ -1010,6 +1010,31 @@ em{ font-style:italic; }
 }
 
 /* ============================================================
+   ALLY DIFFERENCE — founder, business and present context.
+   ============================================================ */
+.ally-difference{background:var(--ivory);padding:clamp(88px,12vh,148px) 0 clamp(72px,10vh,120px)}
+.ally-difference h2{font-family:var(--serif);font-weight:400;font-size:clamp(36px,4vw,62px);line-height:1.05;letter-spacing:-.025em;margin-top:18px;max-width:980px}
+.ally-difference h2 em{color:var(--emerald)}
+.difference-grid{display:grid;grid-template-columns:minmax(0,.98fr) minmax(380px,1.02fr);gap:clamp(44px,7vw,112px);align-items:center;margin-top:clamp(58px,8vh,92px)}
+.context-map{margin:0;min-width:0}
+.context-map svg{display:block;width:100%;height:auto;overflow:visible}
+.context-map .map-axis{stroke:var(--bd-2);stroke-width:1.5}
+.context-map .map-founder{stroke:var(--emerald)}
+.context-map .map-business{stroke:var(--lime-edge)}
+.context-map .map-current{stroke:var(--muted-2)}
+.context-map .map-route{stroke-width:2.4;stroke-dasharray:8 9}
+.context-map .map-label{fill:var(--muted);font-family:var(--display);font-size:17px;font-weight:750;letter-spacing:.025em}
+.context-map .map-position{font-size:15px}
+.difference-points{border-top:1px solid var(--bd)}
+.difference-point{display:grid;grid-template-columns:18px minmax(0,1fr);gap:18px;padding:30px 0;border-bottom:1px solid var(--bd)}
+.difference-point .dot{width:12px;height:12px;border-radius:50%;margin-top:5px;background:var(--point-color)}
+.difference-point h3{font-size:18px;line-height:1.25;font-weight:700}
+.difference-point p{margin-top:8px;color:var(--muted);font-size:15.5px;line-height:1.55}
+.difference-flow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--bd);margin-top:clamp(54px,8vh,90px);padding-top:34px}
+.difference-flow span:not(.flow-arrow){border:1px solid var(--bd-2);border-radius:var(--r-pill);padding:10px 20px;font-size:13px;font-weight:700;color:var(--forest);background:rgba(255,255,255,.28)}
+.difference-flow span:last-child{border-color:var(--emerald);background:rgba(16,185,129,.08)}
+.flow-arrow{color:var(--muted-2);font-size:15px}
+/* ============================================================
    CTA — return to ivory; the real early-access form, inline.
    ============================================================ */
 /* small credibility section: one statement, one divider row */
@@ -1122,7 +1147,9 @@ em{ font-style:italic; }
 @media (max-width: 900px){
   .product-frame{ grid-template-columns:minmax(0,1fr); height:clamp(500px, 74svh, 640px); }
   .app-side{ display:none; }
-  .outcome-grid, .north-grid, .cta-grid, .today{ grid-template-columns:1fr; }
+  .outcome-grid, .north-grid, .difference-grid, .cta-grid, .today{ grid-template-columns:1fr; }
+  .difference-grid{ margin-top:52px; }
+  .context-map{ max-width:620px; }
   .dir-grid{ grid-template-columns:1fr; }
   .nav-links{ display:none; }
   .metric-row{ grid-template-columns:1fr 1fr; }
@@ -1131,6 +1158,16 @@ em{ font-style:italic; }
   .problem-grid{ grid-template-columns:1fr; }
   .metric-row article:nth-child(2n){ border-right:0; }
   .stage h2{ min-height:0; }
+}
+@media (max-width:560px){
+  .ally-difference h2{font-size:clamp(32px,10vw,44px)}
+  .difference-grid{gap:42px}
+  .context-map .map-label{font-size:15px}
+  .context-map .map-position{font-size:12.5px}
+  .difference-point{padding:24px 0}
+  .difference-point p{font-size:14px}
+  .difference-flow{gap:9px}
+  .difference-flow span:not(.flow-arrow){padding:8px 13px;font-size:11.5px}
 }
 </style>
 </head>
@@ -1661,6 +1698,46 @@ em{ font-style:italic; }
   </div>
 </section>
 
+<!-- ================= THE ALLY DIFFERENCE ================= -->
+<section class="ally-difference" aria-labelledby="ally-difference-title">
+  <div class="shell">
+    <p class="eyebrow">The Ally Difference</p>
+    <h2 id="ally-difference-title">Most AI gives you answers. Ally<br>helps you <em>find the right question.</em></h2>
+    <div class="difference-grid">
+      <figure class="context-map">
+        <svg viewBox="0 0 640 520" role="img" aria-labelledby="context-map-title context-map-desc">
+          <title id="context-map-title">Your actual position</title>
+          <desc id="context-map-desc">Founder context, business context and current context meet at your actual position.</desc>
+          <path class="map-axis" d="M38 34V480H602" fill="none"/>
+          <path class="map-founder map-route" d="M320 70V285" fill="none"/>
+          <path class="map-current map-route" d="M320 285L92 420" fill="none"/>
+          <path class="map-business map-route" d="M320 285L548 420" fill="none"/>
+          <circle cx="320" cy="64" r="13" fill="var(--emerald)"/>
+          <circle cx="92" cy="420" r="13" fill="var(--muted-2)"/>
+          <circle cx="548" cy="420" r="13" fill="var(--lime-edge)"/>
+          <circle cx="320" cy="285" r="25" fill="var(--ivory)" stroke="var(--forest)" stroke-width="3"/>
+          <circle cx="320" cy="285" r="8" fill="var(--forest)"/>
+          <text class="map-label" x="320" y="32" text-anchor="middle">FOUNDER</text>
+          <text class="map-label map-position" x="320" y="352" text-anchor="middle">YOUR ACTUAL POSITION</text>
+          <text class="map-label" x="38" y="464">CURRENT</text>
+          <text class="map-label" x="602" y="464" text-anchor="end">BUSINESS</text>
+        </svg>
+      </figure>
+      <div class="difference-points">
+        <article class="difference-point" style="--point-color:var(--emerald)"><span class="dot" aria-hidden="true"></span><div><h3>Founder Context</h3><p>Vision, motivation, thinking patterns, focus, confidence and decision-making.</p></div></article>
+        <article class="difference-point" style="--point-color:var(--lime-edge)"><span class="dot" aria-hidden="true"></span><div><h3>Business Context</h3><p>Growth, finance, product, team and operations.</p></div></article>
+        <article class="difference-point" style="--point-color:var(--muted-2)"><span class="dot" aria-hidden="true"></span><div><h3>Current Context</h3><p>What is happening right now, and what led to this situation.</p></div></article>
+      </div>
+    </div>
+    <div class="difference-flow" aria-label="Ally's process">
+      <span>Understand</span><span class="flow-arrow" aria-hidden="true">&rarr;</span>
+      <span>Diagnose</span><span class="flow-arrow" aria-hidden="true">&rarr;</span>
+      <span>Find the real problem</span><span class="flow-arrow" aria-hidden="true">&rarr;</span>
+      <span>Prioritise</span><span class="flow-arrow" aria-hidden="true">&rarr;</span>
+      <span>Move forward</span>
+    </div>
+  </div>
+</section>
 <!-- ================= PHILOSOPHY / TRUST ================= -->
 <section class="philosophy shell">
   <p class="eyebrow">Built around real founder journeys</p>
