@@ -1055,43 +1055,45 @@ em{ font-style:italic; }
 }
 .think h2 em{ color:var(--emerald); }
 
-.think-list{ list-style:none; margin-top:clamp(44px, 6vh, 68px); }
+.think-list{
+  list-style:none; margin-top:clamp(48px, 7vh, 76px);
+  display:grid; grid-template-columns:repeat(5, minmax(0,1fr));
+  gap:clamp(18px, 2.2vw, 34px);
+}
 .think-step{
-  position:relative;
-  display:grid; grid-template-columns:64px minmax(0,1fr);
-  gap:28px; padding-bottom:clamp(40px, 5vh, 58px);
+  position:relative; min-width:0;
   opacity:.55; transition:opacity .55s ease;
 }
-.think-step:last-child{ padding-bottom:0; }
 .think-step.is-on{ opacity:1; }
 
-/* each step draws the rule for the gap beneath it */
+/* each step draws the rule across the gap to its right */
 .think-step::before{
-  content:""; position:absolute; left:32px; margin-left:-1px;
-  top:64px; bottom:0; width:2px;
+  content:""; position:absolute;
+  left:52px; right:calc(-1 * clamp(18px, 2.2vw, 34px));
+  top:25px; height:2px;
   background:var(--bd); transition:background .6s ease;
 }
 .think-step:last-child::before{ display:none; }
 .think-step.is-on::before{ background:var(--emerald); }
 
 .think-dot{
-  width:64px; height:64px; border-radius:50%;
+  width:50px; height:50px; border-radius:50%;
   display:grid; place-items:center; position:relative; z-index:1;
-  font-family:var(--display); font-size:13px; font-weight:800;
+  font-family:var(--display); font-size:12px; font-weight:800;
   background:var(--ivory); border:1px solid var(--bd-2); color:var(--muted-2);
   transition:background .5s ease, border-color .5s ease, color .5s ease;
 }
 .think-step.is-on .think-dot{
   background:var(--emerald); border-color:var(--emerald); color:#fff;
 }
-.think-body{ padding-top:14px; }
+.think-body{ padding-top:22px; }
 .think-body h3{
   font-family:var(--serif); font-weight:500;
-  font-size:clamp(21px, 1.9vw, 26px); color:var(--ink);
+  font-size:clamp(18px, 1.5vw, 22px); line-height:1.2; color:var(--ink);
 }
 .think-body p{
-  margin-top:10px; max-width:520px;
-  font-size:15.5px; line-height:1.6; color:var(--muted);
+  margin-top:10px;
+  font-size:14px; line-height:1.55; color:var(--muted);
 }
 
 /* ============================================================
@@ -1211,10 +1213,18 @@ em{ font-style:italic; }
   .difference-grid{ margin-top:52px; }
   .context-map{ max-width:620px; }
   .dir-grid{ grid-template-columns:1fr; }
-  .think-step{ grid-template-columns:48px minmax(0,1fr); gap:18px; }
-  .think-step::before{ left:24px; top:48px; }
+  .think-list{ grid-template-columns:1fr; gap:0; }
+  .think-step{
+    display:grid; grid-template-columns:48px minmax(0,1fr);
+    gap:18px; padding-bottom:34px;
+  }
+  .think-step:last-child{ padding-bottom:0; }
+  .think-step::before{
+    left:24px; right:auto; margin-left:-1px;
+    top:48px; bottom:0; width:2px; height:auto;
+  }
   .think-dot{ width:48px; height:48px; font-size:11.5px; }
-  .think-body{ padding-top:8px; }
+  .think-body{ padding-top:6px; }
   .nav-links{ display:none; }
   .metric-row{ grid-template-columns:1fr 1fr; }
   .stage-row, .phil-row{ grid-template-columns:1fr; }
