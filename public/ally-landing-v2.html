@@ -845,6 +845,41 @@ em{ font-style:italic; }
   box-shadow:var(--shadow-deep);
   padding:clamp(24px, 2.4vw, 36px);
 }
+.bn-slides{ display:grid; }
+.bn-slide{
+  grid-area:1 / 1; min-width:0;
+  opacity:0; transform:translateY(8px);
+  transition:opacity .45s ease, transform .45s ease;
+  pointer-events:none;
+}
+[data-slide="0"] .bn-slide[data-b="0"],
+[data-slide="1"] .bn-slide[data-b="1"],
+[data-slide="2"] .bn-slide[data-b="2"]{ opacity:1; transform:none; pointer-events:auto; }
+
+.bn-dots{
+  display:flex; gap:9px; margin-top:22px;
+}
+.bn-dot{
+  width:9px; height:9px; border-radius:50%;
+  border:1px solid var(--bd-2); background:transparent;
+  padding:0; cursor:pointer;
+  transition:background .3s, border-color .3s;
+}
+.bn-dot.is-on{ background:var(--emerald); border-color:var(--emerald); }
+.bn-dot:hover{ border-color:var(--emerald); }
+
+.dir-sets{ display:grid; margin-top:44px; }
+.dir-set{
+  grid-area:1 / 1; min-width:0;
+  opacity:0; transform:translateY(8px);
+  transition:opacity .45s ease, transform .45s ease;
+  pointer-events:none;
+}
+[data-slide="0"] .dir-set[data-b="0"],
+[data-slide="1"] .dir-set[data-b="1"],
+[data-slide="2"] .dir-set[data-b="2"]{ opacity:1; transform:none; pointer-events:auto; }
+.dir-set .dir-grid{ margin-top:0; }
+
 .bn-top{
   display:flex; align-items:center; justify-content:space-between; gap:12px;
 }
@@ -1478,11 +1513,36 @@ em{ font-style:italic; }
       <div class="bn-top">
         <span>What Ally noticed</span>
       </div>
-      <h3>Getting customers consistently</h3>
-      <p>Your offer may not be the main issue. The bigger pattern is that customer growth isn&rsquo;t repeatable yet &mdash; and too many decisions still depend on you.</p>
-      <div class="bn-foot">
-        <div><span>Why it matters</span><p>When both you and the business are stretched, adding more work usually creates more noise.</p></div>
-        <div><span>What to focus on next</span><p>Build one reliable way to get customers &mdash; while reducing the decisions only you can make.</p></div>
+      <div class="bn-slides">
+        <div class="bn-slide" data-b="0">
+          <h3>Getting customers consistently</h3>
+          <p>Your offer may not be the main issue. The bigger pattern is that customer growth isn&rsquo;t repeatable yet &mdash; and too many decisions still depend on you.</p>
+          <div class="bn-foot">
+            <div><span>Why it matters</span><p>When both you and the business are stretched, adding more work usually creates more noise.</p></div>
+            <div><span>What to focus on next</span><p>Build one reliable way to get customers &mdash; while reducing the decisions only you can make.</p></div>
+          </div>
+        </div>
+        <div class="bn-slide" data-b="1">
+          <h3>Too much still depends on you</h3>
+          <p>The business runs, but every important call waits for you. The bigger pattern is that your attention has become the busiest place in the company.</p>
+          <div class="bn-foot">
+            <div><span>Why it matters</span><p>When every decision queues behind one person, everything slows down &mdash; including you.</p></div>
+            <div><span>What to focus on next</span><p>Hand over the decisions others can make &mdash; and protect your attention for the ones only you can.</p></div>
+          </div>
+        </div>
+        <div class="bn-slide" data-b="2">
+          <h3>Priorities keep changing</h3>
+          <p>Every week starts with a new plan. The bigger pattern is that without one clear direction, everything urgent starts to look important.</p>
+          <div class="bn-foot">
+            <div><span>Why it matters</span><p>When priorities shift every week, the team loses momentum and you lose confidence in the plan.</p></div>
+            <div><span>What to focus on next</span><p>Pick one direction for the quarter &mdash; and let it decide what you say no to.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="bn-dots" role="tablist" aria-label="What Ally noticed — examples">
+        <button class="bn-dot is-on" type="button" data-dot="0" aria-label="Example 1"></button>
+        <button class="bn-dot" type="button" data-dot="1" aria-label="Example 2"></button>
+        <button class="bn-dot" type="button" data-dot="2" aria-label="Example 3"></button>
       </div>
     </div>
   </div>
@@ -1494,22 +1554,64 @@ em{ font-style:italic; }
     <p class="eyebrow">Your next 90 days</p>
     <h2>Three things to <em>focus on first.</em></h2>
 
-    <div class="dir-grid">
-      <article>
-        <span class="step">01</span>
-        <h3>Get clear on your customer</h3>
-        <p>Know who needs your product most and who you should stop trying to reach.</p>
-      </article>
-      <article>
-        <span class="step">02</span>
-        <h3>Build one reliable way to get customers</h3>
-        <p>Choose the way that already shows promise and make it work consistently before adding more.</p>
-      </article>
-      <article>
-        <span class="step">03</span>
-        <h3>Take pressure off the founder</h3>
-        <p>Create a simple system so every decision doesn&rsquo;t have to come back to you.</p>
-      </article>
+    <div class="dir-sets">
+      <div class="dir-set" data-b="0">
+        <div class="dir-grid">
+          <article>
+            <span class="step">01</span>
+            <h3>Get clear on your customer</h3>
+            <p>Know who needs your product most and who you should stop trying to reach.</p>
+          </article>
+          <article>
+            <span class="step">02</span>
+            <h3>Build one reliable way to get customers</h3>
+            <p>Choose the way that already shows promise and make it work consistently before adding more.</p>
+          </article>
+          <article>
+            <span class="step">03</span>
+            <h3>Take pressure off the founder</h3>
+            <p>Create a simple system so every decision doesn&rsquo;t have to come back to you.</p>
+          </article>
+        </div>
+      </div>
+      <div class="dir-set" data-b="1">
+        <div class="dir-grid">
+          <article>
+            <span class="step">01</span>
+            <h3>Decide what only you should decide</h3>
+            <p>List the decisions that truly need you, and let the rest go with clear guidelines.</p>
+          </article>
+          <article>
+            <span class="step">02</span>
+            <h3>Make expectations clear</h3>
+            <p>When people know what good looks like, they stop bringing everything back to you.</p>
+          </article>
+          <article>
+            <span class="step">03</span>
+            <h3>Protect your focus</h3>
+            <p>Keep part of every week for the work that moves things forward &mdash; not just keeps them running.</p>
+          </article>
+        </div>
+      </div>
+      <div class="dir-set" data-b="2">
+        <div class="dir-grid">
+          <article>
+            <span class="step">01</span>
+            <h3>Choose one direction</h3>
+            <p>Decide the one outcome this quarter is about, and write it where everyone can see it.</p>
+          </article>
+          <article>
+            <span class="step">02</span>
+            <h3>Say no on purpose</h3>
+            <p>Park the good ideas that don&rsquo;t serve the direction &mdash; parked isn&rsquo;t cancelled.</p>
+          </article>
+          <article>
+            <span class="step">03</span>
+            <h3>Review weekly, change monthly</h3>
+            <p>Check progress every week, but change direction only with good reason.</p>
+          </article>
+        </div>
+      </div>
     </div>
 
     <div class="today">
@@ -1751,6 +1853,56 @@ em{ font-style:italic; }
      to invoke it directly. Harmless in production. */
   window.__allyImmersion = { update: update, progress: progress, gotoP: gotoP, gotoStage: gotoStage, stageSpan: stageSpan };
 
+})();
+
+/* ============================================================
+   NOTICED-SCENARIO SLIDER
+   One index, two sections: the outcome card and the 90-day cards
+   below it always show the same scenario. Auto-advances gently,
+   stops the moment the visitor takes over, and never auto-plays
+   under reduced motion.
+   ============================================================ */
+(function(){
+  var outcome = document.getElementById('outcome');
+  var direction = document.querySelector('.direction');
+  var dots = [].slice.call(document.querySelectorAll('.bn-dot'));
+  if(!outcome || !direction || !dots.length) return;
+
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  var COUNT = 3, current = 0, timer = null;
+
+  function show(i){
+    current = (i + COUNT) % COUNT;
+    outcome.setAttribute('data-slide', String(current));
+    direction.setAttribute('data-slide', String(current));
+    dots.forEach(function(d, k){
+      d.classList.toggle('is-on', k === current);
+      d.setAttribute('aria-selected', k === current ? 'true' : 'false');
+    });
+  }
+
+  function start(){
+    if(reduce.matches || timer) return;
+    timer = setInterval(function(){ show(current + 1); }, 8000);
+  }
+  function stop(){ clearInterval(timer); timer = null; }
+
+  dots.forEach(function(d){
+    d.addEventListener('click', function(){
+      stop();                       /* the visitor has taken over */
+      show(parseInt(d.getAttribute('data-dot'), 10));
+    });
+  });
+
+  show(0);
+  /* advance only while the section is actually on screen */
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){
+      es.forEach(function(e){ e.isIntersecting ? start() : stop(); });
+    }, { threshold: 0.2 }).observe(outcome);
+  }else{
+    start();
+  }
 })();
 
 /* ============================================================
