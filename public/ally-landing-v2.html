@@ -158,51 +158,38 @@ em{ font-style:italic; }
 .hero{
   position:relative;
   min-height:calc(100svh - 80px);
-  display:grid; grid-template-columns:1.05fr .95fr;
-  gap:clamp(40px, 5vw, 80px); align-items:center;
+  display:grid; grid-template-columns:.92fr 1.08fr;
+  gap:clamp(32px, 4vw, 60px); align-items:center;
   padding:48px 0 72px;
 }
 /* only the bare copy column — .hero-map must keep its absolute, and
    .hero > div would outrank it (0,1,1 vs 0,1,0) */
 .hero > div:not([class]){ position:relative; z-index:1; }
 
-/* ---------- the living founder map ----------
-   One SVG behind the content: faint coordinate ticks on the right
-   half, one route from just above the steps strip to the dashboard,
-   three waypoints, two navigation labels. Anchored bottom-right
-   (xMaxYMax slice) so narrow viewports crop the quiet left side and
-   the route's destination never leaves the frame. */
+/* ---------- one route, nothing else ----------
+   Three visual elements only: the glow, this line, the dashboard.
+   The route starts in the gap between the supporting note and the
+   process strip — under the copy, never through it — and finds the
+   dashboard's edge in two curves. At rest it is a whisper. */
 .hero-map{
   position:absolute; inset:0; z-index:0;
   pointer-events:none;
 }
 .hero-map svg{ width:100%; height:100%; display:block; }
-.hero-map .tick{ stroke:var(--ink); opacity:.05; stroke-width:1; }
 .hero-map .route{
-  fill:none; stroke:var(--bd-2); stroke-width:1.5;
-  opacity:.55;
+  fill:none; stroke:var(--muted-2); stroke-width:1.25;
+  opacity:.12;
 }
-.hero-map .wp{ fill:var(--emerald); opacity:.35; }
-.hero-map .wp--end{ opacity:.55; }
-.hero-map text{
-  font-family:var(--body); font-size:9.5px; font-weight:700;
-  letter-spacing:.16em; fill:var(--muted-2);
-}
-.hero-map .lbl-end{ fill:var(--emerald); }
-@media (max-width: 1200px){
-  .hero-map text{ display:none; }     /* metadata, not sticker copy */
-}
-@media (max-width: 900px){
-  .hero-map .tick{ display:none; }
-  .hero-map .route{ opacity:.3; }
-  .hero-map .wp:not(.wp--end){ display:none; }
+.hero-map .wp{ fill:var(--emerald); opacity:.3; }
+@media (max-width: 1024px){
+  .hero-map{ display:none; }   /* below desktop the route has no clean corridor */
 }
 
-/* soft light behind the dashboard, not a halo */
+/* wide, diffused, almost not there — depth, not a halo */
 .hero-glow{
-  position:absolute; inset:-12% -16%;
-  background:radial-gradient(closest-side, rgba(16,185,129,.16), transparent 72%);
-  opacity:.13; pointer-events:none;
+  position:absolute; inset:-28% -34%;
+  background:radial-gradient(closest-side, rgba(16,185,129,.12), transparent 70%);
+  opacity:.11; pointer-events:none;
 }
 
 /* ---------- motion. Everything below this line is decoration:
@@ -221,40 +208,33 @@ em{ font-style:italic; }
 
   .hero-map .route{
     stroke-dasharray:1; stroke-dashoffset:1;
-    animation:routeDraw .8s cubic-bezier(.22,1,.36,1) .4s forwards;
+    animation:routeDraw .9s cubic-bezier(.22,1,.36,1) .4s forwards;
   }
-  .hero-map .wp{ opacity:0; animation:wpIn .4s ease-out forwards; }
-  .hero-map .wp1{ animation-delay:.55s; }
-  .hero-map .wp2{ animation-delay:.85s; }
-  .hero-map .wp3{ animation-delay:1.15s; }
-  .hero-map text{ opacity:0; animation:wpIn .5s ease-out 1.2s forwards; }
+  .hero-map .wp{ opacity:0; animation:mapIn .5s ease-out forwards; }
+  .hero-map .wp--start{ animation-delay:.5s; }
+  .hero-map .wp--end{ animation-delay:1.15s; }
 
   .glimpse-card{
     animation:glimpseIn .7s cubic-bezier(.22,1,.36,1) .7s both;
   }
 
-  /* idle: the glow breathes; two waypoints pulse, never together */
+  /* idle: only the glow breathes; the interface stays still */
   .hero-glow{ animation:glowBreathe 9s ease-in-out 2s infinite alternate; }
-  .hero-map .wp2{ animation:wpIn .4s ease-out .85s forwards, wpPulse 6s ease-in-out 3s infinite; }
-  .hero-map .wp3{ animation:wpIn .4s ease-out 1.15s forwards, wpPulse 7s ease-in-out 6.5s infinite; }
 }
 @keyframes heroRise{
   from{ opacity:0; translate:0 10px; }
   to  { opacity:1; translate:none; }
 }
 @keyframes glimpseIn{
-  from{ opacity:0; translate:0 14px; scale:.96; }
+  from{ opacity:0; translate:0 12px; scale:.97; }
   to  { opacity:1; translate:none; scale:1; }
 }
 @keyframes routeDraw{ to{ stroke-dashoffset:0; } }
-@keyframes wpIn{ to{ opacity:.35; } }
-@keyframes glowBreathe{
-  from{ opacity:.10; } to{ opacity:.16; }
+@keyframes mapIn{
+  to{ opacity:var(--map-in, .3); }
 }
-@keyframes wpPulse{
-  0%,100%{ scale:1; opacity:.35; }
-  8%     { scale:1.12; opacity:.5; }
-  16%    { scale:1; opacity:.35; }
+@keyframes glowBreathe{
+  from{ opacity:.09; } to{ opacity:.14; }
 }
 
 /* ---------- leaving the hero: the card straightens ----------
@@ -1154,22 +1134,15 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 <!-- ================= HERO ================= -->
 <section class="hero shell">
   <div class="hero-map" aria-hidden="true">
-    <svg viewBox="0 0 1440 800" preserveAspectRatio="xMaxYMax slice">
-      <g class="ticks">
-        <path class="tick" d="M760 120v12M754 126h12"/>
-        <path class="tick" d="M1050 90v12M1044 96h12"/>
-        <path class="tick" d="M1300 200v12M1294 206h12"/>
-        <path class="tick" d="M880 640v12M874 646h12"/>
-        <path class="tick" d="M1240 560v12M1234 566h12"/>
-        <path class="tick" d="M660 420v12M654 426h12"/>
-      </g>
+    <!-- viewBox matches the hero's shell proportions; the corridor the
+         route uses (y 660-700 while under the copy) sits between the
+         supporting note and the process strip, then rises to the
+         dashboard's near edge. -->
+    <svg viewBox="0 0 1240 820" preserveAspectRatio="xMidYMid slice">
       <path class="route" pathLength="1"
-            d="M150 640 C 330 600, 430 560, 560 520 S 900 430, 1180 340"/>
-      <circle class="wp wp1" cx="150" cy="640" r="4.5"/>
-      <circle class="wp wp2" cx="560" cy="520" r="4"/>
-      <circle class="wp wp3 wp--end" cx="1180" cy="340" r="5"/>
-      <text x="150" y="668">YOU ARE HERE</text>
-      <text class="lbl-end" x="1188" y="322" text-anchor="end">YOUR NEXT MOVE &#8594;</text>
+            d="M95 632 C 250 648, 420 642, 520 608 C 592 584, 612 512, 616 448"/>
+      <circle class="wp wp--start" cx="95" cy="632" r="4"/>
+      <circle class="wp wp--end" cx="616" cy="448" r="4.5"/>
     </svg>
   </div>
   <div>
@@ -1183,9 +1156,9 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
     <p class="hero-note">No generic advice. Ally starts by understanding where you actually are.</p>
     <div class="hero-steps" aria-label="The Ally journey">
       <div><strong>01</strong><span>Understand</span></div>
-      <div><strong>02</strong><span>Diagnose</span></div>
-      <div><strong>03</strong><span>Direct</span></div>
-      <div><strong>04</strong><span>Act</span></div>
+      <div><strong>02</strong><span>Look deeper</span></div>
+      <div><strong>03</strong><span>Find what matters</span></div>
+      <div><strong>04</strong><span>Take action</span></div>
     </div>
   </div>
 
