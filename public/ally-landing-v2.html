@@ -857,8 +857,15 @@ em{ font-style:italic; }
 [data-slide="2"] .bn-slide[data-b="2"]{ opacity:1; transform:none; pointer-events:auto; }
 
 .bn-dots{
-  display:flex; gap:9px; margin-top:22px;
+  display:flex; align-items:center; gap:9px; margin-top:22px;
 }
+.bn-hint{
+  margin-left:12px;
+  font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  font-weight:700; color:var(--muted-2);
+}
+.bottleneck{ cursor:grab; }
+.bottleneck:active{ cursor:grabbing; }
 .bn-dot{
   width:9px; height:9px; border-radius:50%;
   border:1px solid var(--bd-2); background:transparent;
@@ -1543,6 +1550,7 @@ em{ font-style:italic; }
         <button class="bn-dot is-on" type="button" data-dot="0" aria-label="Example 1"></button>
         <button class="bn-dot" type="button" data-dot="1" aria-label="Example 2"></button>
         <button class="bn-dot" type="button" data-dot="2" aria-label="Example 3"></button>
+        <span class="bn-hint" aria-hidden="true">Drag for next</span>
       </div>
     </div>
   </div>
@@ -1869,7 +1877,7 @@ em{ font-style:italic; }
   if(!outcome || !direction || !dots.length) return;
 
   var reduce = matchMedia('(prefers-reduced-motion: reduce)');
-  var COUNT = 3, current = 0, timer = null;
+  var COUNT = 3, current = 0, timer = null, visible = true;
 
   function show(i){
     current = (i + COUNT) % COUNT;
@@ -1882,23 +1890,42 @@ em{ font-style:italic; }
   }
 
   function start(){
-    if(reduce.matches || timer) return;
-    timer = setInterval(function(){ show(current + 1); }, 8000);
+    if(reduce.matches || timer || !visible) return;
+    timer = setInterval(function(){ show(current + 1); }, 10000);
   }
   function stop(){ clearInterval(timer); timer = null; }
 
+  /* a manual change restarts the 10s clock rather than killing the
+     rotation — hands-on when the visitor wants, hands-off after */
+  function manual(i){ stop(); show(i); start(); }
+
   dots.forEach(function(d){
     d.addEventListener('click', function(){
-      stop();                       /* the visitor has taken over */
-      show(parseInt(d.getAttribute('data-dot'), 10));
+      manual(parseInt(d.getAttribute('data-dot'), 10));
     });
   });
+
+  /* drag the card itself — mouse or touch, either direction */
+  var card = outcome.querySelector('.bottleneck');
+  var downX = null;
+  card.addEventListener('pointerdown', function(e){ downX = e.clientX; });
+  card.addEventListener('pointerup', function(e){
+    if(downX === null) return;
+    var dx = e.clientX - downX;
+    downX = null;
+    if(Math.abs(dx) < 40) return;      /* a click, not a drag */
+    manual(current + (dx < 0 ? 1 : -1));
+  });
+  card.addEventListener('pointercancel', function(){ downX = null; });
 
   show(0);
   /* advance only while the section is actually on screen */
   if('IntersectionObserver' in window){
     new IntersectionObserver(function(es){
-      es.forEach(function(e){ e.isIntersecting ? start() : stop(); });
+      es.forEach(function(e){
+        visible = e.isIntersecting;
+        visible ? start() : stop();
+      });
     }, { threshold: 0.2 }).observe(outcome);
   }else{
     start();
