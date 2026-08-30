@@ -1200,6 +1200,56 @@ em{ font-style:italic; }
 .both-note p{ font-size:14.5px; line-height:1.6; color:var(--muted); }
 
 /* ============================================================
+   THE SHIFT — before and after, side by side. The right panel is
+   the one that carries weight: white, emerald-edged, lifted.
+   ============================================================ */
+.shift{ background:var(--ivory); padding:clamp(80px, 11vh, 130px) 0 clamp(88px, 12vh, 140px); }
+.shift h2{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(32px, 3.4vw, 50px); line-height:1.14;
+  letter-spacing:-.02em; margin-top:16px; max-width:820px;
+}
+.shift h2 em{ color:var(--emerald); }
+
+.shift-grid{
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:clamp(20px, 2.6vw, 34px);
+  margin-top:clamp(48px, 7vh, 76px);
+  align-items:start;
+}
+.shift-col{
+  border-radius:var(--r-card); border:1px solid var(--bd);
+  background:var(--ivory-2); padding:clamp(24px, 2.6vw, 34px);
+}
+.shift-col--after{
+  background:#fff; border-color:rgba(16,185,129,.45);
+  box-shadow:0 1px 2px -1px rgba(6,20,13,.14), 0 18px 44px -22px rgba(6,20,13,.26);
+}
+.shift-col > span{
+  display:block; font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  font-weight:700; color:var(--muted-2);
+}
+.shift-col--after > span{ color:var(--emerald); }
+
+.shift-col ul{ list-style:none; margin-top:22px; }
+.shift-col li{
+  display:flex; align-items:center; gap:14px;
+  padding:16px 0; border-bottom:1px solid var(--bd);
+  font-size:15.5px; color:var(--muted);
+}
+.shift-col li:last-child{ border-bottom:0; padding-bottom:0; }
+.shift-col--after li{ color:var(--ink); }
+.shift-col i{
+  width:26px; height:26px; flex:0 0 auto; border-radius:50%;
+  display:grid; place-items:center;
+}
+.shift-col i svg{ width:12px; height:12px; fill:none; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; }
+.shift-col--before i{ background:var(--ivory-3); }
+.shift-col--before i svg{ stroke:var(--muted-2); }
+.shift-col--after i{ background:rgba(16,185,129,.12); }
+.shift-col--after i svg{ stroke:var(--emerald); }
+
+/* ============================================================
    CTA — return to ivory; the real early-access form, inline.
    ============================================================ */
 /* small credibility section: one statement, one divider row */
@@ -1316,6 +1366,7 @@ em{ font-style:italic; }
   .difference-grid{ margin-top:52px; }
   .context-map{ max-width:620px; }
   .dir-grid{ grid-template-columns:1fr; }
+  .shift-grid{ grid-template-columns:1fr; }
   .both-stage{ grid-template-columns:1fr; gap:26px; padding-bottom:0; }
   .both-node{ width:auto; height:auto; display:grid; justify-items:center; }
   .both-node .lbl, .both-node .pill{ position:static; transform:none; }
@@ -2004,6 +2055,36 @@ em{ font-style:italic; }
   <div class="both-note">
     <i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.2 8.8l-1.9 4.4-4.4 1.9 1.9-4.4z"/></svg></i>
     <p>Because what&rsquo;s happening in the business and what&rsquo;s happening with the founder are rarely completely separate.</p>
+  </div>
+</section>
+
+<!-- ================= THE SHIFT ================= -->
+<section class="shift shell">
+  <p class="eyebrow">The shift</p>
+  <h2>From &ldquo;I have too much to do&rdquo; to <em>&ldquo;I know what matters now.&rdquo;</em></h2>
+
+  <div class="shift-grid">
+    <div class="shift-col shift-col--before">
+      <span>Before Ally</span>
+      <ul>
+        <li><i><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></i>Too many problems</li>
+        <li><i><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></i>Too many opinions</li>
+        <li><i><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></i>Too many things to do</li>
+        <li><i><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></i>No clear priority</li>
+        <li><i><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></i>Constant second-guessing</li>
+      </ul>
+    </div>
+
+    <div class="shift-col shift-col--after">
+      <span>With Ally</span>
+      <ul>
+        <li><i><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></i>Better context</li>
+        <li><i><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></i>Clearer thinking</li>
+        <li><i><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></i>Deeper understanding</li>
+        <li><i><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></i>Meaningful priorities</li>
+        <li><i><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></i>A clear next move</li>
+      </ul>
+    </div>
   </div>
 </section>
 
