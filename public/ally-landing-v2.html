@@ -1097,6 +1097,109 @@ em{ font-style:italic; }
 }
 
 /* ============================================================
+   WHY ALLY LOOKS AT BOTH — two panels, one node between them.
+   Ivory rather than the reference's black: this sits between two
+   ivory sections, and a lone dark band here would read as a flash
+   rather than a change of place.
+   ============================================================ */
+.both{ background:var(--ivory); padding:clamp(80px, 11vh, 130px) 0 clamp(88px, 12vh, 140px); }
+.both-head{ text-align:center; }
+.both-head h2{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(34px, 3.6vw, 54px); line-height:1.1;
+  letter-spacing:-.02em; margin-top:16px;
+}
+.both-head h2 em{ color:var(--emerald); }
+.both-sub{ margin-top:18px; font-size:16px; color:var(--muted); }
+
+.both-stage{
+  position:relative;
+  display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center; gap:clamp(20px, 3vw, 44px);
+  margin-top:clamp(48px, 7vh, 78px);
+  padding-bottom:104px;               /* the node's label and pill hang here */
+}
+/* the connecting rule runs the width of the row and is covered by the
+   panels themselves, so it shows only in the gaps either side */
+.both-stage::before{
+  content:""; position:absolute; left:12%; right:12%;
+  top:calc((100% - 104px) / 2);       /* centre of the panels, not the box */
+  height:1px; background:var(--bd-2);
+}
+.both-panel{
+  position:relative; z-index:1;
+  background:var(--ivory-2); border:1px solid var(--bd);
+  border-radius:var(--r-card); box-shadow:var(--shadow-card);
+  padding:clamp(22px, 2.4vw, 30px);
+}
+.both-panel span{
+  display:block; font-size:10.5px; letter-spacing:.16em; text-transform:uppercase;
+  font-weight:700; color:var(--emerald);
+}
+.both-panel h3{
+  font-family:var(--display); font-size:17.5px; font-weight:700;
+  letter-spacing:-.01em; color:var(--ink); margin:10px 0 16px;
+}
+.both-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+.both-chips b{
+  font-size:12.5px; font-weight:600; color:var(--muted);
+  border:1px solid var(--bd-2); border-radius:var(--r-pill);
+  padding:7px 14px; background:#fff;
+}
+
+.both-node{ position:relative; z-index:1; width:74px; height:74px; }
+.both-mark{
+  width:74px; height:74px; border-radius:50%;
+  display:grid; place-items:center;
+  background:#fff; border:1px solid rgba(16,185,129,.35);
+  box-shadow:0 0 0 8px rgba(16,185,129,.07), var(--shadow-card);
+}
+.both-mark svg{ width:30px; height:30px; stroke:var(--emerald); fill:none; stroke-width:1.7; }
+.both-node .lbl,
+.both-node .pill{
+  position:absolute; left:50%; transform:translateX(-50%);
+  white-space:nowrap;
+}
+.both-node .lbl{
+  top:calc(100% + 30px);
+  font-size:10.5px; letter-spacing:.18em; text-transform:uppercase;
+  font-weight:700; color:var(--emerald);
+}
+.both-node .pill{
+  top:calc(100% + 52px);
+  font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; font-weight:700;
+  color:var(--forest); background:rgba(16,185,129,.1);
+  border:1px solid rgba(16,185,129,.28); border-radius:var(--r-pill);
+  padding:8px 16px;
+}
+/* the dotted drop from the mark to its label */
+.both-node::before{
+  content:""; position:absolute; top:100%; left:50%;
+  width:1px; height:22px; margin-left:-.5px;
+  background:repeating-linear-gradient(var(--bd-2) 0 3px, transparent 3px 6px);
+}
+
+.both-close{
+  margin-top:clamp(56px, 8vh, 90px); text-align:center;
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(24px, 2.4vw, 34px); line-height:1.2;
+  letter-spacing:-.015em; color:var(--ink);
+}
+.both-note{
+  display:flex; align-items:center; gap:16px;
+  max-width:660px; margin:28px auto 0;
+  background:var(--ivory-2); border:1px solid var(--bd);
+  border-radius:var(--r-card); padding:18px 22px;
+}
+.both-note i{
+  width:42px; height:42px; flex:0 0 auto; border-radius:50%;
+  display:grid; place-items:center;
+  background:rgba(16,185,129,.1); border:1px solid rgba(16,185,129,.28);
+}
+.both-note svg{ width:19px; height:19px; stroke:var(--emerald); fill:none; stroke-width:1.7; }
+.both-note p{ font-size:14.5px; line-height:1.6; color:var(--muted); }
+
+/* ============================================================
    CTA — return to ivory; the real early-access form, inline.
    ============================================================ */
 /* small credibility section: one statement, one divider row */
@@ -1213,6 +1316,14 @@ em{ font-style:italic; }
   .difference-grid{ margin-top:52px; }
   .context-map{ max-width:620px; }
   .dir-grid{ grid-template-columns:1fr; }
+  .both-stage{ grid-template-columns:1fr; gap:26px; padding-bottom:0; }
+  .both-node{ width:auto; height:auto; display:grid; justify-items:center; }
+  .both-node .lbl, .both-node .pill{ position:static; transform:none; }
+  .both-node .lbl{ margin-top:14px; }
+  .both-node .pill{ margin-top:10px; }
+  .both-mark{ margin-inline:auto; }
+  .both-stage::before{ display:none; }
+  .both-node::before{ display:none; }
   .think-list{ grid-template-columns:1fr; gap:0; }
   .think-step{
     display:grid; grid-template-columns:48px minmax(0,1fr);
@@ -1853,6 +1964,47 @@ em{ font-style:italic; }
       </div>
     </li>
   </ol>
+</section>
+
+<!-- ================= WHY ALLY LOOKS AT BOTH ================= -->
+<section class="both shell">
+  <div class="both-head">
+    <p class="eyebrow">Why Ally looks at both</p>
+    <h2>You&rsquo;re building <em>two things</em> at once.</h2>
+    <p class="both-sub">Your business. And yourself as a founder.</p>
+  </div>
+
+  <div class="both-stage">
+    <article class="both-panel">
+      <span>You</span>
+      <h3>The founder behind the decisions.</h3>
+      <div class="both-chips">
+        <b>Mind</b><b>Focus</b><b>Confidence</b><b>Decisions</b>
+      </div>
+    </article>
+
+    <div class="both-node" aria-hidden="true">
+      <span class="both-mark">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.2 8.8l-1.9 4.4-4.4 1.9 1.9-4.4z"/></svg>
+      </span>
+      <span class="lbl">Ally</span>
+      <span class="pill">Connects both</span>
+    </div>
+
+    <article class="both-panel">
+      <span>Your business</span>
+      <h3>The business those decisions shape.</h3>
+      <div class="both-chips">
+        <b>Growth</b><b>Finance</b><b>Product</b><b>Team</b><b>Operations</b>
+      </div>
+    </article>
+  </div>
+
+  <p class="both-close">Ally connects both before helping you find direction.</p>
+  <div class="both-note">
+    <i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.2 8.8l-1.9 4.4-4.4 1.9 1.9-4.4z"/></svg></i>
+    <p>Because what&rsquo;s happening in the business and what&rsquo;s happening with the founder are rarely completely separate.</p>
+  </div>
 </section>
 
 <!-- ================= PHILOSOPHY / TRUST ================= -->
