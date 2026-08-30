@@ -93,20 +93,7 @@
 
   --shell:min(1240px, calc(100% - 96px));
 
-  /* ---- immersion state. Written by the scroll timeline (native path)
-     or by the JS fallback — read in exactly one place each. ---- */
-  --fx:9deg;      /* frame rotateX  */
-  --fy:-8deg;     /* frame rotateY  */
-  --fs:0.84;      /* frame scale    */
-  --fyy:6vh;      /* frame translateY */
-  --env:0;        /* dark environment opacity */
 }
-/* Registered so the native scroll timeline can interpolate them. */
-@property --fx  { syntax:'<angle>';  inherits:true; initial-value:9deg; }
-@property --fy  { syntax:'<angle>';  inherits:true; initial-value:-8deg; }
-@property --fs  { syntax:'<number>'; inherits:true; initial-value:0.84; }
-@property --fyy { syntax:'<length>'; inherits:true; initial-value:0px; }
-@property --env { syntax:'<number>'; inherits:true; initial-value:0; }
 
 *{ box-sizing:border-box; margin:0; padding:0; }
 html{ scroll-behavior:auto; }
@@ -343,7 +330,7 @@ em{ font-style:italic; }
 
 /* ============================================================
    THE REAL PROBLEM — dark, then a gradient back to ivory so the
-   immersion's light opening reads as stepping out of the question
+   the dashboard below reads as stepping out of the question
    into the product.
    ============================================================ */
 .problem{
@@ -389,445 +376,65 @@ em{ font-style:italic; }
 .problem-close strong em{ color:var(--emerald-bright); }
 
 /* ============================================================
-   IMMERSION — the centrepiece.
-   A 460vh track with a 100svh sticky viewport. The dashboard frame
-   reads five custom properties for its spatial state; those are
-   driven by the native scroll timeline where supported, or by the
-   JS fallback otherwise. Content stages are pre-rendered layers
-   toggled by one data-stage attribute — the shell never moves.
+   MEET ALLY — the live dashboard, and a way to open it full screen.
+   No scroll machinery: the product is simply here, running, and one
+   button gives it the whole window.
    ============================================================ */
-.immersion{ position:relative; timeline-scope:--imm; }
-.immersion-track{ height:580vh; view-timeline-name:--imm; view-timeline-axis:block; }
-.immersion-sticky{
-  position:sticky; top:0; height:100svh;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:18px; overflow:hidden;
-}
-/* Dark environment: an overlay, so the darkening is compositor opacity
-   rather than repainting a background. It stays at 1 through release —
-   the sections after the immersion are dark, so the exit is seamless. */
-.env{
-  position:absolute; inset:0; z-index:0;
-  background:
-    radial-gradient(90% 70% at 50% 30%, var(--forest-deep-2), var(--forest-night) 78%);
-  opacity:var(--env);
-  pointer-events:none;
-}
-
-.product-frame{
-  position:relative; z-index:1;
-  width:min(1240px, 94vw);
-  height:clamp(540px, 76svh, 730px);
-  display:grid; grid-template-columns:232px minmax(0,1fr);
-  border-radius:var(--r-card); overflow:hidden;
-  background:var(--ivory);
-  border:1px solid var(--bd-2);
-  box-shadow:var(--shadow-deep);
-  transform:
-    perspective(1600px)
-    rotateX(var(--fx)) rotateY(var(--fy))
-    scale(var(--fs)) translateY(var(--fyy));
-}
-
-/* ---------- sidebar (presentation-only) ---------- */
-.app-side{
-  background:var(--ally-sb-grad);
-  color:var(--on-dark);
-  display:flex; flex-direction:column;
-  padding:20px 14px 12px;
-  font-size:13.5px;
-  border-right:1px solid rgba(255,255,255,.08);
-  position:relative; overflow:hidden;
-}
-/* the product's soft emerald glow behind the brand */
-.app-side::before{
-  content:""; position:absolute; top:-120px; left:-80px;
-  width:300px; height:300px; border-radius:50%;
-  background:radial-gradient(circle, rgba(16,185,129,.28), transparent 70%);
-  filter:blur(70px); pointer-events:none;
-}
-.app-brand{ padding:0 8px; display:flex; align-items:flex-start; justify-content:space-between; }
-.app-collapse{
-  width:26px; height:26px; border-radius:8px;
-  border:1px solid rgba(255,255,255,.12);
-  display:grid; place-items:center;
-  color:var(--ally-on-dark-dim); font-size:11px;
-}
-.app-brand strong{
-  font-family:var(--display-tight); font-weight:800; font-size:22px;
-  color:#fff; letter-spacing:-.02em;
-}
-.app-brand strong b{ color:var(--ally-accent); font-weight:800; }
-.app-brand small{
-  display:block; font-size:7.5px; letter-spacing:.16em; font-weight:600;
-  color:var(--on-dark-dim); margin-top:3px; text-transform:uppercase;
-}
-.ally-live{
-  display:inline-flex; align-items:center; gap:6px;
-  margin:12px 8px 4px; padding:4px 10px;
-  border:1px solid rgba(16,185,129,.32); border-radius:var(--r-pill);
-  background:rgba(16,185,129,.14);
-  font-size:11px; font-weight:700; color:var(--emerald-bright);
-  letter-spacing:.04em; width:max-content;
-}
-.ally-live i{
-  width:6px; height:6px; border-radius:50%; background:var(--emerald-bright);
-}
-.side-label{
-  font-size:9.5px; letter-spacing:.15em; font-weight:700;
-  text-transform:uppercase;
-  color:var(--ally-group-label); margin:13px 8px 5px;
-}
-.side-item{
-  display:flex; align-items:center; gap:11px;
-  width:100%; text-align:left;
-  padding:7px 12px; border:0; border-radius:11px;
-  background:transparent; color:var(--on-dark-muted);
-  font-size:13.5px; font-weight:500;
+.meet-frame{
   position:relative;
-  transition:background .35s, color .35s;
+  margin-top:clamp(34px, 5vh, 54px);
+  width:100%;
 }
-.side-item svg{
-  width:18px; height:18px; flex:0 0 auto;
-  stroke:currentColor; fill:none; stroke-width:1.7;
-  stroke-linecap:round; stroke-linejoin:round;
+.meet-screen{
+  display:block; width:100%;
+  aspect-ratio:16 / 10;                 /* reserves the box before it loads */
+  border-radius:var(--r-card); overflow:hidden;
+  border:1px solid var(--bd-2);
+  background:var(--ivory-2);
+  box-shadow:0 2px 6px -2px rgba(6,20,13,.18), 0 40px 90px -40px rgba(6,20,13,.4);
 }
-.side-item.locked{ opacity:.62; cursor:default; }
-.side-item[data-goto]{ cursor:pointer; }
-.side-item[data-goto]:hover{ background:rgba(255,255,255,.05); color:#fff; }
-@keyframes askPulse{
-  0%  { box-shadow:0 0 0 0 rgba(16,185,129,.45); }
-  100%{ box-shadow:0 0 0 14px rgba(16,185,129,0); }
+.meet-screen iframe{
+  width:100%; height:100%; border:0; display:block;
 }
-@media (prefers-reduced-motion: no-preference){
-  .ask-bar.is-pulsing{ animation:askPulse .9s ease-out 2; }
-}
-.side-item .lk{ margin-left:auto; opacity:.55; }
-.side-item .lk svg{ width:13px; height:13px; stroke-width:2; }
-/* the product's active bar: 20px tall, emerald-to-lime */
-.side-item::before{
-  content:""; position:absolute; left:-14px; top:50%;
-  width:3px; height:20px; transform:translateY(-50%);
-  border-radius:0 3px 3px 0; background:var(--ally-active-bar);
-  opacity:0; transition:opacity .35s;
-}
-/* stage-driven emphasis: exactly one strong focus at a time */
-[data-stage="0"] .side-item[data-s="0"],
-[data-stage="1"] .side-item[data-s="1"],
-[data-stage="2"] .side-item[data-s="2"],
-[data-stage="3"] .side-item[data-s="3"],
-[data-stage="4"] .side-item[data-s="4"]{
-  background:var(--ally-nav-active); color:#fff;
-}
-[data-stage="0"] .side-item[data-s="0"] svg,
-[data-stage="1"] .side-item[data-s="1"] svg,
-[data-stage="2"] .side-item[data-s="2"] svg,
-[data-stage="3"] .side-item[data-s="3"] svg{ stroke:var(--emerald-bright); }
-[data-stage="4"] .side-item[data-s="4"] svg{ stroke:var(--emerald-bright); }
-[data-stage="0"] .side-item[data-s="0"]::before,
-[data-stage="1"] .side-item[data-s="1"]::before,
-[data-stage="2"] .side-item[data-s="2"]::before,
-[data-stage="3"] .side-item[data-s="3"]::before,
-[data-stage="4"] .side-item[data-s="4"]::before{ opacity:1; }
-
-.side-push{ flex:1; }
-.upgrade{
-  margin:0 2px 10px; padding:14px;
-  border:1px solid rgba(16,185,129,.28); border-radius:14px;
-  background:linear-gradient(155deg, rgba(16,185,129,.16), rgba(16,185,129,.04));
-}
-.upgrade strong{
-  font-family:var(--display-tight); font-size:12.5px; font-weight:750; color:#fff;
-}
-.upgrade span{
-  display:block; font-size:11px; line-height:1.45;
-  color:var(--on-dark-muted); margin:5px 0 11px;
-}
-.upgrade b{
-  display:flex; align-items:center; justify-content:center;
-  width:100%; font-size:12px; font-weight:750;
-  color:var(--ally-btn-ink);
-  background:linear-gradient(150deg, var(--emerald-bright), var(--lime-edge));
-  border-radius:10px; padding:9px;
-}
-.profile{
-  display:flex; align-items:center; gap:10px; padding:10px 8px 0;
-  border-top:1px solid rgba(255,255,255,.08);
-}
-.avatar{
-  width:32px; height:32px; border-radius:50%;
-  background:var(--ally-av-grad); color:var(--ally-btn-ink);
-  display:grid; place-items:center;
-  font-size:11.5px; font-weight:700;
-}
-.profile strong{ display:block; font-size:12px; color:#fff; }
-.profile small{ font-size:10.5px; color:var(--on-dark-dim); }
-
-/* ---------- main pane ---------- */
-.app-main{
-  display:flex; flex-direction:column; min-width:0;
-  background:var(--ivory);
-}
-.app-top{
+.meet-bar{
   display:flex; align-items:center; justify-content:space-between;
-  padding:16px 26px; border-bottom:1px solid var(--bd);
-  background:var(--ivory-2);
+  gap:16px; flex-wrap:wrap; margin-top:18px;
 }
-.app-top .ovl{
-  font-size:10px; letter-spacing:.18em; font-weight:700; color:var(--emerald);
+.meet-note{ font-size:13px; color:var(--muted-2); }
+.meet-fs{
+  display:inline-flex; align-items:center; gap:9px;
+  border:1px solid var(--bd-2); border-radius:var(--r-pill);
+  background:#fff; color:var(--forest);
+  padding:11px 18px; font-size:13px; font-weight:600;
+  transition:border-color .2s, background .2s;
 }
-.top-title{ position:relative; height:24px; min-width:280px; }
-.top-title b{
-  position:absolute; inset:0;
-  font-family:var(--display-tight); font-size:19px; font-weight:700;
-  color:var(--forest); letter-spacing:-.02em;
-  opacity:0; transform:translateY(6px);
-  transition:opacity .35s, transform .35s;
-}
-[data-stage="0"] .top-title b[data-s="0"],
-[data-stage="1"] .top-title b[data-s="1"],
-[data-stage="2"] .top-title b[data-s="2"],
-[data-stage="3"] .top-title b[data-s="3"],
-[data-stage="4"] .top-title b[data-s="4"]{ opacity:1; transform:none; }
-.top-actions{ display:flex; align-items:center; gap:10px; }
-.plan-pill{
-  display:inline-flex; align-items:center; gap:8px;
-  border:1px solid #d7ccb8; border-radius:var(--r-pill);
-  background:#f7f1e2; padding:9px 14px;
-  font-size:12.5px; font-weight:700; color:#6d6041;
-}
-.plan-pill i{
-  width:8px; height:8px; border-radius:50%; background:#8d9167;
-  box-shadow:0 0 0 3px rgba(141,145,103,.12);
-}
-.bell{
-  width:34px; height:34px; border-radius:50%;
-  background:#fff; border:1px solid var(--bd-2);
-  display:grid; place-items:center;
-}
-.bell svg{ width:15px; height:15px; stroke:var(--muted); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.meet-fs:hover{ border-color:var(--emerald); background:var(--ivory-2); }
+.meet-fs svg{ width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 
-.app-content{
-  flex:1; min-height:0; padding:30px 34px 24px;
-  display:flex; flex-direction:column;
+/* full-screen viewer: the same frame, moved into a dialog */
+.viewer{
+  position:fixed; inset:0; z-index:200;
+  display:none; padding:clamp(12px, 2vh, 28px);
+  background:rgba(6,20,13,.86);
+  backdrop-filter:blur(4px);
 }
+.viewer.is-open{ display:grid; grid-template-rows:auto minmax(0,1fr); gap:12px; }
+.viewer-top{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.viewer-top p{ font-size:13px; color:var(--on-dark-muted); }
+.viewer-x{
+  display:inline-flex; align-items:center; gap:9px;
+  border:1px solid rgba(255,255,255,.18); border-radius:var(--r-pill);
+  background:rgba(255,255,255,.06); color:var(--on-dark);
+  padding:10px 16px; font-size:13px; font-weight:600;
+}
+.viewer-x:hover{ background:rgba(255,255,255,.12); }
+.viewer-frame{
+  min-height:0; border-radius:var(--r-card); overflow:hidden;
+  background:var(--ivory-2); border:1px solid rgba(255,255,255,.12);
+}
+.viewer-frame iframe{ width:100%; height:100%; border:0; display:block; }
+html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 
-/* the four stages: pre-rendered, stacked, crossfaded. The region has one
-   fixed geometry, so nothing ever reflows when the story advances. */
-.stage-zone{ flex:1; min-height:0; display:grid; }
-.stage{
-  grid-area:1 / 1; min-width:0;
-  display:flex; flex-direction:column;
-  opacity:0; transform:translateY(10px);
-  transition:opacity .4s ease, transform .4s ease;
-  pointer-events:none;
-}
-[data-stage="0"] .stage[data-s="0"],
-[data-stage="1"] .stage[data-s="1"],
-[data-stage="2"] .stage[data-s="2"],
-[data-stage="3"] .stage[data-s="3"],
-[data-stage="4"] .stage[data-s="4"]{
-  opacity:1; transform:none; pointer-events:auto;
-}
-
-.screen-label{
-  font-size:10px; letter-spacing:.16em; text-transform:uppercase;
-  font-weight:700; color:var(--muted-2);
-}
-.stage h2{
-  /* the current product's compass-headline: Fraunces 400, calmer scale */
-  font-family:var(--serif); font-weight:400;
-  font-size:clamp(24px, 2.2vw, 31px); line-height:1.28;
-  letter-spacing:-.01em; margin:13px 0 0;
-  min-height:2.56em; /* two lines reserved — headlines may not resize the shell */
-  max-width:34ch;
-  color:var(--forest-deep);
-}
-.stage h2 em{ color:var(--emerald); }
-.insight{
-  margin-top:18px; padding:14px 20px;
-  border:1px solid var(--bd); border-left:3px solid var(--emerald);
-  border-radius:12px; background:var(--ivory-2);
-  font-family:var(--serif); font-style:italic;
-  font-size:15px; color:var(--forest);
-  min-height:52px; display:flex; align-items:center; gap:12px;
-}
-.stage[data-s="3"] .insight::after{ content:"\2014\00a0 Your one-year vision"; }
-.insight::after{
-  content:"\2014\00a0 Ally";
-  font-family:var(--display); font-style:normal; font-weight:700;
-  font-size:11px; letter-spacing:.02em; color:var(--muted-2);
-  margin-left:auto; white-space:nowrap;
-}
-.stage .ask-bar{ margin-top:18px; }
-.stage .ask-bar span{
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-}
-.state-head{ margin-top:20px; }
-.state-head span{
-  font-size:10px; font-weight:600; letter-spacing:.16em;
-  text-transform:uppercase; color:var(--muted);
-}
-.state-head h3{
-  font-family:var(--display);
-  font-size:18px; font-weight:600; color:var(--ink); margin-top:7px;
-  letter-spacing:-.01em;
-}
-.metric-row{
-  display:grid; grid-template-columns:repeat(4,1fr);
-  border-top:1px solid var(--bd); border-bottom:1px solid var(--bd);
-  margin-top:14px;
-}
-.metric-row article{
-  padding:16px 20px 14px; border-left:1px solid var(--bd);
-  min-width:0;
-}
-.metric-row article:first-child{ border-left:0; padding-left:0; }
-.metric-row span{
-  display:block; font-size:10px; letter-spacing:.14em; text-transform:uppercase;
-  font-weight:600; color:var(--muted);
-}
-.metric-row strong{
-  display:block; font-family:var(--body);
-  font-size:27px; font-weight:600; color:var(--forest-deep);
-  letter-spacing:-.03em; line-height:1;
-  font-variant-numeric:tabular-nums;
-  margin:10px 0 8px;
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-}
-.metric-row p{
-  font-size:12px; line-height:1.45; color:var(--muted);
-  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
-}
-
-/* ---- Plan Your Day, as the product actually builds it: two mode
-   tabs and a capture box. Values lifted from allydashboard.html. ---- */
-.pl-tabs{ display:flex; gap:14px; margin-top:18px; }
-.pl-tab{
-  flex:1; display:flex; align-items:center; gap:12px;
-  background:#fff; border:1px solid var(--bd); border-radius:14px;
-  padding:12px 16px; text-align:left;
-}
-.pl-tab.is-on{ border-color:var(--emerald); box-shadow:0 0 0 1px rgba(16,185,129,.3); }
-.pl-tab-ic{
-  width:34px; height:34px; border-radius:10px; flex:0 0 auto;
-  display:grid; place-items:center;
-  background:var(--ivory-3); color:var(--forest);
-}
-.pl-tab.is-on .pl-tab-ic{ background:rgba(16,185,129,.1); color:var(--emerald); }
-.pl-tab-ic svg{ width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.8; }
-.pl-tab b{
-  display:block; font-family:var(--display);
-  font-size:13.5px; font-weight:700; color:var(--ink);
-}
-.pl-tab span{ display:block; font-size:11px; color:var(--muted-2); margin-top:2px; }
-
-.pl-card{
-  margin-top:14px; padding:18px 20px;
-  background:#fff; border:1px solid var(--bd); border-radius:16px;
-  box-shadow:var(--shadow-card);
-}
-.pl-card-head{ display:flex; align-items:center; gap:12px; }
-.pl-av{
-  width:32px; height:32px; border-radius:50%; flex:0 0 auto;
-  display:grid; place-items:center;
-  background:var(--ally-av-grad); color:var(--ally-btn-ink);
-  font-size:12px; font-weight:700;
-}
-.pl-card-head b{ display:block; font-family:var(--display); font-size:13.5px; font-weight:700; color:var(--ink); }
-.pl-card-head span{ display:block; font-size:11.5px; color:var(--muted-2); margin-top:2px; }
-.pl-field{
-  margin-top:12px; padding:11px 14px; min-height:60px;
-  border:1px solid var(--bd); border-radius:12px;
-  background:var(--ivory-2);
-  font-size:13.5px; color:var(--muted-2);
-}
-.pl-foot{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px; }
-.pl-hint{ display:flex; align-items:center; gap:7px; font-size:11.5px; color:var(--muted); }
-.pl-hint i{ width:6px; height:6px; border-radius:50%; background:var(--emerald); flex:0 0 auto; }
-.pl-btn{
-  font-size:12.5px; font-weight:600; color:var(--ally-btn-ink);
-  background:var(--emerald); border-radius:10px; padding:9px 16px;
-  white-space:nowrap; box-shadow:0 10px 26px -8px rgba(16,185,129,.5);
-}
-
-/* Stage 3's four cells stopped being metrics when their copy became
-   sentences: at 27px nowrap in a 194px column, every one of them
-   ellipsised — 'Make one way of getting customers work' needs 509px —
-   and the descriptions lost their third line. They wrap here instead.
-   Scoped to this stage so the readout treatment the other four use,
-   which matches the product, is untouched. */
-.stage[data-s="2"] .metric-row strong{
-  white-space:normal; overflow:visible; text-overflow:clip;
-  font-size:19px; line-height:1.2;
-}
-.stage[data-s="2"] .metric-row p{ -webkit-line-clamp:3; }
-
-/* the shared north-star line under every stage */
-.ns-line{
-  margin-top:auto; padding-top:16px;
-  border-top:1px solid var(--bd);
-}
-.ns-line span{ font-size:13px; color:var(--muted-2); }
-.ns-line p{
-  font-family:var(--serif); font-size:16.5px; color:var(--ink);
-  margin-top:4px;
-}
-
-/* caption under the frame */
-.stage-caption{
-  position:relative; z-index:1;
-  width:min(1240px, 94vw);
-  display:grid; grid-template-columns:44px minmax(0,1fr);
-  gap:16px; align-items:start;
-  min-height:58px;
-  opacity:calc(var(--env)); /* only present once we are inside the dark environment */
-}
-.cap-cell{ position:relative; min-height:58px; }
-.cap-cell > div{
-  position:absolute; inset:0;
-  opacity:0; transform:translateY(8px);
-  transition:opacity .4s, transform .4s;
-}
-[data-stage="0"] .cap-cell > div[data-s="0"],
-[data-stage="1"] .cap-cell > div[data-s="1"],
-[data-stage="2"] .cap-cell > div[data-s="2"],
-[data-stage="3"] .cap-cell > div[data-s="3"],
-[data-stage="4"] .cap-cell > div[data-s="4"]{ opacity:1; transform:none; }
-.cap-idx{
-  font-family:var(--display); font-weight:800; font-size:26px;
-  color:var(--emerald-bright);
-}
-.stage-caption strong{
-  display:block; font-size:15px; font-weight:700; color:var(--on-dark);
-}
-.stage-caption p{ font-size:13px; color:var(--on-dark-muted); margin-top:3px; }
-
-/* ---------- the scrub itself: native path ---------- */
-@supports ((animation-timeline: view()) and (view-timeline-name: --a)){
-  @media (prefers-reduced-motion: no-preference){
-    @keyframes immScrub{
-      /* cover 0–7%: still an object in the page, tilted, at rest */
-      0%  { --fx:9deg;  --fy:-8deg; --fs:0.84; --fyy:6vh; --env:0; }
-      7%  { --fx:9deg;  --fy:-8deg; --fs:0.84; --fyy:6vh; --env:0; }
-      /* by 30% of the journey the visitor is inside Ally */
-      30% { --fx:0deg;  --fy:0deg;  --fs:1;    --fyy:0vh; --env:1; }
-      100%{ --fx:0deg;  --fy:0deg;  --fs:1;    --fyy:0vh; --env:1; }
-    }
-    .immersion-sticky{
-      animation:immScrub auto linear both;
-      animation-timeline:--imm;
-      animation-range:cover 0% cover 100%;
-    }
-    body.js-scrub .immersion-sticky{ animation:none; } /* fallback owns the vars */
-  }
-}
-@media (prefers-reduced-motion: reduce){
-  .immersion-sticky{ --fx:0deg; --fy:0deg; --fs:1; --fyy:0vh; --env:1; }
-  .stage, .cap-cell > div, .top-title b{ transition:none; }
-}
-/* no scrub of any kind (old browser, JS off): resolved, readable, dark */
-.no-scrub .immersion-sticky{ --fx:0deg; --fy:0deg; --fs:1; --fyy:0vh; --env:1; }
 
 /* ============================================================
    AFTER THE IMMERSION — outcome, dark; the exit is continuous.
@@ -1350,7 +957,6 @@ em{ font-style:italic; }
 }
 
 @media (max-width: 1120px){
-  .product-frame{ grid-template-columns:200px minmax(0,1fr); }
 }
 @media (max-width: 1024px){
   :root{ --shell:min(1240px, calc(100% - 48px)); }
@@ -1360,8 +966,6 @@ em{ font-style:italic; }
   .metric-row strong{ font-size:18px; }
 }
 @media (max-width: 900px){
-  .product-frame{ grid-template-columns:minmax(0,1fr); height:clamp(500px, 74svh, 640px); }
-  .app-side{ display:none; }
   .outcome-grid, .north-grid, .difference-grid, .cta-grid, .today{ grid-template-columns:1fr; }
   .difference-grid{ margin-top:52px; }
   .context-map{ max-width:620px; }
@@ -1530,257 +1134,34 @@ em{ font-style:italic; }
 <section class="why shell">
   <p class="eyebrow">Meet Ally</p>
   <h2>This is what it looks like <em>from inside.</em></h2>
-  <p class="why-meet-sub">Not a chat window. A working compass that holds your founder context, your business context and your current situation in one place &mdash; and keeps them pointing the same way.</p>
-  <p class="why-meet-hint"><i></i> Scroll to step inside the dashboard</p>
-</section>
+  <p class="why-meet-sub">Not a chat window. A working compass that holds your founder context, your business context and your current situation in one place &mdash; and keeps them pointing the same way. It&rsquo;s running below &mdash; open it full screen and look around.</p>
 
-<!-- ================= IMMERSION ================= -->
-<section class="immersion" id="experience" aria-label="Inside Ally">
-  <div class="immersion-track">
-    <div class="immersion-sticky">
-      <div class="env" aria-hidden="true"></div>
-
-      <div class="product-frame" id="frame" data-stage="0">
-        <!-- sidebar -->
-        <aside class="app-side" aria-hidden="true">
-          <div class="app-brand">
-            <div>
-              <strong>Go<b>XL</b></strong>
-              <small>Consulting Solutions</small>
-            </div>
-            <span class="app-collapse" aria-hidden="true"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/></svg></span>
-          </div>
-          <span class="ally-live"><i></i> Ally active</span>
-
-          <p class="side-label">Home</p>
-          <button class="side-item" data-goto="0">
-            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-            Compass</button>
-          <button class="side-item" data-goto="1" data-pulse-ask>
-            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            Talk to Ally</button>
-
-          <p class="side-label">Founder diagnosis</p>
-          <button class="side-item" data-s="0" data-goto="0">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
-            Founder DNA</button>
-          <button class="side-item" data-goto="0">
-            <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg>
-            Business DNA</button>
-          <button class="side-item" data-s="1" data-goto="1">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3m-3.5-7.5-2.1 2.1M7.6 16.4l-2.1 2.1m0-12.9 2.1 2.1m8.7 8.7 2.1 2.1"/></svg>
-            Adaptive diagnosis</button>
-          <button class="side-item" data-s="3" data-goto="3">
-            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            Your Vision</button>
-          <button class="side-item locked" tabindex="-1">
-            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            Journey
-            <span class="lk"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span></button>
-          <button class="side-item" data-goto="4">
-            <svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
-            Goals</button>
-          <button class="side-item" data-s="2" data-goto="2">
-            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            Next steps</button>
-          <button class="side-item" data-s="4" data-goto="4">
-            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-            Plan Your Day</button>
-
-          <span class="side-push"></span>
-
-          <div class="upgrade">
-            <strong>Ally Free</strong>
-            <span>Unlock deeper diagnosis, unlimited chat and Founder MRI.</span>
-            <b>↑ Upgrade plan</b>
-          </div>
-          <div class="profile">
-            <span class="avatar">F</span>
-            <div><strong>Founder</strong><small>Your compass</small></div>
-            <svg viewBox="0 0 24 24" style="width:14px;height:14px;margin-left:auto;stroke:#7d9488;fill:none;stroke-width:1.8"><circle cx="12" cy="12" r="3"/><path d="M12 4.2v-1M12 20.8v-1M19.5 12h1M3.5 12h1M17.3 6.7l.7-.7M6 18l.7-.7M17.3 17.3l.7.7M6 6l.7.7"/></svg>
-          </div>
-        </aside>
-
-        <!-- main pane -->
-        <div class="app-main">
-          <div class="app-top">
-            <div>
-              <p class="ovl">Overview</p>
-              <div class="top-title" aria-live="polite">
-                <b data-s="0">Good morning, Founder</b>
-                <b data-s="1">Diagnosis</b>
-                <b data-s="2">Direction</b>
-                <b data-s="3">Vision</b>
-                <b data-s="4">Today</b>
-              </div>
-            </div>
-            <div class="top-actions">
-              <span class="plan-pill"><i></i> Ally Free</span>
-              <span class="bell" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10.3 20a2 2 0 0 0 3.4 0"/></svg></span>
-            </div>
-          </div>
-
-          <div class="app-content">
-            <div class="stage-zone">
-
-              <!-- STAGE 1 · UNDERSTAND THE FOUNDER
-                   Output-style summary of onboarding v2.2 S1+S2: stage,
-                   experience, what you're building, audience. -->
-              <div class="stage" data-s="0">
-                <p class="screen-label">Getting to know you &middot; Understanding where you are</p>
-                <h2>Ally starts by understanding <em>where you actually are.</em></h2>
-                <p class="insight">You&rsquo;re building two things at once: your business and yourself as a founder.</p>
-                <div class="ask-bar" aria-hidden="true">
-                  <span>Ask Ally about what may be creating the noise...</span>
-                  <b>→ Ask Ally</b>
-                </div>
-                <div class="state-head">
-                  <span>You &middot; Your business &middot; Right now</span>
-                  <h3>Where you&rsquo;re starting from</h3>
-                </div>
-                <div class="metric-row">
-                  <article><span>Founder context</span><strong>First-time</strong><p>Experience level, from your entrepreneurial journey.</p></article>
-                  <article><span>Stage</span><strong>Early traction</strong><p>The stage that shapes everything Ally asks next.</p></article>
-                  <article><span>Building</span><strong>B2B SaaS</strong><p>What you&rsquo;re building, and the problem it solves.</p></article>
-                  <article><span>Audience</span><strong>Businesses</strong><p>Who you&rsquo;re building it for.</p></article>
-                </div>
-              </div>
-
-              <!-- STAGE 2 · DIAGNOSE THE SITUATION
-                   The v2.2 Reality Check, at category/result level. The
-                   exact Founder/Business Reality statements and the
-                   Invisible Gaps list are open items in the spec, so only
-                   the categories and outcomes appear here. -->
-              <div class="stage" data-s="1">
-                <p class="screen-label">What do you know &middot; Reality check</p>
-                <h2>Don&rsquo;t jump to the answer. <em>First understand what&rsquo;s really happening.</em></h2>
-                <p class="insight">The problem you notice first may only be the symptom.</p>
-                <div class="ask-bar" aria-hidden="true">
-                  <span>Ask Ally why this matters...</span>
-                  <b>→ Ask Ally</b>
-                </div>
-                <div class="state-head">
-                  <span>Reality check</span>
-                  <h3>What you know &mdash; and what&rsquo;s easy to miss</h3>
-                </div>
-                <div class="metric-row">
-                  <article><span>How you&rsquo;re doing</span><strong>05</strong><p>Honest checks about how things are going for you.</p></article>
-                  <article><span>The business</span><strong>05</strong><p>The same honesty, about how it&rsquo;s really doing.</p></article>
-                  <article><span>Easy to miss</span><strong>03</strong><p>Patterns hard to see from inside the work.</p></article>
-                  <article><span>Needs attention</span><strong>Customers</strong><p>Getting them isn&rsquo;t consistent yet.</p></article>
-                </div>
-              </div>
-
-              <!-- STAGE 3 · FIND DIRECTION
-                   Q10 (Biggest Challenge, up to 3 of the real chip list)
-                   as the founder's words; Ally interprets rather than
-                   repeats. -->
-              <div class="stage" data-s="2">
-                <p class="screen-label">Where you&rsquo;re headed &middot; Biggest challenge</p>
-                <h2>Your next move isn&rsquo;t to do more. <em>It&rsquo;s to fix the right thing.</em></h2>
-                <p class="insight">You said: getting customers, marketing and making decisions feel hard. Ally noticed they may be connected.</p>
-                <div class="ask-bar" aria-hidden="true">
-                  <span>Ask Ally what to focus on first...</span>
-                  <b>→ Ask Ally</b>
-                </div>
-                <div class="state-head">
-                  <span>You said &rarr; Ally noticed</span>
-                  <h3>Getting customers isn&rsquo;t consistent yet.</h3>
-                </div>
-                <div class="metric-row">
-                  <article><span>Priority 01</span><strong>Get clear on your customer</strong><p>Know who needs your product most and who you should stop trying to reach.</p></article>
-                  <article><span>Priority 02</span><strong>Make one way of getting customers work</strong><p>Choose the approach already showing promise and improve that first.</p></article>
-                  <article><span>Priority 03</span><strong>Make it repeatable</strong><p>Build a simple weekly routine so growth doesn&rsquo;t restart every week.</p></article>
-                  <article><span>Avoid</span><strong>Adding more too soon</strong><p>Don&rsquo;t add more campaigns, channels or work before one system is working.</p></article>
-                </div>
-              </div>
-
-              <!-- STAGE 4 · VISION — Q11, the real screen copy as the
-                   headline; the insight is the founder's own answer, so
-                   its attribution flips from Ally to You. -->
-              <div class="stage" data-s="3">
-                <p class="screen-label">Where you&rsquo;re headed &middot; One-year vision</p>
-                <h2>What does success look like <em>one year from today?</em></h2>
-                <p class="insight">A reliable way to bring in the right customers every month.</p>
-                <div class="ask-bar" aria-hidden="true">
-                  <span>Ask Ally what this vision asks of you now...</span>
-                  <b>→ Ask Ally</b>
-                </div>
-                <div class="state-head">
-                  <span>Where you want to go</span>
-                  <h3>Where you want to go helps decide what matters now</h3>
-                </div>
-                <div class="metric-row">
-                  <article><span>Where you want to go</span><strong>1 year</strong><p>Success, described in your own words.</p></article>
-                  <article><span>First milestone</span><strong>90 days</strong><p>The one thing to achieve first.</p></article>
-                  <article><span>What matters first</span><strong>03</strong><p>Three priorities, already sequenced.</p></article>
-                  <article><span>Main focus</span><strong>Customers</strong><p>Customer growth, made repeatable.</p></article>
-                </div>
-              </div>
-
-              <!-- STAGE 5 · TURN DIRECTION INTO ACTION -->
-              <div class="stage" data-s="4">
-                <p class="screen-label">Where you&rsquo;re headed &middot; Today</p>
-                <h2>From &ldquo;I have too much to do&rdquo; to <em>&ldquo;I know what matters now.&rdquo;</em></h2>
-                <p class="insight">Set what matters today. Ally keeps the list honest and reminds you what is due.</p>
-                <div class="ask-bar" aria-hidden="true">
-                  <span>Ask Ally to help plan today...</span>
-                  <b>→ Ask Ally</b>
-                </div>
-                <div class="pl-tabs">
-                  <div class="pl-tab is-on">
-                    <span class="pl-tab-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
-                    <span><b>Plan with Ally</b><span>List them with commas &mdash; I&rsquo;ll add each one.</span></span>
-                  </div>
-                  <div class="pl-tab">
-                    <span class="pl-tab-ic"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
-                    <span><b>Plan manually</b><span>Create tasks yourself.</span></span>
-                  </div>
-                </div>
-                <div class="pl-card">
-                  <div class="pl-card-head">
-                    <span class="pl-av">A</span>
-                    <span><b>What&rsquo;s on today?</b><span>Comma-separate them and I&rsquo;ll add each as its own task.</span></span>
-                  </div>
-                  <p class="pl-field">Talk to two customers who went quiet, decide what actually needs me today, write down what felt stuck</p>
-                  <div class="pl-foot">
-                    <span class="pl-hint"><i></i> Comma-separate a few things and I&rsquo;ll add them as separate tasks.</span>
-                    <span class="pl-btn">Plan my day</span>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-            <div class="ns-line">
-              <span>Your north star &middot; from your one-year vision</span>
-              <p>A reliable way to bring in the right customers every month.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- caption -->
-      <div class="stage-caption" aria-hidden="true">
-        <div class="cap-cell">
-          <div data-s="0"><span class="cap-idx">01</span></div>
-          <div data-s="1"><span class="cap-idx">02</span></div>
-          <div data-s="2"><span class="cap-idx">03</span></div>
-          <div data-s="3"><span class="cap-idx">04</span></div>
-          <div data-s="4"><span class="cap-idx">05</span></div>
-        </div>
-        <div class="cap-cell">
-          <div data-s="0"><strong>Understand the founder.</strong><p>Ally begins with context &mdash; not assumptions.</p></div>
-          <div data-s="1"><strong>Diagnose the situation.</strong><p>See what&rsquo;s really happening under the noise.</p></div>
-          <div data-s="2"><strong>Choose a direction.</strong><p>Ally narrows the field until the next move becomes clear.</p></div>
-          <div data-s="3"><strong>Set the heading.</strong><p>Where you&rsquo;re trying to go decides what matters now.</p></div>
-          <div data-s="4"><strong>Turn direction into action.</strong><p>The compass becomes a plan for today.</p></div>
-        </div>
-      </div>
-
+  <div class="meet-frame">
+    <div class="meet-screen" id="allyScreen">
+      <iframe src="/ally-dashboard.html" title="The Ally dashboard"
+              loading="lazy" fetchpriority="low" allow="fullscreen"></iframe>
+    </div>
+    <div class="meet-bar">
+      <p class="meet-note">The real interface, running here.</p>
+      <button class="meet-fs" type="button" id="allyFsOpen">
+        <svg viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
+        Full screen
+      </button>
     </div>
   </div>
 </section>
+
+<!-- full-screen viewer -->
+<div class="viewer" id="allyViewer" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Ally dashboard, full screen">
+  <div class="viewer-top">
+    <p>Ally &mdash; full screen</p>
+    <button class="viewer-x" type="button" id="allyFsClose">
+      <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      Close
+    </button>
+  </div>
+  <div class="viewer-frame" id="allyViewerFrame"></div>
+</div>
 
 <!-- ================= OUTCOME ================= -->
 <section class="outcome" id="outcome">
@@ -2179,116 +1560,84 @@ em{ font-style:italic; }
 
 <script>
 /* ============================================================
-   STAGE ENGINE + SCRUB FALLBACK
-   One scroll listener. Work per event: one getBoundingClientRect
-   on the track, one attribute write when the stage changes, and —
-   only on browsers without scroll timelines — five custom-property
-   writes on one element. No rAF gate: this pane and throttled tabs
-   both taught us rAF can simply never fire, and the per-event work
-   here is small enough not to need it.
+   FULL-SCREEN VIEWER
+   The dashboard already exists in the section, so the viewer borrows
+   that element rather than creating a second one: the 600 KB loads
+   once, and whatever the visitor was looking at is still there when
+   the viewer opens and again when it closes.
    ============================================================ */
 (function(){
-  var track  = document.querySelector('.immersion-track');
-  var sticky = document.querySelector('.immersion-sticky');
-  var frame  = document.getElementById('frame');
-  if(!track || !sticky || !frame){ document.documentElement.classList.add('no-scrub'); return; }
+  var screen = document.getElementById('allyScreen');
+  var viewer = document.getElementById('allyViewer');
+  var host   = document.getElementById('allyViewerFrame');
+  var openBtn= document.getElementById('allyFsOpen');
+  var closeBtn= document.getElementById('allyFsClose');
+  if(!screen || !viewer || !host || !openBtn) return;
 
-  var reduce = matchMedia('(prefers-reduced-motion: reduce)');
-  var nativeScrub = CSS.supports('animation-timeline', 'view()') &&
-                    CSS.supports('view-timeline-name', '--a');
-  if(!nativeScrub && !reduce.matches) document.body.classList.add('js-scrub');
+  var lastFocus = null;
 
-  /* progress p mirrors the native timeline's `cover` range:
-     0 when the track's top meets the viewport bottom,
-     1 when its bottom passes the viewport top. */
-  function progress(){
-    var r = track.getBoundingClientRect();
-    var vh = innerHeight;
-    var total = r.height + vh;
-    return Math.min(1, Math.max(0, (vh - r.top) / total));
+  function open(){
+    lastFocus = document.activeElement;
+    var f = screen.querySelector('iframe');
+    if(f) host.appendChild(f);
+    viewer.classList.add('is-open');
+    viewer.setAttribute('aria-hidden','false');
+    document.documentElement.classList.add('viewer-lock');
+    document.body.classList.add('viewer-lock');
+    document.addEventListener('keydown', onKey, true);
+    setTimeout(function(){ closeBtn && closeBtn.focus(); }, 40);
   }
-
-  /* Stages run from the end of the straighten to the moment the sticky
-     lets go — and that end is measured, not assumed. It was hardcoded at
-     0.96 while the sticky actually releases at trackH/(trackH+vh); with a
-     470vh track that put the last stage's band start 0.003 PAST the
-     release, so Plan Your Day was handed the screen at the exact instant
-     the screen was leaving. It was never once visible while pinned.
-     Deriving the end means any future change to the track height or a
-     visitor's viewport re-divides the bands correctly instead of silently
-     pushing the last stage off the end again. */
-  var STAGE_FROM = 0.30;                 /* the straighten finishes here */
-  function stageSpan(){
-    var h = track.getBoundingClientRect().height;
-    var to = h / (h + innerHeight);      /* sticky release, in cover progress */
-    return { from: STAGE_FROM, to: to, width: (to - STAGE_FROM) / 5 };
+  function close(){
+    var f = host.querySelector('iframe');
+    if(f) screen.appendChild(f);
+    viewer.classList.remove('is-open');
+    viewer.setAttribute('aria-hidden','true');
+    document.documentElement.classList.remove('viewer-lock');
+    document.body.classList.remove('viewer-lock');
+    document.removeEventListener('keydown', onKey, true);
+    /* preventScroll: returning focus must not move the page */
+    if(lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll:true });
   }
+  function onKey(e){ if(e.key === 'Escape') close(); }
 
-  var current = -1;
-  function setStage(p){
-    var sp = stageSpan();
-    var s = p < sp.from ? 0 : Math.min(4, Math.floor((p - sp.from) / sp.width));
-    if(s !== current){ current = s; frame.setAttribute('data-stage', String(s)); }
+  openBtn.addEventListener('click', open);
+  closeBtn && closeBtn.addEventListener('click', close);
+
+  /* ---- hand the scroll back at the frame's edges ----
+     The dashboard puts overscroll-behavior:contain on its scrolling
+     view, so a wheel that lands on the frame is absorbed there and
+     never chains back out — the page would stop dead over it. Same
+     origin, so the overflow can simply be forwarded. */
+  function scrollerAt(node, doc){
+    for(var n = node; n && n !== doc.documentElement; n = n.parentElement){
+      var oy = doc.defaultView.getComputedStyle(n).overflowY;
+      if((oy === 'auto' || oy === 'scroll') && n.scrollHeight > n.clientHeight + 1) return n;
+    }
+    return null;
   }
-
-  /* Same curve the keyframes describe: flat to 7%, resolved by 30%. */
-  function scrub(p){
-    var t = Math.min(1, Math.max(0, (p - 0.07) / 0.23));
-    sticky.style.setProperty('--fx',  (9  * (1 - t)) + 'deg');
-    sticky.style.setProperty('--fy',  (-8 * (1 - t)) + 'deg');
-    sticky.style.setProperty('--fs',  (0.84 + 0.16 * t).toFixed(4));
-    sticky.style.setProperty('--fyy', (6 * (1 - t)).toFixed(3) + 'vh');
-    sticky.style.setProperty('--env', t.toFixed(4));
+  function wireChain(frame){
+    var doc;
+    try{ doc = frame.contentDocument; }catch(_){ return; }
+    if(!doc || doc.__allyChained) return;
+    doc.__allyChained = true;
+    doc.addEventListener('wheel', function(e){
+      if(viewer.classList.contains('is-open')) return;   /* full screen keeps its own scroll */
+      var sc = scrollerAt(e.target, doc);
+      var past = !sc
+        || (e.deltaY < 0 && sc.scrollTop <= 0)
+        || (e.deltaY > 0 && sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 1);
+      if(!past) return;
+      e.preventDefault();
+      window.scrollBy(0, e.deltaY);
+    }, { passive:false });
   }
-
-  function update(){
-    var p = progress();
-    setStage(p);
-    if(!nativeScrub && !reduce.matches) scrub(p);
+  var frame = screen.querySelector('iframe');
+  if(frame){
+    frame.addEventListener('load', function(){ wireChain(frame); });
+    try{ if(frame.contentDocument && frame.contentDocument.readyState !== 'loading') wireChain(frame); }catch(_){}
   }
-
-  addEventListener('scroll', update, { passive:true });
-  addEventListener('resize', update);
-  update();   /* reload mid-page lands on the right stage immediately */
-
-  /* ---- sidebar navigation: every unlocked item goes to its story
-     moment. The story's own active item then lights via the stage
-     engine, exactly as it would on a plain scroll — clicking is just a
-     faster way of scrolling there. Locked items stay inert. ---- */
-  function gotoP(target){
-    var r = track.getBoundingClientRect();
-    var top = r.top + scrollY;
-    var total = r.height + innerHeight;
-    var y = Math.max(0, top - innerHeight + target * total);
-    scrollTo({ top: y, behavior: reduce.matches ? 'auto' : 'smooth' });
-  }
-  /* the middle of a stage's band, wherever that band currently sits */
-  function gotoStage(i){
-    var sp = stageSpan();
-    gotoP(sp.from + (i + 0.5) * sp.width);
-  }
-  document.querySelectorAll('.side-item[data-goto]').forEach(function(b){
-    b.addEventListener('click', function(){
-      gotoStage(parseInt(b.getAttribute('data-goto'), 10));
-      if(b.hasAttribute('data-pulse-ask')){
-        /* Talk to Ally: draw the eye to the Ask Ally bar once we land */
-        setTimeout(function(){
-          var bar = frame.querySelector('.stage[data-s="' + frame.getAttribute('data-stage') + '"] .ask-bar');
-          if(!bar) return;
-          bar.classList.remove('is-pulsing');
-          void bar.offsetWidth;
-          bar.classList.add('is-pulsing');
-        }, reduce.matches ? 80 : 700);
-      }
-    });
-  });
-
-  /* Test hook. The preview harness this is built in delivers no scroll
-     events at all, so the engine cannot be observed there without a way
-     to invoke it directly. Harmless in production. */
-  window.__allyImmersion = { update: update, progress: progress, gotoP: gotoP, gotoStage: gotoStage, stageSpan: stageSpan };
-
 })();
+
 
 /* ============================================================
    HOW ALLY THINKS — light each step as it reaches mid-screen.
