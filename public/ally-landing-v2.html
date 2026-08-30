@@ -156,11 +156,134 @@ em{ font-style:italic; }
    HERO — calm; a controlled fragment of Ally, not the dashboard.
    ============================================================ */
 .hero{
+  position:relative;
   min-height:calc(100svh - 80px);
   display:grid; grid-template-columns:1.05fr .95fr;
   gap:clamp(40px, 5vw, 80px); align-items:center;
   padding:48px 0 72px;
 }
+/* only the bare copy column — .hero-map must keep its absolute, and
+   .hero > div would outrank it (0,1,1 vs 0,1,0) */
+.hero > div:not([class]){ position:relative; z-index:1; }
+
+/* ---------- the living founder map ----------
+   One SVG behind the content: faint coordinate ticks on the right
+   half, one route from just above the steps strip to the dashboard,
+   three waypoints, two navigation labels. Anchored bottom-right
+   (xMaxYMax slice) so narrow viewports crop the quiet left side and
+   the route's destination never leaves the frame. */
+.hero-map{
+  position:absolute; inset:0; z-index:0;
+  pointer-events:none;
+}
+.hero-map svg{ width:100%; height:100%; display:block; }
+.hero-map .tick{ stroke:var(--ink); opacity:.05; stroke-width:1; }
+.hero-map .route{
+  fill:none; stroke:var(--bd-2); stroke-width:1.5;
+  opacity:.55;
+}
+.hero-map .wp{ fill:var(--emerald); opacity:.35; }
+.hero-map .wp--end{ opacity:.55; }
+.hero-map text{
+  font-family:var(--body); font-size:9.5px; font-weight:700;
+  letter-spacing:.16em; fill:var(--muted-2);
+}
+.hero-map .lbl-end{ fill:var(--emerald); }
+@media (max-width: 1200px){
+  .hero-map text{ display:none; }     /* metadata, not sticker copy */
+}
+@media (max-width: 900px){
+  .hero-map .tick{ display:none; }
+  .hero-map .route{ opacity:.3; }
+  .hero-map .wp:not(.wp--end){ display:none; }
+}
+
+/* soft light behind the dashboard, not a halo */
+.hero-glow{
+  position:absolute; inset:-12% -16%;
+  background:radial-gradient(closest-side, rgba(16,185,129,.16), transparent 72%);
+  opacity:.13; pointer-events:none;
+}
+
+/* ---------- motion. Everything below this line is decoration:
+   the base styles above are the finished state, so reduced motion
+   simply never plays any of it. ---------- */
+@media (prefers-reduced-motion: no-preference){
+  .hero .eyebrow,
+  .hero h1{
+    animation:heroRise .6s cubic-bezier(.22,1,.36,1) both;
+  }
+  .hero h1{ animation-delay:.08s; }
+  .hero-sub{ animation:heroRise .55s cubic-bezier(.22,1,.36,1) .3s both; }
+  .hero-actions{ animation:heroRise .55s cubic-bezier(.22,1,.36,1) .38s both; }
+  .hero-note{ animation:heroRise .55s cubic-bezier(.22,1,.36,1) .46s both; }
+  .hero-steps{ animation:heroRise .55s cubic-bezier(.22,1,.36,1) .54s both; }
+
+  .hero-map .route{
+    stroke-dasharray:1; stroke-dashoffset:1;
+    animation:routeDraw .8s cubic-bezier(.22,1,.36,1) .4s forwards;
+  }
+  .hero-map .wp{ opacity:0; animation:wpIn .4s ease-out forwards; }
+  .hero-map .wp1{ animation-delay:.55s; }
+  .hero-map .wp2{ animation-delay:.85s; }
+  .hero-map .wp3{ animation-delay:1.15s; }
+  .hero-map text{ opacity:0; animation:wpIn .5s ease-out 1.2s forwards; }
+
+  .glimpse-card{
+    animation:glimpseIn .7s cubic-bezier(.22,1,.36,1) .7s both;
+  }
+
+  /* idle: the glow breathes; two waypoints pulse, never together */
+  .hero-glow{ animation:glowBreathe 9s ease-in-out 2s infinite alternate; }
+  .hero-map .wp2{ animation:wpIn .4s ease-out .85s forwards, wpPulse 6s ease-in-out 3s infinite; }
+  .hero-map .wp3{ animation:wpIn .4s ease-out 1.15s forwards, wpPulse 7s ease-in-out 6.5s infinite; }
+}
+@keyframes heroRise{
+  from{ opacity:0; translate:0 10px; }
+  to  { opacity:1; translate:none; }
+}
+@keyframes glimpseIn{
+  from{ opacity:0; translate:0 14px; scale:.96; }
+  to  { opacity:1; translate:none; scale:1; }
+}
+@keyframes routeDraw{ to{ stroke-dashoffset:0; } }
+@keyframes wpIn{ to{ opacity:.35; } }
+@keyframes glowBreathe{
+  from{ opacity:.10; } to{ opacity:.16; }
+}
+@keyframes wpPulse{
+  0%,100%{ scale:1; opacity:.35; }
+  8%     { scale:1.12; opacity:.5; }
+  16%    { scale:1; opacity:.35; }
+}
+
+/* ---------- leaving the hero: the card straightens ----------
+   The tilt belongs to "looking at an object in a page"; as the hero
+   scrolls away the card squares up, and the map fades below it.
+   Scrubbed off the hero's own exit — the hero is the moving element
+   then, so view() is honest. Entrance owns opacity/translate/scale;
+   this owns transform; they never fight. */
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion: no-preference) and (min-width: 1025px){
+    .hero{ view-timeline-name:--hero; view-timeline-axis:block; }
+    .glimpse-card{
+      animation:glimpseIn .7s cubic-bezier(.22,1,.36,1) .7s both,
+                heroStraighten auto linear both;
+      animation-timeline:auto, --hero;
+      animation-range:normal, exit 0% exit 70%;
+    }
+    .hero-map{
+      animation:mapQuiet auto linear both;
+      animation-timeline:--hero;
+      animation-range:exit 0% exit 50%;
+    }
+  }
+}
+@keyframes heroStraighten{
+  to{ transform:perspective(1400px) rotateY(0deg) rotateX(0deg); }
+}
+@keyframes mapQuiet{ to{ opacity:0; } }
+
 .hero h1{
   font-family:var(--serif); font-weight:500;
   font-size:clamp(44px, 4.6vw, 72px);
@@ -202,7 +325,7 @@ em{ font-style:italic; }
 
 /* The fragment: one Ask-Ally bar and one current-state strip, cropped.
    Foreshadows the dashboard without explaining it. */
-.hero-glimpse{ position:relative; }
+.hero-glimpse{ position:relative; z-index:1; }
 .glimpse-card{
   background:var(--ivory-2); border:1px solid var(--bd);
   border-radius:var(--r-card);
@@ -1030,6 +1153,25 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 
 <!-- ================= HERO ================= -->
 <section class="hero shell">
+  <div class="hero-map" aria-hidden="true">
+    <svg viewBox="0 0 1440 800" preserveAspectRatio="xMaxYMax slice">
+      <g class="ticks">
+        <path class="tick" d="M760 120v12M754 126h12"/>
+        <path class="tick" d="M1050 90v12M1044 96h12"/>
+        <path class="tick" d="M1300 200v12M1294 206h12"/>
+        <path class="tick" d="M880 640v12M874 646h12"/>
+        <path class="tick" d="M1240 560v12M1234 566h12"/>
+        <path class="tick" d="M660 420v12M654 426h12"/>
+      </g>
+      <path class="route" pathLength="1"
+            d="M150 640 C 330 600, 430 560, 560 520 S 900 430, 1180 340"/>
+      <circle class="wp wp1" cx="150" cy="640" r="4.5"/>
+      <circle class="wp wp2" cx="560" cy="520" r="4"/>
+      <circle class="wp wp3 wp--end" cx="1180" cy="340" r="5"/>
+      <text x="150" y="668">YOU ARE HERE</text>
+      <text class="lbl-end" x="1188" y="322" text-anchor="end">YOUR NEXT MOVE &#8594;</text>
+    </svg>
+  </div>
   <div>
     <p class="eyebrow">The Founder&rsquo;s Compass</p>
     <h1>You don&rsquo;t need all the answers. <em>You need to know your next move.</em></h1>
@@ -1048,6 +1190,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   </div>
 
   <div class="hero-glimpse" aria-label="A fragment of the Ally interface">
+    <span class="hero-glow" aria-hidden="true"></span>
     <div class="glimpse-card">
       <div class="glimpse-side" aria-hidden="true">
         <b>Go<i>XL</i></b>
@@ -1559,6 +1702,26 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 </footer>
 
 <script>
+/* ============================================================
+   HERO MAP PARALLAX — background layers only, 4px at most, fine
+   pointers only, and never under reduced motion. The card itself
+   never moves with the pointer: it is the thing being trusted.
+   ============================================================ */
+(function(){
+  var map = document.querySelector('.hero-map');
+  var hero = document.querySelector('.hero');
+  if(!map || !hero) return;
+  if(!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  hero.addEventListener('pointermove', function(e){
+    var r = hero.getBoundingClientRect();
+    var dx = ((e.clientX - r.left) / r.width  - .5) * 8;   /* -4..4px */
+    var dy = ((e.clientY - r.top)  / r.height - .5) * 6;
+    map.style.translate = dx.toFixed(1) + 'px ' + dy.toFixed(1) + 'px';
+  });
+  hero.addEventListener('pointerleave', function(){ map.style.translate = ''; });
+})();
+
 /* ============================================================
    FULL-SCREEN VIEWER
    The dashboard already exists in the section, so the viewer borrows
