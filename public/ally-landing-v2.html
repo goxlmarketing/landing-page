@@ -1043,6 +1043,58 @@ em{ font-style:italic; }
 .difference-flow span:last-child{border-color:var(--emerald);background:rgba(16,185,129,.08)}
 .flow-arrow{color:var(--muted-2);font-size:15px}
 /* ============================================================
+   HOW ALLY THINKS — a vertical run of steps. Each step lights as it
+   reaches the middle of the screen, so the rule fills as you read
+   down it rather than arriving all at once.
+   ============================================================ */
+.think{ background:var(--ivory); padding:clamp(80px, 11vh, 130px) 0 clamp(88px, 12vh, 140px); }
+.think h2{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(32px, 3.4vw, 50px); line-height:1.1;
+  letter-spacing:-.02em; margin-top:16px;
+}
+.think h2 em{ color:var(--emerald); }
+
+.think-list{ list-style:none; margin-top:clamp(44px, 6vh, 68px); }
+.think-step{
+  position:relative;
+  display:grid; grid-template-columns:64px minmax(0,1fr);
+  gap:28px; padding-bottom:clamp(40px, 5vh, 58px);
+  opacity:.55; transition:opacity .55s ease;
+}
+.think-step:last-child{ padding-bottom:0; }
+.think-step.is-on{ opacity:1; }
+
+/* each step draws the rule for the gap beneath it */
+.think-step::before{
+  content:""; position:absolute; left:32px; margin-left:-1px;
+  top:64px; bottom:0; width:2px;
+  background:var(--bd); transition:background .6s ease;
+}
+.think-step:last-child::before{ display:none; }
+.think-step.is-on::before{ background:var(--emerald); }
+
+.think-dot{
+  width:64px; height:64px; border-radius:50%;
+  display:grid; place-items:center; position:relative; z-index:1;
+  font-family:var(--display); font-size:13px; font-weight:800;
+  background:var(--ivory); border:1px solid var(--bd-2); color:var(--muted-2);
+  transition:background .5s ease, border-color .5s ease, color .5s ease;
+}
+.think-step.is-on .think-dot{
+  background:var(--emerald); border-color:var(--emerald); color:#fff;
+}
+.think-body{ padding-top:14px; }
+.think-body h3{
+  font-family:var(--serif); font-weight:500;
+  font-size:clamp(21px, 1.9vw, 26px); color:var(--ink);
+}
+.think-body p{
+  margin-top:10px; max-width:520px;
+  font-size:15.5px; line-height:1.6; color:var(--muted);
+}
+
+/* ============================================================
    CTA — return to ivory; the real early-access form, inline.
    ============================================================ */
 /* small credibility section: one statement, one divider row */
@@ -1159,6 +1211,10 @@ em{ font-style:italic; }
   .difference-grid{ margin-top:52px; }
   .context-map{ max-width:620px; }
   .dir-grid{ grid-template-columns:1fr; }
+  .think-step{ grid-template-columns:48px minmax(0,1fr); gap:18px; }
+  .think-step::before{ left:24px; top:48px; }
+  .think-dot{ width:48px; height:48px; font-size:11.5px; }
+  .think-body{ padding-top:8px; }
   .nav-links{ display:none; }
   .metric-row{ grid-template-columns:1fr 1fr; }
   .stage-row, .phil-row{ grid-template-columns:1fr; }
@@ -1746,6 +1802,49 @@ em{ font-style:italic; }
     </div>
   </div>
 </section>
+<!-- ================= HOW ALLY THINKS ================= -->
+<section class="think shell">
+  <p class="eyebrow">How Ally thinks</p>
+  <h2>Don&rsquo;t jump <em>to the answer.</em></h2>
+  <ol class="think-list">
+    <li class="think-step">
+      <span class="think-dot">01</span>
+      <div class="think-body">
+        <h3>Understand</h3>
+        <p>Understand where the founder and the business currently are &mdash; not where a template assumes they should be.</p>
+      </div>
+    </li>
+    <li class="think-step">
+      <span class="think-dot">02</span>
+      <div class="think-body">
+        <h3>Diagnose</h3>
+        <p>Explore what is really happening beneath the surface, beyond the symptom that prompted the question.</p>
+      </div>
+    </li>
+    <li class="think-step">
+      <span class="think-dot">03</span>
+      <div class="think-body">
+        <h3>Find the root cause</h3>
+        <p>Separate symptoms from the actual problem, so effort goes toward what will actually change the outcome.</p>
+      </div>
+    </li>
+    <li class="think-step">
+      <span class="think-dot">04</span>
+      <div class="think-body">
+        <h3>Find the priority</h3>
+        <p>Identify what deserves attention now, and what can honestly wait until later.</p>
+      </div>
+    </li>
+    <li class="think-step">
+      <span class="think-dot">05</span>
+      <div class="think-body">
+        <h3>Take the next step</h3>
+        <p>Move forward with one clear and meaningful action &mdash; not a list of everything you could possibly do.</p>
+      </div>
+    </li>
+  </ol>
+</section>
+
 <!-- ================= PHILOSOPHY / TRUST ================= -->
 <section class="philosophy shell">
   <p class="eyebrow">Built around real founder journeys</p>
@@ -1946,6 +2045,29 @@ em{ font-style:italic; }
      to invoke it directly. Harmless in production. */
   window.__allyImmersion = { update: update, progress: progress, gotoP: gotoP, gotoStage: gotoStage, stageSpan: stageSpan };
 
+})();
+
+/* ============================================================
+   HOW ALLY THINKS — light each step as it reaches mid-screen.
+   One-shot: a step that has lit stays lit, so scrolling back up
+   doesn't unwind the rule behind you. Without IntersectionObserver
+   every step is simply lit from the start; nothing depends on it.
+   ============================================================ */
+(function(){
+  var steps = [].slice.call(document.querySelectorAll('.think-step'));
+  if(!steps.length) return;
+  if(!('IntersectionObserver' in window)){
+    steps.forEach(function(s){ s.classList.add('is-on'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      e.target.classList.add('is-on');
+      io.unobserve(e.target);
+    });
+  }, { rootMargin: '0px 0px -45% 0px' });
+  steps.forEach(function(s){ io.observe(s); });
 })();
 
 /* ============================================================
