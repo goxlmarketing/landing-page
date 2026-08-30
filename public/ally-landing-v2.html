@@ -335,6 +335,31 @@ em{ font-style:italic; }
 }
 .why-lead strong{ font-weight:500; color:var(--ink); }
 .why-lead strong em{ color:var(--emerald); }
+.why-meet{
+  margin-top:clamp(70px, 9vh, 110px);
+  padding-top:clamp(56px, 7vh, 84px);
+  border-top:1px solid var(--bd);
+}
+.why-meet h2{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(30px, 3vw, 46px); line-height:1.14;
+  letter-spacing:-.015em; margin-top:16px; max-width:640px;
+}
+.why-meet h2 em{ color:var(--emerald); }
+.why-meet-sub{
+  margin-top:22px; max-width:560px;
+  font-size:15.5px; line-height:1.7; color:var(--muted);
+}
+.why-meet-hint{
+  display:flex; align-items:center; gap:9px;
+  margin-top:34px;
+  font-size:11.5px; letter-spacing:.16em; text-transform:uppercase;
+  font-weight:700; color:var(--muted);
+}
+.why-meet-hint i{
+  width:7px; height:7px; border-radius:50%;
+  background:var(--emerald); flex:0 0 auto;
+}
 
 /* ============================================================
    THE REAL PROBLEM — dark, then a gradient back to ivory so the
@@ -1224,6 +1249,13 @@ em{ font-style:italic; }
     <p>Traditional founder support can be useful, but it depends on availability, time and context. AI can answer instantly &mdash; but an answer that doesn&rsquo;t understand the founder and the business may still miss what matters. Ally exists to make structured, contextual founder support continuous and accessible.</p>
   </div>
   <p class="why-lead">Before Ally tells you what to do, <strong>it needs to understand <em>where you actually are.</em></strong></p>
+
+  <div class="why-meet">
+    <p class="eyebrow">Meet Ally</p>
+    <h2>This is what it looks like <em>from inside.</em></h2>
+    <p class="why-meet-sub">Not a chat window. A working compass that holds your founder context, your business context and your current situation in one place &mdash; and keeps them pointing the same way.</p>
+    <p class="why-meet-hint"><i></i> Scroll to step inside the dashboard</p>
+  </div>
 </section>
 
 <!-- ================= IMMERSION ================= -->
