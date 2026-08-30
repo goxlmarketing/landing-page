@@ -188,6 +188,7 @@ em{ font-style:italic; }
 .btn:hover{ background:var(--forest-2); }
 .link-quiet{ font-size:14px; font-weight:600; color:var(--muted); }
 .link-quiet:hover{ color:var(--forest); }
+.hero-note{ margin-top:16px; font-size:13px; color:var(--muted-2); }
 .hero-steps{
   display:grid; grid-template-columns:repeat(4,1fr);
   max-width:560px; margin-top:64px; border-top:1px solid var(--bd);
@@ -272,21 +273,81 @@ em{ font-style:italic; }
 }
 
 /* ============================================================
-   BRIDGE — breathing room; makes the immersion feel inevitable.
+   YOUR STARTING POINT — four founder stages, one divider row.
    ============================================================ */
-.bridge{
-  min-height:72svh; display:grid; align-content:center;
+.stages{
   border-top:1px solid var(--bd);
-  padding:80px 0;
+  padding:clamp(80px, 11vh, 130px) 0;
 }
-.bridge .eyebrow{ margin-bottom:28px; }
-.bridge p{
+.stages h2{
   font-family:var(--serif); font-weight:400;
-  font-size:clamp(30px, 3.2vw, 48px); line-height:1.22;
-  letter-spacing:-.015em; max-width:900px; color:var(--muted);
+  font-size:clamp(30px, 3vw, 44px); line-height:1.16;
+  letter-spacing:-.015em; margin-top:16px; max-width:700px;
 }
-.bridge p strong{ font-weight:500; color:var(--ink); display:block; margin-top:.4em; }
-.bridge p strong em{ color:var(--emerald); }
+.stages h2 em{ color:var(--emerald); }
+.stage-row{
+  display:grid; grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--bd);
+  margin-top:44px;
+}
+.stage-row div{ padding:22px 22px 8px 22px; border-left:1px solid var(--bd); }
+.stage-row div:first-child{ border-left:0; padding-left:0; }
+.stage-row b{
+  display:block; font-family:var(--display-tight);
+  font-size:19px; font-weight:800; letter-spacing:-.01em;
+  color:var(--emerald);
+}
+.stage-row p{
+  margin-top:12px; font-size:14.5px; line-height:1.55; color:var(--ink);
+}
+.stages-close{
+  margin-top:52px; font-family:var(--serif); font-style:italic;
+  font-size:clamp(17px, 1.5vw, 21px); line-height:1.5; color:var(--muted);
+}
+.stages-close strong{ font-style:italic; font-weight:500; color:var(--ink); }
+
+/* ============================================================
+   THE REAL PROBLEM — dark, then a gradient back to ivory so the
+   immersion's light opening reads as stepping out of the question
+   into the product.
+   ============================================================ */
+.problem{
+  background:linear-gradient(180deg,
+    var(--forest-night) 0%, var(--forest-night) 82%, var(--ivory) 100%);
+  color:var(--on-dark);
+  padding:clamp(90px, 12vh, 150px) 0 clamp(160px, 22vh, 240px);
+}
+.problem .eyebrow{ color:var(--emerald-bright); }
+.problem h2{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(30px, 3vw, 46px); line-height:1.14;
+  letter-spacing:-.015em; margin-top:16px; max-width:760px;
+}
+.problem h2 em{ color:var(--emerald-bright); }
+.problem-grid{
+  display:grid; grid-template-columns:1fr 1fr; gap:14px;
+  margin-top:48px; max-width:1020px;
+}
+.problem-grid article{
+  background:var(--forest-deep-2); border:1px solid rgba(94,234,212,.14);
+  border-radius:var(--r-card); padding:22px 24px;
+}
+.problem-grid .step{
+  font-family:var(--display); font-size:12px; font-weight:800;
+  letter-spacing:.12em; color:var(--emerald-bright);
+}
+.problem-grid h3{
+  font-family:var(--serif); font-weight:500; font-style:italic;
+  font-size:19px; color:#fff; margin:10px 0 8px;
+}
+.problem-grid p{ font-size:13.5px; line-height:1.55; color:var(--on-dark-muted); }
+.problem-close{
+  margin-top:52px; font-family:var(--serif);
+  font-size:clamp(19px, 1.8vw, 25px); line-height:1.45; color:var(--on-dark-muted);
+  max-width:640px;
+}
+.problem-close strong{ font-weight:500; color:#fff; }
+.problem-close strong em{ color:var(--emerald-bright); }
 
 /* ============================================================
    IMMERSION — the centrepiece.
@@ -878,6 +939,29 @@ em{ font-style:italic; }
 /* ============================================================
    CTA — return to ivory; the real early-access form, inline.
    ============================================================ */
+/* small credibility section: one statement, one divider row */
+.philosophy{
+  border-top:1px solid var(--bd);
+  padding:clamp(80px, 11vh, 130px) 0;
+}
+.philosophy h2{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(26px, 2.6vw, 38px); line-height:1.22;
+  letter-spacing:-.015em; margin-top:16px; max-width:780px;
+}
+.philosophy h2 em{ color:var(--emerald); }
+.phil-row{
+  display:grid; grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--bd); margin-top:44px;
+}
+.phil-row div{ padding:22px 24px 8px 24px; border-left:1px solid var(--bd); }
+.phil-row div:first-child{ border-left:0; padding-left:0; }
+.phil-row b{
+  display:block; font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  font-weight:700; color:var(--emerald);
+}
+.phil-row p{ margin-top:12px; font-size:14px; line-height:1.6; color:var(--muted); }
+
 .cta{
   background:var(--ivory);
   padding:clamp(100px, 14vh, 170px) 0 60px;
@@ -893,6 +977,7 @@ em{ font-style:italic; }
 }
 .cta h2 em{ color:var(--emerald); }
 .cta-sub{ margin-top:22px; font-size:15.5px; line-height:1.7; color:var(--muted); max-width:440px; }
+.cta-close{ margin-top:26px; font-family:var(--serif); font-style:italic; font-size:15px; color:var(--muted-2); }
 .ea-card{
   background:#fff; border:1px solid var(--bd);
   border-radius:var(--r-card); box-shadow:var(--shadow-card);
@@ -966,6 +1051,9 @@ em{ font-style:italic; }
   .dir-grid{ grid-template-columns:1fr; }
   .nav-links{ display:none; }
   .metric-row{ grid-template-columns:1fr 1fr; }
+  .stage-row, .phil-row{ grid-template-columns:1fr; }
+  .stage-row div, .phil-row div{ border-left:0; padding-left:0; }
+  .problem-grid{ grid-template-columns:1fr; }
   .metric-row article:nth-child(2n){ border-right:0; }
   .stage h2{ min-height:0; }
 }
@@ -992,12 +1080,13 @@ em{ font-style:italic; }
 <section class="hero shell">
   <div>
     <p class="eyebrow">The Founder&rsquo;s Compass</p>
-    <h1>You don&rsquo;t need more advice. <em>You need to know what actually matters.</em></h1>
-    <p class="hero-sub">Ally understands the founder, the business and the moment &mdash; then turns uncertainty into a clear next move.</p>
+    <h1>You don&rsquo;t need all the answers. <em>You need to know your next move.</em></h1>
+    <p class="hero-sub">Ally understands your journey, your business and the challenges you&rsquo;re facing &mdash; so you can see what truly matters and move forward with clarity.</p>
     <div class="hero-actions">
-      <a class="btn" href="#early-access">Start your diagnosis <span aria-hidden="true">→</span></a>
-      <a class="link-quiet" href="#how">See how Ally works ↓</a>
+      <a class="btn" href="#early-access">Register for early access <span aria-hidden="true">→</span></a>
+      <a class="link-quiet" href="#how">See how Ally thinks ↓</a>
     </div>
+    <p class="hero-note">No generic advice. Ally starts by understanding where you actually are.</p>
     <div class="hero-steps" aria-label="The Ally journey">
       <div><strong>01</strong><span>Understand</span></div>
       <div><strong>02</strong><span>Diagnose</span></div>
@@ -1021,19 +1110,68 @@ em{ font-style:italic; }
       </div>
       <div class="glimpse-strip">
         <div><span>Founder clarity</span><strong>Emerging</strong></div>
-        <div><span>Invisible gaps</span><strong>03</strong></div>
-        <div><span>Primary signal</span><strong>Acquisition</strong></div>
+        <div><span>Easy to miss</span><strong>03</strong></div>
+        <div><span>Needs attention</span><strong>Customers</strong></div>
       </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ================= BRIDGE ================= -->
-<section class="bridge shell" id="how">
-  <p class="eyebrow">01 &mdash; How Ally works</p>
-  <p>Most tools wait for the right question.
-    <strong>Ally first understands <em>what is actually happening.</em></strong></p>
+<!-- ================= YOUR STARTING POINT ================= -->
+<section class="stages shell">
+  <p class="eyebrow">Your starting point</p>
+  <h2>Wherever you are, <em>start from where you are.</em></h2>
+  <div class="stage-row">
+    <div>
+      <b>&minus;1 &rarr; 0</b>
+      <p>I want to start, but I don&rsquo;t know where to begin.</p>
+    </div>
+    <div>
+      <b>0 &rarr; 1</b>
+      <p>I have an idea. Now I want to make it real.</p>
+    </div>
+    <div>
+      <b>1 &rarr; 10</b>
+      <p>My business is growing, but everything feels important.</p>
+    </div>
+    <div>
+      <b>10 &rarr; Beyond</b>
+      <p>Growth is no longer the only challenge. Better decisions are.</p>
+    </div>
+  </div>
+  <p class="stages-close">Your stage is different. Your context is different. <strong>Your next step should be different too.</strong></p>
+</section>
+
+<!-- ================= THE REAL PROBLEM ================= -->
+<section class="problem" id="how">
+  <div class="shell">
+    <p class="eyebrow">Look closer</p>
+    <h2>The problem you see isn&rsquo;t always <em>the problem you need to solve.</em></h2>
+    <div class="problem-grid">
+      <article>
+        <span class="step">01</span>
+        <h3>&ldquo;I need more sales.&rdquo;</h3>
+        <p>Maybe the real issue is how clearly the right customers understand your value.</p>
+      </article>
+      <article>
+        <span class="step">02</span>
+        <h3>&ldquo;My team isn&rsquo;t performing.&rdquo;</h3>
+        <p>Maybe expectations aren&rsquo;t clear enough.</p>
+      </article>
+      <article>
+        <span class="step">03</span>
+        <h3>&ldquo;I don&rsquo;t have enough time.&rdquo;</h3>
+        <p>Maybe your attention is going to the wrong things.</p>
+      </article>
+      <article>
+        <span class="step">04</span>
+        <h3>&ldquo;My business isn&rsquo;t growing.&rdquo;</h3>
+        <p>Maybe marketing isn&rsquo;t the problem at all.</p>
+      </article>
+    </div>
+    <p class="problem-close">Most people start by searching for answers. <strong>Ally starts by <em>understanding the problem.</em></strong></p>
+  </div>
 </section>
 
 <!-- ================= IMMERSION ================= -->
@@ -1130,14 +1268,14 @@ em{ font-style:italic; }
                    experience, what you're building, audience. -->
               <div class="stage" data-s="0">
                 <p class="screen-label">Getting to know you &middot; Understanding where you are</p>
-                <h2>Before Ally gives direction, it understands where you&rsquo;re <em>actually starting from.</em></h2>
-                <p class="insight">Ally connects founder context with business context before deciding what deserves attention.</p>
+                <h2>Ally starts by understanding <em>where you actually are.</em></h2>
+                <p class="insight">You&rsquo;re building two things at once: your business and yourself as a founder.</p>
                 <div class="ask-bar" aria-hidden="true">
                   <span>Ask Ally about what may be creating the noise...</span>
                   <b>→ Ask Ally</b>
                 </div>
                 <div class="state-head">
-                  <span>Founder context</span>
+                  <span>You &middot; Your business &middot; Right now</span>
                   <h3>Where you&rsquo;re starting from</h3>
                 </div>
                 <div class="metric-row">
@@ -1155,21 +1293,21 @@ em{ font-style:italic; }
                    the categories and outcomes appear here. -->
               <div class="stage" data-s="1">
                 <p class="screen-label">What do you know &middot; Reality check</p>
-                <h2>Not every problem deserves your attention. <em>This one does.</em></h2>
-                <p class="insight">Three patterns need attention &mdash; demand is inconsistent, not absent.</p>
+                <h2>Don&rsquo;t jump to the answer. <em>First understand what&rsquo;s really happening.</em></h2>
+                <p class="insight">The problem you notice first may only be the symptom.</p>
                 <div class="ask-bar" aria-hidden="true">
-                  <span>Ask Ally why this signal matters...</span>
+                  <span>Ask Ally why this matters...</span>
                   <b>→ Ask Ally</b>
                 </div>
                 <div class="state-head">
                   <span>Reality check</span>
-                  <h3>What you know &mdash; and what&rsquo;s invisible from inside</h3>
+                  <h3>What you know &mdash; and what&rsquo;s easy to miss</h3>
                 </div>
                 <div class="metric-row">
-                  <article><span>Founder signals</span><strong>05</strong><p>Honest reality checks about where you really are.</p></article>
-                  <article><span>Business signals</span><strong>05</strong><p>The same honesty, about the business itself.</p></article>
-                  <article><span>Invisible gaps</span><strong>03</strong><p>Patterns hard to see from inside the work.</p></article>
-                  <article><span>Primary signal</span><strong>Acquisition</strong><p>Demand is inconsistent, not absent.</p></article>
+                  <article><span>How you&rsquo;re doing</span><strong>05</strong><p>Honest checks about how things are going for you.</p></article>
+                  <article><span>The business</span><strong>05</strong><p>The same honesty, about how it&rsquo;s really doing.</p></article>
+                  <article><span>Easy to miss</span><strong>03</strong><p>Patterns hard to see from inside the work.</p></article>
+                  <article><span>Needs attention</span><strong>Customers</strong><p>Getting them isn&rsquo;t consistent yet.</p></article>
                 </div>
               </div>
 
@@ -1186,7 +1324,7 @@ em{ font-style:italic; }
                   <b>→ Ask Ally</b>
                 </div>
                 <div class="state-head">
-                  <span>What Ally noticed</span>
+                  <span>You said &rarr; Ally noticed</span>
                   <h3>Getting customers isn&rsquo;t consistent yet.</h3>
                 </div>
                 <div class="metric-row">
@@ -1203,27 +1341,27 @@ em{ font-style:italic; }
               <div class="stage" data-s="3">
                 <p class="screen-label">Where you&rsquo;re headed &middot; One-year vision</p>
                 <h2>What does success look like <em>one year from today?</em></h2>
-                <p class="insight">A predictable acquisition engine that consistently creates qualified opportunities.</p>
+                <p class="insight">A reliable way to bring in the right customers every month.</p>
                 <div class="ask-bar" aria-hidden="true">
                   <span>Ask Ally what this vision asks of you now...</span>
                   <b>→ Ask Ally</b>
                 </div>
                 <div class="state-head">
-                  <span>Where you&rsquo;re trying to go</span>
-                  <h3>The heading that decides what matters now</h3>
+                  <span>Where you want to go</span>
+                  <h3>Where you want to go helps decide what matters now</h3>
                 </div>
                 <div class="metric-row">
-                  <article><span>Horizon</span><strong>1 year</strong><p>Success, described in your own words.</p></article>
+                  <article><span>Where you want to go</span><strong>1 year</strong><p>Success, described in your own words.</p></article>
                   <article><span>First milestone</span><strong>90 days</strong><p>The one thing to achieve first.</p></article>
-                  <article><span>Priorities set</span><strong>03</strong><p>The next 90 days, already sequenced.</p></article>
-                  <article><span>Heading</span><strong>Acquisition</strong><p>Every move should serve the heading.</p></article>
+                  <article><span>What matters first</span><strong>03</strong><p>Three priorities, already sequenced.</p></article>
+                  <article><span>Main focus</span><strong>Customers</strong><p>Customer growth, made repeatable.</p></article>
                 </div>
               </div>
 
               <!-- STAGE 5 · TURN DIRECTION INTO ACTION -->
               <div class="stage" data-s="4">
                 <p class="screen-label">Where you&rsquo;re headed &middot; Today</p>
-                <h2>Clarity only matters when it changes <em>what you do today.</em></h2>
+                <h2>From &ldquo;I have too much to do&rdquo; to <em>&ldquo;I know what matters now.&rdquo;</em></h2>
                 <p class="insight">Set what matters today. Ally keeps the list honest and reminds you what is due.</p>
                 <div class="ask-bar" aria-hidden="true">
                   <span>Ask Ally to help plan today...</span>
@@ -1256,7 +1394,7 @@ em{ font-style:italic; }
 
             <div class="ns-line">
               <span>Your north star &middot; from your one-year vision</span>
-              <p>A predictable acquisition engine that consistently creates qualified opportunities.</p>
+              <p>A reliable way to bring in the right customers every month.</p>
             </div>
           </div>
         </div>
@@ -1273,7 +1411,7 @@ em{ font-style:italic; }
         </div>
         <div class="cap-cell">
           <div data-s="0"><strong>Understand the founder.</strong><p>Ally begins with context &mdash; not assumptions.</p></div>
-          <div data-s="1"><strong>Diagnose the situation.</strong><p>Find the signal hiding inside all the noise.</p></div>
+          <div data-s="1"><strong>Diagnose the situation.</strong><p>See what&rsquo;s really happening under the noise.</p></div>
           <div data-s="2"><strong>Choose a direction.</strong><p>Ally narrows the field until the next move becomes clear.</p></div>
           <div data-s="3"><strong>Set the heading.</strong><p>Where you&rsquo;re trying to go decides what matters now.</p></div>
           <div data-s="4"><strong>Turn direction into action.</strong><p>The compass becomes a plan for today.</p></div>
@@ -1349,8 +1487,8 @@ em{ font-style:italic; }
   <div class="shell north-grid">
     <div>
       <p class="eyebrow">Your North Star</p>
-      <h2>Every founder is moving. <em>Ally helps make sure it&rsquo;s in the right direction.</em></h2>
-      <p class="north-sub">Your one-year vision sets the heading. Ally keeps three things pointing the same way: where you want to go, what matters now, and what you do today.</p>
+      <h2>Every founder is moving. <em>Ally helps you see where to go next.</em></h2>
+      <p class="north-sub">Where you want to go, what matters now and what you do today should point in the same direction.</p>
     </div>
     <div class="compass" aria-hidden="true">
       <svg viewBox="0 0 420 420" fill="none">
@@ -1368,13 +1506,34 @@ em{ font-style:italic; }
   </div>
 </section>
 
+<!-- ================= PHILOSOPHY / TRUST ================= -->
+<section class="philosophy shell">
+  <p class="eyebrow">Built around real founder journeys</p>
+  <h2>Founders don&rsquo;t need another place to collect advice. <em>They need a better way to understand their reality.</em></h2>
+  <div class="phil-row">
+    <div>
+      <b>01 &mdash; Structured thinking</b>
+      <p>Built around a structured way of understanding founders and businesses &mdash; not generic prompts or advice templates.</p>
+    </div>
+    <div>
+      <b>02 &mdash; Founder + business together</b>
+      <p>Designed to understand both the person making the decisions and the business they&rsquo;re building.</p>
+    </div>
+    <div>
+      <b>03 &mdash; Early access</b>
+      <p>Currently onboarding founders through early access.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ================= CTA + EARLY ACCESS ================= -->
 <section class="cta" id="early-access">
   <div class="shell cta-grid">
     <div>
       <p class="eyebrow">The Founder&rsquo;s Compass</p>
-      <h2>Find out what deserves your attention <em>next.</em></h2>
-      <p class="cta-sub">Start with the diagnosis. Leave with a clearer view of yourself, your business and your next move.</p>
+      <h2>You already have a journey. <em>Now understand where it should go next.</em></h2>
+      <p class="cta-sub">Start by understanding where you are today.</p>
+      <p class="cta-close">Your journey starts with understanding.</p>
     </div>
 
     <div class="ea-card">
