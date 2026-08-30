@@ -110,6 +110,14 @@
 
 *{ box-sizing:border-box; margin:0; padding:0; }
 html{ scroll-behavior:auto; }
+/* The page still scrolls; only the bar is hidden. Scrolling stays fully
+   native — wheel, trackpad, keyboard, touch, and the scroll-driven
+   animations all behave exactly as before. Firefox takes
+   scrollbar-width, WebKit the pseudo-element, old Edge the -ms rule. */
+html{ scrollbar-width:none; -ms-overflow-style:none; }
+html::-webkit-scrollbar,
+body::-webkit-scrollbar{ width:0; height:0; display:none; }
+
 body{
   background:var(--ivory);
   color:var(--ink);
