@@ -307,6 +307,36 @@ em{ font-style:italic; }
 .stages-close strong{ font-style:italic; font-weight:500; color:var(--ink); }
 
 /* ============================================================
+   WHY ALLY EXISTS — one compact narrative, ivory, editorial.
+   ============================================================ */
+.why{
+  padding:clamp(80px, 11vh, 130px) 0;
+}
+.why h2{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(28px, 2.8vw, 42px); line-height:1.16;
+  letter-spacing:-.015em; margin-top:16px; max-width:720px;
+}
+.why h2 em{ color:var(--emerald); }
+.why-body{ max-width:640px; }
+.why-body p{
+  margin-top:22px; font-size:15.5px; line-height:1.7; color:var(--muted);
+}
+.why-pull{
+  margin:34px 0 12px; padding-left:22px;
+  border-left:3px solid var(--emerald);
+  font-family:var(--serif); font-style:italic;
+  font-size:clamp(18px, 1.7vw, 23px); line-height:1.5; color:var(--ink);
+  max-width:620px;
+}
+.why-lead{
+  margin-top:40px; font-family:var(--serif);
+  font-size:clamp(17px, 1.5vw, 21px); color:var(--muted);
+}
+.why-lead strong{ font-weight:500; color:var(--ink); }
+.why-lead strong em{ color:var(--emerald); }
+
+/* ============================================================
    THE REAL PROBLEM — dark, then a gradient back to ivory so the
    immersion's light opening reads as stepping out of the question
    into the product.
@@ -961,6 +991,8 @@ em{ font-style:italic; }
   font-weight:700; color:var(--emerald);
 }
 .phil-row p{ margin-top:12px; font-size:14px; line-height:1.6; color:var(--muted); }
+.phil-note{ margin-top:36px; font-size:12.5px; color:var(--muted-2); }
+.phil-note a{ text-decoration:underline; color:var(--muted); }
 
 .cta{
   background:var(--ivory);
@@ -1172,6 +1204,18 @@ em{ font-style:italic; }
     </div>
     <p class="problem-close">Most people start by searching for answers. <strong>Ally starts by <em>understanding the problem.</em></strong></p>
   </div>
+</section>
+
+<!-- ================= WHY ALLY EXISTS ================= -->
+<section class="why shell">
+  <p class="eyebrow">Why Ally exists</p>
+  <h2>The hard part isn&rsquo;t finding answers. <em>It&rsquo;s knowing what question to ask.</em></h2>
+  <div class="why-body">
+    <p>Working closely with entrepreneurs showed GoXL a recurring reality: founders are surrounded by advice, information, opinions and tools &mdash; and can still be unsure what actually matters, what to prioritise, or whether they&rsquo;re solving the right problem.</p>
+    <p class="why-pull">The problem is not always a lack of answers. Sometimes the harder problem is understanding the situation well enough to know what question should be asked.</p>
+    <p>Traditional founder support can be useful, but it depends on availability, time and context. AI can answer instantly &mdash; but an answer that doesn&rsquo;t understand the founder and the business may still miss what matters. Ally exists to make structured, contextual founder support continuous and accessible.</p>
+  </div>
+  <p class="why-lead">Before Ally tells you what to do, <strong>it needs to understand <em>where you actually are.</em></strong></p>
 </section>
 
 <!-- ================= IMMERSION ================= -->
@@ -1524,6 +1568,7 @@ em{ font-style:italic; }
       <p>Currently onboarding founders through early access.</p>
     </div>
   </div>
+  <p class="phil-note">Your information is handled under our <a href="/privacy.html">privacy policy</a>.</p>
 </section>
 
 <!-- ================= CTA + EARLY ACCESS ================= -->
