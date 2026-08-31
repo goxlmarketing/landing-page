@@ -137,7 +137,9 @@ em{ font-style:italic; }
   border-bottom:1px solid var(--bd);
   position:relative; z-index:30;
 }
-.brand{
+.brand{ display:flex; align-items:center; gap:12px; }
+.brand-logo{ width:38px; height:38px; flex:0 0 auto; }
+.brand-text{
   display:grid; align-items:baseline; gap:0 10px;
   grid-template-columns:auto 1fr;
 }
@@ -1155,9 +1157,12 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 
 <header class="nav shell">
   <a class="brand" href="#top" aria-label="GoXL Ally home">
-    <span class="brand-mark">GoXL</span>
-    <span class="brand-name">Ally</span>
-    <span class="brand-by">by GoXL Entrepreneurship</span>
+    <img class="brand-logo" src="/assets/ally-logo-mark.png" alt="">
+    <span class="brand-text">
+      <span class="brand-mark">GoXL</span>
+      <span class="brand-name">Ally</span>
+      <span class="brand-by">by GoXL Entrepreneurship</span>
+    </span>
   </a>
   <nav class="nav-links" aria-label="Primary">
     <a href="#experience">Experience</a>
