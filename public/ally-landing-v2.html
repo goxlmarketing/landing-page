@@ -148,10 +148,10 @@ em{ font-style:italic; }
   font-size:10.5px; letter-spacing:.08em; color:var(--muted-2);
 }
 .brand-mark{
-  font-family:var(--display); font-weight:800; font-size:22px;
+  font-family:var(--display); font-weight:800; font-size:19.8px;
   letter-spacing:-.02em; color:var(--forest);
 }
-.brand-name{ font-size:15px; font-weight:600; color:var(--muted); }
+.brand-name{ font-size:19.8px; font-weight:600; color:var(--muted); }
 .nav-links{ display:flex; gap:32px; font-size:14px; color:var(--muted); }
 .nav-links a:hover{ color:var(--forest); }
 .nav-cta{
@@ -290,10 +290,10 @@ em{ font-style:italic; }
   .hero-veil{
     background:linear-gradient(180deg,
       rgba(247,241,235,.78) 0%,
-      rgba(247,241,235,.68) 36%,
-      rgba(247,241,235,.54) 58%,
-      rgba(247,241,235,.3) 76%,
-      rgba(247,241,235,0) 90%);
+      rgba(247,241,235,.72) 40%,
+      rgba(247,241,235,.66) 58%,
+      rgba(247,241,235,.42) 74%,
+      rgba(247,241,235,0) 92%);
   }
   .hero-veil::after{ height:56px; }
   .hero-inner{ padding:32px 0 clamp(230px, 38svh, 330px); }
@@ -312,20 +312,17 @@ em{ font-style:italic; }
     .hero .hero-copy .btn{ font-size:min(3.3vw, 14px); padding:min(3.2vw,13px) min(4.9vw,20px); }
     .hero .hero-copy .link-quiet{ font-size:min(3.4vw, 14px); }
     .hero .hero-copy .hero-note{ font-size:min(2.95vw, 12.5px); }
-    .hero .hero-copy .hero-steps strong{ font-size:min(2.7vw, 11px); }
-    .hero .hero-copy .hero-steps span{ font-size:min(3.05vw, 13px); }
+    .hero .hero-copy .hero-built{ font-size:min(2.85vw, 12px); }
     /* vertical rhythm scales with the same factor as the type */
     .brk-ph{ display:inline; }
     .hero .hero-copy h1{ margin:min(3.4vw,14px) 0 min(4.4vw,18px); }
     .hero .hero-copy .hero-sub{ margin-top:min(5.9vw,24px); }
     .hero .hero-copy .hero-actions{ margin-top:min(8.8vw,36px); gap:min(5vw,22px); }
     .hero .hero-copy .hero-note{ margin-top:min(3.9vw,16px); }
-    .hero .hero-copy .hero-steps{ margin-top:min(8.3vw,34px); }
-    .hero .hero-copy .hero-steps div{ padding:min(3.9vw,16px) min(3.4vw,14px) 0 min(3.9vw,16px); }
-    .hero .hero-copy .hero-steps div:first-child{ padding-left:0; }
+    .hero .hero-copy .hero-built{ margin-top:min(7.3vw,30px); padding-top:min(3.9vw,16px); }
     .hero-media .hero-lbl--m,
     .hero-media .hero-lbl--m2{ font-size:min(2.55vw, 10.5px); padding:min(1.7vw,7px) min(3.2vw,13px); }
-    .hero-media .hero-lbl--m3{ font-size:min(2.2vw, 9px); max-width:min(27.2vw, 112px); padding:min(1.5vw,6px) min(2.4vw,10px); }
+    .hero-media .hero-lbl--m3{ font-size:min(2.2vw, 9px); max-width:min(33vw, 136px); padding:min(1.5vw,6px) min(2.4vw,10px); }
   }
   /* very narrow phones: the copy runs taller, so the two lower pills
      drop beneath the strip instead of colliding with it */
@@ -342,8 +339,7 @@ em{ font-style:italic; }
   .hero .hero-copy .hero-note{ color:var(--muted); }
   .hero .hero-copy .btn{ padding:13px 20px; font-size:13.5px; }
   .hero .hero-copy .hero-note{ font-size:12px; }
-  .hero .hero-copy .hero-steps{ margin-top:34px; }
-  .hero .hero-copy .hero-steps span{ font-size:12.5px; }
+  .hero .hero-copy .hero-built{ margin-top:30px; font-size:12px; color:var(--muted); }
 }
 
 /* ---------- entrance: UI only; the film carries its own motion ---------- */
@@ -356,7 +352,7 @@ em{ font-style:italic; }
   .hero-sub{ animation:heroRise .55s cubic-bezier(.22,1,.36,1) .3s both; }
   .hero-actions{ animation:heroRise .55s cubic-bezier(.22,1,.36,1) .38s both; }
   .hero-note{ animation:heroRise .55s cubic-bezier(.22,1,.36,1) .46s both; }
-  .hero-steps{ animation:heroRise .55s cubic-bezier(.22,1,.36,1) .54s both; }
+  .hero-built{ animation:heroRise .55s cubic-bezier(.22,1,.36,1) .54s both; }
   .hero-media{ animation:filmIn .8s ease both; }
   .hero-lbl{ animation:lblIn .6s ease 1.1s both; }
 }
@@ -415,21 +411,13 @@ em{ font-style:italic; }
 .link-quiet{ font-size:14px; font-weight:600; color:var(--muted); }
 .link-quiet:hover{ color:var(--forest); }
 .hero-note{ margin-top:16px; font-size:13px; color:var(--muted-2); }
-.hero-steps{
-  display:grid; grid-template-columns:repeat(4,1fr);
-  max-width:560px; margin-top:64px; border-top:1px solid var(--bd);
+/* the evidence line that closes the hero — quiet, one rule above it */
+.hero-built{
+  max-width:520px; margin-top:44px; padding-top:18px;
+  border-top:1px solid var(--bd);
+  font-size:12.5px; line-height:1.6; color:var(--muted-2);
 }
-/* Divider on the left with padding to clear it, first cell flush —
-   the same structure the product uses for its readout row. With the
-   rule on the right and no left padding, 02/03/04 sat hard against
-   the divider to their left. */
-.hero-steps div{ padding:16px 14px 0 16px; border-left:1px solid var(--bd); }
-.hero-steps div:first-child{ border-left:0; padding-left:0; }
-.hero-steps strong{
-  display:block; font-family:var(--display); font-size:11px;
-  letter-spacing:.12em; color:var(--emerald); font-weight:700;
-}
-.hero-steps span{ display:block; margin-top:5px; font-size:13.5px; color:var(--ink); }
+.hero-built strong{ font-weight:700; color:var(--forest); }
 
 /* (the hero's dashboard glimpse card was replaced by the journey film) */
 
@@ -1231,7 +1219,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
     <a href="#north">Why Ally</a>
     <a href="/about.html">Our Story</a>
   </nav>
-  <a class="nav-cta" href="#early-access">Early access <span aria-hidden="true">→</span></a>
+  <a class="nav-cta" href="#early-access">Start your founder journey <span aria-hidden="true">→</span></a>
   <button class="nav-burger" type="button" id="navBurger" aria-label="Menu" aria-expanded="false" aria-controls="navMenu">
     <i></i><i></i><i></i>
   </button>
@@ -1254,7 +1242,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   <div class="hero-media" aria-hidden="true">
     <span class="hero-lbl hero-lbl--m" aria-hidden="true"><i></i>Your next move</span>
     <span class="hero-lbl hero-lbl--m2" aria-hidden="true"><i></i>You are here</span>
-    <span class="hero-lbl hero-lbl--m3" aria-hidden="true">Where you&rsquo;re headed</span>
+    <span class="hero-lbl hero-lbl--m3" aria-hidden="true">Where you want to reach</span>
     <video id="heroFilm" autoplay muted loop playsinline
            preload="metadata"
            poster="/assets/founder-journey-poster.v1.jpg">
@@ -1265,7 +1253,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 
   <span class="hero-lbl hero-lbl--here" aria-hidden="true"><i></i>You are here</span>
   <span class="hero-lbl hero-lbl--next" aria-hidden="true"><i></i>Your next move</span>
-  <span class="hero-lbl hero-lbl--headed" aria-hidden="true">Where you&rsquo;re headed</span>
+  <span class="hero-lbl hero-lbl--headed" aria-hidden="true">Where you want to reach</span>
 
   <div class="hero-inner">
     <div class="hero-copy">
@@ -1277,12 +1265,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
         <a class="link-quiet" href="#how">See how Ally thinks ↓</a>
       </div>
       <p class="hero-note">Ally builds a living picture of you and your business, finds the real problem behind the one you&rsquo;re feeling, and gives you one clear next move.</p>
-      <div class="hero-steps" aria-label="The Ally journey">
-        <div><strong>01</strong><span>Understand</span></div>
-        <div><strong>02</strong><span>Look deeper</span></div>
-        <div><strong>03</strong><span>Find what matters</span></div>
-        <div><strong>04</strong><span>Take action</span></div>
-      </div>
+      <p class="hero-built">Built on insights across <strong>100+</strong> entrepreneurial dimensions, <strong>10,000+</strong> founder case studies, and <strong>25,000+</strong> founder problems mapped to their root causes.</p>
     </div>
   </div>
 </section>
@@ -1386,25 +1369,25 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
     <h2>The problem you see isn&rsquo;t always <em>the problem you need to solve.</em></h2>
     <div class="problem-grid">
       <article>
-        <span class="step">01</span>
+        <span class="step">01 &mdash; Founder thinks</span>
         <h3>&ldquo;I need more sales.&rdquo;</h3>
         <span class="al">Ally looks at</span>
         <p>Maybe the real problem is positioning &mdash; the offer isn&rsquo;t yet clear enough for the right buyer to say yes quickly.</p>
       </article>
       <article>
-        <span class="step">02</span>
+        <span class="step">02 &mdash; Founder thinks</span>
         <h3>&ldquo;My team isn&rsquo;t performing.&rdquo;</h3>
         <span class="al">Ally looks at</span>
         <p>Maybe expectations were never made clear &mdash; performance is hard to give when the target keeps shifting.</p>
       </article>
       <article>
-        <span class="step">03</span>
+        <span class="step">03 &mdash; Founder thinks</span>
         <h3>&ldquo;I don&rsquo;t have enough time.&rdquo;</h3>
         <span class="al">Ally looks at</span>
         <p>Maybe there&rsquo;s enough time, but attention is going to the wrong priorities &mdash; busy isn&rsquo;t the same as important.</p>
       </article>
       <article>
-        <span class="step">04</span>
+        <span class="step">04 &mdash; Founder thinks</span>
         <h3>&ldquo;My business isn&rsquo;t growing.&rdquo;</h3>
         <span class="al">Ally looks at</span>
         <p>Maybe the real problem isn&rsquo;t marketing at all &mdash; it could be retention, pricing, or a product gap upstream.</p>
@@ -1774,7 +1757,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
           <span><span class="ea-optional">Optional</span><br>I&rsquo;d like to receive GoXL Ally product updates, founder insights and promotional emails. I can unsubscribe at any time.</span>
         </label>
         <p class="ea-err" id="eaErr" role="alert"></p>
-        <button class="btn" type="submit" id="eaSubmit">Register for early access</button>
+        <button class="btn" type="submit" id="eaSubmit">Start your founder journey</button>
       </form>
       <div class="ea-done" id="eaDone" hidden>
         <p id="eaDoneMsg">Thank you for registering.</p>
