@@ -383,20 +383,50 @@ em{ font-style:italic; }
   letter-spacing:-.015em; margin-top:16px; max-width:700px;
 }
 .stages h2 em{ color:var(--emerald); }
-.stage-row{
+.stage-tabs{
   display:grid; grid-template-columns:repeat(4,1fr);
-  border-top:1px solid var(--bd);
-  margin-top:44px;
+  gap:clamp(16px, 2vw, 28px); margin-top:44px;
 }
-.stage-row div{ padding:22px 22px 8px 22px; border-left:1px solid var(--bd); }
-.stage-row div:first-child{ border-left:0; padding-left:0; }
-.stage-row b{
+.stage-tab{
+  text-align:left; background:none; border:0; cursor:pointer;
+  padding:0 0 16px; border-bottom:1px solid var(--bd);
+  transition:border-color .2s;
+}
+.stage-tab:hover{ border-color:var(--bd-2); }
+.stage-tab b{
   display:block; font-family:var(--display-tight);
-  font-size:19px; font-weight:800; letter-spacing:-.01em;
+  font-size:13.5px; font-weight:800; letter-spacing:.02em;
+  color:var(--muted-2); transition:color .2s;
+}
+.stage-tab > span{
+  display:block; margin-top:9px; font-family:var(--serif);
+  font-size:clamp(19px, 1.7vw, 24px); line-height:1.2; color:var(--ink);
+}
+.stage-tab.is-on{ border-bottom:2px solid var(--emerald); padding-bottom:15px; }
+.stage-tab.is-on b{ color:var(--emerald); }
+
+.stage-card{
+  margin-top:clamp(26px, 4vh, 38px);
+  background:#fff; border:1px solid var(--bd); border-radius:var(--r-card);
+  padding:clamp(28px, 3vw, 44px) clamp(28px, 3.4vw, 48px);
+  box-shadow:0 1px 2px -1px rgba(6,20,13,.12), 0 24px 60px -30px rgba(6,20,13,.22);
+}
+.stage-pane{ display:none; gap:clamp(20px, 2.4vw, 34px); align-items:flex-start; }
+.stage-pane.is-on{ display:flex; }
+.stage-num{
+  width:60px; height:60px; flex:0 0 auto; border-radius:50%;
+  background:var(--ivory-2); border:1px solid var(--bd);
+  display:grid; place-items:center;
+  font-family:var(--display-tight); font-weight:800; font-size:16px;
   color:var(--emerald);
 }
-.stage-row p{
-  margin-top:12px; font-size:14.5px; line-height:1.55; color:var(--ink);
+.stage-pane h3{
+  font-family:var(--serif); font-weight:600;
+  font-size:clamp(21px, 2vw, 27px); line-height:1.25; letter-spacing:-.01em;
+}
+.stage-pane p{
+  margin-top:10px; font-size:15px; line-height:1.65;
+  color:var(--muted); max-width:60ch;
 }
 .stages-close{
   margin-top:52px; font-family:var(--serif); font-style:italic;
@@ -1096,8 +1126,10 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   .think-body{ padding-top:6px; }
   .nav-links{ display:none; }
   .metric-row{ grid-template-columns:1fr 1fr; }
-  .stage-row, .phil-row{ grid-template-columns:1fr; }
-  .stage-row div, .phil-row div{ border-left:0; padding-left:0; }
+  .stage-tabs{ grid-template-columns:1fr 1fr; }
+  .stage-pane.is-on{ flex-direction:column; gap:18px; }
+  .phil-row{ grid-template-columns:1fr; }
+  .phil-row div{ border-left:0; padding-left:0; }
   .problem-grid{ grid-template-columns:1fr; }
   .metric-row article:nth-child(2n){ border-right:0; }
   .stage h2{ min-height:0; }
@@ -1190,22 +1222,49 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 <section class="stages shell">
   <p class="eyebrow">Your starting point</p>
   <h2>Wherever you are, <em>start from where you are.</em></h2>
-  <div class="stage-row">
-    <div>
-      <b>&minus;1 &rarr; 0</b>
-      <p>I want to start, but I don&rsquo;t know where to begin.</p>
+  <div class="stage-tabs" role="tablist" aria-label="Founder stages">
+    <button class="stage-tab is-on" type="button" role="tab" aria-selected="true" data-stage="0">
+      <b>&minus;1 &rarr; 0</b><span>Aspiring</span>
+    </button>
+    <button class="stage-tab" type="button" role="tab" aria-selected="false" data-stage="1">
+      <b>0 &rarr; 1</b><span>First idea</span>
+    </button>
+    <button class="stage-tab" type="button" role="tab" aria-selected="false" data-stage="2">
+      <b>1 &rarr; 10</b><span>Growing</span>
+    </button>
+    <button class="stage-tab" type="button" role="tab" aria-selected="false" data-stage="3">
+      <b>10 &rarr; &infin;</b><span>Experienced</span>
+    </button>
+  </div>
+
+  <div class="stage-card">
+    <div class="stage-pane is-on" data-stage="0">
+      <span class="stage-num">01</span>
+      <div>
+        <h3>I want to start, but I don&rsquo;t know where to begin.</h3>
+        <p>Every idea feels unproven and every path feels like a guess. Ally helps you find solid ground before you commit to a direction.</p>
+      </div>
     </div>
-    <div>
-      <b>0 &rarr; 1</b>
-      <p>I have an idea. Now I want to make it real.</p>
+    <div class="stage-pane" data-stage="1">
+      <span class="stage-num">02</span>
+      <div>
+        <h3>I have an idea. Now I want to make it real.</h3>
+        <p>The distance between an idea and a first customer is where most founders stall. Ally helps you take the few steps that actually close it.</p>
+      </div>
     </div>
-    <div>
-      <b>1 &rarr; 10</b>
-      <p>My business is growing, but everything feels important.</p>
+    <div class="stage-pane" data-stage="2">
+      <span class="stage-num">03</span>
+      <div>
+        <h3>My business is growing, but everything feels important.</h3>
+        <p>More customers, more work, more noise. Ally helps you see which part of it deserves your attention this week &mdash; and which can wait.</p>
+      </div>
     </div>
-    <div>
-      <b>10 &rarr; Beyond</b>
-      <p>Growth is no longer the only challenge. Better decisions are.</p>
+    <div class="stage-pane" data-stage="3">
+      <span class="stage-num">04</span>
+      <div>
+        <h3>Growth is no longer the only challenge. Better decisions are.</h3>
+        <p>You&rsquo;ve built something real, so every choice now carries more weight. Ally helps you think each one through with your full picture in view.</p>
+      </div>
     </div>
   </div>
   <p class="stages-close">Your stage is different. Your context is different. <strong>Your next step should be different too.</strong></p>
@@ -1693,6 +1752,28 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
     map.style.translate = dx.toFixed(1) + 'px ' + dy.toFixed(1) + 'px';
   });
   hero.addEventListener('pointerleave', function(){ map.style.translate = ''; });
+})();
+
+/* ============================================================
+   YOUR STARTING POINT — four stage tabs, one card.
+   ============================================================ */
+(function(){
+  var tabs = document.querySelectorAll('.stage-tab');
+  var panes = document.querySelectorAll('.stage-pane');
+  if(!tabs.length) return;
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      var k = tab.getAttribute('data-stage');
+      tabs.forEach(function(t){
+        var on = t === tab;
+        t.classList.toggle('is-on', on);
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      panes.forEach(function(pn){
+        pn.classList.toggle('is-on', pn.getAttribute('data-stage') === k);
+      });
+    });
+  });
 })();
 
 /* ============================================================
