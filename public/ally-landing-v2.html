@@ -1897,7 +1897,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   if(!outcome || !direction || !dots.length) return;
 
   var reduce = matchMedia('(prefers-reduced-motion: reduce)');
-  var COUNT = 3, current = 0, timer = null, visible = true;
+  var COUNT = 3, current = 0, timer = null, visible = true, held = false;
 
   function show(i){
     current = (i + COUNT) % COUNT;
@@ -1910,12 +1910,12 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   }
 
   function start(){
-    if(reduce.matches || timer || !visible) return;
-    timer = setInterval(function(){ show(current + 1); }, 10000);
+    if(reduce.matches || timer || !visible || held) return;
+    timer = setInterval(function(){ show(current + 1); }, 2000);
   }
   function stop(){ clearInterval(timer); timer = null; }
 
-  /* a manual change restarts the 10s clock rather than killing the
+  /* a manual change restarts the clock rather than killing the
      rotation — hands-on when the visitor wants, hands-off after */
   function manual(i){ stop(); show(i); start(); }
 
@@ -1937,6 +1937,19 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
     manual(current + (dx < 0 ? 1 : -1));
   });
   card.addEventListener('pointercancel', function(){ downX = null; });
+
+  /* the rotation waits while a hand is on the card — hover or a
+     press-and-hold both count; it resumes as soon as the hand leaves */
+  function pause(){ held = true; stop(); }
+  function resume(){ held = false; start(); }
+  card.addEventListener('pointerenter', pause);
+  card.addEventListener('pointerleave', resume);
+  card.addEventListener('pointerdown', pause);
+  card.addEventListener('pointerup', function(e){
+    /* touch has no hover: lifting the finger lets it run again */
+    if(e.pointerType !== 'mouse') resume();
+  });
+  card.addEventListener('pointercancel', resume);
 
   show(0);
   /* advance only while the section is actually on screen */
