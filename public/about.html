@@ -1,289 +1,465 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="/assets/ally-logo.v1.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/ally-logo.v1.png">
-<meta name="theme-color" content="#040705">
+<meta name="theme-color" content="#f7f1eb">
 <title>Our Story — GoXL Ally</title>
-<meta name="description" content="The story behind GoXL Ally and why it was built for founders.">
+<meta name="description" content="Why GoXL built Ally — the founder's compass.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://join.goxlally.ai/about.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700;800&family=Montserrat:wght@600;700;800&display=swap">
 <style>
-  :root{
-    --bg:#040705;
-    --accent:#2fe3ac;
-    --accent-2:#7ffcd1;
-    --text:#eef4f1;
-    --text-dim:#a9bab3;
-    --text-mute:#647a72;
-    --font-display:'Avenir Next','Segoe UI Semibold','Century Gothic',ui-sans-serif,system-ui,sans-serif;
-    --font-body:'Segoe UI',ui-sans-serif,system-ui,-apple-system,sans-serif;
-    --font-mono:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;
-  }
-  *{ box-sizing:border-box; margin:0; padding:0; }
-  html,body{ background:var(--bg); color:var(--text); }
-  body{
-    font-family:var(--font-body);
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  a{ color:inherit; text-decoration:none; }
-  .top-brand{
-    position:absolute; top:max(22px, env(safe-area-inset-top));
-    left:max(22px, env(safe-area-inset-left));
-    z-index:40; display:flex; align-items:center; gap:10px;
-    font-family:var(--font-display); font-weight:700; font-size:18px;
-    letter-spacing:-0.02em; color:#fff;
-    padding:6px 14px 6px 6px;
-    border-radius:999px;
-    background:rgba(8,16,12,0.72);
-    border:1px solid rgba(255,255,255,0.28);
-  }
-  .top-brand img{ width:32px; height:32px; object-fit:contain; mix-blend-mode:screen; }
-  .top-back{
-    position:absolute; top:max(22px, env(safe-area-inset-top));
-    right:max(22px, env(safe-area-inset-right));
-    z-index:40; display:inline-flex; align-items:center; gap:7px;
-    font-family:var(--font-display); font-weight:600; font-size:14px;
-    color:#fff;
-    padding:8px 14px 8px 10px;
-    border-radius:999px;
-    background:rgba(8,16,12,0.72);
-    border:1px solid rgba(255,255,255,0.28);
-  }
-  .top-back svg{ width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; }
-  .top-back:hover{ border-color:rgba(47,227,172,0.55); color:var(--accent); }
-  .back-row{
-    margin-top:36px;
-  }
-  .back-row a{
-    display:inline-flex; align-items:center; gap:8px;
-    font-family:var(--font-display); font-weight:600; font-size:14px;
-    color:var(--accent);
-  }
-  .back-row svg{ width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; }
-  .wrap{
-    width:min(720px, 90vw);
-    margin:0 auto;
-    padding:108px 0 80px;
-  }
-  .eye{
-    font-family:var(--font-mono);
-    font-size:11px;
-    letter-spacing:0.22em;
-    text-transform:uppercase;
-    color:var(--accent);
-    margin-bottom:16px;
-  }
-  h1{
-    font-family:var(--font-display);
-    font-size:clamp(34px, 7vw, 56px);
-    font-weight:600;
-    letter-spacing:-0.04em;
-    line-height:1.05;
-    margin:0 0 18px;
-  }
-  h1 em{ font-style:italic; font-weight:500; color:var(--accent); }
-  .lede{
-    font-size:clamp(17px, 2.4vw, 20px);
-    line-height:1.55;
-    color:rgba(238,244,241,0.82);
-    margin-bottom:48px;
-    max-width:34ch;
-  }
-  h2{
-    font-family:var(--font-display);
-    font-size:clamp(22px, 4vw, 30px);
-    font-weight:600;
-    letter-spacing:-0.03em;
-    line-height:1.2;
-    margin:48px 0 16px;
-  }
-  p{
-    font-size:16.5px;
-    line-height:1.7;
-    color:var(--text-dim);
-    margin:0 0 16px;
-  }
-  .pull{
-    font-family:var(--font-display);
-    font-size:clamp(20px, 3.4vw, 26px);
-    font-weight:500;
-    letter-spacing:-0.03em;
-    line-height:1.35;
-    color:#fff;
-    margin:28px 0;
-  }
-  .asks{
-    list-style:none;
-    margin:20px 0 28px;
-    padding:0;
-  }
-  .asks li{
-    font-family:var(--font-display);
-    font-size:18px;
-    font-weight:500;
-    letter-spacing:-0.02em;
-    color:rgba(238,244,241,0.9);
-    padding:10px 0 10px 18px;
-    border-left:1px solid rgba(47,227,172,0.35);
-    margin:8px 0;
-  }
-  .steps{
-    display:flex; flex-wrap:wrap; gap:8px;
-    margin:18px 0 28px;
-  }
-  .steps span{
-    font-family:var(--font-mono);
-    font-size:11px;
-    letter-spacing:0.12em;
-    text-transform:uppercase;
-    color:var(--accent);
-    border:1px solid rgba(47,227,172,0.28);
-    border-radius:999px;
-    padding:8px 12px;
-  }
-  .close{
-    margin-top:56px;
-    padding-top:36px;
-    border-top:1px solid rgba(120,220,190,0.16);
-  }
-  .brand{
-    display:flex; align-items:center; gap:12px;
-    margin:18px 0 10px;
-  }
-  .brand img{ width:42px; height:42px; object-fit:contain; mix-blend-mode:screen; }
-  .brand strong{
-    display:block;
-    font-family:var(--font-display);
-    font-size:22px;
-    font-weight:700;
-    letter-spacing:-0.03em;
-  }
-  .brand small{
-    display:block;
-    font-size:13px;
-    color:var(--accent);
-    letter-spacing:0.04em;
-  }
-  .foot{
-    display:flex; justify-content:center; flex-wrap:wrap;
-    gap:10px 18px;
-    margin-top:48px;
-    font-size:12.5px;
-    color:var(--text-mute);
-  }
-  .foot a{ color:var(--text-dim); }
-  .foot a:hover{ color:var(--accent); }
-  @media (max-width:768px){
-    .top-brand{
-      top:max(14px, env(safe-area-inset-top));
-      left:max(14px, env(safe-area-inset-left));
-      font-size:15px;
-      background:#101c18;
-      backdrop-filter:none;
-    }
-    .top-brand img{ width:28px; height:28px; }
-    .top-back{
-      top:max(14px, env(safe-area-inset-top));
-      right:max(14px, env(safe-area-inset-right));
-      font-size:13px;
-      background:#101c18;
-      padding:7px 12px 7px 10px;
-    }
-    .wrap{ padding:96px 0 max(64px, env(safe-area-inset-bottom)); }
-    h2{ margin-top:40px; }
-    p{ font-size:16px; }
-  }
+:root{
+  --ivory:#f7f1eb; --ivory-2:#fbf7f2; --ivory-3:#efe6d9;
+  --forest:#1B4332; --forest-night:#06140d;
+  --emerald:#10B981; --emerald-bright:#34d399;
+  --ink:#16241c; --muted:#556458; --muted-2:#6c7a70;
+  --bd:#e7e0d6; --bd-2:#d8cfc2;
+  --on-dark:#eaf3ee; --on-dark-muted:#a7c0b4; --on-dark-dim:#7d9488;
+  --serif:'Fraunces','Georgia',serif;
+  --body:'Inter',system-ui,sans-serif;
+  --display:'Montserrat','Inter Tight',system-ui,sans-serif;
+  --display-tight:'Inter Tight','Inter',system-ui,sans-serif;
+  --r-card:16px; --r-pill:999px;
+  --shell:min(1240px, calc(100% - 96px));
+  --rail:104px; --col:640px;
+}
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; scrollbar-width:none; -ms-overflow-style:none; }
+html::-webkit-scrollbar, body::-webkit-scrollbar{ width:0; height:0; display:none; }
+body{
+  background:var(--ivory); color:var(--ink);
+  font-family:var(--body); font-size:16.5px; line-height:1.75;
+  overflow-x:hidden; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{ background:var(--emerald); color:#fff; }
+a{ color:inherit; text-decoration:none; }
+img,svg{ display:block; max-width:100%; }
+:focus{ outline:none; }
+:focus-visible{ outline:2.5px solid var(--emerald-bright); outline-offset:3px; border-radius:8px; }
+.shell{ width:var(--shell); margin-inline:auto; }
+
+/* ---------- nav, same as the landing page ---------- */
+.nav{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:26px 0 24px; border-bottom:1px solid var(--bd);
+}
+.brand{ display:grid; align-items:baseline; gap:0 10px; grid-template-columns:auto 1fr; }
+.brand-mark{
+  font-family:var(--display); font-weight:800; font-size:22px;
+  letter-spacing:-.02em; color:var(--forest);
+}
+.brand-name{ font-size:15px; font-weight:600; color:var(--muted); }
+.brand-by{
+  grid-column:1 / -1; margin-top:2px;
+  font-size:10.5px; letter-spacing:.08em; color:var(--muted-2);
+}
+.nav-back{ font-size:14px; color:var(--muted); }
+.nav-back:hover{ color:var(--forest); }
+
+/* ---------- story column + thread rail ---------- */
+.story{ max-width:calc(var(--rail) + var(--col) + 48px); margin:0 auto; padding:0 24px; }
+.thread-zone{ position:relative; }
+#thread{ position:absolute; top:0; left:0; pointer-events:none; overflow:visible; }
+#track{ fill:none; stroke:var(--bd-2); stroke-width:1.5; }
+#draw{ fill:none; stroke:var(--emerald); stroke-width:1.5; stroke-linecap:round; }
+.node{ fill:var(--ivory); stroke:var(--bd-2); stroke-width:1.5; transition:fill .45s ease, stroke .45s ease, r .45s ease; }
+.node.on{ fill:var(--emerald); stroke:var(--forest); r:6.5; }
+
+.chapter{ position:relative; padding:clamp(72px, 11vh, 120px) 0 0 var(--rail); }
+.chapter:first-child{ padding-top:clamp(80px, 12vh, 140px); }
+.num{
+  position:absolute; left:0; top:calc(clamp(72px, 11vh, 120px) + 4px);
+  width:calc(var(--rail) - 36px); text-align:right;
+  font-family:var(--display-tight); font-weight:800; font-size:12.5px;
+  letter-spacing:.1em; color:var(--muted-2);
+}
+.chapter:first-child .num{ top:calc(clamp(80px, 12vh, 140px) + 4px); }
+.tick{
+  position:absolute; left:calc(var(--rail) - 26px);
+  top:calc(clamp(72px, 11vh, 120px) + 12px);
+  width:18px; height:1px; background:var(--bd-2);
+}
+.chapter:first-child .tick{ top:calc(clamp(80px, 12vh, 140px) + 12px); }
+
+/* ---------- type ---------- */
+.eyebrow{
+  font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+  font-weight:700; color:var(--muted-2); margin-bottom:18px;
+}
+h1{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(40px, 5.4vw, 62px); line-height:1.06;
+  letter-spacing:-.02em; margin-bottom:22px; max-width:15ch;
+}
+h1 em, h2 em{ font-style:italic; color:var(--emerald); }
+h2{
+  font-family:var(--serif); font-weight:500;
+  font-size:clamp(25px, 3vw, 34px); line-height:1.18;
+  letter-spacing:-.015em; margin-bottom:18px; max-width:22ch;
+}
+p{ margin-bottom:20px; max-width:58ch; color:var(--muted); font-size:15.5px; }
+p.lead{ font-size:19px; color:var(--ink); max-width:52ch; }
+strong{ font-weight:600; color:var(--ink); }
+.follow{
+  font-family:var(--display-tight); font-weight:700; font-size:11.5px;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--muted-2);
+  display:flex; align-items:center; gap:9px;
+}
+.follow i{ width:7px; height:7px; border-radius:50%; background:var(--emerald); flex:0 0 auto; }
+
+.pull{
+  border-left:2px solid var(--emerald);
+  padding:2px 0 2px 22px; margin:32px 0 8px; max-width:54ch;
+}
+.pull p{ font-family:var(--serif); font-size:20px; line-height:1.5; color:var(--ink); margin:0; }
+
+.strike{ list-style:none; margin-bottom:28px; font-size:14.5px; color:var(--muted-2); max-width:54ch; }
+.strike li{
+  padding:11px 0; border-bottom:1px solid var(--bd);
+  text-decoration:line-through; text-decoration-color:var(--bd-2);
+}
+
+.said{ margin:28px 0; padding-left:22px; border-left:1px dashed var(--bd-2); }
+.said p{ font-family:var(--serif); font-style:italic; font-size:17px; line-height:2.05; color:var(--ink); margin:0; }
+
+.chain{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:28px; list-style:none; }
+.chain li{
+  font-family:var(--display-tight); font-weight:600; font-size:13px;
+  padding:8px 14px; border:1px solid var(--bd); border-radius:var(--r-pill);
+  color:var(--muted); background:var(--ivory-2);
+}
+.chain li:last-child{ border-color:var(--emerald); color:var(--forest); background:rgba(16,185,129,.08); }
+.chain span{ color:var(--bd-2); font-size:13px; }
+
+.split{
+  display:grid; grid-template-columns:1fr 1fr; gap:14px;
+  margin-bottom:28px; max-width:58ch;
+}
+.split div{
+  border:1px solid var(--bd); border-radius:var(--r-card);
+  background:var(--ivory-2); padding:20px 22px;
+}
+.split div+div{ border-color:rgba(16,185,129,.35); }
+.split h3{
+  font-family:var(--display-tight); font-size:11.5px; letter-spacing:.12em;
+  text-transform:uppercase; font-weight:800; color:var(--muted-2); margin-bottom:8px;
+}
+.split div+div h3{ color:var(--emerald); }
+.split p{ font-size:14.5px; margin:0; color:var(--ink); line-height:1.6; }
+
+.verbs{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:28px; list-style:none; }
+.verbs li{
+  font-size:13.5px; font-weight:500; padding:9px 15px;
+  border-radius:var(--r-pill); background:#fff; border:1px solid var(--bd); color:var(--ink);
+}
+
+.compass{ margin-bottom:32px; }
+#needle{ transform-origin:64px 64px; transform:rotate(-42deg); transition:transform 1.4s cubic-bezier(.22,1,.36,1); }
+.compass.lit #needle{ transform:rotate(0deg); }
+
+/* ---------- close, dark like the landing page's dark bands ---------- */
+.close{
+  background:var(--forest-night); color:var(--on-dark);
+  margin-top:clamp(88px, 12vh, 136px);
+  padding:clamp(64px, 9vh, 104px) 0 clamp(72px, 10vh, 112px);
+}
+.close .inner{ max-width:calc(var(--rail) + var(--col) + 48px); margin:0 auto; padding:0 24px; }
+.close .body{ padding-left:var(--rail); }
+.close .eyebrow{ color:var(--emerald-bright); }
+.close h2{ color:var(--on-dark); max-width:16ch; }
+.close p{ color:var(--on-dark-muted); }
+.tagline{
+  font-family:var(--display-tight); font-weight:700; font-size:12.5px;
+  letter-spacing:.2em; text-transform:uppercase; color:var(--emerald-bright);
+  margin-bottom:28px;
+}
+.close .pull{ border-left-color:var(--emerald); }
+.close .pull p{ color:var(--on-dark); }
+.cta{
+  display:inline-flex; align-items:center; gap:9px; margin-top:18px;
+  background:var(--emerald); color:#06231a;
+  font-size:15px; font-weight:600; padding:15px 26px; border-radius:var(--r-pill);
+  transition:transform .2s ease, background .2s ease;
+}
+.cta:hover{ background:var(--emerald-bright); transform:translateY(-2px); }
+.cta-note{ font-size:12.5px; color:var(--on-dark-dim); margin:16px 0 0; }
+
+/* ---------- footer, same as the landing page ---------- */
+.footer{
+  display:flex; align-items:center; justify-content:space-between; gap:18px;
+  flex-wrap:wrap; padding:30px 0 34px;
+  font-size:13px; color:var(--muted-2);
+}
+.foot-brand{ display:inline-flex; align-items:baseline; gap:8px; }
+.foot-links{ display:inline-flex; align-items:center; gap:14px; flex-wrap:wrap; }
+.foot-links a:hover{ color:var(--forest); }
+.divider{ color:var(--bd-2); }
+
+/* ---------- motion ---------- */
+.reveal{ opacity:0; transform:translateY(14px); transition:opacity .7s ease, transform .7s cubic-bezier(.22,1,.36,1); }
+.reveal.in{ opacity:1; transform:none; }
+
+@media (max-width:760px){
+  :root{ --rail:40px; --shell:min(1240px, calc(100% - 48px)); }
+  body{ font-size:15.5px; }
+  .num{ width:100%; text-align:left; left:0; top:calc(clamp(72px, 11vh, 120px) - 28px); }
+  .chapter:first-child .num{ top:calc(clamp(80px, 12vh, 140px) - 28px); }
+  .tick{ display:none; }
+  .split{ grid-template-columns:1fr; }
+  p.lead{ font-size:17.5px; }
+  .pull p{ font-size:18px; }
+}
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; }
+  .reveal{ opacity:1; transform:none; transition:none; }
+  #needle, .cta, .node{ transition:none; }
+  #needle{ transform:rotate(0deg); }
+}
 </style>
 </head>
 <body>
-  <a class="top-brand" href="/">
-    <img src="/assets/logo-123.v1.png" alt="" />
-    <span>GoXL Ally</span>
-  </a>
-  <a class="top-back js-back" id="backLink" href="/">
-    <svg viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
-    Back
-  </a>
 
-  <main class="wrap">
-    <p class="eye">Our Story</p>
+<header class="nav shell">
+  <a class="brand" href="/" aria-label="GoXL Ally home">
+    <span class="brand-mark">GoXL</span>
+    <span class="brand-name">Ally</span>
+    <span class="brand-by">by GoXL Entrepreneurship</span>
+  </a>
+  <a class="nav-back" href="/">&larr; Back to home</a>
+</header>
+
+<main class="story">
+<div class="thread-zone" id="zone">
+<svg id="thread" aria-hidden="true"><path id="track"></path><path id="draw"></path><g id="dots"></g></svg>
+
+<section class="chapter" data-node>
+  <span class="num">00</span><span class="tick"></span>
+  <div class="reveal">
+    <p class="eyebrow">GoXL Ally &mdash; our story</p>
     <h1>Why we built <em>Ally.</em></h1>
-    <p class="lede">At GoXL, our purpose is simple: to make entrepreneurship accessible to everyone.</p>
+    <p class="lead">Our purpose at GoXL is simple: make entrepreneurship accessible to everyone. This is the thinking that got us to Ally.</p>
+    <p class="follow"><i></i> Follow the line</p>
+  </div>
+</section>
 
-    <h2>What accessibility actually means</h2>
-    <p>It is not just about giving someone information. It is not just about giving someone a mentor. It is not just about giving someone a network.</p>
-    <p>It is about making sure that a founder — wherever they are, whatever their background — has someone they can rely on when they need clarity, direction and support.</p>
-
-    <h2>Entrepreneurship is a lonely journey</h2>
-    <p>Everyone comes to the founder. The team. The customers. The investors. The family. Everyone expects the founder to have an answer.</p>
-    <p>But even the founder doesn’t have all the answers. So we started asking: where does the founder go?</p>
-    <ul class="asks">
-      <li>I don’t know what to do.</li>
-      <li>I’m confused.</li>
-      <li>I think I’ve made the wrong decision.</li>
-      <li>What should I do next?</li>
+<section class="chapter" data-node>
+  <span class="num">01</span><span class="tick"></span>
+  <div class="reveal">
+    <h2>Accessibility is not a resource. It&rsquo;s a relationship.</h2>
+    <ul class="strike">
+      <li>Just giving someone information</li>
+      <li>Just giving someone a mentor</li>
+      <li>Just giving someone a network</li>
     </ul>
-    <p>Not every founder is comfortable talking about these things. Some want to figure it out themselves. Some don’t have access to the right people. Some simply don’t have a safe, private space to think openly.</p>
-    <p class="pull">Self-doubt turns into isolation. Isolation creates stress. Stress can lead to burnout. And the founder starts experiencing mental fog.</p>
-    <p>You’re working every day. You’re making decisions every day. But somewhere inside, you don’t know: am I actually moving forward?</p>
+    <div class="pull"><p>It&rsquo;s making sure a founder &mdash; wherever they are, whatever their background &mdash; has someone to rely on when they need clarity, direction and support.</p></div>
+  </div>
+</section>
 
-    <h2>Access shouldn’t depend on where you live</h2>
-    <p>A founder in a Tier 1 city may have the right people, networks and exposure. What about someone in a Tier 2 or Tier 3 city — with the ambition, the capability and the idea, but not the access?</p>
-    <p>We don’t think entrepreneurship should depend on that. That’s why GoXL exists. And that’s why we needed a space a founder can come to anytime — private, without judgement — to talk, think and figure things out.</p>
-
-    <h2>Not another generic AI tool</h2>
-    <p>Most AI tools are built for everyone. We wanted something built for entrepreneurs, by people who understand entrepreneurs. Not something you use once and forget — something that can become part of a founder’s everyday life.</p>
-    <div class="steps">
-      <span>Get clarity</span>
-      <span>Identify problems</span>
-      <span>Build structure</span>
-      <span>Make decisions</span>
-      <span>Take action</span>
-      <span>Move forward</span>
+<section class="chapter" data-node>
+  <span class="num">02</span><span class="tick"></span>
+  <div class="reveal">
+    <h2>Everyone comes to the founder. The founder goes nowhere.</h2>
+    <p>The team. The customers. The investors. The family. Everyone expects the founder to have an answer. <strong>But the founder doesn&rsquo;t have all the answers either.</strong></p>
+    <div class="said">
+      <p>I don&rsquo;t know what to do.<br>I&rsquo;m confused.<br>I think I&rsquo;ve made the wrong decision.<br>What should I do next?</p>
     </div>
-    <p>We started with diagnosis. Then we realised diagnosis is not enough. If we tell you the problem and leave you there, we haven’t made the journey more accessible. We have to help the founder move forward.</p>
+    <p>Not every founder is comfortable saying these out loud. Some want to work it out themselves. Some don&rsquo;t have the right people around them. Some simply have no private place to think.</p>
+  </div>
+</section>
 
-    <h2>A Founder’s Compass</h2>
-    <p>A compass doesn’t walk for you. It doesn’t decide your destination. It helps you understand your direction.</p>
-    <p>When you are confused, it helps you find clarity. When you have a problem, it helps you understand it. When you have too many options, it helps you think through them. When you don’t know what to do next, it helps you find the next step.</p>
-    <p>You remain the founder. You make the decision. You take the action. You build the business.</p>
-    <p class="pull">No founder should have to leave something they wanted to build simply because they didn’t know the direction.</p>
+<section class="chapter" data-node>
+  <span class="num">03</span><span class="tick"></span>
+  <div class="reveal">
+    <h2>Silence doesn&rsquo;t stay silent. It compounds.</h2>
+    <ul class="chain">
+      <li>Self-doubt</li><span>&rarr;</span><li>Isolation</li><span>&rarr;</span><li>Stress</li><span>&rarr;</span><li>Burnout</li><span>&rarr;</span><li>Mental fog</li>
+    </ul>
+    <div class="pull"><p>You&rsquo;re working every day. You&rsquo;re deciding every day. But somewhere inside, you don&rsquo;t know: am I actually moving forward?</p></div>
+  </div>
+</section>
 
-    <h2>Why we called it Ally</h2>
-    <p>It is not just an AI. Not just a diagnosis tool. Not just a platform. It is something that stands with you — someone you can trust, rely on, and move forward with.</p>
-    <p>An ally is more than someone who assists you. An ally stands with you. That is exactly what we wanted this to become.</p>
-
-    <div class="close">
-      <div class="brand">
-        <img src="/assets/logo-123.v1.png" alt="" />
-        <div>
-          <strong>GoXL Ally</strong>
-          <small>The Founder’s Compass</small>
-        </div>
-      </div>
-      <p>It is not here to replace your thinking, or to make decisions for you. It is here to help you think better, see clearly, navigate, and keep moving.</p>
-      <p>If entrepreneurship is a journey, every founder deserves a compass. Every founder deserves someone to stand with them. And no founder should have to build alone.</p>
-      <p class="back-row"><a class="js-back" href="/"><svg viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Back to home</a></p>
+<section class="chapter" data-node>
+  <span class="num">04</span><span class="tick"></span>
+  <div class="reveal">
+    <h2>Your city shouldn&rsquo;t decide your ceiling.</h2>
+    <div class="split">
+      <div><h3>Tier 1</h3><p>The people, the networks and the exposure are already in the room.</p></div>
+      <div><h3>Tier 2 / Tier 3</h3><p>The same ambition, the same capability, the same idea &mdash; and no room to walk into.</p></div>
     </div>
+    <p>We don&rsquo;t think entrepreneurship should depend on that. That&rsquo;s why GoXL exists, and why we needed a space a founder can come to anytime &mdash; private, without judgement &mdash; to talk, think and figure things out.</p>
+  </div>
+</section>
 
-    <nav class="foot" aria-label="Footer">
-      <a class="js-back" href="/">Back</a>
-      <span>·</span>
-      <a href="/privacy.html">Privacy</a>
-      <span>·</span>
-      <a href="/terms.html">Terms</a>
-    </nav>
-  </main>
-  <script>
-    document.querySelectorAll('.js-back, #backLink').forEach(function(el){
-      el.addEventListener('click', function(e){
-        if(window.history.length > 1){ e.preventDefault(); window.history.back(); }
-      });
+<section class="chapter" data-node>
+  <span class="num">05</span><span class="tick"></span>
+  <div class="reveal">
+    <h2>Diagnosis was only half the job.</h2>
+    <p>We started with diagnosis. Then we realised diagnosis isn&rsquo;t enough. If we name your problem and leave you standing there, we haven&rsquo;t made the journey any more accessible. A founder has to be able to move.</p>
+    <ul class="verbs">
+      <li>Get clarity</li><li>Identify problems</li><li>Build structure</li><li>Make decisions</li><li>Take action</li><li>Move forward</li>
+    </ul>
+    <p>Most AI tools are built for everyone. Ally is built for entrepreneurs, by people who understand entrepreneurs &mdash; not something you use once and forget, but something that becomes part of a founder&rsquo;s everyday.</p>
+  </div>
+</section>
+
+<section class="chapter" data-node>
+  <span class="num">06</span><span class="tick"></span>
+  <div class="reveal">
+    <div class="compass" id="compass">
+      <svg width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="A compass needle settling on north">
+        <circle cx="64" cy="64" r="52" fill="#fbf7f2" stroke="#d8cfc2" stroke-width="1.5"/>
+        <circle cx="64" cy="64" r="38" fill="none" stroke="#e7e0d6" stroke-width="1"/>
+        <g stroke="#d8cfc2" stroke-width="1.5" stroke-linecap="round">
+          <line x1="64" y1="16" x2="64" y2="24"/><line x1="112" y1="64" x2="104" y2="64"/>
+          <line x1="64" y1="112" x2="64" y2="104"/><line x1="16" y1="64" x2="24" y2="64"/>
+        </g>
+        <g id="needle">
+          <path d="M64 22 L73 64 L64 72 L55 64 Z" fill="#10B981"/>
+          <path d="M64 106 L55 64 L64 56 L73 64 Z" fill="#1B4332"/>
+        </g>
+        <circle cx="64" cy="64" r="4.5" fill="#fbf7f2" stroke="#1B4332" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <h2>A compass doesn&rsquo;t walk for you.</h2>
+    <p>It doesn&rsquo;t choose your destination. It tells you which way you&rsquo;re facing. When you&rsquo;re confused, it helps you find clarity. When you have a problem, it helps you understand it. When you have too many options, it helps you think them through. When you don&rsquo;t know what&rsquo;s next, it helps you find the step.</p>
+    <div class="pull"><p>You remain the founder. You make the decision. You take the action. You build the business.</p></div>
+  </div>
+</section>
+
+<section class="chapter" data-node>
+  <span class="num">07</span><span class="tick"></span>
+  <div class="reveal">
+    <h2>Why we called it <em>Ally.</em></h2>
+    <p>An assistant works for you. A tool waits to be used. <strong>An ally stands with you.</strong></p>
+    <p>Not just an AI. Not just a diagnosis tool. Not just a platform. Something you can trust, rely on, and move forward with. That&rsquo;s exactly what we wanted this to become &mdash; so we named it for the job, not the technology.</p>
+  </div>
+</section>
+</div>
+</main>
+
+<section class="close">
+  <div class="inner">
+    <div class="body reveal">
+      <p class="eyebrow">GoXL Ally</p>
+      <h2>The founder&rsquo;s compass.</h2>
+      <p class="tagline">Clarity. Confidence. Consistency.</p>
+      <p>It isn&rsquo;t here to replace your thinking, or to make your decisions. It&rsquo;s here to help you think better, see clearly, navigate, and keep moving.</p>
+      <div class="pull"><p>If entrepreneurship is a journey, every founder deserves a compass. And no founder should have to build alone.</p></div>
+      <a class="cta" href="/#early-access">Get early access <span aria-hidden="true">&rarr;</span></a>
+      <p class="cta-note">join.goxlally.ai &mdash; early access is open</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer shell">
+  <span class="foot-brand">
+    <span class="brand-mark" style="font-size:16px">GoXL</span>
+    <span>Ally &middot; The Founder&rsquo;s Compass</span>
+  </span>
+
+  <nav class="foot-links" aria-label="Footer">
+    <a href="/privacy.html">Privacy</a><span class="divider" aria-hidden="true">|</span>
+    <a href="/terms.html">Terms</a><span class="divider" aria-hidden="true">|</span>
+    <a href="/">Home</a><span class="divider" aria-hidden="true">|</span>
+    <a href="https://www.instagram.com/goxl_ally?igsh=MWgzYXZxaHU5cGw2bA%3D%3D&amp;igsi=MWgzYXZxaHU5cGw2bA%3D%3D" target="_blank" rel="noopener noreferrer">Instagram</a><span class="divider" aria-hidden="true">|</span>
+    <a href="https://www.linkedin.com/showcase/goxl-ally-ai" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  </nav>
+
+  <span>&copy; 2026 GoXL</span>
+</footer>
+
+<script>
+(function(){
+  var zone=document.getElementById('zone'),svg=document.getElementById('thread'),
+      track=document.getElementById('track'),draw=document.getElementById('draw'),
+      dotsG=document.getElementById('dots'),sections=[].slice.call(zone.querySelectorAll('[data-node]')),
+      reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+      pts=[],len=0,dots=[],railCx=0,STRAIGHT_FROM=6;
+
+  function points(){
+    var cs=getComputedStyle(document.documentElement),
+        rail=parseFloat(cs.getPropertyValue('--rail')),
+        amp=rail<60?9:26;
+    railCx=rail-16;
+    var zt=zone.getBoundingClientRect().top+window.scrollY;
+    pts=sections.map(function(s,i){
+      var num=s.querySelector('.num'),
+          y=num.getBoundingClientRect().top+window.scrollY-zt+9,
+          wob=i>=STRAIGHT_FROM?0:amp*Math.sin(i*1.9+0.6)*(1-i/STRAIGHT_FROM*0.55);
+      return {x:railCx+wob,y:y};
     });
-  </script>
+  }
+
+  function d(){
+    if(pts.length<2)return '';
+    var s='M'+pts[0].x.toFixed(1)+' '+pts[0].y.toFixed(1);
+    for(var i=0;i<pts.length-1;i++){
+      var a=pts[i],b=pts[i+1],my=(a.y+b.y)/2;
+      s+=' C'+a.x.toFixed(1)+' '+my.toFixed(1)+','+b.x.toFixed(1)+' '+my.toFixed(1)+','+b.x.toFixed(1)+' '+b.y.toFixed(1);
+    }
+    return s;
+  }
+
+  function build(){
+    points();
+    if(!pts.length)return;
+    var h=pts[pts.length-1].y+40;
+    svg.setAttribute('width',Math.max(railCx+40,60));
+    svg.setAttribute('height',h);
+    var path=d();
+    track.setAttribute('d',path);draw.setAttribute('d',path);
+    len=draw.getTotalLength();
+    draw.style.strokeDasharray=len;
+    draw.style.strokeDashoffset=reduce?0:len;
+    dotsG.innerHTML='';dots=[];
+    pts.forEach(function(p){
+      var c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('cx',p.x);c.setAttribute('cy',p.y);c.setAttribute('r',5);
+      c.setAttribute('class','node');dotsG.appendChild(c);dots.push(c);
+    });
+    onScroll();
+  }
+
+  function onScroll(){
+    if(!pts.length)return;
+    var zt=zone.getBoundingClientRect().top+window.scrollY,
+        span=pts[pts.length-1].y,
+        edge=window.scrollY+window.innerHeight*0.62-zt,
+        prog=Math.max(0,Math.min(1,edge/span));
+    if(!reduce)draw.style.strokeDashoffset=len*(1-prog);
+    var reachedY=reduce?span:prog*span;
+    dots.forEach(function(c,i){c.classList.toggle('on',pts[i].y<=reachedY+1)});
+  }
+
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}
+    })
+  },{threshold:0.15,rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+
+  var ci=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('lit');ci.unobserve(e.target)}})
+  },{threshold:0.5});
+  ci.observe(document.getElementById('compass'));
+
+  var tick=false;
+  window.addEventListener('scroll',function(){
+    if(tick)return;tick=true;
+    requestAnimationFrame(function(){onScroll();tick=false});
+  },{passive:true});
+
+  var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(build,150)});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(build);
+  window.addEventListener('load',build);
+  build();
+})();
+</script>
 </body>
 </html>
