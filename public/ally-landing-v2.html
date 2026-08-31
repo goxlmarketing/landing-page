@@ -219,7 +219,7 @@ em{ font-style:italic; }
 .hero-lbl--m{ display:none; }
 @media (max-width:1024px){
   /* outranks the blanket .hero-lbl hide below */
-  .hero-media .hero-lbl--m{ display:flex; left:13%; top:70%; }
+  .hero-media .hero-lbl--m{ display:flex; left:16%; top:77%; z-index:2; }
 }
 .hero-lbl--headed{ left:81%; top:11%; }
 @media (max-width:1280px){ .hero-lbl--headed{ display:none; } }
@@ -227,17 +227,30 @@ em{ font-style:italic; }
 
 /* ---------- mobile: copy first, film below ---------- */
 @media (max-width:1024px){
-  .hero{ min-height:0; justify-content:flex-start; }
-  .hero-media{
-    position:relative; inset:auto; order:2;
-    width:100%; aspect-ratio:4 / 3;   /* taller: the scene keeps its presence */
+  /* the film stays behind the copy, exactly like desktop — the veil
+     just runs top-to-bottom instead of left-to-right */
+  .hero{ display:block; min-height:calc(100svh - 72px); }
+  .hero-media{ z-index:auto; }
+  .hero-media video{ object-position:70% 30%; }
+  .hero-veil{
+    background:linear-gradient(180deg,
+      var(--ivory) 0%,
+      rgba(247,241,235,.96) 34%,
+      rgba(247,241,235,.84) 52%,
+      rgba(247,241,235,.28) 72%,
+      rgba(247,241,235,0) 86%);
   }
-  .hero-media video{ object-position:76% 38%; }
-  /* same soft ivory floor as desktop, just shorter */
-  .hero-veil{ position:absolute; z-index:1; background:none; }
   .hero-veil::after{ height:56px; }
-  .hero-inner{ order:1; padding:40px 0 30px; }
-  .hero-steps{ margin-top:40px; }
+  .hero-inner{ padding:32px 0 clamp(230px, 38svh, 330px); }
+
+  /* smaller type for the small screen — doubled selectors so these
+     outrank the base rules that appear later in the sheet */
+  .hero .hero-copy h1{ font-size:34px; margin:14px 0 18px; }
+  .hero .hero-copy .hero-sub{ font-size:15px; line-height:1.6; }
+  .hero .hero-copy .btn{ padding:13px 20px; font-size:13.5px; }
+  .hero .hero-copy .hero-note{ font-size:12px; }
+  .hero .hero-copy .hero-steps{ margin-top:34px; }
+  .hero .hero-copy .hero-steps span{ font-size:12.5px; }
 }
 
 /* ---------- entrance: UI only; the film carries its own motion ---------- */
