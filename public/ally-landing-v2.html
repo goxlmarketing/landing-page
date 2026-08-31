@@ -462,15 +462,12 @@ em{ font-style:italic; }
 }
 
 /* ============================================================
-   THE REAL PROBLEM — dark, then a gradient back to ivory so the
-   the dashboard below reads as stepping out of the question
-   into the product.
+   THE REAL PROBLEM — dark, with a clean edge back to ivory.
    ============================================================ */
 .problem{
-  background:linear-gradient(180deg,
-    var(--forest-night) 0%, var(--forest-night) 82%, var(--ivory) 100%);
+  background:var(--forest-night);
   color:var(--on-dark);
-  padding:clamp(90px, 12vh, 150px) 0 clamp(160px, 22vh, 240px);
+  padding:clamp(90px, 12vh, 150px) 0;
 }
 .problem .eyebrow{ color:var(--emerald-bright); }
 .problem h2{
