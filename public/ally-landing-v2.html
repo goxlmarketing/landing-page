@@ -215,6 +215,12 @@ em{ font-style:italic; }
 .hero-lbl i{ width:5px; height:5px; border-radius:50%; background:var(--emerald-bright); flex:0 0 auto; }
 .hero-lbl--here{ left:64%; bottom:9%; }
 .hero-lbl--next{ left:59%; top:41.5%; }
+/* the one label the phone keeps — lives inside the film block */
+.hero-lbl--m{ display:none; }
+@media (max-width:1024px){
+  /* outranks the blanket .hero-lbl hide below */
+  .hero-media .hero-lbl--m{ display:flex; left:13%; top:70%; }
+}
 .hero-lbl--headed{ left:81%; top:11%; }
 @media (max-width:1280px){ .hero-lbl--headed{ display:none; } }
 @media (max-width:1024px){ .hero-lbl{ display:none; } }
@@ -224,13 +230,14 @@ em{ font-style:italic; }
   .hero{ min-height:0; justify-content:flex-start; }
   .hero-media{
     position:relative; inset:auto; order:2;
-    width:100%; aspect-ratio:16 / 10;
+    width:100%; aspect-ratio:4 / 3;   /* taller: the scene keeps its presence */
   }
   .hero-media video{ object-position:76% 38%; }
-  .hero-veil{ position:absolute; z-index:1; }
-  .hero-veil{ background:none; }
-  .hero-veil::after{ display:none; }
-  .hero-inner{ order:1; padding:40px 0 36px; }
+  /* same soft ivory floor as desktop, just shorter */
+  .hero-veil{ position:absolute; z-index:1; background:none; }
+  .hero-veil::after{ height:56px; }
+  .hero-inner{ order:1; padding:40px 0 30px; }
+  .hero-steps{ margin-top:40px; }
 }
 
 /* ---------- entrance: UI only; the film carries its own motion ---------- */
@@ -1126,6 +1133,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 <!-- ================= HERO ================= -->
 <section class="hero">
   <div class="hero-media" aria-hidden="true">
+    <span class="hero-lbl hero-lbl--m" aria-hidden="true"><i></i>Your next move</span>
     <video id="heroFilm" autoplay muted loop playsinline
            preload="metadata"
            poster="/assets/founder-journey-poster.v1.jpg">
