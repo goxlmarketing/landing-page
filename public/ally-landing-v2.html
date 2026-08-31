@@ -224,7 +224,7 @@ em{ font-style:italic; }
   .hero-media .hero-lbl--m3{ display:flex; z-index:2; }
   .hero-media .hero-lbl--m{ left:42%; top:74.5%; }         /* the route ahead */
   .hero-media .hero-lbl--m2{ left:10%; top:84%; }          /* start of the path */
-  .hero-media .hero-lbl--m3{ left:auto; right:3%; top:1.2%; }/* up by the peak */
+  .hero-media .hero-lbl--m3{ left:auto; right:3%; top:1.2%; background:rgba(6,20,13,.68); }/* up by the peak */
 }
 .hero-lbl--headed{ left:81%; top:11%; }
 @media (max-width:1280px){ .hero-lbl--headed{ display:none; } }
@@ -240,10 +240,10 @@ em{ font-style:italic; }
   .hero-veil{
     background:linear-gradient(180deg,
       rgba(247,241,235,.78) 0%,
-      rgba(247,241,235,.66) 36%,
-      rgba(247,241,235,.42) 58%,
-      rgba(247,241,235,.16) 76%,
-      rgba(247,241,235,0) 88%);
+      rgba(247,241,235,.68) 36%,
+      rgba(247,241,235,.54) 58%,
+      rgba(247,241,235,.3) 76%,
+      rgba(247,241,235,0) 90%);
   }
   .hero-veil::after{ height:56px; }
   .hero-inner{ padding:32px 0 clamp(230px, 38svh, 330px); }
@@ -251,7 +251,9 @@ em{ font-style:italic; }
   /* smaller type for the small screen — doubled selectors so these
      outrank the base rules that appear later in the sheet */
   .hero .hero-copy h1{ font-size:34px; margin:14px 0 18px; }
-  .hero .hero-copy .hero-sub{ font-size:15px; line-height:1.6; }
+  .hero .hero-copy h1 em{ display:block; }   /* two lines + two lines */
+  .hero .hero-copy .hero-sub{ font-size:15px; line-height:1.6; margin-top:24px; }
+  .hero .hero-copy .hero-note{ color:var(--muted); }
   .hero .hero-copy .btn{ padding:13px 20px; font-size:13.5px; }
   .hero .hero-copy .hero-note{ font-size:12px; }
   .hero .hero-copy .hero-steps{ margin-top:34px; }
