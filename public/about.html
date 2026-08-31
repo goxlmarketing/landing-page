@@ -161,7 +161,14 @@ strong{ font-weight:600; color:var(--ink); }
   border-radius:var(--r-pill); background:#fff; border:1px solid var(--bd); color:var(--ink);
 }
 
-.compass{ margin-bottom:32px; }
+.compass-row{
+  display:flex; align-items:center; gap:clamp(28px, 4vw, 56px);
+}
+.compass-row > div:first-child{ min-width:0; }
+.compass{ flex:0 0 auto; }
+@media (max-width:760px){
+  .compass-row{ flex-direction:column-reverse; align-items:flex-start; gap:20px; }
+}
 #needle{ transform-origin:64px 64px; transform:rotate(-42deg); transition:transform 1.4s cubic-bezier(.22,1,.36,1); }
 .compass.lit #needle{ transform:rotate(0deg); }
 
@@ -316,9 +323,14 @@ strong{ font-weight:600; color:var(--ink); }
 
 <section class="chapter" data-node>
   <span class="num">06</span><span class="tick"></span>
-  <div class="reveal">
+  <div class="reveal compass-row">
+    <div>
+      <h2>A compass doesn&rsquo;t walk for you.</h2>
+      <p>It doesn&rsquo;t choose your destination. It tells you which way you&rsquo;re facing. When you&rsquo;re confused, it helps you find clarity. When you have a problem, it helps you understand it. When you have too many options, it helps you think them through. When you don&rsquo;t know what&rsquo;s next, it helps you find the step.</p>
+      <div class="pull"><p>You remain the founder. You make the decision. You take the action. You build the business.</p></div>
+    </div>
     <div class="compass" id="compass">
-      <svg width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="A compass needle settling on north">
+      <svg width="150" height="150" viewBox="0 0 128 128" role="img" aria-label="A compass needle settling on north">
         <circle cx="64" cy="64" r="52" fill="#fbf7f2" stroke="#d8cfc2" stroke-width="1.5"/>
         <circle cx="64" cy="64" r="38" fill="none" stroke="#e7e0d6" stroke-width="1"/>
         <g stroke="#d8cfc2" stroke-width="1.5" stroke-linecap="round">
@@ -332,9 +344,6 @@ strong{ font-weight:600; color:var(--ink); }
         <circle cx="64" cy="64" r="4.5" fill="#fbf7f2" stroke="#1B4332" stroke-width="1.5"/>
       </svg>
     </div>
-    <h2>A compass doesn&rsquo;t walk for you.</h2>
-    <p>It doesn&rsquo;t choose your destination. It tells you which way you&rsquo;re facing. When you&rsquo;re confused, it helps you find clarity. When you have a problem, it helps you understand it. When you have too many options, it helps you think them through. When you don&rsquo;t know what&rsquo;s next, it helps you find the step.</p>
-    <div class="pull"><p>You remain the founder. You make the decision. You take the action. You build the business.</p></div>
   </div>
 </section>
 
