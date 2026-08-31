@@ -845,47 +845,96 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 }
 .think h2 em{ color:var(--emerald-bright); }
 
-.think-list{
-  list-style:none; margin-top:clamp(48px, 7vh, 76px);
+/* the journey rail: five stages, one of them opened up */
+.jr{
   display:grid; grid-template-columns:repeat(5, minmax(0,1fr));
-  gap:clamp(18px, 2.2vw, 34px);
+  gap:clamp(10px, 1.1vw, 18px);
+  margin-top:clamp(44px, 6vh, 68px);
+  align-items:stretch;
 }
-.think-step{
+.jr-stage{
   position:relative; min-width:0;
-  opacity:.55; transition:opacity .55s ease;
+  display:flex; flex-direction:column;
+  border:1px solid rgba(255,255,255,.13); border-radius:var(--r-card);
+  background:rgba(255,255,255,.035);
+  padding:clamp(16px, 1.5vw, 22px);
+  transition:border-color .4s ease, background .4s ease;
 }
-.think-step.is-on{ opacity:1; }
-
-/* each step draws the rule across the gap to its right */
-.think-step::before{
-  content:""; position:absolute;
-  left:52px; right:calc(-1 * clamp(18px, 2.2vw, 34px));
-  top:25px; height:2px;
-  background:rgba(255,255,255,.14); transition:background .6s ease;
+.jr-stage--open{
+  border-color:rgba(16,185,129,.55);
+  background:rgba(16,185,129,.06);
 }
-.think-step:last-child::before{ display:none; }
-.think-step.is-on::before{ background:var(--emerald); }
-
-.think-dot{
-  width:50px; height:50px; border-radius:50%;
-  display:grid; place-items:center; position:relative; z-index:1;
-  font-family:var(--display); font-size:12px; font-weight:800;
-  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.22);
-  color:var(--on-dark-muted);
-  transition:background .5s ease, border-color .5s ease, color .5s ease;
+/* the chevron that carries the eye to the next stage */
+.jr-stage:not(:last-child)::after{
+  content:""; position:absolute; z-index:1;
+  right:calc(-1 * clamp(10px, 1.1vw, 18px) / 2 - 4px); top:50%;
+  width:8px; height:8px; margin-top:-4px;
+  border-right:1.5px solid rgba(255,255,255,.3);
+  border-top:1.5px solid rgba(255,255,255,.3);
+  transform:rotate(45deg);
 }
-.think-step.is-on .think-dot{
-  background:var(--emerald); border-color:var(--emerald); color:#fff;
+.jr-num{
+  width:34px; height:34px; border-radius:50%;
+  display:grid; place-items:center;
+  font-family:var(--display); font-size:11.5px; font-weight:800;
+  background:var(--emerald); color:var(--ally-btn-ink);
 }
-.think-body{ padding-top:22px; }
-.think-body h3{
+.jr-stage h3{
   font-family:var(--serif); font-weight:500;
-  font-size:clamp(18px, 1.5vw, 22px); line-height:1.2; color:var(--on-dark);
+  font-size:clamp(17px, 1.35vw, 21px); line-height:1.2;
+  color:var(--on-dark); margin-top:14px;
 }
-.think-body p{
-  margin-top:10px;
-  font-size:14px; line-height:1.55; color:var(--on-dark-muted);
+.jr-when{
+  display:block; margin-top:5px;
+  font-size:11.5px; letter-spacing:.04em; color:var(--on-dark-dim);
 }
+.jr-list{ list-style:none; margin-top:16px; }
+.jr-list li{
+  position:relative; padding-left:16px; margin-bottom:9px;
+  font-size:12.5px; line-height:1.45; color:var(--on-dark-muted);
+}
+.jr-list li::before{
+  content:""; position:absolute; left:0; top:6px;
+  width:5px; height:5px; border-radius:50%; background:var(--emerald);
+}
+.jr-out{
+  margin-top:auto; padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.1);
+  font-size:12px; line-height:1.45; color:var(--emerald-bright);
+}
+.jr-out b{ font-weight:600; }
+
+/* stage 02 opens into the two living profiles */
+.jr-dna{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px; }
+.jr-dna > div{
+  border:1px solid rgba(255,255,255,.13); border-radius:12px;
+  background:rgba(6,20,13,.35); padding:11px 10px;
+  min-width:0;
+}
+.jr-dna h4{
+  display:flex; align-items:center; gap:6px;
+  font-size:11.5px; font-weight:700; color:var(--on-dark);
+  line-height:1.25;
+}
+.jr-dna h4 i{
+  width:16px; height:16px; border-radius:4px; flex:0 0 auto;
+  display:grid; place-items:center; font-style:normal;
+  font-family:var(--display); font-size:9px; font-weight:800;
+  background:var(--emerald); color:var(--ally-btn-ink);
+}
+.jr-dna ul{ list-style:none; margin-top:9px; }
+.jr-dna li{
+  font-size:11.5px; line-height:1.4; color:var(--on-dark-dim);
+  margin-bottom:6px;
+}
+/* the loop note under the rail */
+.jr-loop{
+  display:flex; align-items:center; gap:14px;
+  margin-top:clamp(26px, 3.5vh, 40px);
+  font-size:13px; color:var(--on-dark-muted);
+}
+.jr-loop::before,
+.jr-loop::after{ content:""; height:1px; background:rgba(255,255,255,.14); flex:1; }
 
 /* ============================================================
    WHY ALLY LOOKS AT BOTH — two panels, one node between them.
@@ -1062,6 +1111,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   letter-spacing:-.015em; margin-top:16px; max-width:780px;
 }
 .philosophy h2 em{ color:var(--emerald); }
+.phil-lead{ margin-top:22px; max-width:720px; font-size:16.5px; line-height:1.65; color:var(--muted); }
 .phil-row{
   display:grid; grid-template-columns:repeat(3,1fr);
   border-top:1px solid var(--bd); margin-top:44px;
@@ -1168,18 +1218,12 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   .both-mark{ margin-inline:auto; }
   .both-stage::before{ display:none; }
   .both-node::before{ display:none; }
-  .think-list{ grid-template-columns:1fr; gap:0; }
-  .think-step{
-    display:grid; grid-template-columns:48px minmax(0,1fr);
-    gap:18px; padding-bottom:34px;
+  .jr{ grid-template-columns:1fr; gap:12px; }
+  .jr-stage:not(:last-child)::after{
+    right:50%; top:auto; bottom:-14px; margin:0 -4px 0 0;
+    transform:rotate(135deg);
   }
-  .think-step:last-child{ padding-bottom:0; }
-  .think-step::before{
-    left:24px; right:auto; margin-left:-1px;
-    top:48px; bottom:0; width:2px; height:auto;
-  }
-  .think-dot{ width:48px; height:48px; font-size:11.5px; }
-  .think-body{ padding-top:6px; }
+  .jr-loop{ font-size:12.5px; }
   .nav-links{ display:none; }
   .metric-row{ grid-template-columns:1fr 1fr; }
   .stage-tabs{ grid-template-columns:1fr 1fr; }
@@ -1550,9 +1594,9 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
       </div>
       <div class="today-list">
         <div><time>09:30</time><span>See where customers are getting stuck</span><i>45 min</i></div>
-        <div><time>11:00</time><span>Decide what actually needs your attention today</span><i>30 min</i></div>
+        <div><time>11:30</time><span>Investors meeting</span><i>30 min</i></div>
         <div><time>14:00</time><span>Talk to five customers or potential customers</span><i>45 min</i></div>
-        <div><time>18:00</time><span>Tell Ally what moved &mdash; and what still feels stuck</span><i>10 min</i></div>
+        <div><time>18:10</time><span>Team meeting</span><i>10 min</i></div>
       </div>
     </div>
   </div>
@@ -1585,45 +1629,89 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 
 <!-- ================= HOW ALLY THINKS ================= -->
 <section class="think"><div class="shell">
-  <p class="eyebrow">How Ally thinks</p>
-  <h2>Don&rsquo;t jump <em>to the answer.</em></h2>
-  <ol class="think-list">
-    <li class="think-step">
-      <span class="think-dot">01</span>
-      <div class="think-body">
-        <h3>Understand</h3>
-        <p>Understand where the founder and the business currently are &mdash; not where a template assumes they should be.</p>
+  <p class="eyebrow">How Ally works</p>
+  <h2>From onboarding <em>to everyday use.</em></h2>
+
+  <div class="jr">
+    <div class="jr-stage">
+      <span class="jr-num">01</span>
+      <h3>Onboarding</h3>
+      <span class="jr-when">under 5 minutes</span>
+      <ul class="jr-list">
+        <li>Who they are, and why now</li>
+        <li>Business snapshot: stage, size, sector</li>
+        <li>What Ally will ask, and why</li>
+        <li>Data scope and consent agreed</li>
+      </ul>
+      <p class="jr-out"><b>A first question that feels personal</b></p>
+    </div>
+
+    <div class="jr-stage jr-stage--open">
+      <span class="jr-num">02</span>
+      <h3>Adaptive diagnosis</h3>
+      <span class="jr-when">20 to 30 minutes, resumable</span>
+      <div class="jr-dna">
+        <div>
+          <h4><i>A</i>Founder DNA</h4>
+          <ul>
+            <li>Motivation and risk appetite</li>
+            <li>Decision style under pressure</li>
+            <li>Strengths and blind spots</li>
+          </ul>
+        </div>
+        <div>
+          <h4><i>B</i>Business DNA</h4>
+          <ul>
+            <li>Model, revenue and margins</li>
+            <li>Operations and systems maturity</li>
+            <li>Team, market and traction</li>
+          </ul>
+        </div>
       </div>
-    </li>
-    <li class="think-step">
-      <span class="think-dot">02</span>
-      <div class="think-body">
-        <h3>Diagnose</h3>
-        <p>Explore what is really happening beneath the surface, beyond the symptom that prompted the question.</p>
-      </div>
-    </li>
-    <li class="think-step">
-      <span class="think-dot">03</span>
-      <div class="think-body">
-        <h3>Find the root cause</h3>
-        <p>Separate symptoms from the actual problem, so effort goes toward what will actually change the outcome.</p>
-      </div>
-    </li>
-    <li class="think-step">
-      <span class="think-dot">04</span>
-      <div class="think-body">
-        <h3>Find the priority</h3>
-        <p>Identify what deserves attention now, and what can honestly wait until later.</p>
-      </div>
-    </li>
-    <li class="think-step">
-      <span class="think-dot">05</span>
-      <div class="think-body">
-        <h3>Take the next step</h3>
-        <p>Move forward with one clear and meaningful action &mdash; not a list of everything you could possibly do.</p>
-      </div>
-    </li>
-  </ol>
+      <p class="jr-out"><b>Two living profiles, kept and updated</b></p>
+    </div>
+
+    <div class="jr-stage">
+      <span class="jr-num">03</span>
+      <h3>Root cause</h3>
+      <span class="jr-when">runs automatically</span>
+      <ul class="jr-list">
+        <li>Surfaced issues ranked by impact</li>
+        <li>Symptoms traced to their drivers</li>
+        <li>Founder DNA checked against business DNA</li>
+        <li>Converges on one cause to fix first</li>
+      </ul>
+      <p class="jr-out"><b>One named cause, with its reasoning</b></p>
+    </div>
+
+    <div class="jr-stage">
+      <span class="jr-num">04</span>
+      <h3>Report</h3>
+      <span class="jr-when">generated on the spot</span>
+      <ul class="jr-list">
+        <li>Diagnosis in plain language</li>
+        <li>Root cause stated with evidence</li>
+        <li>Prioritised actions and timelines</li>
+        <li>Baselines for the next 90 days</li>
+      </ul>
+      <p class="jr-out"><b>An open action list and live metrics</b></p>
+    </div>
+
+    <div class="jr-stage">
+      <span class="jr-num">05</span>
+      <h3>Daily use</h3>
+      <span class="jr-when">ongoing</span>
+      <ul class="jr-list">
+        <li>Decision support in context</li>
+        <li>Nudges tied to the action list</li>
+        <li>Weekly check-in on what moved</li>
+        <li>Signals drift, reopens the diagnosis</li>
+      </ul>
+      <p class="jr-out"><b>Momentum, not a filed report</b></p>
+    </div>
+  </div>
+
+  <p class="jr-loop">As the business changes, Ally reruns the diagnosis instead of starting the founder over</p>
 </div></section>
 
 <!-- ================= WHY ALLY LOOKS AT BOTH ================= -->
@@ -1702,6 +1790,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   <p class="phil-title">Philosophy</p>
   <p class="eyebrow">Built around real founder journeys</p>
   <h2>Founders don&rsquo;t need another place to collect advice. <em>They need a better way to understand their reality.</em></h2>
+  <p class="phil-lead">GoXL Ally combines structured founder thinking, business understanding and AI to help founders move from confusion to clarity &mdash; and from clarity to action.</p>
   <div class="phil-row">
     <div>
       <b>01 &mdash; Structured thinking</b>
@@ -1938,29 +2027,6 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   }
 })();
 
-
-/* ============================================================
-   HOW ALLY THINKS — light each step as it reaches mid-screen.
-   One-shot: a step that has lit stays lit, so scrolling back up
-   doesn't unwind the rule behind you. Without IntersectionObserver
-   every step is simply lit from the start; nothing depends on it.
-   ============================================================ */
-(function(){
-  var steps = [].slice.call(document.querySelectorAll('.think-step'));
-  if(!steps.length) return;
-  if(!('IntersectionObserver' in window)){
-    steps.forEach(function(s){ s.classList.add('is-on'); });
-    return;
-  }
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(!e.isIntersecting) return;
-      e.target.classList.add('is-on');
-      io.unobserve(e.target);
-    });
-  }, { rootMargin: '0px 0px -45% 0px' });
-  steps.forEach(function(s){ io.observe(s); });
-})();
 
 /* ============================================================
    NOTICED-SCENARIO SLIDER
