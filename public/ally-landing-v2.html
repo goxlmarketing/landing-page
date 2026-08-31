@@ -528,7 +528,7 @@ em{ font-style:italic; }
 }
 .meet-bar{
   display:flex; align-items:center; justify-content:space-between;
-  gap:16px; flex-wrap:wrap; margin-top:18px;
+  gap:16px; flex-wrap:wrap; margin-bottom:18px;
 }
 .meet-note{ font-size:13px; color:var(--muted-2); }
 .meet-fs{
@@ -1309,16 +1309,16 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   <p class="why-meet-sub">Not a chat window. A working compass that holds your founder context, your business context and your current situation in one place &mdash; and keeps them pointing the same way. It&rsquo;s running below &mdash; open it full screen and look around.</p>
 
   <div class="meet-frame">
-    <div class="meet-screen" id="allyScreen">
-      <iframe src="/ally-dashboard.html" title="The Ally dashboard"
-              loading="lazy" fetchpriority="low" allow="fullscreen"></iframe>
-    </div>
     <div class="meet-bar">
       <p class="meet-note">The real interface, running here.</p>
       <button class="meet-fs" type="button" id="allyFsOpen">
         <svg viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
         Full screen
       </button>
+    </div>
+    <div class="meet-screen" id="allyScreen">
+      <iframe src="/ally-dashboard.html" title="The Ally dashboard"
+              loading="lazy" fetchpriority="low" allow="fullscreen"></iframe>
     </div>
   </div>
 </section>
