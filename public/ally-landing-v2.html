@@ -163,48 +163,76 @@ em{ font-style:italic; }
 .nav-cta:hover{ border-color:var(--forest); }
 
 /* ============================================================
-   HERO — calm; a controlled fragment of Ally, not the dashboard.
+   HERO — the founder-journey film behind an ivory editorial left.
+   The video is ambient storytelling; the copy owns the screen.
    ============================================================ */
 .hero{
   position:relative;
-  min-height:calc(100svh - 80px);
-  display:grid; grid-template-columns:.92fr 1.08fr;
-  gap:clamp(32px, 4vw, 60px); align-items:center;
+  min-height:calc(94svh - 88px);
+  display:flex; flex-direction:column; justify-content:center;
+  overflow:hidden;
+}
+.hero-media{ position:absolute; inset:0; z-index:0; pointer-events:none; }
+.hero-media video{
+  width:100%; height:100%; display:block;
+  object-fit:cover;
+  /* keeps the founders, the lit first waypoint, the route and the
+     peak in frame while the quiet ivory left gets cropped first */
+  object-position:72% 42%;
+}
+/* readability veil: strong ivory left, honest film right. No panel,
+   no shadow, no blur — the left simply stays the editorial canvas. */
+.hero-veil{
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(90deg,
+    var(--ivory) 0%, var(--ivory) 26%,
+    rgba(247,241,235,.88) 38%,
+    rgba(247,241,235,.38) 52%,
+    rgba(247,241,235,0) 66%);
+}
+/* the hero ends into ivory, not on a hard cut */
+.hero-veil::after{
+  content:""; position:absolute; left:0; right:0; bottom:0; height:90px;
+  background:linear-gradient(180deg, rgba(247,241,235,0), var(--ivory));
+}
+.hero-inner{
+  position:relative; z-index:2;
+  width:var(--shell); margin-inline:auto;
   padding:48px 0 72px;
 }
-/* only the bare copy column — .hero-map must keep its absolute, and
-   .hero > div would outrank it (0,1,1 vs 0,1,0) */
-.hero > div:not([class]){ position:relative; z-index:1; }
+.hero-copy{ max-width:600px; }
 
-/* ---------- one route, nothing else ----------
-   Three visual elements only: the glow, this line, the dashboard.
-   The route starts in the gap between the supporting note and the
-   process strip — under the copy, never through it — and finds the
-   dashboard's edge in two curves. At rest it is a whisper. */
-.hero-map{
-  position:absolute; inset:0; z-index:0;
-  pointer-events:none;
+/* ---------- micro-labels over the film ---------- */
+.hero-lbl{
+  position:absolute; z-index:2; pointer-events:none;
+  display:flex; align-items:center; gap:7px; white-space:nowrap;
+  font-size:10.5px; font-weight:700; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--forest); opacity:.62;
 }
-.hero-map svg{ width:100%; height:100%; display:block; }
-.hero-map .route{
-  fill:none; stroke:var(--muted-2); stroke-width:1.25;
-  opacity:.12;
-}
-.hero-map .wp{ fill:var(--emerald); opacity:.3; }
-@media (max-width: 1024px){
-  .hero-map{ display:none; }   /* below desktop the route has no clean corridor */
+.hero-lbl i{ width:5px; height:5px; border-radius:50%; background:var(--emerald); flex:0 0 auto; }
+.hero-lbl--here{ left:64%; bottom:9%; color:rgba(247,241,235,.92); }
+.hero-lbl--here i{ background:var(--emerald-bright); }
+.hero-lbl--next{ left:59%; top:41.5%; color:rgba(247,241,235,.95); opacity:.85; }
+.hero-lbl--next i{ background:var(--emerald-bright); }
+.hero-lbl--headed{ left:81%; top:11%; opacity:.55; }
+@media (max-width:1280px){ .hero-lbl--headed{ display:none; } }
+@media (max-width:1024px){ .hero-lbl{ display:none; } }
+
+/* ---------- mobile: copy first, film below ---------- */
+@media (max-width:1024px){
+  .hero{ min-height:0; justify-content:flex-start; }
+  .hero-media{
+    position:relative; inset:auto; order:2;
+    width:100%; aspect-ratio:16 / 10;
+  }
+  .hero-media video{ object-position:76% 38%; }
+  .hero-veil{ position:absolute; z-index:1; }
+  .hero-veil{ background:none; }
+  .hero-veil::after{ display:none; }
+  .hero-inner{ order:1; padding:40px 0 36px; }
 }
 
-/* wide, diffused, almost not there — depth, not a halo */
-.hero-glow{
-  position:absolute; inset:-28% -34%;
-  background:radial-gradient(closest-side, rgba(16,185,129,.12), transparent 70%);
-  opacity:.11; pointer-events:none;
-}
-
-/* ---------- motion. Everything below this line is decoration:
-   the base styles above are the finished state, so reduced motion
-   simply never plays any of it. ---------- */
+/* ---------- entrance: UI only; the film carries its own motion ---------- */
 @media (prefers-reduced-motion: no-preference){
   .hero .eyebrow,
   .hero h1{
@@ -215,64 +243,40 @@ em{ font-style:italic; }
   .hero-actions{ animation:heroRise .55s cubic-bezier(.22,1,.36,1) .38s both; }
   .hero-note{ animation:heroRise .55s cubic-bezier(.22,1,.36,1) .46s both; }
   .hero-steps{ animation:heroRise .55s cubic-bezier(.22,1,.36,1) .54s both; }
-
-  .hero-map .route{
-    stroke-dasharray:1; stroke-dashoffset:1;
-    animation:routeDraw .9s cubic-bezier(.22,1,.36,1) .4s forwards;
-  }
-  .hero-map .wp{ opacity:0; animation:mapIn .5s ease-out forwards; }
-  .hero-map .wp--start{ animation-delay:.5s; }
-  .hero-map .wp--end{ animation-delay:1.15s; }
-
-  .glimpse-card{
-    animation:glimpseIn .7s cubic-bezier(.22,1,.36,1) .7s both;
-  }
-
-  /* idle: only the glow breathes; the interface stays still */
-  .hero-glow{ animation:glowBreathe 9s ease-in-out 2s infinite alternate; }
+  .hero-media{ animation:filmIn .8s ease both; }
+  .hero-lbl{ animation:lblIn .6s ease 1.1s both; }
 }
 @keyframes heroRise{
   from{ opacity:0; translate:0 10px; }
   to  { opacity:1; translate:none; }
 }
-@keyframes glimpseIn{
-  from{ opacity:0; translate:0 12px; scale:.97; }
-  to  { opacity:1; translate:none; scale:1; }
-}
-@keyframes routeDraw{ to{ stroke-dashoffset:0; } }
-@keyframes mapIn{
-  to{ opacity:var(--map-in, .3); }
-}
-@keyframes glowBreathe{
-  from{ opacity:.09; } to{ opacity:.14; }
-}
+@keyframes filmIn{ from{ opacity:0; } }
+@keyframes lblIn{ from{ opacity:0; } }
 
-/* ---------- leaving the hero: the card straightens ----------
-   The tilt belongs to "looking at an object in a page"; as the hero
-   scrolls away the card squares up, and the map fades below it.
-   Scrubbed off the hero's own exit — the hero is the moving element
-   then, so view() is honest. Entrance owns opacity/translate/scale;
-   this owns transform; they never fight. */
+/* ---------- leaving the hero: copy lifts away, film breathes ----------
+   Scrubbed off the hero's own exit. The entrance animates the copy's
+   children; this scrubs the wrapper — they never share a property. */
 @supports (animation-timeline: view()){
   @media (prefers-reduced-motion: no-preference) and (min-width: 1025px){
     .hero{ view-timeline-name:--hero; view-timeline-axis:block; }
-    .glimpse-card{
-      animation:glimpseIn .7s cubic-bezier(.22,1,.36,1) .7s both,
-                heroStraighten auto linear both;
-      animation-timeline:auto, --hero;
-      animation-range:normal, exit 0% exit 70%;
-    }
-    .hero-map{
-      animation:mapQuiet auto linear both;
+    .hero-inner{
+      animation:heroCopyAway auto linear both;
       animation-timeline:--hero;
-      animation-range:exit 0% exit 50%;
+      animation-range:exit 0% exit 70%;
+    }
+    .hero-media{
+      animation:filmIn .8s ease both, heroFilmQuiet auto linear both;
+      animation-timeline:auto, --hero;
+      animation-range:normal, exit 0% exit 80%;
     }
   }
 }
-@keyframes heroStraighten{
-  to{ transform:perspective(1400px) rotateY(0deg) rotateX(0deg); }
+@keyframes heroCopyAway{
+  to{ translate:0 -26px; opacity:.4; }
 }
-@keyframes mapQuiet{ to{ opacity:0; } }
+@keyframes heroFilmQuiet{
+  to{ scale:1.02; opacity:.5; }
+}
 
 .hero h1{
   font-family:var(--serif); font-weight:500;
@@ -313,72 +317,7 @@ em{ font-style:italic; }
 }
 .hero-steps span{ display:block; margin-top:5px; font-size:13.5px; color:var(--ink); }
 
-/* The fragment: one Ask-Ally bar and one current-state strip, cropped.
-   Foreshadows the dashboard without explaining it. */
-.hero-glimpse{ position:relative; z-index:1; }
-.glimpse-card{
-  background:var(--ivory-2); border:1px solid var(--bd);
-  border-radius:var(--r-card);
-  box-shadow:var(--shadow-card);
-  display:grid; grid-template-columns:56px minmax(0,1fr);
-  overflow:hidden;
-  transform:perspective(1400px) rotateY(-6deg) rotateX(4deg);
-}
-.glimpse-side{
-  background:linear-gradient(180deg, var(--ally-sidebar), var(--ally-sidebar-deep));
-  display:flex; flex-direction:column; align-items:center;
-  padding:18px 0; gap:16px;
-}
-.glimpse-side b{
-  font-family:var(--display-tight); font-weight:800; font-size:12px;
-  color:#fff; letter-spacing:-.02em;
-}
-.glimpse-side b i{ font-style:normal; color:var(--ally-accent); }
-.glimpse-side i{
-  width:18px; height:18px; border-radius:5px;
-  border:1px solid rgba(167,192,180,.4);
-}
-.glimpse-side i.on{ background:var(--ally-accent); border-color:var(--ally-accent); }
-.glimpse-main{ padding:24px 24px 0; min-width:0; }
-.glimpse-kicker{
-  font-size:10.5px; letter-spacing:.16em; text-transform:uppercase;
-  font-weight:700; color:var(--muted-2);
-}
-.glimpse-card h3{
-  font-family:var(--serif); font-weight:400; font-size:24px;
-  line-height:1.26; margin:12px 0 18px; color:var(--forest-deep);
-}
-.glimpse-card h3 em{ color:var(--emerald); }
-.ask-bar{
-  display:flex; align-items:center; justify-content:space-between; gap:14px;
-  border:1px solid var(--bd); border-radius:var(--r-pill);
-  background:#fff; padding:8px 8px 8px 22px;
-  font-size:13.5px; color:var(--muted-2);
-  box-shadow:0 1px 2px -1px rgba(6,20,13,.1), 0 8px 22px -14px rgba(6,20,13,.18);
-}
-.ask-bar b{
-  display:inline-flex; align-items:center; gap:8px;
-  background:var(--emerald); color:var(--ally-btn-ink);
-  font-weight:600; font-size:12.5px;
-  border-radius:10px; padding:10px 15px; white-space:nowrap;
-  box-shadow:0 10px 26px -8px rgba(16,185,129,.5);
-}
-.glimpse-strip{
-  display:grid; grid-template-columns:repeat(3,1fr);
-  border-top:1px solid var(--bd); margin-top:22px;
-  transform:translateY(1px);
-}
-.glimpse-strip div{ padding:16px 12px 22px 16px; border-left:1px solid var(--bd); }
-.glimpse-strip div:first-child{ border-left:0; padding-left:0; }
-.glimpse-strip span{
-  display:block; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase;
-  color:var(--muted-2); font-weight:700;
-}
-.glimpse-strip strong{
-  display:block; margin-top:8px; font-family:var(--body);
-  font-size:19px; font-weight:600; color:var(--forest-deep);
-  letter-spacing:-.02em;
-}
+/* (the hero's dashboard glimpse card was replaced by the journey film) */
 
 /* ============================================================
    YOUR STARTING POINT — four founder stages, one divider row.
@@ -1109,8 +1048,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 }
 @media (max-width: 1024px){
   :root{ --shell:min(1240px, calc(100% - 48px)); }
-  .hero{ grid-template-columns:1fr; min-height:0; padding-bottom:56px; }
-  .hero-glimpse{ max-width:640px; }
+  .hero{ padding-bottom:0; }
   .glimpse-card{ transform:none; }
   .metric-row strong{ font-size:18px; }
 }
@@ -1185,55 +1123,35 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 <main id="top">
 
 <!-- ================= HERO ================= -->
-<section class="hero shell">
-  <div class="hero-map" aria-hidden="true">
-    <!-- viewBox matches the hero's shell proportions; the corridor the
-         route uses (y 660-700 while under the copy) sits between the
-         supporting note and the process strip, then rises to the
-         dashboard's near edge. -->
-    <svg viewBox="0 0 1240 820" preserveAspectRatio="xMidYMid slice">
-      <path class="route" pathLength="1"
-            d="M95 632 C 250 648, 420 642, 520 608 C 592 584, 612 512, 616 448"/>
-      <circle class="wp wp--start" cx="95" cy="632" r="4"/>
-      <circle class="wp wp--end" cx="616" cy="448" r="4.5"/>
-    </svg>
+<section class="hero">
+  <div class="hero-media" aria-hidden="true">
+    <video id="heroFilm" autoplay muted loop playsinline
+           preload="metadata"
+           poster="/assets/founder-journey-poster.v1.jpg">
+      <source src="/assets/founder-journey.v1.mp4" type="video/mp4">
+    </video>
   </div>
-  <div>
-    <p class="eyebrow">The Founder&rsquo;s Compass</p>
-    <h1>You don&rsquo;t need all the answers. <em>You need to know your next move.</em></h1>
-    <p class="hero-sub">Ally understands your journey, your business and the challenges you&rsquo;re facing &mdash; so you can see what truly matters and move forward with clarity.</p>
-    <div class="hero-actions">
-      <a class="btn" href="#early-access">Register for early access <span aria-hidden="true">→</span></a>
-      <a class="link-quiet" href="#how">See how Ally thinks ↓</a>
-    </div>
-    <p class="hero-note">No generic advice. Ally starts by understanding where you actually are.</p>
-    <div class="hero-steps" aria-label="The Ally journey">
-      <div><strong>01</strong><span>Understand</span></div>
-      <div><strong>02</strong><span>Look deeper</span></div>
-      <div><strong>03</strong><span>Find what matters</span></div>
-      <div><strong>04</strong><span>Take action</span></div>
-    </div>
-  </div>
+  <div class="hero-veil" aria-hidden="true"></div>
 
-  <div class="hero-glimpse" aria-label="A fragment of the Ally interface">
-    <span class="hero-glow" aria-hidden="true"></span>
-    <div class="glimpse-card">
-      <div class="glimpse-side" aria-hidden="true">
-        <b>Go<i>XL</i></b>
-        <i class="on"></i><i></i><i></i><i></i>
+  <span class="hero-lbl hero-lbl--here" aria-hidden="true"><i></i>You are here</span>
+  <span class="hero-lbl hero-lbl--next" aria-hidden="true"><i></i>Your next move</span>
+  <span class="hero-lbl hero-lbl--headed" aria-hidden="true">Where you&rsquo;re headed</span>
+
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow">The Founder&rsquo;s Compass</p>
+      <h1>You don&rsquo;t need all the answers. <em>You need to know your next move.</em></h1>
+      <p class="hero-sub">Ally understands your journey, your business and the challenges you&rsquo;re facing &mdash; so you can see what truly matters and move forward with clarity.</p>
+      <div class="hero-actions">
+        <a class="btn" href="#early-access">Register for early access <span aria-hidden="true">→</span></a>
+        <a class="link-quiet" href="#how">See how Ally thinks ↓</a>
       </div>
-      <div class="glimpse-main">
-      <p class="glimpse-kicker">Good morning, Founder &middot; Founder&rsquo;s Compass</p>
-      <h3>Your living map of where you are, and <em>where you&rsquo;re going.</em></h3>
-      <div class="ask-bar" aria-hidden="true">
-        <span>Ask Ally about anything on this page...</span>
-        <b>→ Ask Ally</b>
-      </div>
-      <div class="glimpse-strip">
-        <div><span>Founder clarity</span><strong>Emerging</strong></div>
-        <div><span>Easy to miss</span><strong>03</strong></div>
-        <div><span>Needs attention</span><strong>Customers</strong></div>
-      </div>
+      <p class="hero-note">No generic advice. Ally starts by understanding where you actually are.</p>
+      <div class="hero-steps" aria-label="The Ally journey">
+        <div><strong>01</strong><span>Understand</span></div>
+        <div><strong>02</strong><span>Look deeper</span></div>
+        <div><strong>03</strong><span>Find what matters</span></div>
+        <div><strong>04</strong><span>Take action</span></div>
       </div>
     </div>
   </div>
@@ -1757,23 +1675,27 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 
 <script>
 /* ============================================================
-   HERO MAP PARALLAX — background layers only, 4px at most, fine
-   pointers only, and never under reduced motion. The card itself
-   never moves with the pointer: it is the thing being trusted.
+   HERO FILM — ambient, never a video player. Reduced motion gets
+   the poster (first frame); off-screen it pauses to save battery.
+   If playback fails, the poster stays and the hero is complete.
    ============================================================ */
 (function(){
-  var map = document.querySelector('.hero-map');
-  var hero = document.querySelector('.hero');
-  if(!map || !hero) return;
-  if(!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  hero.addEventListener('pointermove', function(e){
-    var r = hero.getBoundingClientRect();
-    var dx = ((e.clientX - r.left) / r.width  - .5) * 8;   /* -4..4px */
-    var dy = ((e.clientY - r.top)  / r.height - .5) * 6;
-    map.style.translate = dx.toFixed(1) + 'px ' + dy.toFixed(1) + 'px';
-  });
-  hero.addEventListener('pointerleave', function(){ map.style.translate = ''; });
+  var film = document.getElementById('heroFilm');
+  if(!film) return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){
+    film.removeAttribute('autoplay');
+    film.pause();
+    return;
+  }
+  film.play && film.play().catch(function(){});   /* poster remains on refusal */
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){ film.play().catch(function(){}); }
+        else{ film.pause(); }
+      });
+    }, { threshold: 0.1 }).observe(film);
+  }
 })();
 
 /* ============================================================
