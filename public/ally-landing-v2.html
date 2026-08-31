@@ -928,6 +928,17 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   margin-bottom:6px;
 }
 /* the loop note under the rail */
+.track-hint{
+  display:none; align-items:center; gap:8px;
+  margin-top:16px; font-size:11.5px; letter-spacing:.1em;
+  text-transform:uppercase; font-weight:700; color:var(--on-dark-dim);
+}
+.track-hint i{
+  width:6px; height:6px; border-radius:50%; flex:0 0 auto;
+  background:var(--emerald);
+}
+@media (max-width: 900px){ .track-hint{ display:flex; } }
+
 .jr-loop{
   display:flex; align-items:center; gap:14px;
   margin-top:clamp(26px, 3.5vh, 40px);
@@ -1218,11 +1229,16 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   .both-mark{ margin-inline:auto; }
   .both-stage::before{ display:none; }
   .both-node::before{ display:none; }
-  .jr{ grid-template-columns:1fr; gap:12px; }
-  .jr-stage:not(:last-child)::after{
-    right:50%; top:auto; bottom:-14px; margin:0 -4px 0 0;
-    transform:rotate(135deg);
+  /* the journey becomes a track you swipe rather than a long stack */
+  .jr{
+    display:flex; grid-template-columns:none;
+    gap:12px; overflow-x:auto; scroll-snap-type:x mandatory;
+    scroll-padding-left:0; -webkit-overflow-scrolling:touch;
+    scrollbar-width:none; -ms-overflow-style:none;
   }
+  .jr::-webkit-scrollbar{ display:none; }
+  .jr-stage{ flex:0 0 86%; scroll-snap-align:center; }
+  .jr-stage:not(:last-child)::after{ display:none; }
   .jr-loop{ font-size:12.5px; }
   .nav-links{ display:none; }
   .metric-row{ grid-template-columns:1fr 1fr; }
@@ -1230,7 +1246,14 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   .stage-pane.is-on{ flex-direction:column; gap:18px; }
   .phil-row{ grid-template-columns:1fr; }
   .phil-row div{ border-left:0; padding-left:0; }
-  .problem-grid{ grid-template-columns:1fr; }
+  .problem-grid{
+    display:flex; grid-template-columns:none;
+    gap:12px; overflow-x:auto; scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none; -ms-overflow-style:none;
+  }
+  .problem-grid::-webkit-scrollbar{ display:none; }
+  .problem-grid > article{ flex:0 0 86%; scroll-snap-align:center; }
   .metric-row article:nth-child(2n){ border-right:0; }
   .stage h2{ min-height:0; }
 }
@@ -1437,6 +1460,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
         <p>Maybe the real problem isn&rsquo;t marketing at all &mdash; it could be retention, pricing, or a product gap upstream.</p>
       </article>
     </div>
+    <p class="track-hint"><i></i>Swipes on its own &mdash; touch and hold to pause</p>
     <p class="problem-close">Most people start by searching for answers. <strong>Ally starts by <em>understanding the problem.</em></strong></p>
   </div>
 </section>
@@ -1711,6 +1735,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
     </div>
   </div>
 
+  <p class="track-hint"><i></i>Swipes on its own &mdash; touch and hold to pause</p>
   <p class="jr-loop">As the business changes, Ally reruns the diagnosis instead of starting the founder over</p>
 </div></section>
 
@@ -2027,6 +2052,75 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   }
 })();
 
+
+/* ============================================================
+   PHONE TRACKS — the journey rail and the Look-closer cards ride
+   the same carousel on small screens: it advances itself every two
+   seconds, and a finger held anywhere on the track stops it. Never
+   runs on desktop, never under reduced motion.
+   ============================================================ */
+(function(){
+  var mq = matchMedia('(max-width: 900px)');
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  var tracks = [].slice.call(document.querySelectorAll('.jr, .problem-grid'));
+  if(!tracks.length) return;
+
+  tracks.forEach(function(track){
+    var timer = null, held = false, visible = true, idle = null;
+
+    function step(){
+      var cards = track.children;
+      if(!cards.length) return;
+      var w = cards[0].getBoundingClientRect().width + 12;   /* card + gap */
+      var max = track.scrollWidth - track.clientWidth - 2;
+      var from = track.scrollLeft;
+      var to = from + w > max ? 0 : from + w;
+      track.scrollTo({ left: to, behavior: 'smooth' });
+      /* a few engines ignore smooth scrolling inside a snapping track;
+         if nothing moved, take the step without the animation */
+      setTimeout(function(){
+        if(Math.abs(track.scrollLeft - from) < 2) track.scrollLeft = to;
+      }, 450);
+    }
+    function start(){
+      if(timer || held || !visible || !mq.matches || reduce.matches) return;
+      timer = setInterval(step, 2000);
+    }
+    function stop(){ clearInterval(timer); timer = null; }
+
+    /* a finger (or a mouse button) on the track holds it still */
+    track.addEventListener('pointerdown', function(){ held = true; stop(); });
+    var release = function(){ held = false; start(); };
+    track.addEventListener('pointerup', release);
+    track.addEventListener('pointercancel', release);
+    track.addEventListener('pointerleave', release);
+
+    /* a manual swipe also buys a moment of quiet */
+    track.addEventListener('scroll', function(){
+      stop();
+      clearTimeout(idle);
+      idle = setTimeout(function(){ if(!held) start(); }, 2500);
+    }, { passive: true });
+
+    /* it runs from the start; the observer only quiets it once the
+       track has actually left the screen */
+    start();
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        es.forEach(function(e){
+          visible = e.isIntersecting;
+          visible ? start() : stop();
+        });
+      }, { threshold: .15 }).observe(track);
+    }
+
+    /* rotating the phone can cross the breakpoint either way */
+    mq.addEventListener && mq.addEventListener('change', function(){
+      stop();
+      if(mq.matches) start(); else track.scrollLeft = 0;
+    });
+  });
+})();
 
 /* ============================================================
    NOTICED-SCENARIO SLIDER
