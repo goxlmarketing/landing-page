@@ -825,20 +825,98 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 .ally-difference h2{font-family:var(--serif);font-weight:400;font-size:clamp(36px,4vw,62px);line-height:1.05;letter-spacing:-.025em;margin-top:18px;max-width:980px}
 .ally-difference h2 em{color:var(--emerald)}
 .difference-grid{display:grid;grid-template-columns:minmax(0,.98fr) minmax(380px,1.02fr);gap:clamp(44px,7vw,112px);align-items:center;margin-top:clamp(58px,8vh,92px)}
-.context-map{margin:0;min-width:0}
-.context-map svg{display:block;width:100%;height:auto;overflow:visible}
-.context-map .map-axis{stroke:var(--bd-2);stroke-width:1.5}
-.context-map .map-founder{stroke:var(--emerald)}
-.context-map .map-business{stroke:var(--lime-edge)}
-.context-map .map-current{stroke:var(--muted-2)}
-.context-map .map-route{stroke-width:2.4;stroke-dasharray:8 9}
-.context-map .map-label{fill:var(--muted);font-family:var(--display);font-size:17px;font-weight:750;letter-spacing:.025em}
-.context-map .map-position{font-size:15px}
+/* ---------- the context compass ---------- */
+.context-compass{margin:0;min-width:0}
+.context-compass svg{display:block;width:100%;height:auto;overflow:visible}
+.cc-ring{fill:none;stroke:var(--bd-2);stroke-width:1}
+.cc-ring--dots{stroke-dasharray:1.5 7;opacity:.8}
+.cc-tick{stroke:var(--bd-2);stroke-width:1}
+.cc-dot{fill:var(--forest)}
+.cc-halo{fill:none;stroke:var(--emerald);stroke-width:1.5;opacity:0;transition:opacity .45s ease}
+.cc-path{fill:none;stroke-width:1.6;opacity:.45;transition:opacity .35s ease,stroke-width .35s ease}
+.cc-path--founder{stroke:var(--emerald)}
+.cc-path--business{stroke:var(--lime-edge)}
+.cc-path--current{stroke:var(--muted-2)}
+.cc-node{cursor:pointer;outline:none}
+.cc-node circle.cc-node-ring{fill:var(--ivory);stroke-width:1.5;transition:stroke-width .3s ease}
+.cc-node--founder circle.cc-node-ring{stroke:var(--emerald)}
+.cc-node--business circle.cc-node-ring{stroke:var(--lime-edge)}
+.cc-node--current circle.cc-node-ring{stroke:var(--muted-2)}
+.cc-node .cc-icon{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.cc-node--founder .cc-icon{stroke:var(--emerald)}
+.cc-node--business .cc-icon{stroke:#7ba32e}
+.cc-node--current .cc-icon{stroke:var(--muted-2)}
+.cc-node,.cc-centre{transition:opacity .35s ease}
+.cc-centre{cursor:pointer;outline:none}
+.cc-node:focus-visible circle.cc-node-ring,
+.cc-centre:focus-visible .cc-ring--focus{stroke:var(--emerald-bright);stroke-width:2.5}
+.cc-label{fill:var(--muted);font-family:var(--display);font-size:12.5px;font-weight:750;letter-spacing:.09em}
+.cc-label--pos{fill:var(--muted-2);font-size:11px;letter-spacing:.12em}
+
+/* selection states, driven by data-sel on the grid */
+.difference-grid[data-sel="founder"] .cc-path--founder,
+.difference-grid[data-sel="business"] .cc-path--business,
+.difference-grid[data-sel="current"] .cc-path--current{opacity:1;stroke-width:2.4}
+.difference-grid[data-sel="founder"] .cc-path--business,
+.difference-grid[data-sel="founder"] .cc-path--current,
+.difference-grid[data-sel="business"] .cc-path--founder,
+.difference-grid[data-sel="business"] .cc-path--current,
+.difference-grid[data-sel="current"] .cc-path--founder,
+.difference-grid[data-sel="current"] .cc-path--business{opacity:.14}
+.difference-grid[data-sel="founder"] .cc-node--business,
+.difference-grid[data-sel="founder"] .cc-node--current,
+.difference-grid[data-sel="business"] .cc-node--founder,
+.difference-grid[data-sel="business"] .cc-node--current,
+.difference-grid[data-sel="current"] .cc-node--founder,
+.difference-grid[data-sel="current"] .cc-node--business{opacity:.38}
+.difference-grid[data-sel="founder"] .cc-node--founder circle.cc-node-ring,
+.difference-grid[data-sel="business"] .cc-node--business circle.cc-node-ring,
+.difference-grid[data-sel="current"] .cc-node--current circle.cc-node-ring{stroke-width:2.6}
+.difference-grid[data-sel="all"] .cc-path{opacity:1;stroke-width:2.2}
+.difference-grid[data-sel="all"] .cc-halo{opacity:.55}
+
+/* the caption under the diagram follows the state */
+.cc-msg{margin-top:20px;min-height:44px}
+.cc-msg b{display:block;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--muted-2)}
+.cc-msg span{display:block;margin-top:5px;font-size:14px;color:var(--muted);font-style:italic;font-family:var(--serif)}
+.difference-grid[data-sel="all"] .cc-msg b{color:var(--emerald)}
+
+/* right-hand rows are the same component */
 .difference-points{border-top:1px solid var(--bd)}
-.difference-point{display:grid;grid-template-columns:18px minmax(0,1fr);gap:18px;padding:30px 0;border-bottom:1px solid var(--bd)}
+.difference-point{display:grid;grid-template-columns:18px minmax(0,1fr);gap:18px;padding:26px 14px;margin-inline:-14px;border-bottom:1px solid var(--bd);border-radius:12px;cursor:pointer;transition:background .3s ease,opacity .3s ease;outline:none}
+.difference-point:focus-visible{outline:2.5px solid var(--emerald-bright);outline-offset:2px}
 .difference-point .dot{width:12px;height:12px;border-radius:50%;margin-top:5px;background:var(--point-color)}
 .difference-point h3{font-size:18px;line-height:1.25;font-weight:700}
 .difference-point p{margin-top:8px;color:var(--muted);font-size:15.5px;line-height:1.55}
+.difference-grid[data-sel="founder"] [data-ctx="business"].difference-point,
+.difference-grid[data-sel="founder"] [data-ctx="current"].difference-point,
+.difference-grid[data-sel="business"] [data-ctx="founder"].difference-point,
+.difference-grid[data-sel="business"] [data-ctx="current"].difference-point,
+.difference-grid[data-sel="current"] [data-ctx="founder"].difference-point,
+.difference-grid[data-sel="current"] [data-ctx="business"].difference-point{opacity:.55}
+.difference-grid[data-sel="founder"] [data-ctx="founder"].difference-point,
+.difference-grid[data-sel="all"] [data-ctx="founder"].difference-point{background:rgba(16,185,129,.07)}
+.difference-grid[data-sel="business"] [data-ctx="business"].difference-point,
+.difference-grid[data-sel="all"] [data-ctx="business"].difference-point{background:rgba(168,217,74,.12)}
+.difference-grid[data-sel="current"] [data-ctx="current"].difference-point,
+.difference-grid[data-sel="all"] [data-ctx="current"].difference-point{background:rgba(108,122,112,.09)}
+
+/* ---------- entrance: nodes, then paths, then the centre ----------
+   Base styles above are the finished state; the classes below exist
+   only while motion is allowed, so reduced motion sees it complete. */
+@media (prefers-reduced-motion: no-preference){
+  .cc-anim .cc-node--founder{animation:ccIn .4s ease 0s both}
+  .cc-anim .cc-node--business{animation:ccIn .4s ease .15s both}
+  .cc-anim .cc-node--current{animation:ccIn .4s ease .3s both}
+  .cc-anim .cc-path{stroke-dasharray:1;stroke-dashoffset:1;animation:ccDraw .55s cubic-bezier(.22,1,.36,1) .5s forwards}
+  .cc-anim .cc-centre-art{animation:ccIn .45s ease .95s both}
+  .cc-anim .cc-halo{animation:ccPulse 1s ease 1.25s 1}
+  .cc-node circle.cc-node-ring{transition:stroke-width .3s ease, r .3s ease}
+}
+@keyframes ccIn{from{opacity:0}}
+@keyframes ccDraw{to{stroke-dashoffset:0}}
+@keyframes ccPulse{0%{opacity:0}35%{opacity:.55}100%{opacity:0}}
+.difference-grid[data-sel="all"] .cc-anim .cc-halo{animation:none}
 .difference-flow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--bd);margin-top:clamp(54px,8vh,90px);padding-top:34px}
 .difference-flow span:not(.flow-arrow){border:1px solid var(--bd-2);border-radius:var(--r-pill);padding:10px 20px;font-size:13px;font-weight:700;color:var(--forest);background:rgba(255,255,255,.28)}
 .difference-flow span:last-child{border-color:var(--emerald);background:rgba(16,185,129,.08)}
@@ -1339,6 +1417,85 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   <p class="stages-close">Your stage is different. Your context is different. <strong>Your next step should be different too.</strong></p>
 </section>
 
+<!-- ================= THE ALLY DIFFERENCE ================= -->
+<section class="ally-difference" aria-labelledby="ally-difference-title">
+  <div class="shell">
+    <p class="eyebrow">The Ally Difference</p>
+    <h2 id="ally-difference-title">Most AI gives you answers. Ally<br>helps you <em>find the right question.</em></h2>
+    <div class="difference-grid" data-sel="none" id="ccGrid">
+      <figure class="context-compass" id="ccFigure">
+        <svg viewBox="0 0 640 560" aria-labelledby="cc-title cc-desc">
+          <title id="cc-title">The context compass</title>
+          <desc id="cc-desc">You, your business and right now combine to reveal your actual position. Ally connects all three.</desc>
+
+          <!-- centre calibration -->
+          <g class="cc-centre" id="ccCentre" role="button" tabindex="0" aria-label="Your actual position — Ally connects all three">
+            <g class="cc-centre-art">
+              <circle class="cc-ring cc-ring--dots" cx="320" cy="310" r="92"/>
+              <circle class="cc-ring cc-ring--focus" cx="320" cy="310" r="64"/>
+              <circle class="cc-ring" cx="320" cy="310" r="38" opacity=".8"/>
+              <g class="cc-tick">
+                <line x1="320" y1="212" x2="320" y2="222"/><line x1="320" y1="398" x2="320" y2="408"/>
+                <line x1="222" y1="310" x2="232" y2="310"/><line x1="408" y1="310" x2="418" y2="310"/>
+              </g>
+              <circle class="cc-halo" cx="320" cy="310" r="26"/>
+              <circle class="cc-dot" cx="320" cy="310" r="7"/>
+              <text class="cc-label cc-label--pos" x="320" y="356" text-anchor="middle">YOUR ACTUAL</text>
+              <text class="cc-label cc-label--pos" x="320" y="372" text-anchor="middle">POSITION</text>
+            </g>
+          </g>
+
+          <!-- curved approaches -->
+          <path class="cc-path cc-path--founder" pathLength="1" d="M172 152 C 208 208, 228 238, 264 268"/>
+          <path class="cc-path cc-path--business" pathLength="1" d="M468 152 C 432 208, 412 238, 376 268"/>
+          <path class="cc-path cc-path--current" pathLength="1" d="M320 448 C 320 430, 320 414, 320 400"/>
+
+          <!-- the three contexts -->
+          <g class="cc-node cc-node--founder" data-ctx="founder" role="button" tabindex="0" aria-label="You — founder context">
+            <circle class="cc-node-ring" cx="150" cy="122" r="30"/>
+            <g class="cc-icon">
+              <circle cx="150" cy="115" r="6.5"/>
+              <path d="M138 136 c2.5 -7 21.5 -7 24 0"/>
+            </g>
+            <text class="cc-label" x="150" y="176" text-anchor="middle">YOU</text>
+          </g>
+          <g class="cc-node cc-node--business" data-ctx="business" role="button" tabindex="0" aria-label="Your business — business context">
+            <circle class="cc-node-ring" cx="490" cy="122" r="30"/>
+            <g class="cc-icon">
+              <path d="M480 134 v-21 h12 v21 M496 134 v-13 h6 v13 M477 134 h28"/>
+              <path d="M484.5 118 h3 M484.5 123 h3 M484.5 128 h3"/>
+            </g>
+            <text class="cc-label" x="490" y="176" text-anchor="middle">YOUR BUSINESS</text>
+          </g>
+          <g class="cc-node cc-node--current" data-ctx="current" role="button" tabindex="0" aria-label="Right now — current context">
+            <circle class="cc-node-ring" cx="320" cy="478" r="30"/>
+            <g class="cc-icon">
+              <circle cx="320" cy="478" r="10.5"/>
+              <path d="M320 471.5 v6.5 l4.5 3"/>
+            </g>
+            <text class="cc-label" x="320" y="532" text-anchor="middle">RIGHT NOW</text>
+          </g>
+        </svg>
+        <figcaption class="cc-msg" aria-live="polite">
+          <b id="ccMsgT">Hover / tap to explore</b>
+          <span id="ccMsgS"></span>
+        </figcaption>
+      </figure>
+      <div class="difference-points">
+        <article class="difference-point" data-ctx="founder" role="button" tabindex="0" style="--point-color:var(--emerald)"><span class="dot" aria-hidden="true"></span><div><h3>Founder Context</h3><p>Vision, motivation, thinking patterns, focus, confidence and decision-making.</p></div></article>
+        <article class="difference-point" data-ctx="business" role="button" tabindex="0" style="--point-color:var(--lime-edge)"><span class="dot" aria-hidden="true"></span><div><h3>Business Context</h3><p>Growth, finance, product, team and operations.</p></div></article>
+        <article class="difference-point" data-ctx="current" role="button" tabindex="0" style="--point-color:var(--muted-2)"><span class="dot" aria-hidden="true"></span><div><h3>Current Context</h3><p>What is happening right now, and what led to this situation.</p></div></article>
+      </div>
+    </div>
+    <div class="difference-flow" aria-label="Ally's process">
+      <span>Understand</span><span class="flow-arrow" aria-hidden="true">&rarr;</span>
+      <span>Diagnose</span><span class="flow-arrow" aria-hidden="true">&rarr;</span>
+      <span>Find the real problem</span><span class="flow-arrow" aria-hidden="true">&rarr;</span>
+      <span>Prioritise</span><span class="flow-arrow" aria-hidden="true">&rarr;</span>
+      <span>Move forward</span>
+    </div>
+  </div>
+</section>
 <!-- ================= THE REAL PROBLEM ================= -->
 <section class="problem" id="how">
   <div class="shell">
@@ -1560,46 +1717,6 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   </div>
 </section>
 
-<!-- ================= THE ALLY DIFFERENCE ================= -->
-<section class="ally-difference" aria-labelledby="ally-difference-title">
-  <div class="shell">
-    <p class="eyebrow">The Ally Difference</p>
-    <h2 id="ally-difference-title">Most AI gives you answers. Ally<br>helps you <em>find the right question.</em></h2>
-    <div class="difference-grid">
-      <figure class="context-map">
-        <svg viewBox="0 0 640 520" role="img" aria-labelledby="context-map-title context-map-desc">
-          <title id="context-map-title">Your actual position</title>
-          <desc id="context-map-desc">Founder context, business context and current context meet at your actual position.</desc>
-          <path class="map-axis" d="M38 34V480H602" fill="none"/>
-          <path class="map-founder map-route" d="M320 70V285" fill="none"/>
-          <path class="map-current map-route" d="M320 285L92 420" fill="none"/>
-          <path class="map-business map-route" d="M320 285L548 420" fill="none"/>
-          <circle cx="320" cy="64" r="13" fill="var(--emerald)"/>
-          <circle cx="92" cy="420" r="13" fill="var(--muted-2)"/>
-          <circle cx="548" cy="420" r="13" fill="var(--lime-edge)"/>
-          <circle cx="320" cy="285" r="25" fill="var(--ivory)" stroke="var(--forest)" stroke-width="3"/>
-          <circle cx="320" cy="285" r="8" fill="var(--forest)"/>
-          <text class="map-label" x="320" y="32" text-anchor="middle">FOUNDER</text>
-          <text class="map-label map-position" x="320" y="352" text-anchor="middle">YOUR ACTUAL POSITION</text>
-          <text class="map-label" x="38" y="464">CURRENT</text>
-          <text class="map-label" x="602" y="464" text-anchor="end">BUSINESS</text>
-        </svg>
-      </figure>
-      <div class="difference-points">
-        <article class="difference-point" style="--point-color:var(--emerald)"><span class="dot" aria-hidden="true"></span><div><h3>Founder Context</h3><p>Vision, motivation, thinking patterns, focus, confidence and decision-making.</p></div></article>
-        <article class="difference-point" style="--point-color:var(--lime-edge)"><span class="dot" aria-hidden="true"></span><div><h3>Business Context</h3><p>Growth, finance, product, team and operations.</p></div></article>
-        <article class="difference-point" style="--point-color:var(--muted-2)"><span class="dot" aria-hidden="true"></span><div><h3>Current Context</h3><p>What is happening right now, and what led to this situation.</p></div></article>
-      </div>
-    </div>
-    <div class="difference-flow" aria-label="Ally's process">
-      <span>Understand</span><span class="flow-arrow" aria-hidden="true">&rarr;</span>
-      <span>Diagnose</span><span class="flow-arrow" aria-hidden="true">&rarr;</span>
-      <span>Find the real problem</span><span class="flow-arrow" aria-hidden="true">&rarr;</span>
-      <span>Prioritise</span><span class="flow-arrow" aria-hidden="true">&rarr;</span>
-      <span>Move forward</span>
-    </div>
-  </div>
-</section>
 <!-- ================= HOW ALLY THINKS ================= -->
 <section class="think"><div class="shell">
   <p class="eyebrow">How Ally thinks</p>
@@ -1851,6 +1968,61 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
         else{ film.pause(); }
       });
     }, { threshold: 0.1 }).observe(film);
+  }
+})();
+
+/* ============================================================
+   CONTEXT COMPASS — hover previews, click locks, the centre is the
+   aha moment. The diagram and the right-hand rows are one component.
+   ============================================================ */
+(function(){
+  var grid = document.getElementById('ccGrid');
+  var fig = document.getElementById('ccFigure');
+  if(!grid || !fig) return;
+  var msgT = document.getElementById('ccMsgT');
+  var msgS = document.getElementById('ccMsgS');
+  var centre = document.getElementById('ccCentre');
+
+  var COPY = {
+    none:     ['Hover / tap to explore', ''],
+    founder:  ['You', 'How you think, decide and lead.'],
+    business: ['Your business', 'What your business needs right now.'],
+    current:  ['Right now', 'What\u2019s happening around you today.'],
+    all:      ['Ally connects all three', 'Because understanding only one side can miss what really matters.']
+  };
+  var locked = null;
+
+  function apply(k){
+    k = k || 'none';
+    grid.setAttribute('data-sel', k);
+    msgT.textContent = COPY[k][0];
+    msgS.textContent = COPY[k][1];
+  }
+
+  function wire(el, key){
+    el.addEventListener('pointerenter', function(){ if(!locked) apply(key); });
+    el.addEventListener('click', function(){
+      locked = (locked === key) ? null : key;
+      apply(locked);
+    });
+    el.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); el.click(); }
+    });
+  }
+  grid.querySelectorAll('[data-ctx]').forEach(function(el){
+    wire(el, el.getAttribute('data-ctx'));
+  });
+  wire(centre, 'all');
+  grid.addEventListener('pointerleave', function(){ if(!locked) apply(null); });
+
+  /* entrance: play once when the diagram arrives, motion permitting */
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){ fig.classList.add('cc-anim'); io.disconnect(); }
+      });
+    }, { threshold: .35 });
+    io.observe(fig);
   }
 })();
 
