@@ -172,7 +172,8 @@ strong{ font-weight:600; color:var(--ink); }
 .close .inner{ max-width:calc(var(--rail) + var(--col) + 48px); margin:0 auto; padding:0 24px; }
 .close .body{ padding-left:var(--rail); }
 .close .eyebrow{ color:var(--emerald-bright); }
-.close h2{ color:var(--on-dark); max-width:16ch; }
+.close h2{ color:var(--on-dark); max-width:none; white-space:nowrap; }
+@media (max-width:560px){ .close h2{ white-space:normal; } }
 .close p{ color:var(--on-dark-muted); }
 .tagline{
   font-family:var(--display-tight); font-weight:700; font-size:12.5px;
