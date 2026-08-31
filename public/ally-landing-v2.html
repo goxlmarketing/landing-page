@@ -215,11 +215,16 @@ em{ font-style:italic; }
 .hero-lbl i{ width:5px; height:5px; border-radius:50%; background:var(--emerald-bright); flex:0 0 auto; }
 .hero-lbl--here{ left:64%; bottom:9%; }
 .hero-lbl--next{ left:59%; top:41.5%; }
-/* the one label the phone keeps — lives inside the film block */
-.hero-lbl--m{ display:none; }
+/* phone labels — live inside the film block */
+.hero-lbl--m, .hero-lbl--m2, .hero-lbl--m3{ display:none; }
 @media (max-width:1024px){
-  /* outranks the blanket .hero-lbl hide below */
-  .hero-media .hero-lbl--m{ display:flex; left:16%; top:77%; z-index:2; }
+  /* outrank the blanket .hero-lbl hide below */
+  .hero-media .hero-lbl--m,
+  .hero-media .hero-lbl--m2,
+  .hero-media .hero-lbl--m3{ display:flex; z-index:2; }
+  .hero-media .hero-lbl--m{ left:42%; top:74.5%; }         /* the route ahead */
+  .hero-media .hero-lbl--m2{ left:10%; top:84%; }          /* start of the path */
+  .hero-media .hero-lbl--m3{ left:auto; right:3%; top:1.2%; }/* up by the peak */
 }
 .hero-lbl--headed{ left:81%; top:11%; }
 @media (max-width:1280px){ .hero-lbl--headed{ display:none; } }
@@ -231,14 +236,14 @@ em{ font-style:italic; }
      just runs top-to-bottom instead of left-to-right */
   .hero{ display:block; min-height:calc(100svh - 72px); }
   .hero-media{ z-index:auto; }
-  .hero-media video{ object-position:70% 30%; }
+  .hero-media video{ object-position:76% 26%; }
   .hero-veil{
     background:linear-gradient(180deg,
-      var(--ivory) 0%,
-      rgba(247,241,235,.96) 34%,
-      rgba(247,241,235,.84) 52%,
-      rgba(247,241,235,.28) 72%,
-      rgba(247,241,235,0) 86%);
+      rgba(247,241,235,.78) 0%,
+      rgba(247,241,235,.66) 36%,
+      rgba(247,241,235,.42) 58%,
+      rgba(247,241,235,.16) 76%,
+      rgba(247,241,235,0) 88%);
   }
   .hero-veil::after{ height:56px; }
   .hero-inner{ padding:32px 0 clamp(230px, 38svh, 330px); }
@@ -1147,6 +1152,8 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 <section class="hero">
   <div class="hero-media" aria-hidden="true">
     <span class="hero-lbl hero-lbl--m" aria-hidden="true"><i></i>Your next move</span>
+    <span class="hero-lbl hero-lbl--m2" aria-hidden="true"><i></i>You are here</span>
+    <span class="hero-lbl hero-lbl--m3" aria-hidden="true">Where you&rsquo;re headed</span>
     <video id="heroFilm" autoplay muted loop playsinline
            preload="metadata"
            poster="/assets/founder-journey-poster.v1.jpg">
