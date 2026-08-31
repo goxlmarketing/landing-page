@@ -235,6 +235,7 @@ em{ font-style:italic; }
   padding:48px 0 72px;
 }
 .hero-copy{ max-width:600px; }
+.brk-ph{ display:none; }   /* phone-only line breaks, so every phone wraps like the reference */
 
 /* ---------- micro-labels over the film ---------- */
 .hero-lbl{
@@ -288,6 +289,42 @@ em{ font-style:italic; }
   }
   .hero-veil::after{ height:56px; }
   .hero-inner{ padding:32px 0 clamp(230px, 38svh, 330px); }
+
+  /* ---- phones: lock the hero to the Pixel-reference proportions ----
+     412px wide × ~843px hero is the approved composition. Fixing the
+     aspect (height 205vw) means the film crops identically on every
+     phone, so the labels land on the same scenery — everything just
+     scales. Type scales with vw, capped at the reference sizes. */
+  @media (max-width:560px){
+    .hero{ height:205vw; min-height:0; }
+    .hero-inner{ padding:7.8vw 0 0; }
+    .hero .hero-copy .eyebrow{ font-size:min(2.9vw, 12.5px); }
+    .hero .hero-copy h1{ font-size:min(8.25vw, 36px); }
+    .hero .hero-copy .hero-sub{ font-size:min(3.65vw, 15.5px); }
+    .hero .hero-copy .btn{ font-size:min(3.3vw, 14px); padding:min(3.2vw,13px) min(4.9vw,20px); }
+    .hero .hero-copy .link-quiet{ font-size:min(3.4vw, 14px); }
+    .hero .hero-copy .hero-note{ font-size:min(2.95vw, 12.5px); }
+    .hero .hero-copy .hero-steps strong{ font-size:min(2.7vw, 11px); }
+    .hero .hero-copy .hero-steps span{ font-size:min(3.05vw, 13px); }
+    /* vertical rhythm scales with the same factor as the type */
+    .brk-ph{ display:inline; }
+    .hero .hero-copy h1{ margin:min(3.4vw,14px) 0 min(4.4vw,18px); }
+    .hero .hero-copy .hero-sub{ margin-top:min(5.9vw,24px); }
+    .hero .hero-copy .hero-actions{ margin-top:min(8.8vw,36px); gap:min(5vw,22px); }
+    .hero .hero-copy .hero-note{ margin-top:min(3.9vw,16px); }
+    .hero .hero-copy .hero-steps{ margin-top:min(8.3vw,34px); }
+    .hero .hero-copy .hero-steps div{ padding:min(3.9vw,16px) min(3.4vw,14px) 0 min(3.9vw,16px); }
+    .hero .hero-copy .hero-steps div:first-child{ padding-left:0; }
+    .hero-media .hero-lbl--m,
+    .hero-media .hero-lbl--m2{ font-size:min(2.55vw, 10.5px); padding:min(1.7vw,7px) min(3.2vw,13px); }
+    .hero-media .hero-lbl--m3{ font-size:min(2.2vw, 9px); max-width:min(27.2vw, 112px); padding:min(1.5vw,6px) min(2.4vw,10px); }
+  }
+  /* very narrow phones: the copy runs taller, so the two lower pills
+     drop beneath the strip instead of colliding with it */
+  @media (max-width:400px){
+    .hero-media .hero-lbl--m{ left:36%; top:88%; }
+    .hero-media .hero-lbl--m2{ left:8%; top:94.5%; }
+  }
 
   /* smaller type for the small screen — doubled selectors so these
      outrank the base rules that appear later in the sheet */
@@ -1225,7 +1262,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   <div class="hero-inner">
     <div class="hero-copy">
       <p class="eyebrow">The Founder&rsquo;s Compass</p>
-      <h1>You don&rsquo;t need all the answers. <em>You need to know your next move.</em></h1>
+      <h1>You don&rsquo;t need<br class="brk-ph"> all the answers. <em>You need to know<br class="brk-ph"> your next move.</em></h1>
       <p class="hero-sub">Ally understands your journey, your business and the challenges you&rsquo;re facing &mdash; so you can see what truly matters and move forward with clarity.</p>
       <div class="hero-actions">
         <a class="btn" href="#early-access">Start your founder journey <span aria-hidden="true">→</span></a>
