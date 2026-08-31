@@ -380,19 +380,17 @@ strong{ font-weight:600; color:var(--ink); }
       track=document.getElementById('track'),draw=document.getElementById('draw'),
       dotsG=document.getElementById('dots'),sections=[].slice.call(zone.querySelectorAll('[data-node]')),
       reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-      pts=[],len=0,dots=[],railCx=0,STRAIGHT_FROM=6;
+      pts=[],len=0,dots=[],railCx=0;
 
   function points(){
     var cs=getComputedStyle(document.documentElement),
-        rail=parseFloat(cs.getPropertyValue('--rail')),
-        amp=rail<60?9:26;
+        rail=parseFloat(cs.getPropertyValue('--rail'));
     railCx=rail-16;
     var zt=zone.getBoundingClientRect().top+window.scrollY;
-    pts=sections.map(function(s,i){
+    pts=sections.map(function(s){
       var num=s.querySelector('.num'),
-          y=num.getBoundingClientRect().top+window.scrollY-zt+9,
-          wob=i>=STRAIGHT_FROM?0:amp*Math.sin(i*1.9+0.6)*(1-i/STRAIGHT_FROM*0.55);
-      return {x:railCx+wob,y:y};
+          y=num.getBoundingClientRect().top+window.scrollY-zt+9;
+      return {x:railCx,y:y};   /* dead straight; the draw + nodes stay scroll-driven */
     });
   }
 
