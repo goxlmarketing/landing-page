@@ -121,6 +121,7 @@ img,svg{ display:block; max-width:100%; }
 :focus-visible{ outline:2.5px solid var(--emerald-bright); outline-offset:3px; border-radius:8px; }
 
 .shell{ width:var(--shell); margin-inline:auto; }
+:root{ --sec-pad:clamp(88px, 12vh, 136px); }   /* one vertical rhythm for every section */
 
 .eyebrow{
   font-size:12px; letter-spacing:.18em; text-transform:uppercase;
@@ -375,7 +376,7 @@ em{ font-style:italic; }
    ============================================================ */
 .stages{
   border-top:1px solid var(--bd);
-  padding:clamp(80px, 11vh, 130px) 0;
+  padding:var(--sec-pad) 0;
 }
 .stages h2{
   font-family:var(--serif); font-weight:400;
@@ -438,7 +439,7 @@ em{ font-style:italic; }
    WHY ALLY EXISTS — one compact narrative, ivory, editorial.
    ============================================================ */
 .why{
-  padding:clamp(80px, 11vh, 130px) 0;
+  padding:var(--sec-pad) 0;
 }
 .why h2{
   font-family:var(--serif); font-weight:400;
@@ -467,7 +468,7 @@ em{ font-style:italic; }
 .problem{
   background:var(--forest-night);
   color:var(--on-dark);
-  padding:clamp(90px, 12vh, 150px) 0;
+  padding:var(--sec-pad) 0;
 }
 .problem .eyebrow{ color:var(--emerald-bright); }
 .problem h2{
@@ -571,7 +572,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
    ============================================================ */
 .outcome{
   background:var(--forest-night); color:var(--on-dark);
-  padding:clamp(90px, 12vh, 150px) 0;
+  padding:var(--sec-pad) 0;
 }
 .outcome-grid{
   display:grid; grid-template-columns:minmax(280px,.9fr) minmax(0,1.1fr);
@@ -667,7 +668,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
    ============================================================ */
 .direction{
   background:var(--forest-night); color:var(--on-dark);
-  padding:0 0 clamp(90px, 12vh, 150px);
+  padding:0 0 var(--sec-pad);   /* shares the dark band above, so no top */
 }
 .direction .eyebrow{ color:var(--on-dark-dim); }
 .direction h2{
@@ -728,7 +729,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   background:
     radial-gradient(80% 90% at 70% 40%, var(--forest-deep) 0%, var(--forest-night) 70%);
   color:var(--on-dark);
-  padding:clamp(100px, 14vh, 170px) 0;
+  padding:var(--sec-pad) 0;
   overflow:hidden;
 }
 .north-grid{
@@ -757,7 +758,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 /* ============================================================
    ALLY DIFFERENCE — founder, business and present context.
    ============================================================ */
-.ally-difference{background:var(--ivory);padding:clamp(88px,12vh,148px) 0 clamp(72px,10vh,120px)}
+.ally-difference{background:var(--ivory);padding:var(--sec-pad) 0}
 .ally-difference h2{font-family:var(--serif);font-weight:400;font-size:clamp(36px,4vw,62px);line-height:1.05;letter-spacing:-.025em;margin-top:18px;max-width:980px}
 .ally-difference h2 em{color:var(--emerald)}
 .difference-grid{display:grid;grid-template-columns:minmax(0,.98fr) minmax(380px,1.02fr);gap:clamp(44px,7vw,112px);align-items:center;margin-top:clamp(58px,8vh,92px)}
@@ -784,7 +785,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
    reaches the middle of the screen, so the rule fills as you read
    down it rather than arriving all at once.
    ============================================================ */
-.think{ background:var(--ivory); padding:clamp(80px, 11vh, 130px) 0 clamp(88px, 12vh, 140px); }
+.think{ background:var(--ivory); padding:var(--sec-pad) 0; }
 .think h2{
   font-family:var(--serif); font-weight:400;
   font-size:clamp(32px, 3.4vw, 50px); line-height:1.1;
@@ -839,7 +840,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
    ivory sections, and a lone dark band here would read as a flash
    rather than a change of place.
    ============================================================ */
-.both{ background:var(--ivory); padding:clamp(80px, 11vh, 130px) 0 clamp(88px, 12vh, 140px); }
+.both{ background:var(--ivory); padding:var(--sec-pad) 0; }
 .both-head{ text-align:center; }
 .both-head h2{
   font-family:var(--serif); font-weight:400;
@@ -940,7 +941,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
    THE SHIFT — before and after, side by side. The right panel is
    the one that carries weight: white, emerald-edged, lifted.
    ============================================================ */
-.shift{ background:var(--ivory); padding:clamp(80px, 11vh, 130px) 0 clamp(88px, 12vh, 140px); }
+.shift{ background:var(--ivory); padding:var(--sec-pad) 0; }
 .shift h2{
   font-family:var(--serif); font-weight:400;
   font-size:clamp(32px, 3.4vw, 50px); line-height:1.14;
@@ -992,7 +993,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 /* small credibility section: one statement, one divider row */
 .philosophy{
   border-top:1px solid var(--bd);
-  padding:clamp(80px, 11vh, 130px) 0;
+  padding:var(--sec-pad) 0;
 }
 .philosophy h2{
   font-family:var(--serif); font-weight:400;
@@ -1016,7 +1017,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 
 .cta{
   background:var(--ivory);
-  padding:clamp(100px, 14vh, 170px) 0 60px;
+  padding:var(--sec-pad) 0 64px;   /* shorter tail into the footer */
 }
 .cta-grid{
   display:grid; grid-template-columns:minmax(0,1fr) minmax(340px, 460px);
