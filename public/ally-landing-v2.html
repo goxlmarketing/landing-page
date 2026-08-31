@@ -162,6 +162,40 @@ em{ font-style:italic; }
 }
 .nav-cta:hover{ border-color:var(--forest); }
 
+/* ---------- phone nav: burger + full menu ---------- */
+.nav-burger{ display:none; }
+.nav-menu{ display:none; }
+@media (max-width:900px){
+  .nav-cta{ display:none; }
+  .nav-burger{
+    display:inline-flex; flex-direction:column; justify-content:center; gap:5px;
+    width:44px; height:44px; padding:11px;
+    background:var(--ivory-2); border:1px solid var(--bd-2); border-radius:12px;
+  }
+  .nav-burger i{
+    display:block; height:2px; border-radius:2px; background:var(--forest);
+    transition:translate .25s ease, rotate .25s ease, opacity .2s ease;
+  }
+  .nav-burger.is-open i:nth-child(1){ translate:0 7px; rotate:45deg; }
+  .nav-burger.is-open i:nth-child(2){ opacity:0; }
+  .nav-burger.is-open i:nth-child(3){ translate:0 -7px; rotate:-45deg; }
+
+  /* full-screen ivory sheet; the nav row stays on top of it */
+  .nav-menu{
+    position:fixed; inset:0; z-index:25;
+    background:var(--ivory); padding:104px 24px 32px;
+  }
+  .nav-menu.is-open{ display:block; }
+  .nav-menu .btn{ width:100%; justify-content:center; }
+  .nav-menu nav{ margin-top:18px; }
+  .nav-menu nav a{
+    display:block; padding:17px 2px;
+    border-bottom:1px solid var(--bd);
+    font-size:17px; font-weight:600; color:var(--ink);
+  }
+  .nav-menu nav a:last-child{ border-bottom:0; }
+}
+
 /* ============================================================
    HERO — the founder-journey film behind an ivory editorial left.
    The video is ambient storytelling; the copy owns the screen.
@@ -1153,7 +1187,20 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
     <a href="/about.html">Our Story</a>
   </nav>
   <a class="nav-cta" href="#early-access">Early access <span aria-hidden="true">→</span></a>
+  <button class="nav-burger" type="button" id="navBurger" aria-label="Menu" aria-expanded="false" aria-controls="navMenu">
+    <i></i><i></i><i></i>
+  </button>
 </header>
+
+<div class="nav-menu" id="navMenu">
+  <a class="btn" href="#early-access">Start your founder journey <span aria-hidden="true">→</span></a>
+  <nav aria-label="Menu">
+    <a href="#experience">Experience</a>
+    <a href="#how">How it works</a>
+    <a href="#north">Why Ally</a>
+    <a href="/about.html">Our Story</a>
+  </nav>
+</div>
 
 <main id="top">
 
@@ -1712,6 +1759,32 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 </footer>
 
 <script>
+/* ============================================================
+   PHONE MENU — the burger opens a full ivory sheet; the nav row
+   stays on top, so the same button closes it.
+   ============================================================ */
+(function(){
+  var burger = document.getElementById('navBurger');
+  var menu = document.getElementById('navMenu');
+  if(!burger || !menu) return;
+  function set(open){
+    burger.classList.toggle('is-open', open);
+    menu.classList.toggle('is-open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    document.documentElement.classList.toggle('viewer-lock', open);
+    document.body.classList.toggle('viewer-lock', open);
+  }
+  burger.addEventListener('click', function(){
+    set(!menu.classList.contains('is-open'));
+  });
+  menu.addEventListener('click', function(e){
+    if(e.target.closest('a')) set(false);   /* navigating closes it */
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && menu.classList.contains('is-open')) set(false);
+  });
+})();
+
 /* ============================================================
    HERO FILM — ambient, never a video player. Reduced motion gets
    the poster (first frame); off-screen it pauses to save battery.
