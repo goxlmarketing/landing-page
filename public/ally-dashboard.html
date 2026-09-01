@@ -236,10 +236,12 @@ a{color:inherit;text-decoration:none}
 .sb-toggle{width:30px;height:30px;flex-shrink:0;border-radius:9px;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.04);color:var(--on-dark-muted,#a7c0b4);display:grid;place-items:center;cursor:pointer;transition:background .2s,color .2s,border-color .2s;-webkit-tap-highlight-color:transparent}
 .sb-toggle:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.22)}
 .sb-toggle .ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;transition:transform .3s cubic-bezier(.2,.7,.2,1)}
-.sb-brand{display:flex;flex-direction:column;line-height:1}
-.sb-brand .mark{font-family:var(--display-tight);font-weight:800;font-size:23px;letter-spacing:-.02em;color:#fff}
+.sb-brand{display:flex;flex-direction:row;align-items:center;gap:10px;line-height:1}
+.sb-brand .sb-words{display:flex;flex-direction:column;min-width:0}
+.sb-brand .mark{font-family:var(--display-tight);font-weight:800;font-size:19px;letter-spacing:-.02em;color:#fff;white-space:nowrap}
+.sb-brand .mark i{font-style:normal;font-weight:600;color:#a7c0b4}
 .sb-brand .mark .x{color:#10B981}
-.sb-brand .sub{font-size:7.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--on-dark-dim,#7d9488);font-weight:600;margin-top:3px}
+.sb-brand .sub{font-size:8.5px;letter-spacing:.06em;color:var(--on-dark-dim,#7d9488);font-weight:500;margin-top:4px;white-space:nowrap}
 .ally-badge{display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:rgba(16,185,129,.14);border:1px solid rgba(16,185,129,.32);border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700;color:#34d399;letter-spacing:.04em}
 .ally-badge .dot{width:6px;height:6px;border-radius:50%;background:#34d399;box-shadow:0 0 0 0 rgba(52,211,153,.6);animation:pulse 2.4s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}70%{box-shadow:0 0 0 7px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
@@ -1489,10 +1491,10 @@ img,svg,video,canvas{max-width:100%}
    (transparent wordmark Â· aspect ~3.33:1 Â· crisp on Retina)
    ============================================================ */
 .goxl-logo{display:block;width:auto;height:32px;object-fit:contain;-webkit-user-drag:none;user-select:none;flex-shrink:0}
-.sb-brand .goxl-logo{height:38px}
+.sb-brand .goxl-logo{width:34px;height:34px;flex:0 0 auto}
 .gn-logo{display:inline-flex;align-items:center;gap:8px}
 .gn-logo .goxl-logo{height:24px}
-@media(max-width:767px){ .sb-brand .goxl-logo{height:36px} }
+@media(max-width:767px){ .sb-brand .goxl-logo{width:32px;height:32px} }
 
 /* ============================================================
    AUTHENTICATION THEME â€” warm ivory / soft-white (reference-driven)
@@ -6556,16 +6558,13 @@ body.lp-done #landing-page { display:none; }
 <aside class="sidebar" aria-label="Primary">
   <div class="sb-head">
     <div class="sb-head-top">
-      <div class="sb-brand"><svg class="goxl-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 180" role="img" aria-label="GoXL">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset="1" stop-color="#10B981"/>
-    </linearGradient>
-  </defs>
-  <rect width="600" height="180" rx="24" fill="none"/>
-  <text x="24" y="116" font-family="Inter, Arial, sans-serif" font-size="96" font-weight="800" letter-spacing="-4" fill="url(#g)">GoXL</text>
-</svg><span class="sub">Consulting Solutions</span></div>
+      <div class="sb-brand">
+        <img class="goxl-logo" src="/assets/ally-logo-mark.png" alt="">
+        <span class="sb-words">
+          <span class="mark">GoXL <i>Ally</i></span>
+          <span class="sub">by GoXL Entrepreneurship</span>
+        </span>
+      </div>
       <button class="sb-toggle" aria-label="Collapse sidebar" title="Collapse sidebar" data-toast="Sidebar collapse is available in the full app">
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/></svg>
       </button>
