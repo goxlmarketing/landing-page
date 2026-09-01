@@ -1237,6 +1237,20 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 .cta h2 em{ color:var(--emerald); }
 .cta-sub{ margin-top:22px; font-size:15.5px; line-height:1.7; color:var(--muted); max-width:440px; }
 .cta-close{ margin-top:26px; font-family:var(--serif); font-style:italic; font-size:15px; color:var(--muted-2); }
+/* the closing signature — the last thing read on the page, so it gets
+   the emerald and a rule of its own rather than sitting in the run of copy */
+.cta-tag{
+  display:flex; align-items:center; gap:16px;
+  margin-top:34px; padding-top:26px;
+  border-top:1px solid rgba(16,185,129,.3);
+  font-family:var(--serif); font-style:italic; font-weight:500;
+  font-size:clamp(19px, 1.7vw, 24px); line-height:1.25;
+  color:var(--emerald);
+}
+.cta-tag i{
+  width:7px; height:7px; border-radius:50%; flex:0 0 auto;
+  background:var(--emerald);
+}
 .ea-card{
   background:#fff; border:1px solid var(--bd);
   border-radius:var(--r-card); box-shadow:var(--shadow-card);
@@ -1959,6 +1973,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
       <h2>You already have a journey. <em>Now understand where it should go next.</em></h2>
       <p class="cta-sub">Start by understanding where you are today.</p>
       <p class="cta-close">Your journey starts with understanding.</p>
+      <p class="cta-tag"><i aria-hidden="true"></i>For the entrepreneurs, by the entrepreneurs.</p>
     </div>
 
     <div class="ea-card">
