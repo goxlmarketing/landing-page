@@ -1195,6 +1195,20 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 }
 .philosophy h2 em{ color:var(--emerald); }
 .phil-lead{ margin-top:22px; max-width:720px; font-size:16.5px; line-height:1.65; color:var(--muted); }
+/* one quiet line of reassurance, shaped like a badge rather than a
+   paragraph so it reads as a fact about the product, not a promise */
+.phil-trust{
+  display:inline-flex; align-items:center; gap:10px;
+  margin-top:20px; padding:10px 18px;
+  border:1px solid var(--bd-2); border-radius:var(--r-pill);
+  background:var(--ivory-2);
+  font-size:13px; font-weight:500; color:var(--forest);
+}
+.phil-trust svg{
+  width:14px; height:14px; flex:0 0 auto;
+  stroke:var(--emerald); fill:none;
+  stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round;
+}
 .phil-row{
   display:grid; grid-template-columns:repeat(3,1fr);
   border-top:1px solid var(--bd); margin-top:44px;
@@ -1909,6 +1923,11 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   <p class="eyebrow">Built around real founder journeys</p>
   <h2>Founders don&rsquo;t need another place to collect advice. <em>They need a better way to understand their reality.</em></h2>
   <p class="phil-lead">GoXL Ally combines structured founder thinking, business understanding and AI to help founders move from confusion to clarity &mdash; and from clarity to action.</p>
+  <p class="phil-trust">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+    Your data is encrypted, private to you, and never sold.
+  </p>
+
   <div class="who" aria-hidden="true">
     <div class="who-track">
       <span>Aspiring founders</span><span>First-time founders</span><span>Solo operators</span><span>Growing businesses</span><span>Second-time founders</span><span>Small teams</span><span>Family businesses</span><span>Bootstrapped builders</span>
