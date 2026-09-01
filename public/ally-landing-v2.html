@@ -820,9 +820,15 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   display:grid; grid-template-columns:minmax(240px,.8fr) minmax(0,1.2fr);
   gap:clamp(24px, 3vw, 56px); align-items:center;
 }
+.today-kicker b{
+  display:block; margin-bottom:12px;
+  font-family:var(--serif); font-weight:500; font-style:italic;
+  font-size:clamp(17px, 1.5vw, 21px); line-height:1.25;
+  color:var(--emerald);
+}
 .today-kicker span{
   font-size:11px; letter-spacing:.16em; text-transform:uppercase;
-  font-weight:700; color:var(--emerald);
+  font-weight:700; color:var(--muted-2);
 }
 .today-kicker strong{
   display:block; font-family:var(--serif); font-weight:500;
@@ -903,6 +909,45 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 .difference-flow span:not(.flow-arrow){border:1px solid var(--bd-2);border-radius:var(--r-pill);padding:10px 20px;font-size:13px;font-weight:700;color:var(--forest);background:rgba(255,255,255,.28)}
 .difference-flow span:last-child{border-color:var(--emerald);background:rgba(16,185,129,.08)}
 .flow-arrow{color:var(--muted-2);font-size:15px}
+/* a pill lifts a little when you point at it — the strip is the one
+   place on the page that reads as a path you could walk */
+.difference-flow span:not(.flow-arrow){
+  transition:transform .25s cubic-bezier(.22,1,.36,1),
+             border-color .25s ease, background .25s ease;
+}
+.difference-flow span:not(.flow-arrow):hover{
+  transform:translateY(-2px);
+  border-color:var(--emerald);
+  background:rgba(16,185,129,.07);
+}
+
+@media (prefers-reduced-motion: no-preference){
+  /* each step arrives after the one before it, so the eye walks the
+     strip left to right instead of taking it in all at once */
+  .difference-flow.flow-ready > *{ opacity:0; translate:0 7px; }
+
+  /* Spelled out as longhands because the hover rule above sets the
+     transition shorthand on these same pills — a second shorthand
+     here would drop the per-step delay that makes the walk work. */
+  .difference-flow.flow-ready > span{
+    transition-property:opacity, translate, transform, border-color, background;
+    transition-duration:.4s, .4s, .25s, .25s, .25s;
+    transition-timing-function:ease, cubic-bezier(.22,1,.36,1), cubic-bezier(.22,1,.36,1), ease, ease;
+    transition-delay:calc(var(--i) * 90ms), calc(var(--i) * 90ms), 0s, 0s, 0s;
+  }
+  .difference-flow.flow-ready.is-in > *{ opacity:1; translate:none; }
+  .difference-flow.flow-ready.is-in > .flow-arrow{ opacity:.75; }
+
+  /* the destination confirms itself once the walk is done */
+  .difference-flow.flow-ready.is-in > span:last-child{
+    animation:flowArrive 1.1s cubic-bezier(.22,1,.36,1) .78s 1;
+  }
+}
+@keyframes flowArrive{
+  0%  { box-shadow:0 0 0 0 rgba(16,185,129,.35); }
+  55% { box-shadow:0 0 0 9px rgba(16,185,129,0); }
+  100%{ box-shadow:0 0 0 0 rgba(16,185,129,0); }
+}
 /* ============================================================
    HOW ALLY THINKS — a vertical run of steps. Each step lights as it
    reaches the middle of the screen, so the rule fills as you read
@@ -1739,6 +1784,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 
     <div class="today">
       <div class="today-kicker">
+        <b>Plan your day with Ally</b>
         <span>Today</span>
         <strong>One clear day beats ten unfinished priorities.</strong>
       </div>
@@ -1839,7 +1885,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
     <div class="jr-stage">
       <span class="jr-num">04</span>
       <h3>Report</h3>
-      <span class="jr-when">generated on the spot</span>
+      <span class="jr-when">generated on demand</span>
       <ul class="jr-list">
         <li>One written report, yours to keep</li>
         <li>Diagnosis in plain language</li>
@@ -2250,7 +2296,17 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
      text is the one thing that must never depend on a callback that
      might not arrive: a rect read per pending element, and the list
      empties itself as they arrive. */
-  var pending = heads.concat(cols);
+  /* the process strip walks step by step, so its children are indexed
+     the same way the headings' words are */
+  var flow = document.querySelector('.difference-flow');
+  if(flow){
+    [].slice.call(flow.children).forEach(function(el, i){
+      el.style.setProperty('--i', i);
+    });
+    flow.classList.add('flow-ready');
+  }
+
+  var pending = heads.concat(cols, flow ? [flow] : []);
   function check(){
     for(var i = pending.length - 1; i >= 0; i--){
       var el = pending[i], r = el.getBoundingClientRect();
