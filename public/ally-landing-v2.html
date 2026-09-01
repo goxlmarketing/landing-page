@@ -311,7 +311,7 @@ em{ font-style:italic; }
     .hero .hero-copy .hero-sub{ font-size:min(3.65vw, 15.5px); }
     .hero .hero-copy .btn{ font-size:min(3.3vw, 14px); padding:min(3.2vw,13px) min(4.9vw,20px); }
     .hero .hero-copy .link-quiet{ font-size:min(3.4vw, 14px); }
-    .hero .hero-copy .hero-note{ font-size:min(2.95vw, 12.5px); }
+    .hero .hero-copy .hero-note{ font-size:min(2.75vw, 11.5px); letter-spacing:.14em; }
     .hero .hero-copy .hero-built{ font-size:min(2.85vw, 12px); }
     /* vertical rhythm scales with the same factor as the type */
     .brk-ph{ display:inline; }
@@ -336,7 +336,7 @@ em{ font-style:italic; }
   .hero .hero-copy h1{ font-size:34px; margin:14px 0 18px; }
   .hero .hero-copy h1 em{ display:block; }   /* two lines + two lines */
   .hero .hero-copy .hero-sub{ font-size:15px; line-height:1.6; margin-top:24px; }
-  .hero .hero-copy .hero-note{ color:var(--muted); }
+  .hero .hero-copy .hero-note{ color:var(--forest); }
   .hero .hero-copy .btn{ padding:13px 20px; font-size:13.5px; }
   .hero .hero-copy .hero-note{ font-size:12px; }
   .hero .hero-copy .hero-built{ margin-top:30px; font-size:12px; color:var(--muted); }
@@ -410,7 +410,11 @@ em{ font-style:italic; }
 .btn:hover{ background:var(--forest-2); }
 .link-quiet{ font-size:14px; font-weight:600; color:var(--muted); }
 .link-quiet:hover{ color:var(--forest); }
-.hero-note{ margin-top:16px; font-size:13px; color:var(--muted-2); }
+.hero-note{
+  margin-top:20px; font-size:12.5px; font-weight:700;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--forest);
+}
+.hero-note span{ margin:0 6px; color:var(--bd-2); font-weight:400; }
 /* the evidence line that closes the hero — quiet, one rule above it */
 .hero-built{
   max-width:520px; margin-top:44px; padding-top:18px;
@@ -1331,7 +1335,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
         <a class="btn" href="#early-access">Start your founder journey <span aria-hidden="true">→</span></a>
         <a class="link-quiet" href="#how">See how Ally thinks ↓</a>
       </div>
-      <p class="hero-note">Ally builds a living picture of you and your business, finds the real problem behind the one you&rsquo;re feeling, and gives you one clear next move.</p>
+      <p class="hero-note">Clarity <span aria-hidden="true">|</span> Confidence <span aria-hidden="true">|</span> Consistency</p>
       <p class="hero-built">Built on insights across <strong>100+</strong> entrepreneurial dimensions, <strong>10,000+</strong> founder case studies, and <strong>25,000+</strong> founder problems mapped to their root causes.</p>
     </div>
   </div>
