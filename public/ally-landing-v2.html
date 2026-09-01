@@ -430,6 +430,69 @@ em{ font-style:italic; }
 /* (the hero's dashboard glimpse card was replaced by the journey film) */
 
 /* ============================================================
+   SCROLL REVEALS — headings arrive a word at a time, lists a line
+   at a time. Everything here lives inside no-preference, so the
+   base styles stay the finished state for reduced motion.
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference){
+  .split-ready .w{
+    display:inline-block;
+    opacity:0; translate:0 .34em;
+    transition:opacity .5s cubic-bezier(.22,1,.36,1),
+               translate .5s cubic-bezier(.22,1,.36,1);
+    transition-delay:calc(var(--i) * 42ms);
+  }
+  .split-ready.is-in .w{ opacity:1; translate:none; }
+
+  /* the shift columns fill in line by line as they arrive */
+  .shift-col li{
+    opacity:0; translate:0 8px;
+    transition:opacity .45s ease, translate .45s cubic-bezier(.22,1,.36,1);
+    transition-delay:calc(var(--i) * 70ms);
+  }
+  .shift-col.is-in li{ opacity:1; translate:none; }
+}
+
+/* ============================================================
+   WHO ALLY IS FOR — one slow marquee. It carries nothing the page
+   needs, so it pauses on hover and never runs under reduced motion.
+   ============================================================ */
+.who{
+  margin-top:clamp(40px, 6vh, 64px);
+  border-block:1px solid var(--bd);
+  padding:20px 0; overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+          mask-image:linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+}
+.who-track{ display:flex; width:max-content; }
+.who-track span{
+  display:inline-flex; align-items:center; gap:22px;
+  padding-right:22px; white-space:nowrap;
+  font-family:var(--display-tight); font-weight:700;
+  font-size:13.5px; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--muted-2);
+}
+.who-track span::after{
+  content:""; width:5px; height:5px; border-radius:50%;
+  background:var(--emerald); opacity:.5;
+}
+@media (prefers-reduced-motion: no-preference){
+  .who-track{ animation:whoRun 34s linear infinite; }
+  .who:hover .who-track{ animation-play-state:paused; }
+}
+@keyframes whoRun{ to{ transform:translateX(-50%); } }
+
+/* the compass keeps its own time — one slow turn on its outer rings
+   only, so the needle stays pointing north */
+@media (prefers-reduced-motion: no-preference){
+  .compass .rings{
+    transform-origin:210px 210px;
+    animation:compassTurn 90s linear infinite;
+  }
+}
+@keyframes compassTurn{ to{ transform:rotate(360deg); } }
+
+/* ============================================================
    YOUR STARTING POINT — four founder stages, one divider row.
    ============================================================ */
 .stages{
@@ -833,7 +896,8 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 .difference-points{border-top:1px solid var(--bd)}
 .difference-point{display:grid;grid-template-columns:18px minmax(0,1fr);gap:18px;padding:30px 0;border-bottom:1px solid var(--bd)}
 .difference-point .dot{width:12px;height:12px;border-radius:50%;margin-top:5px;background:var(--point-color)}
-.difference-point h3{font-size:18px;line-height:1.25;font-weight:700}
+.difference-point h3{font-size:18px;line-height:1.3;font-weight:700}
+.dna-note{font-size:13px;font-weight:500;color:var(--muted-2);white-space:nowrap}
 .difference-point p{margin-top:8px;color:var(--muted);font-size:15.5px;line-height:1.55}
 .difference-flow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--bd);margin-top:clamp(54px,8vh,90px);padding-top:34px}
 .difference-flow span:not(.flow-arrow){border:1px solid var(--bd-2);border-radius:var(--r-pill);padding:10px 20px;font-size:13px;font-weight:700;color:var(--forest);background:rgba(255,255,255,.28)}
@@ -1440,8 +1504,8 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
         </svg>
       </figure>
       <div class="difference-points">
-        <article class="difference-point" style="--point-color:var(--emerald)"><span class="dot" aria-hidden="true"></span><div><h3>Founder DNA</h3><p>How you think, decide, lead and operate.</p></div></article>
-        <article class="difference-point" style="--point-color:var(--lime-edge)"><span class="dot" aria-hidden="true"></span><div><h3>Business DNA</h3><p>What you&rsquo;re building, who you serve, how you make money and where you are today.</p></div></article>
+        <article class="difference-point" style="--point-color:var(--emerald)"><span class="dot" aria-hidden="true"></span><div><h3>Founder DNA <span class="dna-note">(built on 15 different parameters)</span></h3><p>How you think, decide, lead and operate.</p></div></article>
+        <article class="difference-point" style="--point-color:var(--lime-edge)"><span class="dot" aria-hidden="true"></span><div><h3>Business DNA <span class="dna-note">(built according to your stage)</span></h3><p>What you&rsquo;re building, who you serve, how you make money and where you are today.</p></div></article>
         <article class="difference-point" style="--point-color:var(--muted-2)"><span class="dot" aria-hidden="true"></span><div><h3>Context</h3><p>What has happened, what you&rsquo;re facing and where you&rsquo;re trying to go.</p></div></article>
       </div>
     </div>
@@ -1662,10 +1726,12 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
     </div>
     <div class="compass" aria-hidden="true">
       <svg viewBox="0 0 420 420" fill="none">
-        <circle cx="210" cy="210" r="196" stroke="rgba(94,234,212,.14)"/>
-        <circle cx="210" cy="210" r="150" stroke="rgba(94,234,212,.2)" stroke-dasharray="2 7"/>
-        <circle cx="210" cy="210" r="102" stroke="rgba(94,234,212,.28)"/>
-        <path d="M210 8v22M210 390v22M8 210h22M390 210h22" stroke="rgba(94,234,212,.35)"/>
+        <g class="rings">
+          <circle cx="210" cy="210" r="196" stroke="rgba(94,234,212,.14)"/>
+          <circle cx="210" cy="210" r="150" stroke="rgba(94,234,212,.2)" stroke-dasharray="2 7"/>
+          <circle cx="210" cy="210" r="102" stroke="rgba(94,234,212,.28)"/>
+          <path d="M210 8v22M210 390v22M8 210h22M390 210h22" stroke="rgba(94,234,212,.35)"/>
+        </g>
         <g class="needle">
           <path d="M210 116L224 210L210 304L196 210Z" fill="rgba(52,211,153,.9)"/>
           <circle cx="210" cy="210" r="7" fill="#06140d" stroke="#34d399" stroke-width="2"/>
@@ -1841,6 +1907,13 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   <p class="eyebrow">Built around real founder journeys</p>
   <h2>Founders don&rsquo;t need another place to collect advice. <em>They need a better way to understand their reality.</em></h2>
   <p class="phil-lead">GoXL Ally combines structured founder thinking, business understanding and AI to help founders move from confusion to clarity &mdash; and from clarity to action.</p>
+  <div class="who" aria-hidden="true">
+    <div class="who-track">
+      <span>Aspiring founders</span><span>First-time founders</span><span>Solo operators</span><span>Growing businesses</span><span>Second-time founders</span><span>Small teams</span><span>Family businesses</span><span>Bootstrapped builders</span>
+      <span>Aspiring founders</span><span>First-time founders</span><span>Solo operators</span><span>Growing businesses</span><span>Second-time founders</span><span>Small teams</span><span>Family businesses</span><span>Bootstrapped builders</span>
+    </div>
+  </div>
+
   <div class="phil-row">
     <div>
       <b>01 &mdash; Structured thinking</b>
@@ -2077,6 +2150,83 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   }
 })();
 
+
+/* ============================================================
+   WORD-BY-WORD HEADINGS + LINE-BY-LINE LISTS
+   Each heading is split into inline-block words that lift into place
+   as the heading arrives. The split walks the element tree rather
+   than innerHTML, so the emerald <em> spans survive intact. One-shot:
+   once a heading has arrived it stays arrived.
+   ============================================================ */
+(function(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var n = 0;
+  function splitInto(node){
+    [].slice.call(node.childNodes).forEach(function(child){
+      if(child.nodeType === 3){
+        var parts = child.textContent.split(/(\s+)/);
+        var frag = document.createDocumentFragment();
+        parts.forEach(function(part){
+          if(!part) return;
+          if(/^\s+$/.test(part)){ frag.appendChild(document.createTextNode(part)); return; }
+          var w = document.createElement('span');
+          w.className = 'w';
+          w.style.setProperty('--i', n++);
+          w.textContent = part;
+          frag.appendChild(w);
+        });
+        node.replaceChild(frag, child);
+      }else if(child.nodeType === 1 && !child.classList.contains('w')){
+        splitInto(child);          /* keeps <em>, <br> and friends */
+      }
+    });
+  }
+
+  var heads = [].slice.call(document.querySelectorAll(
+    '.stages h2, .problem h2, .ally-difference h2, .think h2, .both h2, ' +
+    '.shift h2, .north h2, .outcome h2, .why h2, .philosophy h2, .cta h2'
+  ));
+  heads.forEach(function(h){
+    n = 0;
+    splitInto(h);
+    h.classList.add('split-ready');
+  });
+
+  /* the before/after columns fill in a line at a time */
+  var cols = [].slice.call(document.querySelectorAll('.shift-col'));
+  cols.forEach(function(col){
+    [].slice.call(col.querySelectorAll('li')).forEach(function(li, i){
+      li.style.setProperty('--i', i);
+    });
+  });
+
+  /* Reveal on a plain scroll check rather than an observer. Hidden
+     text is the one thing that must never depend on a callback that
+     might not arrive: a rect read per pending element, and the list
+     empties itself as they arrive. */
+  var pending = heads.concat(cols);
+  function check(){
+    for(var i = pending.length - 1; i >= 0; i--){
+      var el = pending[i], r = el.getBoundingClientRect();
+      if(r.top < window.innerHeight * 0.92 && r.bottom > 0){
+        el.classList.add('is-in');
+        pending.splice(i, 1);
+      }
+    }
+    if(!pending.length){
+      window.removeEventListener('scroll', check);
+      window.removeEventListener('resize', check);
+    }
+  }
+  check();
+  window.addEventListener('scroll', check, { passive: true });
+  window.addEventListener('resize', check);
+  /* a last-resort sweep: nothing stays hidden if something goes wrong */
+  setTimeout(function(){
+    pending.forEach(function(el){ el.classList.add('is-in'); });
+  }, 8000);
+})();
 
 /* ============================================================
    PHONE TRACKS — the journey rail and the Look-closer cards ride
