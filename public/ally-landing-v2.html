@@ -308,11 +308,11 @@ em{ font-style:italic; }
     .hero-inner{ padding:7.8vw 0 0; }
     .hero .hero-copy .eyebrow{ font-size:min(2.9vw, 12.5px); }
     .hero .hero-copy h1{ font-size:min(8.25vw, 36px); }
-    .hero .hero-copy .hero-sub{ font-size:min(3.65vw, 15.5px); }
+    .hero .hero-copy .hero-sub{ font-size:min(3.9vw, 16px); }
     .hero .hero-copy .btn{ font-size:min(3.3vw, 14px); padding:min(3.2vw,13px) min(4.9vw,20px); }
     .hero .hero-copy .link-quiet{ font-size:min(3.4vw, 14px); }
     .hero .hero-copy .hero-note{ font-size:min(2.75vw, 11.5px); letter-spacing:.14em; }
-    .hero .hero-copy .hero-built{ font-size:min(2.85vw, 12px); }
+    .hero .hero-copy .hero-built{ font-size:min(3vw, 12.5px); }
     /* vertical rhythm scales with the same factor as the type */
     .brk-ph{ display:inline; }
     .hero .hero-copy h1{ margin:min(3.4vw,14px) 0 min(4.4vw,18px); }
@@ -335,11 +335,11 @@ em{ font-style:italic; }
      outrank the base rules that appear later in the sheet */
   .hero .hero-copy h1{ font-size:34px; margin:14px 0 18px; }
   .hero .hero-copy h1 em{ display:block; }   /* two lines + two lines */
-  .hero .hero-copy .hero-sub{ font-size:15px; line-height:1.6; margin-top:24px; }
+  .hero .hero-copy .hero-sub{ font-size:16px; line-height:1.6; margin-top:24px; }
   .hero .hero-copy .hero-note{ color:var(--forest); }
   .hero .hero-copy .btn{ padding:13px 20px; font-size:13.5px; }
   .hero .hero-copy .hero-note{ font-size:12px; }
-  .hero .hero-copy .hero-built{ margin-top:30px; font-size:12px; color:var(--muted); }
+  .hero .hero-copy .hero-built{ margin-top:30px; font-size:12.5px; color:var(--muted); }
 }
 
 /* ---------- entrance: UI only; the film carries its own motion ---------- */
@@ -1220,6 +1220,24 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   .metric-row strong{ font-size:18px; }
 }
 @media (max-width: 900px){
+  /* Phone reading floor. Sixteen pixels is what Stripe, Notion and
+     Anthropic all settle on for body copy; below it a paragraph
+     starts to read as fine print on a handset held at arm's length.
+     Only body text moves — headings keep their own scale. */
+  .stage-pane p,
+  .problem-grid p,
+  .difference-point p,
+  .phil-row p,
+  .both-panel li,
+  .shift-col li,
+  .metric-row p{ font-size:15.5px; line-height:1.6; }
+  .phil-lead{ font-size:16.5px; line-height:1.6; }   /* a lead sits just above body */
+  .jr-list li{ font-size:13.5px; line-height:1.5; }
+  .jr-dna li{ font-size:12.5px; line-height:1.45; }
+  .jr-loop{ font-size:13px; }
+  .jr-stage h3{ font-size:19px; }
+  .jr-out{ font-size:12.5px; }
+
   .outcome-grid, .north-grid, .difference-grid, .cta-grid, .today{ grid-template-columns:1fr; }
   .difference-grid{ margin-top:52px; }
   .context-map{ max-width:620px; }
@@ -1243,7 +1261,6 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   .jr::-webkit-scrollbar{ display:none; }
   .jr-stage{ flex:0 0 86%; scroll-snap-align:center; }
   .jr-stage:not(:last-child)::after{ display:none; }
-  .jr-loop{ font-size:12.5px; }
   .nav-links{ display:none; }
   .metric-row{ grid-template-columns:1fr 1fr; }
   .stage-tabs{ grid-template-columns:1fr 1fr; }
@@ -1262,12 +1279,12 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   .stage h2{ min-height:0; }
 }
 @media (max-width:560px){
-  .ally-difference h2{font-size:clamp(32px,10vw,44px)}
+  .ally-difference h2{font-size:clamp(27px,7.8vw,34px)}
   .difference-grid{gap:42px}
   .context-map .map-label{font-size:15px}
   .context-map .map-position{font-size:12.5px}
   .difference-point{padding:24px 0}
-  .difference-point p{font-size:14px}
+  .difference-point p{font-size:15.5px}
   .difference-flow{gap:9px}
   .difference-flow span:not(.flow-arrow){padding:8px 13px;font-size:11.5px}
 }
