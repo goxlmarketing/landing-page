@@ -416,16 +416,16 @@ em{ font-style:italic; }
   letter-spacing:.18em; text-transform:uppercase; color:var(--forest);
 }
 .hero-note span{ margin:0 6px; color:var(--bd-2); font-weight:400; }
-/* the evidence line that closes the hero — the sentence carries the
-   headline's emerald, the counts drop to near-black so the numbers
-   are what the eye lands on. */
+/* the evidence line that closes the hero — the sentence reads in the
+   page's near-black, the counts carry the headline's emerald so the
+   numbers are what the eye lands on. */
 .hero-built{
   max-width:520px; margin-top:44px; padding-top:18px;
   border-top:1px solid rgba(16,185,129,.35);
-  font-size:12.5px; line-height:1.75; font-weight:600;
-  color:var(--emerald);
+  font-size:12.5px; line-height:1.75; font-weight:500;
+  color:var(--ink);
 }
-.hero-built strong{ font-weight:800; color:var(--ink); }
+.hero-built strong{ font-weight:800; color:var(--emerald); }
 
 /* (the hero's dashboard glimpse card was replaced by the journey film) */
 
@@ -2091,53 +2091,71 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   if(!tracks.length) return;
 
   tracks.forEach(function(track){
-    var timer = null, held = false, visible = true, idle = null;
+    var timer = null, held = false, idle = null;
 
+    var ownScrollUntil = 0;   /* the scroll handler must ignore our own moves */
+    var fallback = null;      /* the pending no-smooth catch-up */
+
+    /* cheaper and more reliable than an observer: ask once per tick
+       whether the track is actually on screen */
+    function onScreen(){
+      var r = track.getBoundingClientRect();
+      return r.bottom > 0 && r.top < innerHeight;
+    }
     function step(){
       var cards = track.children;
-      if(!cards.length) return;
+      if(!cards.length || !onScreen()) return;
       var w = cards[0].getBoundingClientRect().width + 12;   /* card + gap */
       var max = track.scrollWidth - track.clientWidth - 2;
       var from = track.scrollLeft;
       var to = from + w > max ? 0 : from + w;
+      ownScrollUntil = Date.now() + 900;
       track.scrollTo({ left: to, behavior: 'smooth' });
       /* a few engines ignore smooth scrolling inside a snapping track;
          if nothing moved, take the step without the animation */
-      setTimeout(function(){
-        if(Math.abs(track.scrollLeft - from) < 2) track.scrollLeft = to;
+      clearTimeout(fallback);
+      fallback = setTimeout(function(){
+        if(Math.abs(track.scrollLeft - from) < 2){
+          ownScrollUntil = Date.now() + 400;
+          track.scrollLeft = to;
+        }
       }, 450);
     }
     function start(){
-      if(timer || held || !visible || !mq.matches || reduce.matches) return;
+      if(timer || held || !mq.matches || reduce.matches) return;
       timer = setInterval(step, 2000);
     }
-    function stop(){ clearInterval(timer); timer = null; }
+    /* stopping cancels the pending catch-up too, or a step already in
+       flight would land after the finger went down */
+    function stop(){ clearInterval(timer); timer = null; clearTimeout(fallback); }
 
-    /* a finger (or a mouse button) on the track holds it still */
-    track.addEventListener('pointerdown', function(){ held = true; stop(); });
-    var release = function(){ held = false; start(); };
-    track.addEventListener('pointerup', release);
-    track.addEventListener('pointercancel', release);
-    track.addEventListener('pointerleave', release);
+    /* A finger resting on the track holds it still. Touch is handled
+       with touch events rather than pointer events on purpose: once a
+       scroll gesture begins the browser takes the pointer stream and
+       fires pointercancel, which would have released the hold while
+       the finger was still down. touchend only arrives when the
+       finger actually lifts. */
+    function pause(){ held = true; stop(); }
+    function release(){ held = false; start(); }
 
-    /* a manual swipe also buys a moment of quiet */
+    track.addEventListener('pointerdown', function(e){ if(e.pointerType === 'mouse') pause(); });
+    track.addEventListener('pointerup', function(e){ if(e.pointerType === 'mouse') release(); });
+    track.addEventListener('pointerleave', function(e){ if(e.pointerType === 'mouse') release(); });
+
+    track.addEventListener('touchstart', pause, { passive: true });
+    var lift = function(e){ if(!e.touches || !e.touches.length) release(); };
+    track.addEventListener('touchend', lift);
+    track.addEventListener('touchcancel', lift);
+
+    /* a manual swipe buys a moment of quiet; our own steps do not */
     track.addEventListener('scroll', function(){
+      if(Date.now() < ownScrollUntil) return;
       stop();
       clearTimeout(idle);
       idle = setTimeout(function(){ if(!held) start(); }, 2500);
     }, { passive: true });
 
-    /* it runs from the start; the observer only quiets it once the
-       track has actually left the screen */
     start();
-    if('IntersectionObserver' in window){
-      new IntersectionObserver(function(es){
-        es.forEach(function(e){
-          visible = e.isIntersecting;
-          visible ? start() : stop();
-        });
-      }, { threshold: .15 }).observe(track);
-    }
 
     /* rotating the phone can cross the breakpoint either way */
     mq.addEventListener && mq.addEventListener('change', function(){
