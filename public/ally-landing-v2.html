@@ -154,11 +154,22 @@ em{ font-style:italic; }
 .brand-name{ font-size:19.8px; font-weight:600; color:var(--muted); }
 .nav-links{ display:flex; gap:32px; font-size:14px; color:var(--muted); }
 .nav-links a:hover{ color:var(--forest); }
+/* Log in is for people who already have an account, so it stays a
+   quiet link; Sign up is the action we want and carries the weight. */
+.nav-auth{ display:inline-flex; align-items:center; gap:20px; }
+.nav-login{ font-size:14px; font-weight:600; color:var(--muted); }
+.nav-login:hover{ color:var(--forest); }
 .nav-cta{
   display:inline-flex; align-items:center; gap:8px;
-  border:1px solid var(--bd-2); border-radius:var(--r-pill);
-  padding:11px 18px; font-size:13.5px; font-weight:600;
-  background:var(--ivory-2); color:var(--forest);
+  border:1px solid var(--forest); border-radius:var(--r-pill);
+  padding:11px 20px; font-size:13.5px; font-weight:700;
+  background:var(--forest); color:var(--on-dark);
+  transition:background .2s;
+}
+.nav-cta:hover{ background:var(--forest-2); }
+.menu-login{
+  display:block; margin-top:14px; text-align:center;
+  font-size:15px; font-weight:600; color:var(--muted);
 }
 .nav-cta:hover{ border-color:var(--forest); }
 
@@ -1456,14 +1467,18 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
     <a href="#why-ally">Why Ally</a>
     <a href="/about.html">Our Story</a>
   </nav>
-  <a class="nav-cta" href="#early-access">Start your founder journey <span aria-hidden="true">→</span></a>
+  <div class="nav-auth">
+    <a class="nav-login" href="/login.html">Log in</a>
+    <a class="nav-cta" href="/signup.html">Sign up <span aria-hidden="true">→</span></a>
+  </div>
   <button class="nav-burger" type="button" id="navBurger" aria-label="Menu" aria-expanded="false" aria-controls="navMenu">
     <i></i><i></i><i></i>
   </button>
 </header>
 
 <div class="nav-menu" id="navMenu">
-  <a class="btn" href="#early-access">Start your founder journey <span aria-hidden="true">→</span></a>
+  <a class="btn" href="/signup.html">Sign up <span aria-hidden="true">→</span></a>
+  <a class="menu-login" href="/login.html">Log in</a>
   <nav aria-label="Menu">
     <a href="#experience">Experience</a>
     <a href="#how-it-works">How it works</a>
