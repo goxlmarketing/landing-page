@@ -70,13 +70,21 @@ Code to deploy (branch `claude/waitlist-gate` in ally-platform):
   waitlist" links
 - `App.jsx` — `/` requires a session; otherwise → `/guided/login`
 
-## D. Confirm which platform deploy is live — before anything else
+## D. Where the platform is actually served (checked 2026-09-03)
 
-`DEPLOY.md` describes Vercel, with Supabase env. `.github/workflows/deploy-frontend.yml`
-pushes every `main` push to S3 with **no Supabase env**, which produces a build
-where sign-in is disabled. Find out which one goxlally.ai actually serves and
-make sure that one carries the env in C. If it is S3, the workflow needs the
-`VITE_*` values as repository secrets.
+**Vercel.** `goxlally.ai` 308-redirects to `www.goxlally.ai`, which answers with
+`Server: Vercel`; the live sign-in page renders the real email form (so the
+Supabase env is present in that build) and `/api/v1/health` reaches the backend
+through the `vercel.json` rewrite. The backend at `api.goxlally.ai` is the AWS
+part. `.github/workflows/deploy-frontend.yml` still pushes every `main` push to
+an S3 bucket with no Supabase env — that build is not what the domain serves,
+so it can be ignored or removed.
+
+Consequences: pushing `claude/waitlist-gate` gives a Vercel **preview
+deployment** to test on. Preview builds only see variables scoped to
+"Preview" in the Vercel project — check that `VITE_SUPABASE_URL` and
+`VITE_SUPABASE_ANON_KEY` are set for Preview, not just Production, or the
+preview's sign-in will be disabled.
 
 ## E. Backend — api.goxlally.ai
 
