@@ -265,17 +265,27 @@ export async function POST(request: Request) {
   // gained by ordering them.
   // `allSettled`, not `all`: a rejection here would turn a committed
   // registration into a 500, which the invariant above forbids.
+  //
+  // Outside production the emails link back to THIS server (the Approve
+  // button, image URLs) rather than the production site, so the captured
+  // copies in /dev/outbox are followable. In production `baseUrl` stays
+  // undefined and the templates use their configured origin.
+  const devOrigin = process.env.NODE_ENV === "production" ? undefined : new URL(request.url).origin;
   await Promise.allSettled([
-    sendBetaConfirmationEmail({ name, email }),
+    sendBetaConfirmationEmail({ name, email, baseUrl: devOrigin }),
     sendInternalNotificationEmail({
+      id: registration.id,
       name,
       email,
       phone,
       linkedinUrl,
       registeredAt: registration.createdAt,
       source,
+      baseUrl: devOrigin,
     }),
   ]);
 
-  return json({ ok: true, duplicate: false });
+  // The `dev` hint lets the landing page offer a link to the local outbox
+  // while testing. It is never present in production.
+  return json({ ok: true, duplicate: false, ...(devOrigin ? { dev: { outbox: "/dev/outbox" } } : {}) });
 }

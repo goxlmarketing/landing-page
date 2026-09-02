@@ -1,5 +1,6 @@
 /**
- * Customer-facing beta confirmation email (HTML + plain text).
+ * Customer-facing beta emails — waitlist confirmation and approval (HTML +
+ * plain text).
  *
  * The palette, type and brand language below are lifted verbatim from
  * `public/ally-landing.html` so the email reads as the same product as
@@ -16,6 +17,15 @@ type BetaConfirmationInput = {
    * then the production site. Overridden by the dev preview route so images
    * resolve same-origin (the app's CSP is `img-src 'self'`).
    */
+  baseUrl?: string;
+};
+
+type BetaApprovalInput = {
+  /** Full name as registered; only the first name is used in the greeting. */
+  name: string;
+  /** Absolute URL of the platform sign-in page, email pre-filled. */
+  loginUrl: string;
+  /** As on BetaConfirmationInput. */
   baseUrl?: string;
 };
 
@@ -90,6 +100,38 @@ const COPY = {
     "You received this email because you registered for GoXL Ally Early Access at join.goxlally.ai.",
 } as const;
 
+/** Every string the branded layout needs. COPY and APPROVAL_COPY both satisfy it. */
+type EmailCopy = { [K in keyof typeof COPY]: string };
+
+/**
+ * Sent when the team approves a waitlist registration. Same layout as the
+ * confirmation; the status panel and the CTA are what change — the button is
+ * the founder's way in, so it must be the one thing on the page that reads as
+ * an action.
+ */
+const APPROVAL_COPY: EmailCopy = {
+  subject: "You're in — set up your GoXL Ally account",
+  preheader: "Your Early Access is approved. Set up your account and meet Ally.",
+  eyebrow: "Early Access · Approved",
+  heading: "Your Early Access is approved.",
+  brandName: COPY.brandName,
+  brandTag: COPY.brandTag,
+  intro:
+    "Good news — your GoXL Ally Early Access registration has been approved, and your account is ready to be set up.",
+  what: COPY.what,
+  statusTitle: "Access granted",
+  statusNote: "Use the button below. We'll email you a one-time code to confirm it's you.",
+  next:
+    "Click below, confirm your email with the code we send, choose a password, and Ally will take it from there.",
+  ctaLabel: "Set up my account",
+  signOff: COPY.signOff,
+  signature: COPY.signature,
+  builtBy: COPY.builtBy,
+  lockup: COPY.lockup,
+  legal:
+    "You received this email because your GoXL Ally Early Access registration at join.goxlally.ai was approved.",
+};
+
 export function escapeHtml(value: string): string {
   return value
     .replace(/&/g, "&amp;")
@@ -150,7 +192,7 @@ function greetingNameOf(name: string): string {
 }
 
 /** Absolute origin, trailing slash stripped. Email clients require absolute URLs. */
-function resolveBaseUrl(override?: string): string {
+export function resolveBaseUrl(override?: string): string {
   const raw = (override ?? process.env.NEXT_PUBLIC_APP_URL ?? "").trim();
   if (!raw) return PRODUCTION_URL;
   try {
@@ -169,7 +211,7 @@ function paragraph(html: string, opts: { color?: string; size?: number; gap?: nu
   )}px;color:${color};">${html}</p>`;
 }
 
-function confirmationHtml(firstName: string, baseUrl: string): string {
+function brandedHtml(copy: EmailCopy, firstName: string, baseUrl: string, ctaHref: string): string {
   const name = escapeHtml(firstName);
   const allyMark = `${baseUrl}/assets/email/ally-mark-email.png`;
   const goxlLogo = `${baseUrl}/assets/email/goxl-logo-email.png`;
@@ -184,7 +226,7 @@ function confirmationHtml(firstName: string, baseUrl: string): string {
 <meta name="format-detection" content="telephone=no,address=no,email=no,date=no">
 <meta name="color-scheme" content="dark">
 <meta name="supported-color-schemes" content="dark">
-<title>${COPY.heading}</title>
+<title>${copy.heading}</title>
 <!--[if mso]>
 <xml><o:OfficeDocumentSettings><o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
 <![endif]-->
@@ -212,7 +254,7 @@ function confirmationHtml(firstName: string, baseUrl: string): string {
 </head>
 <body class="ally-page" style="margin:0;padding:0;width:100%;background-color:${C.page};">
 
-<div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;color:${C.page};">${COPY.preheader}</div>
+<div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;color:${C.page};">${copy.preheader}</div>
 <div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;">&#8203;&#847;&#8203;&#847;&#8203;&#847;&#8203;&#847;&#8203;&#847;&#8203;&#847;&#8203;&#847;&#8203;&#847;&#8203;&#847;&#8203;&#847;&#8203;&#847;&#8203;&#847;&#8203;&#847;&#8203;&#847;&#8203;&#847;&#8203;&#847;</div>
 
 <table role="presentation" class="ally-page" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${C.page}" style="background-color:${C.page};width:100%;">
@@ -227,10 +269,10 @@ function confirmationHtml(firstName: string, baseUrl: string): string {
           <td align="center" style="padding:8px 0 34px;">
             <table role="presentation" align="center" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
               <tr><td align="center" style="padding:0 0 18px;">
-                <img src="${allyMark}" width="80" height="80" alt="${COPY.brandName}" style="display:block;width:80px;height:80px;">
+                <img src="${allyMark}" width="80" height="80" alt="${copy.brandName}" style="display:block;width:80px;height:80px;">
               </td></tr>
-              <tr><td align="center" class="ally-ink" style="font-family:${FONT_DISPLAY};font-size:24px;line-height:28px;font-weight:600;letter-spacing:-0.02em;color:${C.white};">${COPY.brandName}</td></tr>
-              <tr><td align="center" class="ally-accent" style="padding-top:8px;font-family:${FONT_BODY};font-size:11px;line-height:16px;letter-spacing:0.16em;text-transform:uppercase;color:${C.accent};">${COPY.brandTag}</td></tr>
+              <tr><td align="center" class="ally-ink" style="font-family:${FONT_DISPLAY};font-size:24px;line-height:28px;font-weight:600;letter-spacing:-0.02em;color:${C.white};">${copy.brandName}</td></tr>
+              <tr><td align="center" class="ally-accent" style="padding-top:8px;font-family:${FONT_BODY};font-size:11px;line-height:16px;letter-spacing:0.16em;text-transform:uppercase;color:${C.accent};">${copy.brandTag}</td></tr>
             </table>
           </td>
         </tr>
@@ -247,40 +289,40 @@ function confirmationHtml(firstName: string, baseUrl: string): string {
                     <td bgcolor="${C.accent}" height="2" style="width:32px;height:2px;background-color:${C.accent};font-size:0;line-height:0;">&nbsp;</td>
                   </tr></table>
 
-                  <p class="ally-accent" style="margin:20px 0 14px;font-family:${FONT_MONO};font-size:11px;line-height:16px;letter-spacing:0.22em;text-transform:uppercase;color:${C.accent};">${COPY.eyebrow}</p>
+                  <p class="ally-accent" style="margin:20px 0 14px;font-family:${FONT_MONO};font-size:11px;line-height:16px;letter-spacing:0.22em;text-transform:uppercase;color:${C.accent};">${copy.eyebrow}</p>
 
-                  <h1 class="ally-h1 ally-ink" style="margin:0 0 26px;font-family:${FONT_DISPLAY};font-size:30px;line-height:38px;font-weight:600;letter-spacing:-0.02em;color:${C.white};">${COPY.heading}</h1>
+                  <h1 class="ally-h1 ally-ink" style="margin:0 0 26px;font-family:${FONT_DISPLAY};font-size:30px;line-height:38px;font-weight:600;letter-spacing:-0.02em;color:${C.white};">${copy.heading}</h1>
 
                   ${paragraph(`Hi ${name},`, { color: C.text })}
-                  ${paragraph(COPY.intro)}
-                  ${paragraph(COPY.what, { gap: 28 })}
+                  ${paragraph(copy.intro)}
+                  ${paragraph(copy.what, { gap: 28 })}
 
                   <!-- ── Status panel ── -->
                   <table role="presentation" class="ally-chip" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${C.panel}" style="width:100%;background-color:${C.panel};border:1px solid ${C.chipBorder};border-radius:12px;">
                     <tr>
                       <td valign="top" width="34" style="width:34px;padding:20px 0 20px 20px;font-family:${FONT_BODY};font-size:18px;line-height:22px;color:${C.accent};" class="ally-accent">&#10003;</td>
                       <td valign="top" style="padding:20px 20px 20px 0;">
-                        <div class="ally-ink" style="font-family:${FONT_BODY};font-size:15px;line-height:22px;font-weight:600;color:${C.text};">${COPY.statusTitle}</div>
-                        <div class="ally-mute" style="font-family:${FONT_BODY};font-size:13px;line-height:20px;color:${C.textMute};padding-top:4px;">${COPY.statusNote}</div>
+                        <div class="ally-ink" style="font-family:${FONT_BODY};font-size:15px;line-height:22px;font-weight:600;color:${C.text};">${copy.statusTitle}</div>
+                        <div class="ally-mute" style="font-family:${FONT_BODY};font-size:13px;line-height:20px;color:${C.textMute};padding-top:4px;">${copy.statusNote}</div>
                       </td>
                     </tr>
                   </table>
 
                   <div style="padding-top:28px;">
-                    ${paragraph(COPY.next, { gap: 30 })}
+                    ${paragraph(copy.next, { gap: 30 })}
                   </div>
 
                   <!-- ── CTA ── -->
                   <!--[if mso]>
-                  <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${baseUrl}" style="height:48px;v-text-anchor:middle;width:172px;" arcsize="21%" stroke="f" fillcolor="${C.accent}">
+                  <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${ctaHref}" style="height:48px;v-text-anchor:middle;width:172px;" arcsize="21%" stroke="f" fillcolor="${C.accent}">
                     <w:anchorlock/>
-                    <center style="color:${C.accentInk};font-family:Segoe UI,Arial,sans-serif;font-size:15px;font-weight:700;">${COPY.ctaLabel}</center>
+                    <center style="color:${C.accentInk};font-family:Segoe UI,Arial,sans-serif;font-size:15px;font-weight:700;">${copy.ctaLabel}</center>
                   </v:roundrect>
                   <![endif]-->
                   <!--[if !mso]><!-- -->
                   <table role="presentation" class="ally-cta" cellpadding="0" cellspacing="0" border="0"><tr>
                     <td bgcolor="${C.accent}" style="background-color:${C.accent};border-radius:10px;">
-                      <a href="${baseUrl}" style="display:inline-block;padding:15px 26px;font-family:${FONT_BODY};font-size:15px;line-height:18px;font-weight:700;color:${C.accentInk};text-decoration:none;border-radius:10px;">${COPY.ctaLabel} &rarr;</a>
+                      <a href="${ctaHref}" style="display:inline-block;padding:15px 26px;font-family:${FONT_BODY};font-size:15px;line-height:18px;font-weight:700;color:${C.accentInk};text-decoration:none;border-radius:10px;">${copy.ctaLabel} &rarr;</a>
                     </td>
                   </tr></table>
                   <!--<![endif]-->
@@ -290,8 +332,8 @@ function confirmationHtml(firstName: string, baseUrl: string): string {
                     <tr><td height="32" style="height:32px;font-size:0;line-height:0;">&nbsp;</td></tr>
                     <tr><td bgcolor="${C.border}" height="1" style="height:1px;background-color:${C.border};font-size:0;line-height:0;">&nbsp;</td></tr>
                     <tr><td style="padding-top:26px;">
-                      <div class="ally-dim" style="font-family:${FONT_BODY};font-size:15px;line-height:24px;color:${C.textDim};">${COPY.signOff}</div>
-                      <div class="ally-ink" style="font-family:${FONT_BODY};font-size:15px;line-height:24px;font-weight:600;color:${C.text};">${COPY.signature}</div>
+                      <div class="ally-dim" style="font-family:${FONT_BODY};font-size:15px;line-height:24px;color:${C.textDim};">${copy.signOff}</div>
+                      <div class="ally-ink" style="font-family:${FONT_BODY};font-size:15px;line-height:24px;font-weight:600;color:${C.text};">${copy.signature}</div>
                     </td></tr>
                   </table>
 
@@ -308,8 +350,8 @@ function confirmationHtml(firstName: string, baseUrl: string): string {
               <tr><td align="center" style="padding:0 0 14px;">
                 <img src="${goxlLogo}" width="132" height="57" alt="GoXL Entrepreneurship" style="display:block;width:132px;height:57px;">
               </td></tr>
-              <tr><td align="center" class="ally-mute" style="font-family:${FONT_BODY};font-size:12px;line-height:18px;color:${C.textMute};">${COPY.builtBy}</td></tr>
-              <tr><td align="center" class="ally-mute" style="padding-top:10px;font-family:${FONT_BODY};font-size:11px;line-height:16px;letter-spacing:0.16em;text-transform:uppercase;color:${C.textMute};">${COPY.lockup}</td></tr>
+              <tr><td align="center" class="ally-mute" style="font-family:${FONT_BODY};font-size:12px;line-height:18px;color:${C.textMute};">${copy.builtBy}</td></tr>
+              <tr><td align="center" class="ally-mute" style="padding-top:10px;font-family:${FONT_BODY};font-size:11px;line-height:16px;letter-spacing:0.16em;text-transform:uppercase;color:${C.textMute};">${copy.lockup}</td></tr>
             </table>
 
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:340px;margin:0 auto;">
@@ -317,7 +359,7 @@ function confirmationHtml(firstName: string, baseUrl: string): string {
               <tr><td bgcolor="${C.borderSoft}" height="1" style="height:1px;background-color:${C.borderSoft};font-size:0;line-height:0;">&nbsp;</td></tr>
             </table>
 
-            <div class="ally-mute" style="font-family:${FONT_BODY};font-size:12px;line-height:19px;color:${C.textMute};padding-top:22px;">${COPY.legal}</div>
+            <div class="ally-mute" style="font-family:${FONT_BODY};font-size:12px;line-height:19px;color:${C.textMute};padding-top:22px;">${copy.legal}</div>
             <div class="ally-mute" style="font-family:${FONT_BODY};font-size:12px;line-height:19px;color:${C.textMute};padding-top:8px;">&copy; ${year} GoXL. All rights reserved.</div>
           </td>
         </tr>
@@ -332,30 +374,30 @@ function confirmationHtml(firstName: string, baseUrl: string): string {
 </html>`;
 }
 
-function confirmationText(firstName: string, baseUrl: string): string {
+function brandedText(copy: EmailCopy, firstName: string, ctaHref: string): string {
   return [
-    `${COPY.brandName} — ${COPY.brandTag}`,
+    `${copy.brandName} — ${copy.brandTag}`,
     "",
-    COPY.heading,
+    copy.heading,
     "",
     `Hi ${firstName},`,
     "",
-    COPY.intro,
+    copy.intro,
     "",
-    COPY.what,
+    copy.what,
     "",
-    `[✓] ${COPY.statusTitle} — ${COPY.statusNote}`,
+    `[✓] ${copy.statusTitle} — ${copy.statusNote}`,
     "",
-    COPY.next,
+    copy.next,
     "",
-    `${COPY.ctaLabel}: ${baseUrl}`,
+    `${copy.ctaLabel}: ${ctaHref}`,
     "",
-    COPY.signOff,
-    COPY.signature,
+    copy.signOff,
+    copy.signature,
     "",
     "—",
-    `${COPY.builtBy} · ${COPY.lockup}`,
-    COPY.legal,
+    `${copy.builtBy} · ${copy.lockup}`,
+    copy.legal,
     `© ${new Date().getFullYear()} GoXL. All rights reserved.`,
   ].join("\n");
 }
@@ -375,7 +417,21 @@ export function renderBetaConfirmationEmail({
   const base = resolveBaseUrl(baseUrl);
   return {
     subject: COPY.subject,
-    html: confirmationHtml(firstName, base),
-    text: confirmationText(firstName, base),
+    html: brandedHtml(COPY, firstName, base, base),
+    text: brandedText(COPY, firstName, base),
+  };
+}
+
+/**
+ * Renders the approval ("you're in") email. `loginUrl` is the platform's
+ * sign-in page with the founder's email pre-filled — see platform-url.ts.
+ */
+export function renderBetaApprovalEmail({ name, loginUrl, baseUrl }: BetaApprovalInput): RenderedEmail {
+  const firstName = greetingNameOf(name);
+  const base = resolveBaseUrl(baseUrl);
+  return {
+    subject: APPROVAL_COPY.subject,
+    html: brandedHtml(APPROVAL_COPY, firstName, base, loginUrl),
+    text: brandedText(APPROVAL_COPY, firstName, loginUrl),
   };
 }

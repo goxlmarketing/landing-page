@@ -2078,8 +2078,10 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
         <button class="btn" type="submit" id="eaSubmit">Start your founder journey</button>
       </form>
       <div class="ea-done" id="eaDone" hidden>
-        <p id="eaDoneMsg">Thank you for registering.</p>
-        <p class="ea-done__sub" id="eaDoneSub">We&rsquo;ve sent a confirmation to your inbox &mdash; check spam if it doesn&rsquo;t arrive. Our team will reach out soon.</p>
+        <p id="eaDoneMsg">You&rsquo;re on the waitlist.</p>
+        <p class="ea-done__sub" id="eaDoneSub">We&rsquo;ve sent a confirmation to your inbox &mdash; check spam if it doesn&rsquo;t arrive. Once you&rsquo;re approved, we&rsquo;ll email you a link to set up your account.</p>
+        <p class="ea-done__sub" id="eaDoneDev" hidden></p>
+        <p class="ea-done__sub"><a href="#early-access" id="eaAnother">Register a different email</a></p>
       </div>
     </div>
   </div>
@@ -2538,6 +2540,33 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   var submitLabel = submit.textContent;
 
+  /* Coming back to the page after registering (a refresh, a bookmark) shows
+     the same "you're on the waitlist" state rather than an empty form that
+     invites a second submission. Only a flag is stored -- never the email --
+     so nothing about the person is readable on a shared machine, and the
+     "different email" link clears it for the next person. Storage access can
+     throw outright (private mode, blocked cookies), hence the try/catch. */
+  var STORAGE_KEY = 'ally_waitlist_registered';
+  var another = document.getElementById('eaAnother');
+  function remember(){ try{ localStorage.setItem(STORAGE_KEY, '1'); }catch(_){} }
+  function forget(){ try{ localStorage.removeItem(STORAGE_KEY); }catch(_){} }
+  function remembered(){ try{ return localStorage.getItem(STORAGE_KEY) === '1'; }catch(_){ return false; } }
+  function showDone(){ form.hidden = true; done.hidden = false; }
+  function showForm(){ form.hidden = false; done.hidden = true; }
+  if(another){
+    another.addEventListener('click', function(e){
+      e.preventDefault();
+      forget();
+      showForm();
+      nameEl.focus();
+    });
+  }
+  if(remembered()){
+    doneMsg.textContent = 'You’re on the waitlist.';
+    doneSub.textContent = 'Once you’re approved, we’ll email you a link to set up your account.';
+    showDone();
+  }
+
   function linkedinLooksValid(value){
     var raw = value.trim();
     if(!raw) return true;
@@ -2586,11 +2615,23 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
         return;
       }
       if(data.duplicate){
-        doneMsg.textContent = 'You’re already registered.';
-        doneSub.textContent = 'You’re on the list — our team will reach out soon.';
+        doneMsg.textContent = 'You’re already on the waitlist.';
+        doneSub.textContent = 'We have your details — once you’re approved, we’ll email you a link to set up your account.';
       }
-      form.hidden = true;
-      done.hidden = false;
+      /* Development only: the server includes this when it captured the
+         emails locally instead of sending them, so a tester can follow the
+         flow from here. Never present in production. */
+      var devEl = document.getElementById('eaDoneDev');
+      if(devEl && data.dev && data.dev.outbox){
+        devEl.textContent = '';
+        var devLink = document.createElement('a');
+        devLink.href = data.dev.outbox;
+        devLink.textContent = 'Dev: open the local email outbox →';
+        devEl.appendChild(devLink);
+        devEl.hidden = false;
+      }
+      remember();
+      showDone();
     }catch(_){
       err.textContent = 'Something went wrong. Please try again.';
       submit.disabled = false;

@@ -10,6 +10,8 @@ out
 .DS_Store
 Thumbs.db
 _studio-restore
+# dev-only stand-ins for the database and mailbox (see app/lib/dev-store.ts)
+.dev/
 # local source images (canonical copies live in /public/assets)
 logo 1.jpeg
 logo 123.png
