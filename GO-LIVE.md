@@ -12,8 +12,11 @@ How access to Ally works once everything below is plugged in:
 3. The founder opens the link, presses "Send me a code", enters the 8-digit
    code Supabase emails, chooses a password, and lands in onboarding. Next
    time it is email + password.
-4. Anyone else who reaches goxlally.ai is sent to sign-in, which links back to
-   the waitlist. Requesting a code for an unapproved address is refused.
+4. Anyone who reaches goxlally.ai without a session (after a silent attempt to
+   resume one from the refresh cookie) is sent to join.goxlally.ai. Sign-in
+   stays at goxlally.ai/guided/login, reached from the invite email and the
+   waitlist site's "Log in". Requesting a code for an unapproved address is
+   refused.
 
 Nothing in the code differs between testing and production — only the
 environment below. Until it is set, everything runs in the local stand-in mode
@@ -68,7 +71,9 @@ Code to deploy (branch `claude/waitlist-gate` in ally-platform):
   "hasn't been approved … join the waitlist"
 - `pages/guided/Login.jsx` — reads `#email=` from the invite link, "Join the
   waitlist" links
-- `App.jsx` — `/` requires a session; otherwise → `/guided/login`
+- `App.jsx` — the platform's own marketing landing is removed; `/` resumes a
+  session if it can, then → `/app`, otherwise → `VITE_WAITLIST_URL`
+  (join.goxlally.ai)
 
 ## D. Where the platform is actually served (checked 2026-09-03)
 
