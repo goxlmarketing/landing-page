@@ -1469,7 +1469,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   </nav>
   <div class="nav-auth">
     <a class="nav-login" href="/login.html">Log in</a>
-    <a class="nav-cta" href="/signup.html">Sign up <span aria-hidden="true">→</span></a>
+    <a class="nav-cta" id="navCta" href="/signup.html">Sign up <span aria-hidden="true">→</span></a>
   </div>
   <button class="nav-burger" type="button" id="navBurger" aria-label="Menu" aria-expanded="false" aria-controls="navMenu">
     <i></i><i></i><i></i>
@@ -1477,7 +1477,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 </header>
 
 <div class="nav-menu" id="navMenu">
-  <a class="btn" href="/signup.html">Sign up <span aria-hidden="true">→</span></a>
+  <a class="btn" id="menuCta" href="/signup.html">Sign up <span aria-hidden="true">→</span></a>
   <a class="menu-login" href="/login.html">Log in</a>
   <nav aria-label="Menu">
     <a href="#experience">Experience</a>
@@ -1513,7 +1513,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
       <h1>You don&rsquo;t need<br class="brk-ph"> all the answers. <em>You need to know<br class="brk-ph"> your next move.</em></h1>
       <p class="hero-sub">GoXL Ally is your Founder&rsquo;s Compass &mdash; an AI that understands you, your business and your situation before helping you decide what to do next.</p>
       <div class="hero-actions">
-        <a class="btn" href="#early-access">Start your founder journey <span aria-hidden="true">→</span></a>
+        <a class="btn" id="heroCta" href="#early-access">Start your founder journey <span aria-hidden="true">→</span></a>
         <a class="link-quiet" href="#how-it-works">See how Ally thinks ↓</a>
       </div>
       <p class="hero-note">Clarity <span aria-hidden="true">|</span> Confidence <span aria-hidden="true">|</span> Consistency</p>
@@ -2078,10 +2078,11 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
         <button class="btn" type="submit" id="eaSubmit">Start your founder journey</button>
       </form>
       <div class="ea-done" id="eaDone" hidden>
-        <p id="eaDoneMsg">You&rsquo;re on the waitlist.</p>
-        <p class="ea-done__sub" id="eaDoneSub">We&rsquo;ve sent a confirmation to your inbox &mdash; check spam if it doesn&rsquo;t arrive. Once you&rsquo;re approved, we&rsquo;ll email you a link to set up your account.</p>
+        <p id="eaDoneMsg">You&rsquo;re on the approval list.</p>
+        <p class="ea-done__sub" id="eaDoneSub">Our team will verify your details. Keep an eye on your inbox &mdash; we&rsquo;ll email you the moment you&rsquo;re approved.</p>
         <p class="ea-done__sub" id="eaDoneDev" hidden></p>
-        <p class="ea-done__sub"><a href="#early-access" id="eaAnother">Register a different email</a></p>
+        <a class="btn" id="eaDoneCta" href="#early-access" hidden></a>
+        <p class="ea-done__sub" id="eaAnotherWrap"><a href="#early-access" id="eaAnother">Register a different email</a></p>
       </div>
     </div>
   </div>
@@ -2540,32 +2541,142 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   var submitLabel = submit.textContent;
 
-  /* Coming back to the page after registering (a refresh, a bookmark) shows
-     the same "you're on the waitlist" state rather than an empty form that
-     invites a second submission. Only a flag is stored -- never the email --
-     so nothing about the person is readable on a shared machine, and the
-     "different email" link clears it for the next person. Storage access can
-     throw outright (private mode, blocked cookies), hence the try/catch. */
-  var STORAGE_KEY = 'ally_waitlist_registered';
+  /* ── Who is this visitor? ────────────────────────────────────────────
+     This page is the front door for everyone, so it has five states, and
+     the hero button, the nav button and this section must all agree:
+
+       new       nothing known                 → the form
+       waiting   registered, not yet approved  → "you're on the approval list"
+       approved  the team approved them        → "Sign in to Ally" → platform
+       in        signed in on the platform     → "Go to my dashboard"
+       out       has an account, signed out    → "Log in"
+
+     "registered" is the registration's id kept in localStorage -- a random
+     UUID, never the email -- and "approved" is asked of our own server with
+     that id (/api/waitlist-status). So a registrant who comes back after
+     approval, or whose tab sat open through it, is sent to the platform,
+     while a brand-new visitor is never redirected. "in"/"out" arrive as the
+     `ally_hint` cookie the platform sets on the shared goxlally.ai domain:
+     only ever those two words, enough to pick a button and nothing more.
+     Storage and cookies can be blocked outright; every access is guarded and
+     the page degrades to "new". */
+  var ID_KEY = 'ally_waitlist_id';
+  var heroCta = document.getElementById('heroCta');
+  var navCta = document.getElementById('navCta');
+  var menuCta = document.getElementById('menuCta');
+  var doneCta = document.getElementById('eaDoneCta');
+  var anotherWrap = document.getElementById('eaAnotherWrap');
   var another = document.getElementById('eaAnother');
-  function remember(){ try{ localStorage.setItem(STORAGE_KEY, '1'); }catch(_){} }
-  function forget(){ try{ localStorage.removeItem(STORAGE_KEY); }catch(_){} }
-  function remembered(){ try{ return localStorage.getItem(STORAGE_KEY) === '1'; }catch(_){ return false; } }
+
+  function storedId(){ try{ return localStorage.getItem(ID_KEY) || ''; }catch(_){ return ''; } }
+  function rememberId(id){ try{ if(id) localStorage.setItem(ID_KEY, String(id)); }catch(_){} }
+  function forget(){ try{ localStorage.removeItem(ID_KEY); localStorage.removeItem('ally_waitlist_registered'); }catch(_){} }
+  function hint(){
+    var m = /(?:^|; )ally_hint=(in|out)(?:;|$)/.exec(document.cookie || '');
+    return m ? m[1] : '';
+  }
   function showDone(){ form.hidden = true; done.hidden = false; }
   function showForm(){ form.hidden = false; done.hidden = true; }
+
+  function setCta(el, label, href){
+    if(!el) return;
+    el.textContent = '';
+    el.appendChild(document.createTextNode(label + ' '));
+    var arrow = document.createElement('span');
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '→';
+    el.appendChild(arrow);
+    el.setAttribute('href', href);
+  }
+
+  var current = { state: 'new', loginUrl: '' };
+  var COPY = {
+    waiting:  ['You’re on the approval list.', 'Our team will verify your details. Keep an eye on your inbox — we’ll email you the moment you’re approved.'],
+    approved: ['You’re approved.', 'Your invite is in your inbox — or go straight to sign in.'],
+    in:       ['You’re all set.', 'Your Ally account is active.'],
+    out:      ['Welcome back.', 'Log in to pick up where you left off.']
+  };
+
+  function render(state, extra){
+    current = { state: state, loginUrl: (extra && extra.loginUrl) || '' };
+    if(state === 'new'){
+      setCta(heroCta, 'Start your founder journey', '#early-access');
+      setCta(navCta, 'Sign up', '/signup.html');
+      setCta(menuCta, 'Sign up', '/signup.html');
+      if(doneCta) doneCta.hidden = true;
+      showForm();
+      return;
+    }
+    doneMsg.textContent = COPY[state][0];
+    doneSub.textContent = COPY[state][1];
+    if(anotherWrap) anotherWrap.hidden = (state === 'in' || state === 'out');
+    var to = '#early-access', label = 'Start your founder journey', nav = 'Sign up';
+    if(state === 'waiting'){ label = 'You’re on the waitlist'; nav = 'Waitlist'; }
+    if(state === 'approved'){ to = current.loginUrl || '/go/login'; label = 'Sign in to Ally'; nav = 'Sign in'; }
+    if(state === 'in'){ to = '/go/app'; label = 'Go to my dashboard'; nav = 'Dashboard'; }
+    if(state === 'out'){ to = '/go/login'; label = 'Log in'; nav = 'Log in'; }
+    setCta(heroCta, label, to);
+    setCta(navCta, nav, to);
+    setCta(menuCta, nav, to);
+    if(doneCta){
+      if(state === 'waiting'){ doneCta.hidden = true; }
+      else { setCta(doneCta, label, to); doneCta.hidden = false; }
+    }
+    showDone();
+  }
+
+  /* Ask our server whether this registration has been approved. Never
+     rejects: offline or an error means "still waiting"; an id the server no
+     longer knows means "new" (the row was removed). */
+  function checkStatus(id){
+    return fetch('/api/waitlist-status', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body: JSON.stringify({ id: id })
+    }).then(function(r){ return r.json(); }).then(function(d){
+      if(!d || !d.ok) return { state: (d && d.gone) ? 'new' : 'waiting' };
+      if(d.status === 'INVITED' || d.status === 'ACTIVE') return { state: 'approved', loginUrl: d.loginUrl || '' };
+      return { state: 'waiting' };
+    }).catch(function(){ return { state: 'waiting' }; });
+  }
+
+  function resolveAndRender(){
+    var h = hint();
+    if(h === 'in' || h === 'out'){ render(h); return Promise.resolve(); }
+    var id = storedId();
+    if(!id){ render('new'); return Promise.resolve(); }
+    render('waiting');
+    return checkStatus(id).then(function(r){
+      if(r.state === 'new') forget();
+      render(r.state, r);
+    });
+  }
+
   if(another){
     another.addEventListener('click', function(e){
       e.preventDefault();
       forget();
-      showForm();
+      render('new');
       nameEl.focus();
     });
   }
-  if(remembered()){
-    doneMsg.textContent = 'You’re on the waitlist.';
-    doneSub.textContent = 'Once you’re approved, we’ll email you a link to set up your account.';
-    showDone();
+
+  /* A click while "waiting" re-checks first, so someone approved while this
+     tab sat open is sent through instead of being told to keep waiting. In
+     every other state the button's href already says where to go. */
+  function onCtaClick(e){
+    if(current.state !== 'waiting') return;
+    e.preventDefault();
+    checkStatus(storedId()).then(function(r){
+      render(r.state, r);
+      if(r.state === 'approved' && current.loginUrl){ window.location.href = current.loginUrl; return; }
+      var section = document.getElementById('early-access');
+      if(section) section.scrollIntoView({ behavior: 'smooth' });
+    });
   }
+  [heroCta, navCta, menuCta].forEach(function(el){ if(el) el.addEventListener('click', onCtaClick); });
+
+  resolveAndRender();
 
   function linkedinLooksValid(value){
     var raw = value.trim();
@@ -2614,24 +2725,30 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
         submit.textContent = submitLabel;
         return;
       }
-      if(data.duplicate){
-        doneMsg.textContent = 'You’re already on the waitlist.';
-        doneSub.textContent = 'We have your details — once you’re approved, we’ll email you a link to set up your account.';
-      }
       /* Development only: the server includes this when it captured the
          emails locally instead of sending them, so a tester can follow the
          flow from here. Never present in production. */
       var devEl = document.getElementById('eaDoneDev');
-      if(devEl && data.dev && data.dev.outbox){
-        devEl.textContent = '';
-        var devLink = document.createElement('a');
-        devLink.href = data.dev.outbox;
-        devLink.textContent = 'Dev: open the local email outbox →';
-        devEl.appendChild(devLink);
-        devEl.hidden = false;
+      if(devEl){
+        devEl.hidden = true;
+        if(data.dev && data.dev.outbox){
+          devEl.textContent = '';
+          var devLink = document.createElement('a');
+          devLink.href = data.dev.outbox;
+          devLink.textContent = 'Dev: open the local email outbox →';
+          devEl.appendChild(devLink);
+          devEl.hidden = false;
+        }
       }
-      remember();
-      showDone();
+      rememberId(data.id);
+      /* A repeat submission may belong to someone already approved, so the
+         state comes from the server rather than being assumed. */
+      resolveAndRender().then(function(){
+        if(data.duplicate && current.state === 'waiting'){
+          doneMsg.textContent = 'You’re already on the approval list.';
+          doneSub.textContent = 'We have your details — we’ll email you the moment you’re approved.';
+        }
+      });
     }catch(_){
       err.textContent = 'Something went wrong. Please try again.';
       submit.disabled = false;

@@ -36,3 +36,8 @@ export function platformLoginUrl(email?: string): string {
   const base = `${resolvePlatformUrl()}/guided/login`;
   return email ? `${base}#email=${encodeURIComponent(email)}` : base;
 }
+
+/** The founder's dashboard. The platform checks the real session on arrival. */
+export function platformAppUrl(): string {
+  return `${resolvePlatformUrl()}/app`;
+}

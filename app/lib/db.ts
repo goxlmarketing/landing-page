@@ -1,6 +1,7 @@
 import postgres, { type Sql } from "postgres";
 
 import {
+  devFindBetaUserByEmail,
   devFindBetaUserById,
   devInsertBetaUser,
   devMarkBetaUserInvited,
@@ -135,6 +136,23 @@ export async function findBetaUserById(id: string): Promise<BetaUserRow | null> 
     SELECT id, name, email, status, created_at, updated_at
     FROM beta_users
     WHERE id = ${id}
+  `;
+  return rows[0] ? toRow(rows[0]) : null;
+}
+
+/** Lookup by (already lowercased) email -- used to hand a repeat registrant their id. */
+export async function findBetaUserByEmail(email: string): Promise<BetaUserRow | null> {
+  if (useDevStore()) {
+    const row = await devFindBetaUserByEmail(email);
+    return row
+      ? toRow({ ...row, created_at: new Date(row.created_at), updated_at: new Date(row.updated_at) })
+      : null;
+  }
+  const sql = getSql();
+  const rows = await sql<RawRow[]>`
+    SELECT id, name, email, status, created_at, updated_at
+    FROM beta_users
+    WHERE email = ${email}
   `;
   return rows[0] ? toRow(rows[0]) : null;
 }

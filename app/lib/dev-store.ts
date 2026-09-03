@@ -122,6 +122,12 @@ export async function devFindBetaUserById(id: string): Promise<DevBetaUser | nul
   return rows.find((row) => row.id === id) ?? null;
 }
 
+export async function devFindBetaUserByEmail(email: string): Promise<DevBetaUser | null> {
+  assertDev("dev waitlist store");
+  const rows = await readWaitlist();
+  return rows.find((row) => row.email === email) ?? null;
+}
+
 export async function devMarkBetaUserInvited(id: string): Promise<DevBetaUser | null> {
   assertDev("dev waitlist store");
   return serialized(async () => {

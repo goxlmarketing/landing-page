@@ -2,6 +2,15 @@
 
 How access to Ally works once everything below is plugged in:
 
+0. join.goxlally.ai is the front door for everyone and shows one of five
+   states: **new** (the form), **waiting** ("you're on the approval list"),
+   **approved** ("Sign in to Ally" → the platform, email pre-filled),
+   **signed in** ("Go to my dashboard") and **signed out** ("Log in"). The
+   first three come from the registration id the browser keeps
+   (`localStorage`, a random UUID, never the email) checked against
+   `/api/waitlist-status`; the last two from the `ally_hint` cookie
+   (`in`/`out`, nothing else) that the platform writes on the shared
+   `goxlally.ai` domain. A new visitor is never redirected to the platform.
 1. A founder registers at join.goxlally.ai → a `beta_users` row (status `NEW`) →
    a confirmation email to them, and a notification email **with an Approve
    button** to `BETA_NOTIFY_EMAIL`.
