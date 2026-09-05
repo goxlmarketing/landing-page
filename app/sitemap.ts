@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const siteUrl = "https://join.goxlally.ai";
+const siteUrl = "https://www.goxlally.ai";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
