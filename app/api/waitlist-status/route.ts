@@ -1,5 +1,5 @@
 import { isSameOriginRequest } from "../_dev-write-security";
-import { findBetaUserById } from "../../lib/db";
+import { findBetaUserById, getCapacity, positionOf } from "../../lib/db";
 import { platformLoginUrl } from "../../lib/platform-url";
 
 /**
@@ -68,10 +68,31 @@ export async function POST(request: Request) {
     const user = await findBetaUserById(id);
     if (!user) return json({ ok: false, gone: true }, 404);
     const approved = user.status === "INVITED" || user.status === "ACTIVE";
+
+    // Their place in the queue, and how many are ahead of the open batch. The
+    // page turns this into "You're #47 in line"; sending the raw numbers keeps
+    // the wording on the page, where it can be changed without a deploy of
+    // this route. Position is omitted once they are in -- there is no line to
+    // stand in any more, and showing one would only confuse.
+    let position: number | null = null;
+    let capacity: number | null = null;
+    if (!approved) {
+      try {
+        position = await positionOf(id);
+        capacity = await getCapacity();
+      } catch (error) {
+        // A missing position is not a failure: the page falls back to the
+        // plain "you're on the list" wording, which is still true.
+        console.error("[ally-beta] queue position lookup failed", error);
+      }
+    }
+
     return json({
       ok: true,
       status: user.status,
       ...(approved ? { loginUrl: platformLoginUrl(user.email) } : {}),
+      ...(position !== null ? { position } : {}),
+      ...(capacity !== null ? { capacity, ahead: Math.max(0, position! - capacity) } : {}),
     });
   } catch (error) {
     console.error("[ally-beta] waitlist status lookup failed", error);

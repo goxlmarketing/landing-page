@@ -44,6 +44,8 @@ type InternalNotification = {
   registeredAt: Date;
   source: string;
   baseUrl?: string;
+  /** True when the batch was open and they were let straight in. */
+  granted?: boolean;
 };
 
 type ApprovalRecipient = {
@@ -212,7 +214,17 @@ export async function sendInternalNotificationEmail(
     ["Source", registration.source],
   ];
 
-  const approveUrl = approveUrlFor(registration.id, registration.baseUrl);
+  // Someone the open batch already let in needs no Approve button; showing one
+  // invites a click that does nothing and makes the team wonder whether it
+  // worked. The line above the details says which happened.
+  const approveUrl = registration.granted ? null : approveUrlFor(registration.id, registration.baseUrl);
+  const statusHtml = registration.granted
+    ? `<p style="margin:0 0 16px;padding:10px 14px;background:#eefbf3;border-left:3px solid #10B981;font-size:13.5px;">
+      <b>Access granted automatically</b> &mdash; they were inside the open batch, so their account is created and the invite has been sent. Nothing to do.
+    </p>`
+    : `<p style="margin:0 0 16px;padding:10px 14px;background:#fffaf0;border-left:3px solid #e0a800;font-size:13.5px;">
+      <b>Waiting</b> &mdash; the batch is full, so they are in the queue. They will be let in when the next batch opens, or you can approve them now with the button below.
+    </p>`;
   const approveHtml = approveUrl
     ? `<p style="margin:24px 0 0;">
       <a href="${escapeHtml(approveUrl)}" style="display:inline-block;padding:12px 20px;background:#2fe3ac;color:#04120c;font-weight:700;border-radius:8px;text-decoration:none;">Approve &amp; send invite &rarr;</a>
@@ -224,6 +236,7 @@ export async function sendInternalNotificationEmail(
 <html lang="en">
   <body style="margin:0;padding:24px;background:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#1b201e;">
     <h1 style="margin:0 0 16px;font-size:18px;font-weight:600;">New Ally Early Access Registration</h1>
+    ${statusHtml}
     <table role="presentation" cellpadding="0" cellspacing="0" style="font-size:14px;line-height:1.6;">
       ${rows
         .map(
@@ -239,9 +252,17 @@ export async function sendInternalNotificationEmail(
   const text = [
     "New Ally Early Access Registration",
     "",
+    registration.granted
+      ? "ACCESS GRANTED AUTOMATICALLY — inside the open batch; account created and invite sent. Nothing to do."
+      : "WAITING — the batch is full, so they are in the queue.",
+    "",
     ...rows.map(([label, value]) => `${label}: ${value}`),
     "",
-    approveUrl ? `Approve & send invite: ${approveUrl}` : "Approval link unavailable: APPROVAL_SECRET is not configured.",
+    registration.granted
+      ? ""
+      : approveUrl
+        ? `Approve & send invite now: ${approveUrl}`
+        : "Approval link unavailable: APPROVAL_SECRET is not configured.",
   ].join("\n");
 
   return send(

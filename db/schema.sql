@@ -57,3 +57,46 @@ CREATE TRIGGER beta_users_set_updated_at
   BEFORE UPDATE ON beta_users
   FOR EACH ROW
   EXECUTE FUNCTION beta_users_touch_updated_at();
+
+-- ─────────────────────────────────────────────────────────────────────────────
+-- Batched access
+--
+-- Access opens in batches. `capacity` is the number of registrations that have
+-- been let in so far, counted by position in the registration queue: a founder
+-- whose position is <= capacity is in, everyone else is waiting. Raising it is
+-- the only lever the team touches, and the only thing this table holds.
+--
+-- A single row, pinned by a CHECK so a second one cannot be inserted by
+-- accident and leave the app reading whichever it happened to select first.
+-- ─────────────────────────────────────────────────────────────────────────────
+
+CREATE TABLE IF NOT EXISTS access_settings (
+  id         boolean     PRIMARY KEY DEFAULT true,
+  capacity   integer     NOT NULL DEFAULT 300,
+  updated_at timestamptz NOT NULL DEFAULT now(),
+
+  CONSTRAINT access_settings_single_row  CHECK (id),
+  CONSTRAINT access_settings_capacity_ok CHECK (capacity >= 0)
+);
+
+INSERT INTO access_settings (id) VALUES (true) ON CONFLICT (id) DO NOTHING;
+
+ALTER TABLE access_settings ENABLE ROW LEVEL SECURITY;
+
+DROP TRIGGER IF EXISTS access_settings_set_updated_at ON access_settings;
+CREATE TRIGGER access_settings_set_updated_at
+  BEFORE UPDATE ON access_settings
+  FOR EACH ROW
+  EXECUTE FUNCTION beta_users_touch_updated_at();
+
+-- When access was granted, so a batch can be audited after the fact and a
+-- future "reclaim unused invites" rule has something to measure against.
+-- `updated_at` cannot serve: any edit to the row moves it.
+ALTER TABLE beta_users ADD COLUMN IF NOT EXISTS invited_at timestamptz;
+
+-- Position is `ORDER BY created_at, id` over everyone still in the queue, and
+-- granting a batch reads that order under load. Rejected rows leave the line
+-- entirely, so they are excluded from the index as well as the query.
+CREATE INDEX IF NOT EXISTS beta_users_queue_order
+  ON beta_users (created_at, id)
+  WHERE status <> 'REJECTED';

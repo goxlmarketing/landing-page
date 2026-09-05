@@ -1,10 +1,16 @@
 import postgres, { type Sql } from "postgres";
 
 import {
+  devAccessCounts,
   devFindBetaUserByEmail,
   devFindBetaUserById,
+  devGetCapacity,
   devInsertBetaUser,
   devMarkBetaUserInvited,
+  devPendingGrants,
+  devPositionOf,
+  devQueuePreview,
+  devSetCapacity,
   devStoreEnabled,
 } from "./dev-store";
 
@@ -172,9 +178,131 @@ export async function markBetaUserInvited(id: string): Promise<BetaUserRow | nul
   const sql = getSql();
   const rows = await sql<RawRow[]>`
     UPDATE beta_users
-    SET status = 'INVITED'
+    SET status = 'INVITED',
+        -- COALESCE so re-approving keeps the moment access was FIRST granted.
+        invited_at = COALESCE(invited_at, now())
     WHERE id = ${id}
     RETURNING id, name, email, status, created_at, updated_at
   `;
   return rows[0] ? toRow(rows[0]) : null;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * Batched access
+ *
+ * Everyone who registers takes a place in one queue, ordered by when they
+ * registered. `capacity` is how far down that queue we have opened: position
+ * <= capacity means they are in. Raising it is the only lever the team pulls.
+ *
+ * The order is `created_at, id` everywhere -- created_at alone is not unique
+ * under concurrent inserts, and a queue whose order shifts between two reads
+ * would hand two founders the same position. Rejected rows leave the queue, so
+ * everyone behind them moves up.
+ * ───────────────────────────────────────────────────────────────────────────*/
+
+const IN_QUEUE = "status <> 'REJECTED'";
+const GRANTED = "status IN ('INVITED', 'ACTIVE')";
+
+/** How far down the queue access has been opened. */
+export async function getCapacity(): Promise<number> {
+  if (useDevStore()) return devGetCapacity();
+  const sql = getSql();
+  const rows = await sql<{ capacity: number }[]>`SELECT capacity FROM access_settings WHERE id = true`;
+  // schema.sql seeds this row. If it is somehow missing, nobody is in rather
+  // than everybody -- failing closed is the safer direction for a gate.
+  return rows[0]?.capacity ?? 0;
+}
+
+/** Sets capacity outright; the admin page sends the new total, not a delta. */
+export async function setCapacity(capacity: number): Promise<number> {
+  if (useDevStore()) return devSetCapacity(capacity);
+  const sql = getSql();
+  const rows = await sql<{ capacity: number }[]>`
+    UPDATE access_settings SET capacity = ${capacity} WHERE id = true RETURNING capacity
+  `;
+  return rows[0]?.capacity ?? capacity;
+}
+
+/** 1-based place in the queue, or null once the row has left it. */
+export async function positionOf(id: string): Promise<number | null> {
+  if (useDevStore()) return devPositionOf(id);
+  const sql = getSql();
+  const rows = await sql<{ position: string }[]>`
+    SELECT position FROM (
+      SELECT id, row_number() OVER (ORDER BY created_at, id) AS position
+      FROM beta_users
+      WHERE ${sql.unsafe(IN_QUEUE)}
+    ) ranked
+    WHERE id = ${id}
+  `;
+  return rows[0] ? Number(rows[0].position) : null;
+}
+
+export type AccessCounts = { total: number; granted: number; waiting: number };
+
+export async function accessCounts(): Promise<AccessCounts> {
+  if (useDevStore()) return devAccessCounts();
+  const sql = getSql();
+  const rows = await sql<{ total: string; granted: string }[]>`
+    SELECT count(*) AS total,
+           count(*) FILTER (WHERE ${sql.unsafe(GRANTED)}) AS granted
+    FROM beta_users
+    WHERE ${sql.unsafe(IN_QUEUE)}
+  `;
+  const total = Number(rows[0]?.total ?? 0);
+  const granted = Number(rows[0]?.granted ?? 0);
+  return { total, granted, waiting: total - granted };
+}
+
+/**
+ * The next `limit` registrations inside capacity that have not been let in --
+ * the work a batch has left to do. Read in queue order, so granting always
+ * walks the line from the front. Nothing here mutates: the caller grants them
+ * one at a time and calls again.
+ */
+export async function pendingGrants(limit: number): Promise<BetaUserRow[]> {
+  if (useDevStore()) {
+    const rows = await devPendingGrants(limit);
+    return rows.map((r) => toRow({ ...r, created_at: new Date(r.created_at), updated_at: new Date(r.updated_at) }));
+  }
+  const capacity = await getCapacity();
+  if (capacity <= 0) return [];
+  const sql = getSql();
+  const rows = await sql<RawRow[]>`
+    SELECT id, name, email, status, created_at, updated_at FROM (
+      SELECT id, name, email, status, created_at, updated_at,
+             row_number() OVER (ORDER BY created_at, id) AS position
+      FROM beta_users
+      WHERE ${sql.unsafe(IN_QUEUE)}
+    ) ranked
+    WHERE position <= ${capacity} AND NOT (${sql.unsafe(GRANTED)})
+    ORDER BY position
+    LIMIT ${limit}
+  `;
+  return rows.map(toRow);
+}
+
+export type QueueEntry = BetaUserRow & { position: number };
+
+/** The front of the queue, for the admin page. */
+export async function queuePreview(limit: number): Promise<QueueEntry[]> {
+  if (useDevStore()) {
+    const rows = await devQueuePreview(limit);
+    return rows.map((r) => ({
+      ...toRow({ ...r, created_at: new Date(r.created_at), updated_at: new Date(r.updated_at) }),
+      position: r.position,
+    }));
+  }
+  const sql = getSql();
+  const rows = await sql<(RawRow & { position: string })[]>`
+    SELECT id, name, email, status, created_at, updated_at, position FROM (
+      SELECT id, name, email, status, created_at, updated_at,
+             row_number() OVER (ORDER BY created_at, id) AS position
+      FROM beta_users
+      WHERE ${sql.unsafe(IN_QUEUE)}
+    ) ranked
+    ORDER BY position
+    LIMIT ${limit}
+  `;
+  return rows.map((r) => ({ ...toRow(r), position: Number(r.position) }));
 }

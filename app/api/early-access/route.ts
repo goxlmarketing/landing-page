@@ -1,4 +1,7 @@
-import { findBetaUserByEmail, insertBetaUser } from "../../lib/db";
+import { grantAccess } from "../../lib/access";
+import {
+  findBetaUserByEmail, findBetaUserById, getCapacity, insertBetaUser, positionOf,
+} from "../../lib/db";
 import { sendBetaConfirmationEmail, sendInternalNotificationEmail } from "../../lib/email";
 
 // Note on Next.js 16: `nodejs` is already the default runtime and the docs
@@ -280,8 +283,55 @@ export async function POST(request: Request) {
   // copies in /dev/outbox are followable. In production `baseUrl` stays
   // undefined and the templates use their configured origin.
   const devOrigin = process.env.NODE_ENV === "production" ? undefined : new URL(request.url).origin;
+
+  /* Inside the open batch? Then this founder does not wait for anybody: their
+     account is created and the invite goes out now, in the same request that
+     registered them.
+
+     Deliberately BEFORE the confirmation email, so the two cannot contradict
+     each other -- "we'll email you once you're approved" landing in the same
+     inbox as "you're in" reads as a broken product. If they are in, the
+     confirmation is skipped entirely and the invite is the only mail they get.
+
+     Never fatal: a founder who is let in but whose email failed still has
+     access and still sees the right thing on the page, because the response
+     below reports the outcome and the page reads it. */
+  let granted = false;
+  try {
+    const position = await positionOf(registration.id);
+    const capacity = await getCapacity();
+    if (position !== null && position <= capacity) {
+      const row = await findBetaUserById(registration.id);
+      if (row) {
+        const outcome = await grantAccess(row, { baseUrl: devOrigin });
+        granted = outcome.ok;
+        if (!outcome.ok) {
+          // They keep their place in the queue and the next batch picks them
+          // up; the page shows the waiting state, which is then the truth.
+          console.error(`[ally-beta] instant grant failed for ${email}: ${outcome.error}`);
+        }
+      }
+    }
+  } catch (error) {
+    console.error("[ally-beta] instant grant check failed", error);
+  }
+
+  // Best-effort delivery. Both helpers swallow their own failures and log
+  // server-side, so an SMTP outage can never cost us a beta lead.
+  //
+  // Sent concurrently rather than in sequence: each one opens its own SMTP
+  // conversation, and running them back to back doubles the worst case against
+  // the serverless function's timeout. They are independent, so nothing is
+  // gained by ordering them.
+  // `allSettled`, not `all`: a rejection here would turn a committed
+  // registration into a 500, which the invariant above forbids.
+  //
+  // Outside production the emails link back to THIS server (the Approve
+  // button, image URLs) rather than the production site, so the captured
+  // copies in /dev/outbox are followable. In production `baseUrl` stays
+  // undefined and the templates use their configured origin.
   await Promise.allSettled([
-    sendBetaConfirmationEmail({ name, email, baseUrl: devOrigin }),
+    granted ? Promise.resolve() : sendBetaConfirmationEmail({ name, email, baseUrl: devOrigin }),
     sendInternalNotificationEmail({
       id: registration.id,
       name,
@@ -291,6 +341,7 @@ export async function POST(request: Request) {
       registeredAt: registration.createdAt,
       source,
       baseUrl: devOrigin,
+      granted,
     }),
   ]);
 
@@ -300,6 +351,7 @@ export async function POST(request: Request) {
     ok: true,
     duplicate: false,
     id: registration.id,
+    granted,
     ...(devOrigin ? { dev: { outbox: "/dev/outbox" } } : {}),
   });
 }

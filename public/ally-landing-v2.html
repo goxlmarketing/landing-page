@@ -2677,11 +2677,27 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 
   var current = { state: 'new', loginUrl: '' };
   var COPY = {
-    waiting:  ['You’re on the approval list.', 'Our team will verify your details. Keep an eye on your inbox — we’ll email you the moment you’re approved.'],
+    /* waiting's second line is normally built from the queue position; this
+       is the fallback for when the server could not work one out. */
+    waiting:  ['You’re on the waitlist.', 'We open access in batches. We’ll email you the moment a place opens.'],
     approved: ['You’re approved.', 'Your invite is in your inbox — or go straight to sign in.'],
     in:       ['You’re all set.', 'Your Ally account is active.'],
     out:      ['Welcome back.', 'Log in to pick up where you left off.']
   };
+
+  /* "You’re #47 in line" beats "we’ll be in touch": it is specific, it is
+     true, and it is the question every waitlist visitor actually has. Falls
+     back to the plain sentence when no position came back, which is better
+     than showing a number we are not sure of. */
+  function waitingCopy(extra){
+    var pos = extra && extra.position;
+    if(!pos) return COPY.waiting;
+    var ahead = extra.ahead;
+    var sub = (ahead && ahead > 0)
+      ? 'There ' + (ahead === 1 ? 'is 1 founder' : 'are ' + ahead + ' founders') + ' ahead of you. We open access in batches — we’ll email you the moment your place opens.'
+      : 'You’re next in line. We’ll email you the moment your place opens.';
+    return ['You’re #' + pos + ' in line.', sub];
+  }
 
   function render(state, extra){
     current = { state: state, loginUrl: (extra && extra.loginUrl) || '' };
@@ -2693,8 +2709,9 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
       showForm();
       return;
     }
-    doneMsg.textContent = COPY[state][0];
-    doneSub.textContent = COPY[state][1];
+    var copy = state === 'waiting' ? waitingCopy(extra) : COPY[state];
+    doneMsg.textContent = copy[0];
+    doneSub.textContent = copy[1];
     if(anotherWrap) anotherWrap.hidden = (state === 'in' || state === 'out');
     var to = '#early-access', label = 'Start your founder journey', nav = 'Sign up';
     if(state === 'waiting'){ label = 'You’re on the waitlist'; nav = 'Waitlist'; }
@@ -2722,7 +2739,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
     }).then(function(r){ return r.json(); }).then(function(d){
       if(!d || !d.ok) return { state: (d && d.gone) ? 'new' : 'waiting' };
       if(d.status === 'INVITED' || d.status === 'ACTIVE') return { state: 'approved', loginUrl: d.loginUrl || '' };
-      return { state: 'waiting' };
+      return { state: 'waiting', position: d.position, ahead: d.ahead };
     }).catch(function(){ return { state: 'waiting' }; });
   }
 
@@ -2731,7 +2748,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
     if(h === 'in' || h === 'out'){ render(h); return Promise.resolve(); }
     var id = storedId();
     if(!id){ render('new'); return Promise.resolve(); }
-    render('waiting');
+    render('waiting', null);
     return checkStatus(id).then(function(r){
       if(r.state === 'new') forget();
       render(r.state, r);
@@ -2827,12 +2844,15 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
         }
       }
       rememberId(data.id);
-      /* A repeat submission may belong to someone already approved, so the
-         state comes from the server rather than being assumed. */
+      /* A repeat submission may belong to someone already approved, and a new
+         one may have been let straight in, so the state comes from the server
+         rather than being assumed either way. */
       resolveAndRender().then(function(){
-        if(data.duplicate && current.state === 'waiting'){
-          doneMsg.textContent = 'You’re already on the approval list.';
-          doneSub.textContent = 'We have your details — we’ll email you the moment you’re approved.';
+        if(data.granted && current.state === 'approved'){
+          doneMsg.textContent = 'You’re in.';
+          doneSub.textContent = 'Your Ally account is ready — check your inbox, or go straight to sign in.';
+        } else if(data.duplicate && current.state === 'waiting'){
+          doneSub.textContent = 'We already have your details. ' + doneSub.textContent;
         }
       });
     }catch(_){

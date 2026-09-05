@@ -75,7 +75,11 @@ export type DevBetaUser = {
   source: string;
   created_at: string;
   updated_at: string;
+  invited_at?: string | null;
 };
+
+const SETTINGS_FILE = path.join(DEV_DIR, "access.json");
+const DEFAULT_CAPACITY = 300;
 
 type DevInsertInput = {
   name: string;
@@ -134,11 +138,72 @@ export async function devMarkBetaUserInvited(id: string): Promise<DevBetaUser | 
     const rows = await readWaitlist();
     const row = rows.find((candidate) => candidate.id === id);
     if (!row) return null;
+    const now = new Date().toISOString();
+    // Only on the transition, so re-approving does not restamp the moment
+    // access was actually granted.
+    if (row.status !== "INVITED" && row.status !== "ACTIVE") row.invited_at = now;
     row.status = "INVITED";
-    row.updated_at = new Date().toISOString();
+    row.updated_at = now;
     await writeJson(WAITLIST_FILE, rows);
     return row;
   });
+}
+
+// ── Batched access ───────────────────────────────────────────────────────────
+
+/** The queue: everyone still in line, oldest first. Rejections leave it. */
+function queue(rows: DevBetaUser[]): DevBetaUser[] {
+  return rows
+    .filter((row) => row.status !== "REJECTED")
+    .sort((a, b) => (a.created_at === b.created_at
+      ? a.id.localeCompare(b.id)
+      : a.created_at.localeCompare(b.created_at)));
+}
+
+export async function devGetCapacity(): Promise<number> {
+  assertDev("dev access settings");
+  const s = await readJson<{ capacity?: number }>(SETTINGS_FILE, {});
+  return typeof s.capacity === "number" ? s.capacity : DEFAULT_CAPACITY;
+}
+
+export async function devSetCapacity(capacity: number): Promise<number> {
+  assertDev("dev access settings");
+  return serialized(async () => {
+    await writeJson(SETTINGS_FILE, { capacity });
+    return capacity;
+  });
+}
+
+/** 1-based place in the queue, or null once the row has left it. */
+export async function devPositionOf(id: string): Promise<number | null> {
+  assertDev("dev waitlist store");
+  const i = queue(await readWaitlist()).findIndex((row) => row.id === id);
+  return i === -1 ? null : i + 1;
+}
+
+export async function devAccessCounts(): Promise<{ total: number; granted: number; waiting: number }> {
+  assertDev("dev waitlist store");
+  const rows = queue(await readWaitlist());
+  const granted = rows.filter((r) => r.status === "INVITED" || r.status === "ACTIVE").length;
+  return { total: rows.length, granted, waiting: rows.length - granted };
+}
+
+/** The next `limit` in line who are within capacity but have not been let in. */
+export async function devPendingGrants(limit: number): Promise<DevBetaUser[]> {
+  assertDev("dev waitlist store");
+  const capacity = await devGetCapacity();
+  return queue(await readWaitlist())
+    .slice(0, capacity)
+    .filter((row) => row.status !== "INVITED" && row.status !== "ACTIVE")
+    .slice(0, limit);
+}
+
+/** Everyone in line, for the admin page. */
+export async function devQueuePreview(limit: number): Promise<Array<DevBetaUser & { position: number }>> {
+  assertDev("dev waitlist store");
+  return queue(await readWaitlist())
+    .map((row, i) => ({ ...row, position: i + 1 }))
+    .slice(0, limit);
 }
 
 // ── Outbox ───────────────────────────────────────────────────────────────────
