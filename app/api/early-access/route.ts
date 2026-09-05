@@ -1,4 +1,4 @@
-import { insertBetaUser } from "../../lib/db";
+import { findBetaUserByEmail, insertBetaUser } from "../../lib/db";
 import { sendBetaConfirmationEmail, sendInternalNotificationEmail } from "../../lib/email";
 
 // Note on Next.js 16: `nodejs` is already the default runtime and the docs
@@ -253,7 +253,16 @@ export async function POST(request: Request) {
 
   if (!registration.created) {
     // Already registered: no second row, and no second confirmation email.
-    return json({ ok: true, duplicate: true });
+    // The existing id goes back so this browser can follow the registration's
+    // status from now on (see /api/waitlist-status) -- it reveals nothing the
+    // `duplicate` flag has not already said, and the id is a random UUID.
+    let existingId: string | undefined;
+    try {
+      existingId = (await findBetaUserByEmail(email))?.id;
+    } catch (error) {
+      console.error("[ally-beta] duplicate lookup failed", error);
+    }
+    return json({ ok: true, duplicate: true, ...(existingId ? { id: existingId } : {}) });
   }
 
   // Best-effort delivery. Both helpers swallow their own failures and log
@@ -265,17 +274,32 @@ export async function POST(request: Request) {
   // gained by ordering them.
   // `allSettled`, not `all`: a rejection here would turn a committed
   // registration into a 500, which the invariant above forbids.
+  //
+  // Outside production the emails link back to THIS server (the Approve
+  // button, image URLs) rather than the production site, so the captured
+  // copies in /dev/outbox are followable. In production `baseUrl` stays
+  // undefined and the templates use their configured origin.
+  const devOrigin = process.env.NODE_ENV === "production" ? undefined : new URL(request.url).origin;
   await Promise.allSettled([
-    sendBetaConfirmationEmail({ name, email }),
+    sendBetaConfirmationEmail({ name, email, baseUrl: devOrigin }),
     sendInternalNotificationEmail({
+      id: registration.id,
       name,
       email,
       phone,
       linkedinUrl,
       registeredAt: registration.createdAt,
       source,
+      baseUrl: devOrigin,
     }),
   ]);
 
-  return json({ ok: true, duplicate: false });
+  // The `dev` hint lets the landing page offer a link to the local outbox
+  // while testing. It is never present in production.
+  return json({
+    ok: true,
+    duplicate: false,
+    id: registration.id,
+    ...(devOrigin ? { dev: { outbox: "/dev/outbox" } } : {}),
+  });
 }

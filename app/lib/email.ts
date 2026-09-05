@@ -1,6 +1,13 @@
 import nodemailer, { type Transporter } from "nodemailer";
 
-import { escapeHtml, renderBetaConfirmationEmail } from "./email-template";
+import { signApprovalToken } from "./approval-token";
+import { devCaptureEmail, devStoreEnabled } from "./dev-store";
+import {
+  escapeHtml,
+  renderBetaApprovalEmail,
+  renderBetaConfirmationEmail,
+  resolveBaseUrl,
+} from "./email-template";
 
 /**
  * Server-only transactional email for the Ally beta flow, sent over SMTP
@@ -10,23 +17,41 @@ import { escapeHtml, renderBetaConfirmationEmail } from "./email-template";
  * source of truth for a registration, so an email outage must not lose or
  * invalidate a beta lead. Failures are logged server-side only.
  *
- * The branded customer-facing template lives in `email-template.ts`. The
+ * The branded customer-facing templates live in `email-template.ts`. The
  * internal notification below is deliberately plain and stays here — it is an
  * operational email, not a product one.
+ *
+ * Outside production, with no SMTP credentials, every send is captured to the
+ * local outbox (dev-store.ts) and reported as delivered, so the whole waitlist
+ * flow can be followed at /dev/outbox. With credentials present, real mail goes
+ * out — in any environment.
  */
 
 type ConfirmationRecipient = {
   name: string;
   email: string;
+  /** Dev only: point image/link URLs at the local server (see email-template). */
+  baseUrl?: string;
 };
 
 type InternalNotification = {
+  /** beta_users.id — signed into the Approve link. */
+  id: string;
   name: string;
   email: string;
   phone: string | null;
   linkedinUrl: string | null;
   registeredAt: Date;
   source: string;
+  baseUrl?: string;
+};
+
+type ApprovalRecipient = {
+  name: string;
+  email: string;
+  /** Absolute platform sign-in URL, email pre-filled (platform-url.ts). */
+  loginUrl: string;
+  baseUrl?: string;
 };
 
 type Outgoing = {
@@ -103,10 +128,32 @@ function getTransporter(): Transporter | null {
   return globalThis.__allyBetaMailer;
 }
 
+/**
+ * Sender address. Required in production; outside it a placeholder keeps the
+ * captured-to-outbox path working with zero configuration.
+ */
+function fromAddress(context: string): string | null {
+  const from = process.env.BETA_FROM_EMAIL?.trim();
+  if (from) return from;
+  if (devStoreEnabled()) return "GoXL Ally <dev@localhost>";
+  console.warn(`[ally-beta] ${context} skipped: BETA_FROM_EMAIL is not configured`);
+  return null;
+}
+
 /** Never throws — SMTP failures are logged and reported as `false`. */
 async function send(payload: Outgoing, context: string): Promise<boolean> {
   const transporter = getTransporter();
   if (!transporter) {
+    if (devStoreEnabled()) {
+      try {
+        await devCaptureEmail({ ...payload, context });
+        console.info(`[ally-beta] [dev] ${context} to ${payload.to} captured — see /dev/outbox`);
+        return true;
+      } catch (error) {
+        console.error(`[ally-beta] [dev] ${context} could not be captured`, error);
+        return false;
+      }
+    }
     console.warn(
       `[ally-beta] ${context} skipped: SMTP_USER / SMTP_PASSWORD are not configured`,
     );
@@ -129,27 +176,32 @@ async function send(payload: Outgoing, context: string): Promise<boolean> {
  * only for genuinely new registrations.
  */
 export async function sendBetaConfirmationEmail(user: ConfirmationRecipient): Promise<boolean> {
-  const from = process.env.BETA_FROM_EMAIL;
-  if (!from) {
-    console.warn("[ally-beta] confirmation email skipped: BETA_FROM_EMAIL is not configured");
-    return false;
-  }
+  const from = fromAddress("confirmation email");
+  if (!from) return false;
 
-  const { subject, html, text } = renderBetaConfirmationEmail({ name: user.name });
+  const { subject, html, text } = renderBetaConfirmationEmail({ name: user.name, baseUrl: user.baseUrl });
   return send({ from, to: user.email, subject, html, text }, "confirmation email");
 }
 
-/** Internal heads-up for the GoXL team. Silently skipped when unconfigured. */
+/**
+ * The one-click Approve link for the internal notification, or null when
+ * approval is not configured (production without APPROVAL_SECRET) — in which
+ * case the email says so rather than carrying a dead button.
+ */
+function approveUrlFor(id: string, baseUrl?: string): string | null {
+  const token = signApprovalToken(id);
+  if (!token) return null;
+  return `${resolveBaseUrl(baseUrl)}/approve?t=${encodeURIComponent(token)}`;
+}
+
+/** Internal heads-up for the GoXL team, with the Approve button. */
 export async function sendInternalNotificationEmail(
   registration: InternalNotification,
 ): Promise<boolean> {
-  const from = process.env.BETA_FROM_EMAIL;
-  const to = process.env.BETA_NOTIFY_EMAIL;
+  const from = fromAddress("internal notification email");
+  if (!from) return false;
+  const to = process.env.BETA_NOTIFY_EMAIL?.trim() || (devStoreEnabled() ? "team@localhost" : "");
   if (!to) return false;
-  if (!from) {
-    console.warn("[ally-beta] internal notification skipped: BETA_FROM_EMAIL is not configured");
-    return false;
-  }
 
   const rows: Array<[string, string]> = [
     ["Name", registration.name],
@@ -159,6 +211,14 @@ export async function sendInternalNotificationEmail(
     ["Registered At", registration.registeredAt.toISOString()],
     ["Source", registration.source],
   ];
+
+  const approveUrl = approveUrlFor(registration.id, registration.baseUrl);
+  const approveHtml = approveUrl
+    ? `<p style="margin:24px 0 0;">
+      <a href="${escapeHtml(approveUrl)}" style="display:inline-block;padding:12px 20px;background:#2fe3ac;color:#04120c;font-weight:700;border-radius:8px;text-decoration:none;">Approve &amp; send invite &rarr;</a>
+    </p>
+    <p style="margin:8px 0 0;font-size:12px;color:#6b736f;">Opens a confirmation page first &mdash; nothing happens until you confirm there.</p>`
+    : `<p style="margin:24px 0 0;font-size:13px;color:#b00020;">Approval link unavailable: APPROVAL_SECRET is not configured on the server.</p>`;
 
   const html = `<!doctype html>
 <html lang="en">
@@ -172,10 +232,17 @@ export async function sendInternalNotificationEmail(
         )
         .join("\n      ")}
     </table>
+    ${approveHtml}
   </body>
 </html>`;
 
-  const text = ["New Ally Early Access Registration", "", ...rows.map(([label, value]) => `${label}: ${value}`)].join("\n");
+  const text = [
+    "New Ally Early Access Registration",
+    "",
+    ...rows.map(([label, value]) => `${label}: ${value}`),
+    "",
+    approveUrl ? `Approve & send invite: ${approveUrl}` : "Approval link unavailable: APPROVAL_SECRET is not configured.",
+  ].join("\n");
 
   return send(
     {
@@ -188,4 +255,17 @@ export async function sendInternalNotificationEmail(
     },
     "internal notification email",
   );
+}
+
+/** "You're in" — sent once the team approves, carrying the platform sign-in link. */
+export async function sendBetaApprovalEmail(user: ApprovalRecipient): Promise<boolean> {
+  const from = fromAddress("approval email");
+  if (!from) return false;
+
+  const { subject, html, text } = renderBetaApprovalEmail({
+    name: user.name,
+    loginUrl: user.loginUrl,
+    baseUrl: user.baseUrl,
+  });
+  return send({ from, to: user.email, subject, html, text }, "approval email");
 }

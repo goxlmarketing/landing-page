@@ -9,7 +9,11 @@ function requestHost(request: Request) {
   return (forwarded || request.headers.get("host") || new URL(request.url).host).toLowerCase();
 }
 
-function isSameOriginRequest(request: Request) {
+/**
+ * True when the request plausibly came from a page on this site. Shared by
+ * every route that mutates state from a browser form.
+ */
+export function isSameOriginRequest(request: Request) {
   const fetchSite = request.headers.get("sec-fetch-site");
   if (fetchSite && fetchSite !== "same-origin" && fetchSite !== "none") return false;
 

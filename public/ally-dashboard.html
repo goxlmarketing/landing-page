@@ -887,6 +887,90 @@ a{color:inherit;text-decoration:none}
 .impact-c .ic-d{font-size:12.5px;line-height:1.5;color:#556458;margin-top:6px}
 .impact-c.you .ic-d{color:#b9c3bc}
 
+
+/* Visually hidden, still read aloud -- the FAQ search label. */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+/* ==================== HELP ASSISTANT (floating) ==================== */
+.hw{position:fixed;right:24px;bottom:24px;z-index:900;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.hw-fab{position:relative;width:56px;height:56px;border-radius:50%;border:1px solid rgba(52,211,153,.32);background:radial-gradient(circle at 30% 25%,#14392a 0%,#06140d 100%);color:#34d399;display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 22px -6px rgba(6,20,13,.55);transition:transform .2s cubic-bezier(.16,1,.3,1),box-shadow .2s,border-color .2s}
+.hw-fab svg{width:27px;height:27px}
+.hw-fab:hover{transform:translateY(-2px);border-color:rgba(52,211,153,.6);box-shadow:0 12px 28px -8px rgba(6,20,13,.65),0 0 0 6px rgba(52,211,153,.1)}
+.hw-fab:focus-visible{outline:2px solid #34d399;outline-offset:3px}
+.hw-fab-pulse{position:absolute;inset:-1px;border-radius:50%;border:1px solid rgba(52,211,153,.5);animation:hwPulse 3.6s cubic-bezier(.16,1,.3,1) infinite;pointer-events:none}
+@keyframes hwPulse{0%{opacity:.55;transform:scale(1)}45%,100%{opacity:0;transform:scale(1.45)}}
+.hw-panel{width:min(376px,calc(100vw - 32px));height:min(560px,calc(100dvh - 140px));display:flex;flex-direction:column;overflow:hidden;border:1px solid rgba(52,211,153,.2);border-radius:18px;background:radial-gradient(circle at top left,rgba(14,42,28,.97),rgba(6,20,13,.99));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 2px 6px -2px rgba(0,0,0,.4),0 24px 60px -20px rgba(0,0,0,.55);color:#eaf3ee;animation:hwRise .28s cubic-bezier(.16,1,.3,1)}
+@keyframes hwRise{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+.hw.is-full{inset:0;right:0;bottom:0;padding:24px;display:grid;place-items:center;z-index:950;pointer-events:none}
+.hw.is-full>*{pointer-events:auto}
+.hw-panel.is-full{width:min(880px,100%);height:min(880px,100%);border-radius:20px}
+.hw-backdrop{position:fixed;inset:0;z-index:940;background:rgba(6,20,13,.55);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.hw-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 12px 13px 14px;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0}
+.hw-head-id{display:flex;align-items:center;gap:10px;min-width:0}
+.hw-avatar{width:36px;height:36px;flex-shrink:0;display:grid;place-items:center;border-radius:11px;border:1px solid rgba(52,211,153,.28);background:rgba(52,211,153,.09);color:#34d399}
+.hw-avatar svg{width:21px;height:21px}
+.hw-title{font-size:14.5px;font-weight:700;color:#fff;line-height:1.25}
+.hw-sub{margin-top:1px;font-size:11.5px;color:#7d9488;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hw-head-actions{display:flex;gap:2px;flex-shrink:0}
+.hw-icon-btn{width:30px;height:30px;display:grid;place-items:center;border:0;border-radius:8px;background:transparent;color:#a7c0b4;cursor:pointer;transition:background .18s,color .18s}
+.hw-icon-btn svg{width:16px;height:16px}
+.hw-icon-btn:hover{background:rgba(255,255,255,.04);color:#eaf3ee}
+.hw-feed{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:14px;display:flex;flex-direction:column;gap:12px}
+.hw-msg{display:flex;gap:8px;align-items:flex-end;max-width:100%}
+.hw-msg.is-you{justify-content:flex-end}
+.hw-msg-avatar{width:26px;height:26px;flex-shrink:0;display:grid;place-items:center;border-radius:9px;border:1px solid rgba(52,211,153,.22);background:rgba(52,211,153,.08);color:#34d399;margin-bottom:1px}
+.hw-msg-avatar svg{width:16px;height:16px}
+.hw-bubble{max-width:84%;padding:10px 13px;border-radius:14px;font-size:13.2px;line-height:1.6}
+.hw-bubble p{margin:0}
+.hw-msg.is-bot .hw-bubble{border:1px solid rgba(255,255,255,.13);border-bottom-left-radius:5px;background:rgba(255,255,255,.04);color:#eaf3ee}
+.hw-msg.is-you .hw-bubble{border-bottom-right-radius:5px;background:#10B981;color:#06140d;font-weight:500}
+.hw-panel.is-full .hw-feed{padding:20px 22px;gap:14px}
+.hw-panel.is-full .hw-bubble{max-width:68%;font-size:13.8px}
+.hw-bubble-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.hw-bubble-actions button{padding:7px 12px;border:1px solid rgba(52,211,153,.3);border-radius:9px;background:rgba(52,211,153,.08);color:#34d399;font:inherit;font-size:12.3px;font-weight:600;cursor:pointer}
+.hw-bubble-actions button:hover{background:rgba(52,211,153,.16)}
+.hw-related{margin-top:11px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08)}
+.hw-related-lbl{display:block;margin-bottom:7px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#7d9488}
+.hw-starters{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px;padding-left:34px}
+.hw-chip{display:inline-block;margin:0 6px 6px 0;padding:7px 12px;border:1px solid rgba(255,255,255,.13);border-radius:999px;background:transparent;color:#a7c0b4;font:inherit;font-size:12.3px;line-height:1.35;text-align:left;cursor:pointer;transition:border-color .18s,color .18s,background .18s}
+.hw-chip:hover{border-color:rgba(52,211,153,.45);background:rgba(52,211,153,.07);color:#eaf3ee}
+.hw-starters .hw-chip{margin:0}
+.hw-typing{display:flex;gap:4px;align-items:center;padding:13px}
+.hw-typing i{width:6px;height:6px;border-radius:50%;background:#7d9488;animation:hwBlink 1.1s infinite}
+.hw-typing i:nth-child(2){animation-delay:.16s}
+.hw-typing i:nth-child(3){animation-delay:.32s}
+@keyframes hwBlink{0%,60%,100%{opacity:.28;transform:translateY(0)}30%{opacity:1;transform:translateY(-2px)}}
+.hw-ask{display:flex;align-items:center;gap:8px;margin:0 14px;padding:0 6px 0 13px;border:1px solid rgba(255,255,255,.13);border-radius:12px;background:rgba(255,255,255,.04);flex-shrink:0}
+.hw-ask:focus-within{border-color:rgba(52,211,153,.45)}
+.hw-ask input{flex:1;min-width:0;padding:11px 0;border:0;background:transparent;color:#eaf3ee;font:inherit;font-size:13.4px}
+.hw-ask input::placeholder{color:#7d9488}
+.hw-ask input:focus{outline:none}
+.hw-ask button{width:34px;height:34px;flex-shrink:0;display:grid;place-items:center;border:0;border-radius:9px;background:#10B981;color:#06140d;cursor:pointer}
+.hw-ask button svg{width:16px;height:16px}
+.hw-ask button:hover:not(:disabled){background:#34d399}
+.hw-ask button:disabled{opacity:.4;cursor:default}
+.hw-panel.is-full .hw-ask{margin:0 22px}
+.hw-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px 12px;flex-shrink:0}
+.hw-link{display:inline-flex;align-items:center;gap:6px;border:0;padding:0;background:none;color:#a7c0b4;font:inherit;font-size:12.2px;cursor:pointer;transition:color .18s}
+.hw-link svg{width:14px;height:14px}
+.hw-link:hover{color:#34d399}
+@media(max-width:560px){
+  .hw{right:16px;bottom:84px;left:16px}
+  .hw-panel{width:100%;height:calc(100dvh - 200px)}
+  .hw-fab{width:50px;height:50px}
+  .hw-fab svg{width:24px;height:24px}
+  .hw.is-full{padding:0}
+  .hw-panel.is-full{width:100%;height:100%;border-radius:0;border:0}
+  .hw-bubble{max-width:88%}
+  .hw-starters{padding-left:0}
+}
+@media (prefers-reduced-motion: reduce){
+  .hw-panel{animation:none}
+  .hw-fab-pulse{animation:none;opacity:0}
+  .hw-typing i{animation:none;opacity:.5}
+  .hw-fab,.hw-chip,.hw-icon-btn{transition:none}
+  .hw-fab:hover{transform:none}
+}
+
 /* ==================== BILLING ==================== */
 .bill-wrap{max-width:1160px;margin:0 auto}
 .pr-hero{text-align:center;max-width:720px;margin:4px auto 26px}
@@ -6590,6 +6674,7 @@ body.lp-done #landing-page { display:none; }
       <button class="nav-item" type="button" data-route="report" data-navitem><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6m-6 4h4"/></svg><span class="lbl">Report</span></button>
       <button class="nav-item" type="button" data-route="next-steps" data-navitem><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="lbl">Next steps</span></button>
       <button class="nav-item" type="button" data-route="plan" data-navitem><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span class="lbl">Plan Your Day</span></button>
+      <button class="nav-item" type="button" data-route="discovery-call" data-navitem><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="lbl">Discovery call</span></button>
     </div>
     <div>
       <div class="sb-group">KNOWLEDGE</div>
@@ -6606,9 +6691,9 @@ body.lp-done #landing-page { display:none; }
     </div>
   </nav>
   <div class="nav-upsell">
-    <div class="nu-t"><span>Ally Pro</span></div>
+    <div class="nu-t"><span>Ally Plus</span></div>
     <div class="nu-s">Unlock deeper diagnosis, unlimited chat and Founder MRI.</div>
-    <button class="nu-btn" type="button" data-toast="Plans open inside the full app — this is a sample account">
+    <button class="nu-btn" type="button" data-route="billing">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
       Upgrade plan
     </button>
@@ -6632,7 +6717,7 @@ body.lp-done #landing-page { display:none; }
       <h1 id="tb-h1"><span data-greet>Good morning</span>, Priya</h1>
     </div>
     <div class="tb-right">
-      <button class="tb-pill" type="button" data-toast="Plans open inside the full app — this is a sample account"><span class="tb-pill-dot"></span>Ally Pro</button>
+      <button class="tb-pill" type="button" data-route="billing"><span class="tb-pill-dot"></span>Ally Plus</button>
       <div style="position:relative">
         <button class="tb-icon" type="button" aria-label="Notifications, 1 unread" data-toast="Reminders live in Plan Your Day"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="n-badge" aria-hidden="true">1</span></button>
       </div>
@@ -7105,33 +7190,482 @@ body.lp-done #landing-page { display:none; }
     <div class="pr-field"><span class="pr-lbl">Monthly revenue</span><span class="pr-val">₹1L–5L</span></div>
     <div class="pr-field"><span class="pr-lbl">Biggest challenge</span><span class="pr-val">Sales · Getting customers</span></div>
   </div>
-</div></div><div class="view-page" data-view="help">
+</div></div><div class="view-page" data-view="discovery-call">
 <div class="dc-container" style="padding-bottom:80px">
+  <div class="dc-grid">
+
+    <div class="dc-info-card">
+      <div class="dc-info-badge">The next step in your clarity</div>
+      <h2 class="dc-info-title">Turn the diagnosis into a plan.</h2>
+      <p class="dc-info-desc">Ally found the root cause. This is where a GoXL advisor — who has already read your Founder Report — helps you act on it. Not a sales call. The next step in your clarity journey.</p>
+      <div class="dc-info-list">
+      <div class="dc-info-item">
+        <div class="dc-info-ic"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+        <div class="dc-info-text"><strong>30 focused minutes —</strong> with an advisor who has read your report before the call.</div>
+      </div>
+      <div class="dc-info-item">
+        <div class="dc-info-ic"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+        <div class="dc-info-text"><strong>Your root cause, pressure-tested —</strong> we challenge it with you, not at you.</div>
+      </div>
+      <div class="dc-info-item">
+        <div class="dc-info-ic"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+        <div class="dc-info-text"><strong>You leave with —</strong> a 90-day founder roadmap and one weekly north-star metric.</div>
+      </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="dc-picker-card">
+        <div>
+          <h3 class="dc-picker-title">Pick a time</h3>
+          <span class="dc-picker-sub">All times IST · 30 minutes</span>
+        </div>
+        <div class="dc-days-row" id="dc-days"></div>
+        <div class="dc-times-grid" id="dc-times"></div>
+        <button class="dc-confirm-btn" type="button" data-toast="Calls are booked inside the full app — this is a sample account">Confirm booking</button>
+      </div>
+
+      <div class="dc-booked" style="margin-top:16px">
+        <h3 class="dc-picker-title">Your calls</h3>
+        <div class="dc-booked-row">
+          <div class="dc-booked-when" id="dc-past-when"></div>
+          <div class="dc-booked-meta">Completed · 30 min · with Viraj</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+<div class="view-page" data-view="billing">
+<div class="bill-wrap">
+  <div class="pr-hero stagger d1">
+    <div class="pr-eye"><span class="lv"></span>Transparent Pricing</div>
+    <h2>Simple plans, <em>powerful</em> clarity</h2>
+    <p>Every plan includes the adaptive diagnosis and your Clarity Report. Upgrade for chat, planning and Ally's own recommendations.</p>
+  </div>
+
+  <div class="plans stagger d2">
+      <div class="plan-card">
+        
+        <div class="pc-name">Starter</div>
+        <div class="pc-tag">One adaptive diagnosis and your Clarity Report</div>
+        <div class="pc-price"><span class="cur">₹</span><span class="amt">199</span><span class="per">/mo</span></div>
+        <div class="pc-sub"><s>₹300</s> · billed monthly</div>
+        <button class="pc-cta primary" type="button" data-toast="Checkout opens inside the full app — this is a sample account">Start Starter</button>
+        <ul class="pc-feats">
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>One adaptive diagnosis</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Your Clarity Report</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Voice in Diagnosis</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Book a call · ₹300 / 30 min</li>
+        </ul>
+      </div>
+      <div class="plan-card">
+        
+        <div class="pc-name">Plus</div>
+        <div class="pc-tag">For founders working on the business weekly</div>
+        <div class="pc-price"><span class="cur">₹</span><span class="amt">450</span><span class="per">/mo</span></div>
+        <div class="pc-sub"><s>₹600</s> · billed monthly</div>
+        <button class="pc-cta" disabled>✓ Current Plan</button>
+        <ul class="pc-feats">
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>3,500 tokens per day</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Chat with Ally</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Voice in Ally Chat</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Your next 3 steps</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Goals</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Plan Your Day</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Book a call · ₹300 / 30 min</li>
+        </ul>
+      </div>
+      <div class="plan-card popular">
+        <div class="pc-ribbon">⭐ Most Popular</div>
+        <div class="pc-name">Pro</div>
+        <div class="pc-tag">Ally as your standing advisor</div>
+        <div class="pc-price"><span class="cur">₹</span><span class="amt">999</span><span class="per">/mo</span></div>
+        <div class="pc-sub"><s>₹1,200</s> · billed monthly</div>
+        <button class="pc-cta primary" type="button" data-toast="Checkout opens inside the full app — this is a sample account">Start Pro</button>
+        <ul class="pc-feats">
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>8,000 tokens per day</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Chat with Ally</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Voice in Ally Chat</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Your next 3 steps</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Goals</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Plan Your Day</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Ally recommends your steps</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Vision</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Discuss the knowledge base</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Email reminders from Ally</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Know My Energy</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Book a call · ₹300 / 30 min</li>
+          <li><span class="fk"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span>Priority call booking</li>
+        </ul>
+      </div>
+  </div>
+
+  <div class="pr-trust stagger d3">
+    <span><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Bank-grade encryption</span>
+    <span><svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Cancel anytime</span>
+    <span><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>100% data privacy</span>
+    <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Secure Razorpay checkout</span>
+  </div>
+
+  <div class="cmp-head stagger d4"><h2>Full feature comparison</h2></div>
+  <div class="cmp-scroll stagger d4">
+    <table class="cmp">
+      <thead>
+        <tr>
+          <th scope="col" style="text-align:left;padding:16px">Feature</th>
+          <th scope="col"><div class="cmp-pn">Starter</div><div class="cmp-pp">₹199/mo</div></th>
+          <th scope="col"><div class="cmp-pn">Plus</div><div class="cmp-pp">₹450/mo</div></th>
+          <th scope="col" class="cmp-col-pop"><div class="cmp-pn">Pro</div><div class="cmp-pp">₹999/mo</div></th>
+        </tr>
+      </thead>
+      <tbody>
+            <tr>
+              <td style="font-weight:600;color:#16241c;font-size:13px">Tokens per day</td>
+              <td>—</td>
+              <td>3,500</td>
+              <td class="cmp-col-pop">8,000</td>
+            </tr>
+            <tr style="background:rgba(6,20,13,.02)">
+              <td style="font-weight:600;color:#16241c;font-size:13px">Adaptive diagnosis</td>
+              <td><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+              <td><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+              <td class="cmp-col-pop"><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:600;color:#16241c;font-size:13px">Clarity Report</td>
+              <td><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+              <td><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+              <td class="cmp-col-pop"><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+            </tr>
+            <tr style="background:rgba(6,20,13,.02)">
+              <td style="font-weight:600;color:#16241c;font-size:13px">Voice in Diagnosis</td>
+              <td><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+              <td><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+              <td class="cmp-col-pop"><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:600;color:#16241c;font-size:13px">Chat with Ally</td>
+              <td><span class="cmp-no">—</span></td>
+              <td><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+              <td class="cmp-col-pop"><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+            </tr>
+            <tr style="background:rgba(6,20,13,.02)">
+              <td style="font-weight:600;color:#16241c;font-size:13px">Voice in Ally Chat</td>
+              <td><span class="cmp-no">—</span></td>
+              <td><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+              <td class="cmp-col-pop"><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:600;color:#16241c;font-size:13px">Next 3 Steps</td>
+              <td><span class="cmp-no">—</span></td>
+              <td><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+              <td class="cmp-col-pop"><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+            </tr>
+            <tr style="background:rgba(6,20,13,.02)">
+              <td style="font-weight:600;color:#16241c;font-size:13px">Goals</td>
+              <td><span class="cmp-no">—</span></td>
+              <td><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+              <td class="cmp-col-pop"><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:600;color:#16241c;font-size:13px">Plan Your Day</td>
+              <td><span class="cmp-no">—</span></td>
+              <td><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+              <td class="cmp-col-pop"><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+            </tr>
+            <tr style="background:rgba(6,20,13,.02)">
+              <td style="font-weight:600;color:#16241c;font-size:13px">Ally recommends your steps</td>
+              <td><span class="cmp-no">—</span></td>
+              <td><span class="cmp-no">—</span></td>
+              <td class="cmp-col-pop"><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:600;color:#16241c;font-size:13px">Vision</td>
+              <td><span class="cmp-no">—</span></td>
+              <td><span class="cmp-no">—</span></td>
+              <td class="cmp-col-pop"><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+            </tr>
+            <tr style="background:rgba(6,20,13,.02)">
+              <td style="font-weight:600;color:#16241c;font-size:13px">Discuss the knowledge base</td>
+              <td><span class="cmp-no">—</span></td>
+              <td><span class="cmp-no">—</span></td>
+              <td class="cmp-col-pop"><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:600;color:#16241c;font-size:13px">Email reminders from Ally</td>
+              <td><span class="cmp-no">—</span></td>
+              <td><span class="cmp-no">—</span></td>
+              <td class="cmp-col-pop"><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+            </tr>
+            <tr style="background:rgba(6,20,13,.02)">
+              <td style="font-weight:600;color:#16241c;font-size:13px">Know My Energy</td>
+              <td><span class="cmp-no">—</span></td>
+              <td><span class="cmp-no">—</span></td>
+              <td class="cmp-col-pop"><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:600;color:#16241c;font-size:13px">Book a discovery call</td>
+              <td><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+              <td><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+              <td class="cmp-col-pop"><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+            </tr>
+            <tr style="background:rgba(6,20,13,.02)">
+              <td style="font-weight:600;color:#16241c;font-size:13px">Call price</td>
+              <td>₹300 / 30 min</td>
+              <td>₹300 / 30 min</td>
+              <td class="cmp-col-pop">₹300 / 30 min</td>
+            </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+<div class="view-page" data-view="help">
+<div class="dc-container" style="padding-bottom:80px">
+
   <div class="hp-help-header stagger d1">
-    <div class="hp-header-icon"><svg class="" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><circle cx="12" cy="12" r="9"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg></div>
-    <h1 class="hp-help-title">We&rsquo;re here to help.</h1>
-    <p class="hp-help-subtitle">Answers to the common questions — and a straight line to a human when you need one.</p>
+    <div class="hp-header-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+    <h2 class="hp-help-title">Need help?</h2>
+    <p class="hp-help-subtitle">If you're facing any issue, our team is here to help. Search the answers below, or message us directly and we'll reply by email.</p>
   </div>
-  <div class="hp-card" style="margin-bottom:16px"><div class="hp-card-head"><h2>Common questions</h2></div>
-    <details style="padding:10px 0;border-bottom:1px solid var(--bd)"><summary style="cursor:pointer;font-weight:600">How does Ally choose my questions?</summary><p style="color:var(--muted);font-size:13.5px;margin:8px 0 0">Your stage selects the question bank; your answers and profile choose what comes next. Nothing is generated — every question was written by the GoXL team.</p></details>
-    <details style="padding:10px 0;border-bottom:1px solid var(--bd)"><summary style="cursor:pointer;font-weight:600">Can I redo my diagnosis?</summary><p style="color:var(--muted);font-size:13.5px;margin:8px 0 0">The free plan includes one full diagnosis. Your report, DNA pages and recommendations stay yours either way.</p></details>
-    <details style="padding:10px 0"><summary style="cursor:pointer;font-weight:600">Is my data private?</summary><p style="color:var(--muted);font-size:13.5px;margin:8px 0 0">Yes — your answers are yours, processed only to build your diagnosis, and deletable from the Privacy Center at any time.</p></details>
+
+  <div class="hp-grid stagger d2">
+    <div class="hp-card">
+      <div class="hp-card-head">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Contact Support
+      </div>
+      <div class="hp-contact-rows">
+        <div class="hp-contact-line">
+          <span class="hp-contact-lbl">Email</span>
+          <a href="mailto:info@goxl.in" class="hp-contact-val link">info@goxl.in</a>
+        </div>
+        <div class="hp-contact-line">
+          <span class="hp-contact-lbl">Hours</span>
+          <span class="hp-contact-val">Mon–Fri · 9 AM – 6 PM IST</span>
+        </div>
+      </div>
+      <div class="hp-contact-footer">We aim to reply within one working day.</div>
+    </div>
+
+    <div class="hp-card">
+      <div class="hp-card-head">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Quick Actions
+      </div>
+      <div class="hp-actions-grid">
+        <button class="hp-action-btn" type="button" data-route="feedback">
+          <span class="hp-action-ic"><svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg></span>
+          <span class="hp-action-lbl">Report a bug</span>
+        </button>
+        <button class="hp-action-btn" type="button" data-route="feedback">
+          <span class="hp-action-ic"><svg viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.465V19a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.535c0-.9.36-1.76.99-2.393l.553-.553z"/></svg></span>
+          <span class="hp-action-lbl">Request a feature</span>
+        </button>
+        <button class="hp-action-btn" type="button" data-toast="Support messages send from inside the full app — this is a sample account">
+          <span class="hp-action-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+          <span class="hp-action-lbl">Contact support</span>
+        </button>
+        <button class="hp-action-btn" type="button" data-toast="Discovery calls are booked inside the full app — this is a sample account">
+          <span class="hp-action-ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+          <span class="hp-action-lbl">Schedule assistance</span>
+        </button>
+        <button class="hp-action-btn" style="grid-column:1 / -1" type="button" data-faq-scroll>
+          <span class="hp-action-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+          <span class="hp-action-lbl">FAQs</span>
+        </button>
+      </div>
+    </div>
   </div>
-  <div class="hp-card"><div class="hp-card-head"><h2>Contact</h2></div>
-    <div class="hp-contact-line"><span class="hp-contact-lbl">Email</span><span class="hp-contact-val link">support@goxl.in</span></div>
-    <div class="hp-contact-line"><span class="hp-contact-lbl">Hours</span><span>Mon–Sat · 10:00–18:00 IST</span></div>
+
+  <h3 class="hp-faq-title-sec stagger d3" id="hp-faqs">Frequently asked questions</h3>
+
+  <div class="hp-faq-search stagger d3">
+    <label class="sr-only" for="hp-faq-search">Search the answers</label>
+    <input id="hp-faq-search" type="search" class="hp-faq-search-input" placeholder="Search the answers…">
   </div>
+
+  <div class="hp-faq-list stagger d3" id="hp-faq-list">
+    <p class="hp-faq-empty" id="hp-faq-empty" hidden>Nothing here matches that. Try fewer words, or message support above and a person will answer.</p>
+        <div class="hp-faq-row" data-faq>
+          <button class="hp-faq-trigger" type="button" id="faq-trigger-0" aria-expanded="false" aria-controls="faq-panel-0">
+            <span class="hp-faq-q">How do I start a diagnosis?</span>
+            <span class="hp-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="hp-faq-answer" id="faq-panel-0" role="region" aria-labelledby="faq-trigger-0" inert>
+            <div class="hp-faq-answer-inner">Open "Adaptive diagnosis" in the sidebar — or "Start Founder Diagnosis" on your Compass. Ally begins with Founder DNA (how you decide and work), then moves to your current problem, then the business itself.</div>
+          </div>
+        </div>
+        <div class="hp-faq-row" data-faq>
+          <button class="hp-faq-trigger" type="button" id="faq-trigger-1" aria-expanded="false" aria-controls="faq-panel-1">
+            <span class="hp-faq-q">How do plans work?</span>
+            <span class="hp-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="hp-faq-answer" id="faq-panel-1" role="region" aria-labelledby="faq-trigger-1" inert>
+            <div class="hp-faq-answer-inner">There are three: Starter (₹199/month), Plus (₹450/month) and Pro (₹999/month). All three include one adaptive diagnosis, your Clarity Report, voice in the diagnosis, and booking a discovery call at ₹300 per 30 minutes. Plus adds chat with Ally (3,500 tokens a day), voice in chat, your next 3 steps, Goals and Plan Your Day. Pro raises chat to 8,000 tokens a day and adds Ally recommending your steps, Vision, discussing the knowledge base, email reminders, Know My Energy and priority call booking.</div>
+          </div>
+        </div>
+        <div class="hp-faq-row" data-faq>
+          <button class="hp-faq-trigger" type="button" id="faq-trigger-2" aria-expanded="false" aria-controls="faq-panel-2">
+            <span class="hp-faq-q">How many diagnoses do I get?</span>
+            <span class="hp-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="hp-faq-answer" id="faq-panel-2" role="region" aria-labelledby="faq-trigger-2" inert>
+            <div class="hp-faq-answer-inner">One full diagnosis per account, on every plan including Pro — it is a deep one-time mapping, not something to re-run weekly. Upgrading raises your chat allowance and unlocks features, not the diagnosis count. If you genuinely need a second run, contact support and we will look at it case by case.</div>
+          </div>
+        </div>
+        <div class="hp-faq-row" data-faq>
+          <button class="hp-faq-trigger" type="button" id="faq-trigger-3" aria-expanded="false" aria-controls="faq-panel-3">
+            <span class="hp-faq-q">How do reminders work?</span>
+            <span class="hp-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="hp-faq-answer" id="faq-panel-3" role="region" aria-labelledby="faq-trigger-3" inert>
+            <div class="hp-faq-answer-inner">Tasks you set in Plan Your Day show up as "Next due", and Ally nudges you about anything overdue or due today while you are in the app. There are no push notifications or reminder emails yet, so Ally cannot reach you when the app is closed.</div>
+          </div>
+        </div>
+        <div class="hp-faq-row" data-faq>
+          <button class="hp-faq-trigger" type="button" id="faq-trigger-4" aria-expanded="false" aria-controls="faq-panel-4">
+            <span class="hp-faq-q">How do I upgrade?</span>
+            <span class="hp-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="hp-faq-answer" id="faq-panel-4" role="region" aria-labelledby="faq-trigger-4" inert>
+            <div class="hp-faq-answer-inner">Go to Profile, then the Subscription &amp; billing card, and click "Upgrade plan" — or open Plans &amp; billing from the plan pill at the top of any page.</div>
+          </div>
+        </div>
+        <div class="hp-faq-row" data-faq>
+          <button class="hp-faq-trigger" type="button" id="faq-trigger-5" aria-expanded="false" aria-controls="faq-panel-5">
+            <span class="hp-faq-q">Can I edit my Founder Profile?</span>
+            <span class="hp-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="hp-faq-answer" id="faq-panel-5" role="region" aria-labelledby="faq-trigger-5" inert>
+            <div class="hp-faq-answer-inner">Yes. Go to Profile, click "Edit" in the Founder Identity section, change your name, email or LinkedIn URL, and save.</div>
+          </div>
+        </div>
+        <div class="hp-faq-row" data-faq>
+          <button class="hp-faq-trigger" type="button" id="faq-trigger-6" aria-expanded="false" aria-controls="faq-panel-6">
+            <span class="hp-faq-q">Can I export or download my report?</span>
+            <span class="hp-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="hp-faq-answer" id="faq-panel-6" role="region" aria-labelledby="faq-trigger-6" inert>
+            <div class="hp-faq-answer-inner">Not yet from the report page — there is no download or share button there today. What you can do right now is export everything Ally holds about you, including your full diagnosis history, from Profile → Privacy Center → "Download my data". It arrives as a JSON file immediately.</div>
+          </div>
+        </div>
+        <div class="hp-faq-row" data-faq>
+          <button class="hp-faq-trigger" type="button" id="faq-trigger-7" aria-expanded="false" aria-controls="faq-panel-7">
+            <span class="hp-faq-q">What happens to my data, and can I delete it?</span>
+            <span class="hp-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="hp-faq-answer" id="faq-panel-7" role="region" aria-labelledby="faq-trigger-7" inert>
+            <div class="hp-faq-answer-inner">Profile → Privacy Center is the single place for this. You can download everything we hold, see a category-by-category summary, pause AI processing, withdraw consent, or request account deletion — which is scheduled with a 30-day recovery window before anything is permanently erased.</div>
+          </div>
+        </div>
+        <div class="hp-faq-row" data-faq>
+          <button class="hp-faq-trigger" type="button" id="faq-trigger-8" aria-expanded="false" aria-controls="faq-panel-8">
+            <span class="hp-faq-q">I forgot my password — how do I get back in?</span>
+            <span class="hp-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="hp-faq-answer" id="faq-panel-8" role="region" aria-labelledby="faq-trigger-8" inert>
+            <div class="hp-faq-answer-inner">On the sign-in page choose "Email me a code" and enter your email. Ally sends an 8-digit code; entering it lets you set a new password there and then. Your email address is your login — there is no separate username to remember.</div>
+          </div>
+        </div>
+        <div class="hp-faq-row" data-faq>
+          <button class="hp-faq-trigger" type="button" id="faq-trigger-9" aria-expanded="false" aria-controls="faq-panel-9">
+            <span class="hp-faq-q">The sign-in code hasn't arrived</span>
+            <span class="hp-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="hp-faq-answer" id="faq-panel-9" role="region" aria-labelledby="faq-trigger-9" inert>
+            <div class="hp-faq-answer-inner">Codes usually arrive within a minute. Check your spam or promotions folder first, and make sure you used the same address you registered with. A code expires after a few minutes, so if it has been a while, request a fresh one — the button re-enables after a short cooldown.</div>
+          </div>
+        </div>
+        <div class="hp-faq-row" data-faq>
+          <button class="hp-faq-trigger" type="button" id="faq-trigger-10" aria-expanded="false" aria-controls="faq-panel-10">
+            <span class="hp-faq-q">Ally stopped mid-diagnosis. Did I lose my answers?</span>
+            <span class="hp-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="hp-faq-answer" id="faq-panel-10" role="region" aria-labelledby="faq-trigger-10" inert>
+            <div class="hp-faq-answer-inner">No. Every answer is saved as you go, so closing the tab or losing connection does not lose your progress. Open "Adaptive diagnosis" again and you will be returned to where you stopped.</div>
+          </div>
+        </div>
+        <div class="hp-faq-row" data-faq>
+          <button class="hp-faq-trigger" type="button" id="faq-trigger-11" aria-expanded="false" aria-controls="faq-panel-11">
+            <span class="hp-faq-q">When is my report ready?</span>
+            <span class="hp-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="hp-faq-answer" id="faq-panel-11" role="region" aria-labelledby="faq-trigger-11" inert>
+            <div class="hp-faq-answer-inner">The report is written from your completed diagnosis, so it becomes available once the diagnosis is finished — not on a schedule. Until then the Report page tells you what is still missing. Generating it takes seconds, not days.</div>
+          </div>
+        </div>
+        <div class="hp-faq-row" data-faq>
+          <button class="hp-faq-trigger" type="button" id="faq-trigger-12" aria-expanded="false" aria-controls="faq-panel-12">
+            <span class="hp-faq-q">I have run out of chat for today</span>
+            <span class="hp-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="hp-faq-answer" id="faq-panel-12" role="region" aria-labelledby="faq-trigger-12" inert>
+            <div class="hp-faq-answer-inner">Chat is metered by a daily token allowance that resets each day, so waiting until tomorrow restores it — Plus gives 3,500 tokens a day and Pro 8,000. Upgrading raises the allowance; it does not change the diagnosis, which every plan includes once.</div>
+          </div>
+        </div>
+        <div class="hp-faq-row" data-faq>
+          <button class="hp-faq-trigger" type="button" id="faq-trigger-13" aria-expanded="false" aria-controls="faq-panel-13">
+            <span class="hp-faq-q">How do I cancel or get a refund?</span>
+            <span class="hp-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="hp-faq-answer" id="faq-panel-13" role="region" aria-labelledby="faq-trigger-13" inert>
+            <div class="hp-faq-answer-inner">There is no self-serve cancel button yet. Email info@goxl.in from the address on your account and we will handle the cancellation and any refund question directly.</div>
+          </div>
+        </div>
+        <div class="hp-faq-row" data-faq>
+          <button class="hp-faq-trigger" type="button" id="faq-trigger-14" aria-expanded="false" aria-controls="faq-panel-14">
+            <span class="hp-faq-q">Is my business information private?</span>
+            <span class="hp-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="hp-faq-answer" id="faq-panel-14" role="region" aria-labelledby="faq-trigger-14" inert>
+            <div class="hp-faq-answer-inner">Yes. What you tell Ally is yours: it is used to give you your diagnosis, report and recommendations, and is never sold or shared as a product. Profile → Privacy Center shows exactly what is held, lets you pause AI processing, and lets you export or delete it.</div>
+          </div>
+        </div>
+        <div class="hp-faq-row" data-faq>
+          <button class="hp-faq-trigger" type="button" id="faq-trigger-15" aria-expanded="false" aria-controls="faq-panel-15">
+            <span class="hp-faq-q">Can I talk to a person?</span>
+            <span class="hp-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="hp-faq-answer" id="faq-panel-15" role="region" aria-labelledby="faq-trigger-15" inert>
+            <div class="hp-faq-answer-inner">Yes. Use "Schedule assistance" on this page to book a discovery call — every plan can book one at ₹300 per 30 minutes, and Pro gets priority on slots — or email info@goxl.in and we will reply within one working day (Mon–Fri, 9 AM – 6 PM IST).</div>
+          </div>
+        </div>
+  </div>
+
+  <div class="hp-footer-card stagger d4">
+    <div class="hp-footer-info">
+      <h4 class="hp-footer-title">Still need help?</h4>
+      <p class="hp-footer-desc">Our founders' support team and Ally are one click away. Tell us what's happening and we'll get you unblocked.</p>
+    </div>
+    <div class="hp-footer-actions">
+      <button class="hp-footer-btn-green" type="button" data-toast="Support messages send from inside the full app — this is a sample account">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Message support
+      </button>
+      <button class="hp-footer-btn-ghost" type="button" data-route="ally-chat">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Talk to Ally
+      </button>
+    </div>
+  </div>
+
 </div></div>
       </main>
     </div>
   </div>
 </div>
 </div>
+<div class="hw" id="hw">
+  <button class="hw-fab" id="hw-fab" type="button" aria-expanded="false" aria-label="Help assistant"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" aria-hidden="true"><path d="M12 2.5v2.4"/><circle cx="12" cy="1.9" r="1.05" fill="currentColor" stroke="none"/><rect x="4" y="5" width="16" height="12.5" rx="4.5"/><rect x="6.9" y="8.2" width="10.2" height="5.4" rx="2.4" opacity=".45"/><circle cx="9.6" cy="10.9" r="1.15" fill="currentColor" stroke="none"/><circle cx="14.4" cy="10.9" r="1.15" fill="currentColor" stroke="none"/><path d="M4 9.6H2.4M20 9.6h1.6"/><path d="M7.5 17.5v1.2a2.5 2.5 0 0 0 2.5 2.5h4a2.5 2.5 0 0 0 2.5-2.5v-1.2"/></svg><span class="hw-fab-pulse" aria-hidden="true"></span></button>
+</div>
 <div class="demo-toast" id="toast"></div>
 
 <script>
 (function(){
-  var TITLES = {"compass":["Overview",null],"ally-chat":["Conversation",'Talk to Ally'],"founder-dna":["Founder first",'Founder DNA'],"business-dna":["Business",'Business DNA'],"diagnosis":["Diagnosis",'Adaptive diagnosis'],"vision":["Long-term",'Your Vision'],"journey":["Momentum",'Journey'],"achievements":["Milestones",'Your Achievements'],"goals":["Outcomes",'Goals'],"recommendations":["What to do next",'Recommendations'],"report":["Executive report",'Founder DNA Report'],"next-steps":["Momentum",'Your next steps'],"plan":["Today",'Plan Your Day'],"frameworks":["Thinking toolkit",'Frameworks'],"feedback":["Tell us what you think",'Send feedback'],"profile":["Founder identity",'Founder Profile'],"help":["We're here to help",'Help & Support']};
+  var TITLES = {"compass":["Overview",null],"ally-chat":["Conversation",'Talk to Ally'],"founder-dna":["Founder first",'Founder DNA'],"business-dna":["Business",'Business DNA'],"diagnosis":["Diagnosis",'Adaptive diagnosis'],"vision":["Long-term",'Your Vision'],"journey":["Momentum",'Journey'],"achievements":["Milestones",'Your Achievements'],"goals":["Outcomes",'Goals'],"recommendations":["What to do next",'Recommendations'],"report":["Executive report",'Founder DNA Report'],"next-steps":["Momentum",'Your next steps'],"plan":["Today",'Plan Your Day'],"discovery-call":["Talk to a human",'Discovery call'],"frameworks":["Thinking toolkit",'Frameworks'],"feedback":["Tell us what you think",'Send feedback'],"profile":["Founder identity",'Founder Profile'],"billing":["Plans & billing",'Plans & billing'],"help":["We're here to help",'Help & Support']};
   var greetEls = document.querySelectorAll('[data-greet]');
   function greeting(){ var h=new Date().getHours(); return h<12?'Good morning':h<17?'Good afternoon':'Good evening'; }
   greetEls.forEach(function(el){ el.textContent = greeting(); });
@@ -7297,6 +7831,275 @@ body.lp-done #landing-page { display:none; }
   });
 
   show(route());
+})();
+</script>
+<script>
+/* Help assistant — the same component the platform ships, as plain DOM.
+   It answers from the list below and nothing else: it is deliberately not
+   wired to a model, because chat there is metered against the founder's daily
+   token allowance and product questions should not spend it. */
+(function(){
+  var FAQS = [{"q":"How do I start a diagnosis?","a":"Open \"Adaptive diagnosis\" in the sidebar — or \"Start Founder Diagnosis\" on your Compass. Ally begins with Founder DNA (how you decide and work), then moves to your current problem, then the business itself.","k":"begin get started first steps new founder dna assessment"},{"q":"How do plans work?","a":"There are three: Starter (₹199/month), Plus (₹450/month) and Pro (₹999/month). All three include one adaptive diagnosis, your Clarity Report, voice in the diagnosis, and booking a discovery call at ₹300 per 30 minutes. Plus adds chat with Ally (3,500 tokens a day), voice in chat, your next 3 steps, Goals and Plan Your Day. Pro raises chat to 8,000 tokens a day and adds Ally recommending your steps, Vision, discussing the knowledge base, email reminders, Know My Energy and priority call booking.","k":"pricing price cost subscription tiers free starter pro difference compare billing"},{"q":"How many diagnoses do I get?","a":"One full diagnosis per account, on every plan including Pro — it is a deep one-time mapping, not something to re-run weekly. Upgrading raises your chat allowance and unlocks features, not the diagnosis count.","k":"again retake repeat second another limit once"},{"q":"How do reminders work?","a":"Tasks you set in Plan Your Day show up as \"Next due\", and Ally nudges you about anything overdue or due today while you are in the app. There are no push notifications or reminder emails yet.","k":"notification alert push email nudge due tasks plan day"},{"q":"How do I upgrade?","a":"Go to Profile, then the Subscription &amp; billing card, and click \"Upgrade plan\" — or open Plans &amp; billing from the plan pill at the top of any page.","k":"pay payment billing subscribe buy plan change"},{"q":"Can I edit my Founder Profile?","a":"Yes. Go to Profile, click \"Edit\" in the Founder Identity section, change your name, email or LinkedIn URL, and save.","k":"change name email linkedin details update identity"},{"q":"Can I export or download my report?","a":"Not yet from the report page. What you can do right now is export everything Ally holds about you, including your full diagnosis history, from Profile → Privacy Center → \"Download my data\".","k":"pdf save print share copy export download report"},{"q":"What happens to my data, and can I delete it?","a":"Profile → Privacy Center is the single place for this. You can download everything we hold, pause AI processing, withdraw consent, or request account deletion — scheduled with a 30-day recovery window.","k":"privacy security delete account remove gdpr consent stored"},{"q":"I forgot my password — how do I get back in?","a":"On the sign-in page choose \"Email me a code\" and enter your email. Ally sends an 8-digit code; entering it lets you set a new password there and then. Your email address is your login.","k":"reset forgot password locked out cannot sign in login recover"},{"q":"The sign-in code hasn't arrived","a":"Codes usually arrive within a minute. Check spam or promotions first, and make sure you used the address you registered with. A code expires after a few minutes, so request a fresh one if it has been a while.","k":"otp code email not received spam missing expired resend wait"},{"q":"Ally stopped mid-diagnosis. Did I lose my answers?","a":"No. Every answer is saved as you go, so closing the tab or losing connection does not lose your progress. Open \"Adaptive diagnosis\" again and you will be returned to where you stopped.","k":"crash refresh closed tab lost progress resume continue interrupted stuck"},{"q":"When is my report ready?","a":"The report is written from your completed diagnosis, so it becomes available once the diagnosis is finished — not on a schedule. Generating it takes seconds, not days.","k":"how long wait ready time report generate available"},{"q":"I have run out of chat for today","a":"Chat is metered by a daily token allowance that resets each day, so waiting until tomorrow restores it — Plus gives 3,500 tokens a day and Pro 8,000. Upgrading raises the allowance; it does not change the diagnosis, which every plan includes once.","k":"limit quota tokens allowance exhausted used up daily reset chat blocked"},{"q":"How do I cancel or get a refund?","a":"There is no self-serve cancel button yet. Email info@goxl.in from the address on your account and we will handle the cancellation and any refund question directly.","k":"stop billing unsubscribe money back downgrade cancel refund"},{"q":"Is my business information private?","a":"Yes. What you tell Ally is yours: it is used to give you your diagnosis, report and recommendations, and is never sold or shared as a product.","k":"confidential secure who can see shared sold safe private encryption"},{"q":"Can I talk to a person?","a":"Yes. Use \"Schedule assistance\" on the Help page to book a discovery call, or email info@goxl.in and we will reply within one working day (Mon–Fri, 9 AM – 6 PM IST).","k":"human call phone speak team contact support real person meeting"}];
+  var ROBOT = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"1em\" height=\"1em\" aria-hidden=\"true\"><path d=\"M12 2.5v2.4\"/><circle cx=\"12\" cy=\"1.9\" r=\"1.05\" fill=\"currentColor\" stroke=\"none\"/><rect x=\"4\" y=\"5\" width=\"16\" height=\"12.5\" rx=\"4.5\"/><rect x=\"6.9\" y=\"8.2\" width=\"10.2\" height=\"5.4\" rx=\"2.4\" opacity=\".45\"/><circle cx=\"9.6\" cy=\"10.9\" r=\"1.15\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"14.4\" cy=\"10.9\" r=\"1.15\" fill=\"currentColor\" stroke=\"none\"/><path d=\"M4 9.6H2.4M20 9.6h1.6\"/><path d=\"M7.5 17.5v1.2a2.5 2.5 0 0 0 2.5 2.5h4a2.5 2.5 0 0 0 2.5-2.5v-1.2\"/></svg>";
+  var STARTERS = ['How do I start a diagnosis?','How do plans work?','I forgot my password','Can I delete my data?'];
+  var GREETING = "Hi — I'm Ally's help assistant. Ask me about your account, plans, the diagnosis or your data, and I'll find the answer.";
+
+  var root = document.getElementById('hw'), fab = document.getElementById('hw-fab');
+  var panel = null, backdrop = null, full = false, timer = null;
+
+  /* Every word must match somewhere (AND, not OR); a question hit outranks a
+     keyword hit, which outranks a body hit. */
+  function search(query){
+    var words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    if(!words.length) return FAQS.slice();
+    return FAQS.map(function(f){
+      var q=f.q.toLowerCase(), k=f.k.toLowerCase(), a=f.a.toLowerCase(), score=0, ok=true;
+      words.forEach(function(w){
+        if(q.indexOf(w)>=0) score+=3;
+        else if(k.indexOf(w)>=0) score+=2;
+        else if(a.indexOf(w)>=0) score+=1;
+        else ok=false;
+      });
+      return ok ? {f:f,score:score} : null;
+    }).filter(Boolean).sort(function(x,y){return y.score-x.score;}).map(function(h){return h.f;});
+  }
+
+  function el(html){ var d=document.createElement('div'); d.innerHTML=html.trim(); return d.firstElementChild; }
+  function feed(){ return panel.querySelector('.hw-feed'); }
+  function scrollDown(){ var f=feed(); if(f) f.scrollTop=f.scrollHeight; }
+
+  function addMsg(from, text, opts){
+    opts = opts || {};
+    var row = el('<div class="hw-msg is-'+from+'"></div>');
+    if(from==='bot') row.appendChild(el('<span class="hw-msg-avatar" aria-hidden="true">'+ROBOT+'</span>'));
+    var bubble = el('<div class="hw-bubble"></div>');
+    var p = document.createElement('p'); p.textContent = text; bubble.appendChild(p);
+    if(opts.miss){
+      var acts = el('<div class="hw-bubble-actions"></div>');
+      var b1 = el('<button type="button">Open Help &amp; Support</button>');
+      b1.addEventListener('click', function(){ close(); location.hash='/help'; });
+      var b2 = el('<button type="button">Ask Ally</button>');
+      b2.addEventListener('click', function(){ close(); location.hash='/ally-chat'; });
+      acts.appendChild(b1); acts.appendChild(b2); bubble.appendChild(acts);
+    }
+    if(opts.related && opts.related.length){
+      var rel = el('<div class="hw-related"><span class="hw-related-lbl">Related</span></div>');
+      opts.related.forEach(function(q){
+        var c = el('<button class="hw-chip" type="button"></button>');
+        c.textContent = q;
+        c.addEventListener('click', function(){ ask(q); });
+        rel.appendChild(c);
+      });
+      bubble.appendChild(rel);
+    }
+    row.appendChild(bubble);
+    feed().appendChild(row);
+    scrollDown();
+  }
+
+  function ask(text){
+    text = (text||'').trim();
+    if(!text) return;
+    var starters = panel.querySelector('.hw-starters');
+    if(starters) starters.remove();
+    addMsg('you', text);
+    var typing = el('<div class="hw-msg is-bot"><span class="hw-msg-avatar" aria-hidden="true">'+ROBOT+'</span><div class="hw-bubble hw-typing" aria-label="Looking that up"><i></i><i></i><i></i></div></div>');
+    feed().appendChild(typing); scrollDown();
+    clearTimeout(timer);
+    timer = setTimeout(function(){
+      typing.remove();
+      var hits = search(text);
+      if(!hits.length){
+        addMsg('bot', "I don't have an answer for that one in the help guide. Open Help & Support to message the team — or ask Ally, if it's about your business rather than the product.", {miss:true});
+      } else {
+        addMsg('bot', hits[0].a, {related: hits.slice(1,3).map(function(f){return f.q;})});
+      }
+    }, 380);
+  }
+
+  function setFull(v){
+    full = v;
+    root.classList.toggle('is-full', full);
+    panel.classList.toggle('is-full', full);
+    fab.style.display = full ? 'none' : '';
+    if(full && !backdrop){
+      backdrop = el('<div class="hw-backdrop" aria-hidden="true"></div>');
+      backdrop.addEventListener('click', close);
+      document.body.appendChild(backdrop);
+      document.body.style.overflow = 'hidden';
+    } else if(!full && backdrop){
+      backdrop.remove(); backdrop = null; document.body.style.overflow = '';
+    }
+    var btn = panel.querySelector('.hw-expand');
+    btn.setAttribute('aria-label', full ? 'Exit full screen' : 'Open full screen');
+    btn.innerHTML = full
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>';
+    scrollDown();
+  }
+
+  function open(){
+    if(panel) return;
+    panel = el('<div class="hw-panel" role="dialog" aria-label="Help assistant">'
+      + '<div class="hw-head">'
+      +   '<div class="hw-head-id"><span class="hw-avatar" aria-hidden="true">'+ROBOT+'</span>'
+      +     '<div><div class="hw-title">Help assistant</div><div class="hw-sub">Answers from Ally\'s help guide · '+FAQS.length+' topics</div></div>'
+      +   '</div>'
+      +   '<div class="hw-head-actions">'
+      +     '<button class="hw-icon-btn hw-expand" type="button" aria-label="Open full screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button>'
+      +     '<button class="hw-icon-btn hw-close" type="button" aria-label="Close help"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>'
+      +   '</div>'
+      + '</div>'
+      + '<div class="hw-feed"></div>'
+      + '<form class="hw-ask"><input type="text" placeholder="Ask about your account, plans, data…" aria-label="Ask the help assistant"><button type="submit" aria-label="Send" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg></button></form>'
+      + '<div class="hw-foot"><button class="hw-link hw-help" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Message support</button><button class="hw-link hw-fullhelp" type="button">Full help page</button></div>'
+      + '</div>');
+    root.insertBefore(panel, fab);
+    fab.setAttribute('aria-expanded','true');
+    fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+
+    addMsg('bot', GREETING);
+    var starters = el('<div class="hw-starters"></div>');
+    STARTERS.forEach(function(s){
+      var c = el('<button class="hw-chip" type="button"></button>');
+      c.textContent = s;
+      c.addEventListener('click', function(){ ask(s); });
+      starters.appendChild(c);
+    });
+    feed().appendChild(starters);
+
+    var form = panel.querySelector('.hw-ask'), input = form.querySelector('input'), send = form.querySelector('button');
+    input.addEventListener('input', function(){ send.disabled = !input.value.trim(); });
+    form.addEventListener('submit', function(e){ e.preventDefault(); ask(input.value); input.value=''; send.disabled=true; });
+    panel.querySelector('.hw-close').addEventListener('click', close);
+    panel.querySelector('.hw-expand').addEventListener('click', function(){ setFull(!full); });
+    panel.querySelector('.hw-help').addEventListener('click', function(){ close(); location.hash='/help'; });
+    panel.querySelector('.hw-fullhelp').addEventListener('click', function(){ close(); location.hash='/help'; });
+    requestAnimationFrame(function(){ input.focus(); });
+  }
+
+  function close(){
+    if(!panel) return;
+    clearTimeout(timer);
+    if(full) setFull(false);
+    panel.remove(); panel = null;
+    fab.style.display = '';
+    fab.setAttribute('aria-expanded','false');
+    fab.innerHTML = ROBOT + '<span class="hw-fab-pulse" aria-hidden="true"></span>';
+  }
+
+  fab.addEventListener('click', function(){ panel ? close() : open(); });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key!=='Escape' || !panel) return;
+    if(full){ setFull(false); return; }   /* leave full screen before closing */
+    close(); fab.focus();
+  });
+
+  document.addEventListener('mousedown', function(e){
+    if(!panel || full) return;
+    if(!root.contains(e.target)) close();
+  });
+
+  /* Changing view closes it, so it never sits over the page it just opened. */
+  window.addEventListener('hashchange', close);
+})();
+</script>
+<script>
+/* Help view: FAQ accordion and search. Matches every word separately across
+   the question and its answer, so "delete my data" reaches the privacy answer
+   whose wording contains neither phrase. */
+(function(){
+  var list = document.getElementById('hp-faq-list');
+  if(!list) return;
+  var rows = [].slice.call(list.querySelectorAll('[data-faq]'));
+  var empty = document.getElementById('hp-faq-empty');
+  var search = document.getElementById('hp-faq-search');
+
+  function collapse(row){
+    row.classList.remove('open');
+    row.querySelector('.hp-faq-trigger').setAttribute('aria-expanded','false');
+    row.querySelector('.hp-faq-answer').setAttribute('inert','');
+  }
+
+  list.addEventListener('click', function(e){
+    var trigger = e.target.closest('.hp-faq-trigger');
+    if(!trigger) return;
+    var row = trigger.closest('[data-faq]');
+    var wasOpen = row.classList.contains('open');
+    rows.forEach(collapse);
+    if(!wasOpen){
+      row.classList.add('open');
+      trigger.setAttribute('aria-expanded','true');
+      row.querySelector('.hp-faq-answer').removeAttribute('inert');
+    }
+  });
+
+  search.addEventListener('input', function(){
+    var words = search.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    var shown = 0;
+    rows.forEach(function(row){
+      collapse(row);
+      var hay = row.textContent.toLowerCase();
+      var hit = words.every(function(w){ return hay.indexOf(w) >= 0; });
+      row.hidden = !hit;
+      if(hit) shown++;
+    });
+    empty.hidden = shown > 0;
+  });
+
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('[data-faq-scroll]')) return;
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.getElementById('hp-faqs').scrollIntoView({behavior: reduced ? 'auto' : 'smooth', block:'start'});
+  });
+})();
+</script>
+<script>
+/* Discovery call picker (sample). Dates are generated from today so the demo
+   never offers a slot in the past; nothing is actually booked. */
+(function(){
+  var daysEl = document.getElementById('dc-days'), timesEl = document.getElementById('dc-times');
+  if(!daysEl) return;
+
+  var TIMES = ['10:00 AM','11:30 AM','2:00 PM','3:30 PM','5:00 PM'];
+  var DAY = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  var days = [];
+  var d = new Date();
+  while(days.length < 5){
+    d.setDate(d.getDate() + 1);
+    if(d.getDay() === 0 || d.getDay() === 6) continue;   /* weekdays only */
+    days.push(new Date(d));
+  }
+
+  days.forEach(function(date, i){
+    var b = document.createElement('button');
+    b.className = 'dc-day-btn' + (i === 0 ? ' active' : '');
+    b.type = 'button';
+    b.innerHTML = '<span class="dc-day-lbl">' + DAY[date.getDay()] + '</span><span class="dc-day-val">' + date.getDate() + '</span>';
+    b.addEventListener('click', function(){
+      daysEl.querySelectorAll('.dc-day-btn').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      timesEl.querySelectorAll('.dc-time-btn').forEach(function(x){ x.classList.remove('active'); });
+    });
+    daysEl.appendChild(b);
+  });
+
+  TIMES.forEach(function(t, i){
+    var b = document.createElement('button');
+    b.className = 'dc-time-btn' + (i === 1 ? ' active' : '');
+    b.type = 'button';
+    b.textContent = t;
+    b.addEventListener('click', function(){
+      timesEl.querySelectorAll('.dc-time-btn').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+    });
+    timesEl.appendChild(b);
+  });
+
+  var past = new Date(); past.setDate(past.getDate() - 12);
+  document.getElementById('dc-past-when').textContent =
+    past.toLocaleDateString(undefined, {weekday:'long', day:'numeric', month:'long'}) + ' · 11:30 AM';
 })();
 </script>
 </body>
