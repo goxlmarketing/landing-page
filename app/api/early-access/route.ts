@@ -11,7 +11,13 @@ import { parseAttribution, type Attribution } from "../../lib/attribution";
 
 // Room for the attribution object (two touches, each with tags and click ids).
 const MAX_BODY_BYTES = 4_096;
-const RATE_LIMIT = 10;
+// Per client, per window. The client is the nearest IP plus the user agent,
+// not the IP alone: Indian mobile carriers put thousands of subscribers
+// behind one address, and on a launch day ten registrations from one such
+// address in ten minutes is a normal evening, not an attack. The real
+// protections against abuse are the honeypot, the unique email and the
+// fact that a registration costs the sender an inbox they control.
+const RATE_LIMIT = 20;
 const RATE_WINDOW_MS = 10 * 60 * 1_000;
 const MAX_RATE_BUCKETS = 5_000;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -76,7 +82,8 @@ function clientKey(request: Request) {
   const chain = request.headers.get("x-forwarded-for")?.split(",") ?? [];
   const nearest = chain.length ? chain[chain.length - 1]?.trim() : undefined;
   const realIp = request.headers.get("x-real-ip")?.trim();
-  return (nearest || realIp || "unknown").slice(0, 96);
+  const ua = (request.headers.get("user-agent") ?? "").slice(0, 80);
+  return ((nearest || realIp || "unknown").slice(0, 96) + "|" + ua).slice(0, 180);
 }
 
 function consumeRateLimit(request: Request) {
