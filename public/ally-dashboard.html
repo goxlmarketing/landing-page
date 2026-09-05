@@ -2661,9 +2661,11 @@ body.lp-done #landing-page { display:none; }
 .compass-ns-row dd{margin:0;font-size:13.5px;color:var(--ink)}
 .compass-gauge{display:grid;place-items:center;position:relative}
 .compass-gauge svg{width:100%;max-width:220px;height:auto}
-.compass-gauge-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
-.compass-gauge-center b{display:block;font-size:28px;font-weight:600;letter-spacing:-.03em;color:var(--forest-deep);font-variant-numeric:tabular-nums}
-.compass-gauge-center span{display:block;font-family:var(--body);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+/* The dial face. Quiet on purpose -- it is the surface the needle reads
+   against, not something to look at on its own. */
+.compass-rose path{fill:rgba(27,67,50,.13)}
+.compass-rose-minor path{fill:rgba(27,67,50,.07)}
+.compass-rose-letters text{font-family:var(--body);font-size:11px;font-weight:600;letter-spacing:.08em;fill:var(--muted);opacity:.55}
 @media(max-width:960px){.compass-northstar{grid-template-columns:1fr}.compass-gauge{order:-1}}
 
 /* Bottleneck */
@@ -6663,9 +6665,9 @@ body.lp-done #landing-page { display:none; }
     </div>
     <div>
       <div class="sb-group">FOUNDER DIAGNOSIS</div>
+      <button class="nav-item" type="button" data-route="diagnosis" data-navitem><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3m-3.5-7.5-2.1 2.1M7.6 16.4l-2.1 2.1m0-12.9 2.1 2.1m8.7 8.7 2.1 2.1"/></svg><span class="lbl">Adaptive diagnosis</span></button>
       <button class="nav-item" type="button" data-route="founder-dna" data-navitem><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span class="lbl">Founder DNA</span></button>
       <button class="nav-item" type="button" data-route="business-dna" data-navitem><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg><span class="lbl">Business DNA</span></button>
-      <button class="nav-item" type="button" data-route="diagnosis" data-navitem><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3m-3.5-7.5-2.1 2.1M7.6 16.4l-2.1 2.1m0-12.9 2.1 2.1m8.7 8.7 2.1 2.1"/></svg><span class="lbl">Adaptive diagnosis</span></button>
       <button class="nav-item" type="button" data-route="vision" data-navitem><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span class="lbl">Your Vision</span></button>
       <button class="nav-item locked" type="button" data-route="journey" data-navitem><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="lbl">Journey</span><svg class="nav-lock" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
       <button class="nav-item locked" type="button" data-route="achievements" data-navitem><svg class="ic" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg><span class="lbl">Your Achievements</span><svg class="nav-lock" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
@@ -6770,13 +6772,30 @@ body.lp-done #landing-page { display:none; }
     <circle cx="150" cy="150" r="96" fill="none" stroke="rgba(27,67,50,.07)" stroke-width="1"/>
     <circle cx="150" cy="150" r="118" fill="none" stroke="var(--emerald)" stroke-width="3" stroke-linecap="round"
       stroke-dasharray="741.42" stroke-dashoffset="430.02" transform="rotate(-90 150 150)"/>
+    <g class="compass-rose">
+      <path d="M150 104 L154 150 L146 150 Z"/>
+      <path d="M150 196 L154 150 L146 150 Z"/>
+      <path d="M196 150 L150 154 L150 146 Z"/>
+      <path d="M104 150 L150 154 L150 146 Z"/>
+      <g class="compass-rose-minor">
+        <path d="M171 129 L153 147 L147 153 Z"/>
+        <path d="M171 171 L153 153 L147 147 Z"/>
+        <path d="M129 171 L147 153 L153 147 Z"/>
+        <path d="M129 129 L147 147 L153 153 Z"/>
+      </g>
+      <g class="compass-rose-letters">
+        <text x="150" y="76" text-anchor="middle">N</text>
+        <text x="224" y="155" text-anchor="middle">E</text>
+        <text x="150" y="232" text-anchor="middle">S</text>
+        <text x="76" y="155" text-anchor="middle">W</text>
+      </g>
+    </g>
     <g style="transform-origin:150px 150px;transform:rotate(-14.4deg)">
       <path d="M150 62 L156 150 L150 160 L144 150 Z" fill="var(--forest)"/>
       <path d="M150 160 L156 150 L150 232 L144 150 Z" fill="rgba(27,67,50,.16)"/>
     </g>
     <circle cx="150" cy="150" r="6" fill="var(--ivory-2)" stroke="var(--forest)" stroke-width="1.5"/>
   </svg>
-  <figcaption class="compass-gauge-center"><b>42%</b><span>toward your target</span></figcaption>
 </figure>
       </div>
     </section>
@@ -7201,17 +7220,23 @@ body.lp-done #landing-page { display:none; }
       <div class="dc-info-list">
       <div class="dc-info-item">
         <div class="dc-info-ic"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
-        <div class="dc-info-text"><strong>30 focused minutes —</strong> with an advisor who has read your report before the call.</div>
+        <div class="dc-info-text"><strong>What happens —</strong> 30 focused minutes; your advisor arrives already briefed by Ally.</div>
       </div>
       <div class="dc-info-item">
         <div class="dc-info-ic"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
-        <div class="dc-info-text"><strong>Your root cause, pressure-tested —</strong> we challenge it with you, not at you.</div>
+        <div class="dc-info-text"><strong>Why it matters —</strong> a diagnosis only compounds once it becomes a sequenced plan.</div>
+      </div>
+      <div class="dc-info-item">
+        <div class="dc-info-ic"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+        <div class="dc-info-text"><strong>What you get —</strong> your root cause pressure-tested and 3 actions turned into moves.</div>
       </div>
       <div class="dc-info-item">
         <div class="dc-info-ic"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
         <div class="dc-info-text"><strong>You leave with —</strong> a 90-day founder roadmap and one weekly north-star metric.</div>
       </div>
       </div>
+    </div>
+    </div>
     </div>
 
     <div>
@@ -7417,6 +7442,12 @@ body.lp-done #landing-page { display:none; }
               <td>₹300 / 30 min</td>
               <td class="cmp-col-pop">₹300 / 30 min</td>
             </tr>
+            <tr>
+              <td style="font-weight:600;color:#16241c;font-size:13px">Priority call booking</td>
+              <td><span class="cmp-no">—</span></td>
+              <td><span class="cmp-no">—</span></td>
+              <td class="cmp-col-pop"><span class="cmp-yes"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="2 6 5 9 10 3"/></svg></span></td>
+            </tr>
       </tbody>
     </table>
   </div>
@@ -7545,11 +7576,11 @@ body.lp-done #landing-page { display:none; }
         </div>
         <div class="hp-faq-row" data-faq>
           <button class="hp-faq-trigger" type="button" id="faq-trigger-6" aria-expanded="false" aria-controls="faq-panel-6">
-            <span class="hp-faq-q">Can I export or download my report?</span>
+            <span class="hp-faq-q">Can I export, download or share my report?</span>
             <span class="hp-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
           </button>
           <div class="hp-faq-answer" id="faq-panel-6" role="region" aria-labelledby="faq-trigger-6" inert>
-            <div class="hp-faq-answer-inner">Not yet from the report page — there is no download or share button there today. What you can do right now is export everything Ally holds about you, including your full diagnosis history, from Profile → Privacy Center → "Download my data". It arrives as a JSON file immediately.</div>
+            <div class="hp-faq-answer-inner">Yes. The report page has a download button that gives you the report as a PDF, and a share button that creates a link anyone can open without signing in. Shared links are listed under &quot;Links you have shared&quot; on the same page, and you can revoke one there at any time. To export everything Ally holds about you — not just this report — use Profile → Privacy Center → &quot;Download my data&quot;, which arrives as a JSON file immediately.</div>
           </div>
         </div>
         <div class="hp-faq-row" data-faq>
@@ -7839,7 +7870,7 @@ body.lp-done #landing-page { display:none; }
    wired to a model, because chat there is metered against the founder's daily
    token allowance and product questions should not spend it. */
 (function(){
-  var FAQS = [{"q":"How do I start a diagnosis?","a":"Open \"Adaptive diagnosis\" in the sidebar — or \"Start Founder Diagnosis\" on your Compass. Ally begins with Founder DNA (how you decide and work), then moves to your current problem, then the business itself.","k":"begin get started first steps new founder dna assessment"},{"q":"How do plans work?","a":"There are three: Starter (₹199/month), Plus (₹450/month) and Pro (₹999/month). All three include one adaptive diagnosis, your Clarity Report, voice in the diagnosis, and booking a discovery call at ₹300 per 30 minutes. Plus adds chat with Ally (3,500 tokens a day), voice in chat, your next 3 steps, Goals and Plan Your Day. Pro raises chat to 8,000 tokens a day and adds Ally recommending your steps, Vision, discussing the knowledge base, email reminders, Know My Energy and priority call booking.","k":"pricing price cost subscription tiers free starter pro difference compare billing"},{"q":"How many diagnoses do I get?","a":"One full diagnosis per account, on every plan including Pro — it is a deep one-time mapping, not something to re-run weekly. Upgrading raises your chat allowance and unlocks features, not the diagnosis count.","k":"again retake repeat second another limit once"},{"q":"How do reminders work?","a":"Tasks you set in Plan Your Day show up as \"Next due\", and Ally nudges you about anything overdue or due today while you are in the app. There are no push notifications or reminder emails yet.","k":"notification alert push email nudge due tasks plan day"},{"q":"How do I upgrade?","a":"Go to Profile, then the Subscription &amp; billing card, and click \"Upgrade plan\" — or open Plans &amp; billing from the plan pill at the top of any page.","k":"pay payment billing subscribe buy plan change"},{"q":"Can I edit my Founder Profile?","a":"Yes. Go to Profile, click \"Edit\" in the Founder Identity section, change your name, email or LinkedIn URL, and save.","k":"change name email linkedin details update identity"},{"q":"Can I export or download my report?","a":"Not yet from the report page. What you can do right now is export everything Ally holds about you, including your full diagnosis history, from Profile → Privacy Center → \"Download my data\".","k":"pdf save print share copy export download report"},{"q":"What happens to my data, and can I delete it?","a":"Profile → Privacy Center is the single place for this. You can download everything we hold, pause AI processing, withdraw consent, or request account deletion — scheduled with a 30-day recovery window.","k":"privacy security delete account remove gdpr consent stored"},{"q":"I forgot my password — how do I get back in?","a":"On the sign-in page choose \"Email me a code\" and enter your email. Ally sends an 8-digit code; entering it lets you set a new password there and then. Your email address is your login.","k":"reset forgot password locked out cannot sign in login recover"},{"q":"The sign-in code hasn't arrived","a":"Codes usually arrive within a minute. Check spam or promotions first, and make sure you used the address you registered with. A code expires after a few minutes, so request a fresh one if it has been a while.","k":"otp code email not received spam missing expired resend wait"},{"q":"Ally stopped mid-diagnosis. Did I lose my answers?","a":"No. Every answer is saved as you go, so closing the tab or losing connection does not lose your progress. Open \"Adaptive diagnosis\" again and you will be returned to where you stopped.","k":"crash refresh closed tab lost progress resume continue interrupted stuck"},{"q":"When is my report ready?","a":"The report is written from your completed diagnosis, so it becomes available once the diagnosis is finished — not on a schedule. Generating it takes seconds, not days.","k":"how long wait ready time report generate available"},{"q":"I have run out of chat for today","a":"Chat is metered by a daily token allowance that resets each day, so waiting until tomorrow restores it — Plus gives 3,500 tokens a day and Pro 8,000. Upgrading raises the allowance; it does not change the diagnosis, which every plan includes once.","k":"limit quota tokens allowance exhausted used up daily reset chat blocked"},{"q":"How do I cancel or get a refund?","a":"There is no self-serve cancel button yet. Email info@goxl.in from the address on your account and we will handle the cancellation and any refund question directly.","k":"stop billing unsubscribe money back downgrade cancel refund"},{"q":"Is my business information private?","a":"Yes. What you tell Ally is yours: it is used to give you your diagnosis, report and recommendations, and is never sold or shared as a product.","k":"confidential secure who can see shared sold safe private encryption"},{"q":"Can I talk to a person?","a":"Yes. Use \"Schedule assistance\" on the Help page to book a discovery call, or email info@goxl.in and we will reply within one working day (Mon–Fri, 9 AM – 6 PM IST).","k":"human call phone speak team contact support real person meeting"}];
+  var FAQS = [{"q":"How do I start a diagnosis?","a":"Open \"Adaptive diagnosis\" in the sidebar — or \"Start Founder Diagnosis\" on your Compass. Ally begins with Founder DNA (how you decide and work), then moves to your current problem, then the business itself.","k":"begin get started first steps new founder dna assessment"},{"q":"How do plans work?","a":"There are three: Starter (₹199/month), Plus (₹450/month) and Pro (₹999/month). All three include one adaptive diagnosis, your Clarity Report, voice in the diagnosis, and booking a discovery call at ₹300 per 30 minutes. Plus adds chat with Ally (3,500 tokens a day), voice in chat, your next 3 steps, Goals and Plan Your Day. Pro raises chat to 8,000 tokens a day and adds Ally recommending your steps, Vision, discussing the knowledge base, email reminders, Know My Energy and priority call booking.","k":"pricing price cost subscription tiers free starter pro difference compare billing"},{"q":"How many diagnoses do I get?","a":"One full diagnosis per account, on every plan including Pro — it is a deep one-time mapping, not something to re-run weekly. Upgrading raises your chat allowance and unlocks features, not the diagnosis count.","k":"again retake repeat second another limit once"},{"q":"How do reminders work?","a":"Tasks you set in Plan Your Day show up as \"Next due\", and Ally nudges you about anything overdue or due today while you are in the app. There are no push notifications or reminder emails yet.","k":"notification alert push email nudge due tasks plan day"},{"q":"How do I upgrade?","a":"Go to Profile, then the Subscription & billing card, and click \"Upgrade plan\" — or open Plans & billing from the plan pill at the top of any page.","k":"pay payment billing subscribe buy plan change"},{"q":"Can I edit my Founder Profile?","a":"Yes. Go to Profile, click \"Edit\" in the Founder Identity section, change your name, email or LinkedIn URL, and save.","k":"change name email linkedin details update identity"},{"q":"Can I export, download or share my report?","a":"Yes. The report page has a download button that gives you the report as a PDF, and a share button that creates a link anyone can open without signing in. Shared links are listed under \"Links you have shared\" on the same page, and you can revoke one there at any time. To export everything Ally holds about you — not just this report — use Profile → Privacy Center → \"Download my data\", which arrives as a JSON file immediately.","k":"pdf save print share copy export download report"},{"q":"What happens to my data, and can I delete it?","a":"Profile → Privacy Center is the single place for this. You can download everything we hold, pause AI processing, withdraw consent, or request account deletion — scheduled with a 30-day recovery window.","k":"privacy security delete account remove gdpr consent stored"},{"q":"I forgot my password — how do I get back in?","a":"On the sign-in page choose \"Email me a code\" and enter your email. Ally sends an 8-digit code; entering it lets you set a new password there and then. Your email address is your login.","k":"reset forgot password locked out cannot sign in login recover"},{"q":"The sign-in code hasn't arrived","a":"Codes usually arrive within a minute. Check spam or promotions first, and make sure you used the address you registered with. A code expires after a few minutes, so request a fresh one if it has been a while.","k":"otp code email not received spam missing expired resend wait"},{"q":"Ally stopped mid-diagnosis. Did I lose my answers?","a":"No. Every answer is saved as you go, so closing the tab or losing connection does not lose your progress. Open \"Adaptive diagnosis\" again and you will be returned to where you stopped.","k":"crash refresh closed tab lost progress resume continue interrupted stuck"},{"q":"When is my report ready?","a":"The report is written from your completed diagnosis, so it becomes available once the diagnosis is finished — not on a schedule. Generating it takes seconds, not days.","k":"how long wait ready time report generate available"},{"q":"I have run out of chat for today","a":"Chat is metered by a daily token allowance that resets each day, so waiting until tomorrow restores it — Plus gives 3,500 tokens a day and Pro 8,000. Upgrading raises the allowance; it does not change the diagnosis, which every plan includes once.","k":"limit quota tokens allowance exhausted used up daily reset chat blocked"},{"q":"How do I cancel or get a refund?","a":"There is no self-serve cancel button yet. Email info@goxl.in from the address on your account and we will handle the cancellation and any refund question directly.","k":"stop billing unsubscribe money back downgrade cancel refund"},{"q":"Is my business information private?","a":"Yes. What you tell Ally is yours: it is used to give you your diagnosis, report and recommendations, and is never sold or shared as a product.","k":"confidential secure who can see shared sold safe private encryption"},{"q":"Can I talk to a person?","a":"Yes. Use \"Schedule assistance\" on the Help page to book a discovery call, or email info@goxl.in and we will reply within one working day (Mon–Fri, 9 AM – 6 PM IST).","k":"human call phone speak team contact support real person meeting"}];
   var ROBOT = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"1em\" height=\"1em\" aria-hidden=\"true\"><path d=\"M12 2.5v2.4\"/><circle cx=\"12\" cy=\"1.9\" r=\"1.05\" fill=\"currentColor\" stroke=\"none\"/><rect x=\"4\" y=\"5\" width=\"16\" height=\"12.5\" rx=\"4.5\"/><rect x=\"6.9\" y=\"8.2\" width=\"10.2\" height=\"5.4\" rx=\"2.4\" opacity=\".45\"/><circle cx=\"9.6\" cy=\"10.9\" r=\"1.15\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"14.4\" cy=\"10.9\" r=\"1.15\" fill=\"currentColor\" stroke=\"none\"/><path d=\"M4 9.6H2.4M20 9.6h1.6\"/><path d=\"M7.5 17.5v1.2a2.5 2.5 0 0 0 2.5 2.5h4a2.5 2.5 0 0 0 2.5-2.5v-1.2\"/></svg>";
   var STARTERS = ['How do I start a diagnosis?','How do plans work?','I forgot my password','Can I delete my data?'];
   var GREETING = "Hi — I'm Ally's help assistant. Ask me about your account, plans, the diagnosis or your data, and I'll find the answer.";
