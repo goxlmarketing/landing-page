@@ -1347,6 +1347,52 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 /* honeypot: off-screen, unreachable, not announced */
 .ea-hp{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
 
+/* ---- the early-access dialog. Hidden until opened; the card inside is
+   the same one that used to sit at the end of the page. ---- */
+.ea-modal{
+  position:fixed; inset:0; z-index:90; display:none;
+  align-items:center; justify-content:center; padding:24px 16px;
+  background:rgba(6,20,13,.55);
+  -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px);
+}
+.ea-modal.is-open{ display:flex; }
+/* the help robot would sit on top of the phone sheet; it waits outside */
+html.ea-open .hw{ display:none; }
+.ea-modal-box{
+  position:relative; width:min(540px, 100%);
+  max-height:calc(100dvh - 48px); overflow:auto; overscroll-behavior:contain;
+  background:#fff; border:1px solid var(--bd); border-radius:var(--r-card);
+  box-shadow:0 30px 80px -30px rgba(6,20,13,.6);
+  padding:28px 28px 26px;
+  animation:eaIn .32s cubic-bezier(.22,1,.36,1);
+}
+.ea-modal h2{
+  font-family:var(--serif); font-weight:500;
+  font-size:clamp(25px, 3vw, 31px); line-height:1.12; letter-spacing:-.015em;
+  margin:6px 44px 6px 0;
+}
+.ea-modal h2 em{ color:var(--emerald); }
+.ea-modal-sub{ margin:0 0 20px; font-size:14px; line-height:1.6; color:var(--muted); }
+.ea-modal-x{
+  position:absolute; top:14px; right:14px; width:36px; height:36px;
+  display:grid; place-items:center; border-radius:50%;
+  border:1px solid var(--bd); background:#fff; color:var(--muted);
+  font-size:22px; line-height:1; cursor:pointer;
+}
+.ea-modal-x:hover{ color:var(--forest); border-color:var(--bd-2); }
+.ea-modal .ea-card{ padding:0; border:0; box-shadow:none; }
+.ea-promise{
+  display:flex; align-items:flex-start; gap:8px; margin:18px 0 0;
+  font-size:12.5px; line-height:1.5; color:var(--muted-2);
+}
+.ea-promise svg{ width:15px; height:15px; flex:0 0 auto; margin-top:1px; fill:none; stroke:var(--emerald); stroke-width:1.8; }
+@keyframes eaIn{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
+@media (max-width:560px){
+  .ea-modal{ padding:0; align-items:flex-end; }
+  .ea-modal-box{ max-height:calc(100dvh - 20px); border-radius:var(--r-card) var(--r-card) 0 0; padding:22px 18px 28px; }
+}
+@media (prefers-reduced-motion:reduce){ .ea-modal-box{ animation:none; } }
+
 .footer{
   border-top:1px solid var(--bd);
   padding:30px 0 44px;
@@ -2125,14 +2171,16 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 </section>
 
 <!-- ================= CTA + EARLY ACCESS ================= -->
-<section class="cta" id="early-access">
-  <div class="shell cta-grid">
-    <div>
-      <p class="eyebrow">The Founder&rsquo;s Compass</p>
-      <h2>You already have a journey. <em>Now understand where it should go next.</em></h2>
-      <p class="cta-sub">Start by understanding where you are today.</p>
-      <p class="cta-tag"><b>Our promise</b>Your data is encrypted, private and accessible only to you.</p>
-    </div>
+<!-- ================= EARLY ACCESS (dialog) =================
+     Opened by every "#early-access" link on the site and by arriving at
+     /#early-access. Not a section of the page: a visitor reads the page,
+     then decides; the form should not be the thing they scroll into. -->
+<div class="ea-modal" id="early-access" role="dialog" aria-modal="true" aria-labelledby="eaTitle" aria-hidden="true">
+  <div class="ea-modal-box">
+    <button class="ea-modal-x" type="button" id="eaClose" aria-label="Close">&times;</button>
+    <p class="eyebrow">The Founder&rsquo;s Compass</p>
+    <h2 id="eaTitle">Start your <em>founder journey.</em></h2>
+    <p class="ea-modal-sub" id="eaSub">Register once. We set up your Ally account and email you a sign-in link.</p>
 
     <div class="ea-card">
       <form class="ea-form" id="earlyAccessForm" novalidate>
@@ -2173,8 +2221,10 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
         <p class="ea-done__sub" id="eaAnotherWrap"><a href="#early-access" id="eaAnother">Register a different email</a></p>
       </div>
     </div>
+
+    <p class="ea-promise"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Your data is encrypted, private and accessible only to you.</p>
   </div>
-</section>
+</div>
 
 </main>
 
@@ -2667,6 +2717,71 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   function showDone(){ form.hidden = true; done.hidden = false; }
   function showForm(){ form.hidden = false; done.hidden = true; }
 
+  /* The dialog. One opener for the whole site: every "#early-access" link,
+     the CTAs, the help assistant's "Register" buttons and a /#early-access
+     arrival all end up here. Focus goes to the first field when the form is
+     showing and to the close button otherwise, and returns to whatever
+     opened it when it closes. */
+  var modal = document.getElementById('early-access');
+  var modalBox = modal && modal.querySelector('.ea-modal-box');
+  var closeBtn = document.getElementById('eaClose');
+  var titleEl = document.getElementById('eaTitle');
+  var subEl = document.getElementById('eaSub');
+  var TITLE_NEW = titleEl ? titleEl.innerHTML : '';
+  var opener = null;
+  function modalOpen(){ return !!(modal && modal.classList.contains('is-open')); }
+  function openAccess(from){
+    if(!modal) return;
+    if(!modalOpen()){
+      opener = from || document.activeElement;
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.documentElement.classList.add('viewer-lock', 'ea-open');
+      document.body.classList.add('viewer-lock');
+      document.addEventListener('keydown', onModalKey, true);
+      if(modalBox) modalBox.scrollTop = 0;
+    }
+    var target = (form && !form.hidden) ? nameEl : closeBtn;
+    setTimeout(function(){ if(target) target.focus({ preventScroll: true }); }, 0);
+  }
+  function closeAccess(){
+    if(!modalOpen()) return;
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.documentElement.classList.remove('viewer-lock', 'ea-open');
+    document.body.classList.remove('viewer-lock');
+    document.removeEventListener('keydown', onModalKey, true);
+    if(location.hash === '#early-access'){
+      try{ history.replaceState(null, '', location.pathname + location.search); }catch(_){}
+    }
+    if(opener && opener.focus && document.contains(opener)) opener.focus();
+    opener = null;
+  }
+  function onModalKey(e){ if(e.key === 'Escape'){ e.preventDefault(); closeAccess(); } }
+  if(modal){
+    modal.addEventListener('click', function(e){ if(e.target === modal) closeAccess(); });
+    if(closeBtn) closeBtn.addEventListener('click', closeAccess);
+  }
+  /* Any link to #early-access, anywhere on the page, opens the dialog
+     instead of jumping to it. */
+  document.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a[href]') : null;
+    if(!a || a.getAttribute('href') !== '#early-access') return;
+    e.preventDefault();
+    openAccess(a);
+  });
+  window.allyOpenAccess = function(){ openAccess(); };
+  /* The dialog's heading follows the state, so someone re-checking their
+     place in line is not greeted with "Start your founder journey". */
+  function setHeading(state){
+    if(!titleEl) return;
+    if(state === 'new'){ titleEl.innerHTML = TITLE_NEW; if(subEl) subEl.hidden = false; return; }
+    if(subEl) subEl.hidden = true;
+    titleEl.textContent = state === 'waiting' ? 'You’re on the list.'
+      : state === 'approved' ? 'You’re in.'
+      : 'Welcome back.';
+  }
+
   function setCta(el, label, href){
     if(!el) return;
     el.textContent = '';
@@ -2704,6 +2819,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 
   function render(state, extra){
     current = { state: state, loginUrl: (extra && extra.loginUrl) || '' };
+    setHeading(state);
     if(state === 'new'){
       setCta(heroCta, 'Start your founder journey', '#early-access');
       setCta(navCta, 'Sign up', '#early-access');
@@ -2776,13 +2892,19 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
     checkStatus(storedId()).then(function(r){
       render(r.state, r);
       if(r.state === 'approved' && current.loginUrl){ window.location.href = current.loginUrl; return; }
-      var section = document.getElementById('early-access');
-      if(section) section.scrollIntoView({ behavior: 'smooth' });
+      openAccess();
     });
   }
   [heroCta, navCta, menuCta].forEach(function(el){ if(el) el.addEventListener('click', onCtaClick); });
 
   resolveAndRender();
+
+  /* Arriving with the hash -- the pricing page's plan buttons, the story
+     page, the help assistant, an old /signup.html link -- opens the dialog.
+     Only ever after the state is known, so the right face shows. */
+  function openIfHashed(){ if(location.hash === '#early-access') openAccess(); }
+  openIfHashed();
+  window.addEventListener('hashchange', openIfHashed);
 
   function linkedinLooksValid(value){
     var raw = value.trim();
@@ -2910,7 +3032,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
     if(opts.miss){
       var acts = el('<div class="hw-bubble-actions"></div>');
       var b1 = el('<button type="button">Register for access</button>');
-      b1.addEventListener('click', function(){ close(); location.hash='#early-access'; var sec=document.getElementById('early-access'); if(sec) sec.scrollIntoView({behavior:'smooth'}); });
+      b1.addEventListener('click', function(){ close(); if(window.allyOpenAccess) window.allyOpenAccess(); else location.hash='#early-access'; });
       var b2 = el('<button type="button">Email us</button>');
       b2.addEventListener('click', function(){ location.href='mailto:info@goxl.in?subject=Question%20about%20GoXL%20Ally'; });
       acts.appendChild(b1); acts.appendChild(b2); bubble.appendChild(acts);
@@ -3008,8 +3130,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
     panel.querySelector('.hw-expand').addEventListener('click', function(){ setFull(!full); });
     panel.querySelector('.hw-register').addEventListener('click', function(){
       close();
-      var sec = document.getElementById('early-access');
-      if(sec) sec.scrollIntoView({behavior:'smooth'});
+      if(window.allyOpenAccess) window.allyOpenAccess(); else location.hash='#early-access';
     });
     requestAnimationFrame(function(){ input.focus(); });
   }
