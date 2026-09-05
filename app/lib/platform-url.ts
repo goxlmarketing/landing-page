@@ -8,7 +8,9 @@
  * can be clicked through end to end on one machine.
  */
 
-const PRODUCTION_PLATFORM_URL = "https://goxlally.ai";
+/* www.goxlally.ai is this site; the platform sits on its own subdomain, which
+   founders reach only from a sign-in link or "Go to my dashboard". */
+const PRODUCTION_PLATFORM_URL = "https://app.goxlally.ai";
 const DEV_PLATFORM_URL = "http://localhost:5173";
 
 export function resolvePlatformUrl(): string {

@@ -1321,6 +1321,11 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   padding:26px;
 }
 .ea-form{ display:grid; gap:14px; }
+/* The `hidden` attribute only wins by default against elements with no display
+   rule of their own. `.ea-form` (grid) and `.btn` (inline-flex) both have one,
+   so `form.hidden = true` after registering left the form on screen with the
+   "you're on the approval list" message tacked underneath. Settle it once. */
+[hidden]{ display:none !important; }
 .ea-form label{ display:grid; gap:6px; font-size:12.5px; font-weight:600; color:var(--ink); }
 .ea-opt{ color:var(--muted-2); font-weight:500; }
 .ea-form input[type="text"],
