@@ -1,0 +1,37 @@
+# GoXL Ally
+
+> GoXL Ally is an AI "Founder's Compass" for entrepreneurs, made by GoXL Entrepreneurship (India). It runs an adaptive diagnosis of the founder, the business and the current situation, writes a Clarity Report that names the root constraint, and then helps the founder decide and act on what to do next.
+
+## What it does
+
+- Adaptive diagnosis: about 20 minutes of questions on how the founder decides and works, the current problem, and the business itself.
+- Clarity Report: generated in seconds when the diagnosis finishes; names the root cause rather than the symptom.
+- Talk to Ally: ongoing chat, with voice, that already knows the founder's context.
+- Next 3 steps, Goals, Plan Your Day: turns the diagnosis into a sequence of actions and a daily habit.
+- Discovery call: 30 minutes with a GoXL advisor who has read the report, ₹300 on any plan.
+
+## Who it is for
+
+Founders running a real business who know something is off but not what. Most useful once there are customers and momentum and the question is where to put the next month of effort.
+
+## Plans (INR)
+
+- Starter: ₹199 one-time payment. One adaptive diagnosis and your Clarity Report
+- Plus: ₹450 per month. For founders working on the business weekly
+- Pro: ₹999 per month. Ally as your standing advisor
+
+## How to get access
+
+Register at https://www.goxlally.ai/ (name and email). Access opens in batches: the first registrations are let in immediately, later ones join a queue and are told their place in line, and everyone gets an email with a sign-in link when their place opens. The product itself is at https://app.goxlally.ai/ and is only for founders who have been let in.
+
+## Pages
+
+- [Home](https://www.goxlally.ai/): what Ally is and how it thinks
+- [Pricing](https://www.goxlally.ai/pricing.html): the three plans and a full feature comparison
+- [Our Story](https://www.goxlally.ai/about.html): why GoXL built Ally
+- [Privacy](https://www.goxlally.ai/privacy.html)
+- [Terms](https://www.goxlally.ai/terms.html)
+
+## Contact
+
+info@goxl.in · Instagram @goxl_ally · LinkedIn: goxl-ally-ai
