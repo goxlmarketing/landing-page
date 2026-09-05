@@ -77,10 +77,14 @@ const nextConfig: NextConfig = {
         destination: "/#early-access",
         permanent: false,
       },
+      // Earlier builds of the landing page. A redirect beats serving them with
+      // noindex: robots.txt disallows them, and a crawler that obeys it never
+      // fetches the page, so it never sees the noindex either. Permanent, so
+      // any link equity moves to the page that replaced them.
       {
-        source: "/ally-landing.original.html",
+        source: "/:old(ally-landing|ally-landing-v1-backup|ally-landing.original).html",
         destination: "/",
-        permanent: false,
+        permanent: true,
       },
     ];
   },
