@@ -3,12 +3,14 @@ import {
   findBetaUserByEmail, findBetaUserById, getCapacity, insertBetaUser, positionOf,
 } from "../../lib/db";
 import { sendBetaConfirmationEmail, sendInternalNotificationEmail } from "../../lib/email";
+import { parseAttribution, type Attribution } from "../../lib/attribution";
 
 // Note on Next.js 16: `nodejs` is already the default runtime and the docs
 // direct you to remove the `runtime` export (the Edge runtime is deprecated).
 // POST handlers are never cached, so no `dynamic` export is needed either.
 
-const MAX_BODY_BYTES = 2_048;
+// Room for the attribution object (two touches, each with tags and click ids).
+const MAX_BODY_BYTES = 4_096;
 const RATE_LIMIT = 10;
 const RATE_WINDOW_MS = 10 * 60 * 1_000;
 const MAX_RATE_BUCKETS = 5_000;
@@ -171,6 +173,7 @@ export async function POST(request: Request) {
   let email: string;
   let phone: string | null;
   let linkedinUrl: string | null;
+  let attribution: Attribution | null;
   let source: string;
 
   try {
@@ -188,6 +191,7 @@ export async function POST(request: Request) {
       marketingConsent?: unknown;
       policyVersion?: unknown;
       company?: unknown;
+      attribution?: unknown;
     };
     try {
       body = JSON.parse(raw) as typeof body;
@@ -212,6 +216,8 @@ export async function POST(request: Request) {
     const termsAccepted = body?.termsAccepted === true;
     const marketingConsent = body?.marketingConsent === true;
     const policyVersion = String(body?.policyVersion || "").trim().slice(0, 32);
+    // Validated, capped and stripped of anything personal; null for a direct visit.
+    attribution = parseAttribution(body?.attribution);
 
     if (name.length < 2 || name.length > NAME_MAX) {
       return json({ ok: false, error: "Enter your full name" }, 400);
@@ -248,7 +254,7 @@ export async function POST(request: Request) {
   // committed registration into a user-visible failure.
   let registration: Awaited<ReturnType<typeof insertBetaUser>>;
   try {
-    registration = await insertBetaUser({ name, email, phone, linkedinUrl, source });
+    registration = await insertBetaUser({ name, email, phone, linkedinUrl, source, attribution });
   } catch (error) {
     console.error("[ally-beta] registration insert failed", error);
     return json({ ok: false, error: GENERIC_ERROR }, 500);
@@ -338,6 +344,7 @@ export async function POST(request: Request) {
       email,
       phone,
       linkedinUrl,
+      attribution,
       registeredAt: registration.createdAt,
       source,
       baseUrl: devOrigin,

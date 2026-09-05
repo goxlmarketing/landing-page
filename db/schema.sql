@@ -93,6 +93,10 @@ CREATE TRIGGER access_settings_set_updated_at
 -- future "reclaim unused invites" rule has something to measure against.
 -- `updated_at` cannot serve: any edit to the row moves it.
 ALTER TABLE beta_users ADD COLUMN IF NOT EXISTS invited_at timestamptz;
+-- Where the registration came from: UTM tags, ad click ids, referrer. First
+-- touch and the touch at registration, as one JSON document; NULL for a
+-- direct visit. Validated by app/lib/attribution.ts before it gets here.
+ALTER TABLE beta_users ADD COLUMN IF NOT EXISTS attribution jsonb;
 
 -- Position is `ORDER BY created_at, id` over everyone still in the queue, and
 -- granting a batch reads that order under load. Rejected rows leave the line

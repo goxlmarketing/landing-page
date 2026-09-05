@@ -46,7 +46,13 @@ export function supabaseAdminConfigured(): boolean {
  * exactly the claim the platform's provisioning reads to name the founder row
  * — so a founder is greeted by the name they gave us, not by their email.
  */
-export async function ensureAuthUser(input: { email: string; name: string }): Promise<EnsureAuthUserResult> {
+export async function ensureAuthUser(input: {
+  email: string;
+  name: string;
+  /** Extra user_metadata: the registration id and campaign tags, so the
+      platform's records can be joined back to the landing site's. */
+  metadata?: Record<string, string>;
+}): Promise<EnsureAuthUserResult> {
   const cfg = config();
   if (!cfg) {
     if (process.env.NODE_ENV !== "production") {
@@ -70,7 +76,7 @@ export async function ensureAuthUser(input: { email: string; name: string }): Pr
       body: JSON.stringify({
         email: input.email,
         email_confirm: true,
-        user_metadata: { full_name: input.name },
+        user_metadata: { full_name: input.name, ...(input.metadata ?? {}) },
       }),
       signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     });

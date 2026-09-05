@@ -1,3 +1,4 @@
+import { describeAttribution, type Attribution } from "./attribution";
 import nodemailer, { type Transporter } from "nodemailer";
 
 import { signApprovalToken } from "./approval-token";
@@ -41,6 +42,7 @@ type InternalNotification = {
   email: string;
   phone: string | null;
   linkedinUrl: string | null;
+  attribution?: Attribution | null;
   registeredAt: Date;
   source: string;
   baseUrl?: string;
@@ -210,6 +212,7 @@ export async function sendInternalNotificationEmail(
     ["Email", registration.email],
     ["Phone", registration.phone || "—"],
     ["LinkedIn", registration.linkedinUrl || "—"],
+    ["Came from", describeAttribution(registration.attribution)],
     ["Registered At", registration.registeredAt.toISOString()],
     ["Source", registration.source],
   ];

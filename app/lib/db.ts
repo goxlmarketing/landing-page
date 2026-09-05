@@ -1,5 +1,6 @@
 import postgres, { type Sql } from "postgres";
 
+import type { Attribution } from "./attribution";
 import {
   devAccessCounts,
   devFindBetaUserByEmail,
@@ -68,6 +69,8 @@ export type BetaUserInput = {
   phone: string | null;
   linkedinUrl: string | null;
   source: string;
+  /** Where they came from; null for a direct visit. See attribution.ts. */
+  attribution?: Attribution | null;
 };
 
 export type BetaUserInsert =
@@ -85,9 +88,13 @@ export type BetaUserRow = {
   createdAt: Date;
   /** Last change to the row -- for an INVITED row, when it was approved. */
   updatedAt: Date;
+  attribution?: Attribution | null;
 };
 
-type RawRow = { id: string; name: string; email: string; status: string; created_at: Date; updated_at: Date };
+type RawRow = {
+  id: string; name: string; email: string; status: string; created_at: Date; updated_at: Date;
+  attribution?: unknown;
+};
 
 function toRow(raw: RawRow): BetaUserRow {
   return {
@@ -97,6 +104,7 @@ function toRow(raw: RawRow): BetaUserRow {
     status: raw.status as BetaUserStatus,
     createdAt: raw.created_at,
     updatedAt: raw.updated_at,
+    attribution: (raw.attribution as Attribution | null | undefined) ?? null,
   };
 }
 
@@ -113,13 +121,14 @@ export async function insertBetaUser(input: BetaUserInput): Promise<BetaUserInse
   const sql = getSql();
 
   const rows = await sql<{ id: string; created_at: Date }[]>`
-    INSERT INTO beta_users (name, email, phone, linkedin_url, source)
+    INSERT INTO beta_users (name, email, phone, linkedin_url, source, attribution)
     VALUES (
       ${input.name},
       ${input.email},
       ${input.phone},
       ${input.linkedinUrl},
-      ${input.source}
+      ${input.source},
+      ${input.attribution ? sql.json(input.attribution) : null}
     )
     ON CONFLICT (email) DO NOTHING
     RETURNING id, created_at
@@ -139,7 +148,7 @@ export async function findBetaUserById(id: string): Promise<BetaUserRow | null> 
   }
   const sql = getSql();
   const rows = await sql<RawRow[]>`
-    SELECT id, name, email, status, created_at, updated_at
+    SELECT id, name, email, status, created_at, updated_at, attribution
     FROM beta_users
     WHERE id = ${id}
   `;
@@ -156,7 +165,7 @@ export async function findBetaUserByEmail(email: string): Promise<BetaUserRow | 
   }
   const sql = getSql();
   const rows = await sql<RawRow[]>`
-    SELECT id, name, email, status, created_at, updated_at
+    SELECT id, name, email, status, created_at, updated_at, attribution
     FROM beta_users
     WHERE email = ${email}
   `;
@@ -269,8 +278,8 @@ export async function pendingGrants(limit: number): Promise<BetaUserRow[]> {
   if (capacity <= 0) return [];
   const sql = getSql();
   const rows = await sql<RawRow[]>`
-    SELECT id, name, email, status, created_at, updated_at FROM (
-      SELECT id, name, email, status, created_at, updated_at,
+    SELECT id, name, email, status, created_at, updated_at, attribution FROM (
+      SELECT id, name, email, status, created_at, updated_at, attribution,
              row_number() OVER (ORDER BY created_at, id) AS position
       FROM beta_users
       WHERE ${sql.unsafe(IN_QUEUE)}
@@ -295,8 +304,8 @@ export async function queuePreview(limit: number): Promise<QueueEntry[]> {
   }
   const sql = getSql();
   const rows = await sql<(RawRow & { position: string })[]>`
-    SELECT id, name, email, status, created_at, updated_at, position FROM (
-      SELECT id, name, email, status, created_at, updated_at,
+    SELECT id, name, email, status, created_at, updated_at, attribution, position FROM (
+      SELECT id, name, email, status, created_at, updated_at, attribution,
              row_number() OVER (ORDER BY created_at, id) AS position
       FROM beta_users
       WHERE ${sql.unsafe(IN_QUEUE)}

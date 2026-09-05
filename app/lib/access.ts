@@ -2,6 +2,7 @@ import { markBetaUserInvited, pendingGrants, type BetaUserRow } from "./db";
 import { sendBetaApprovalEmail } from "./email";
 import { platformLoginUrl } from "./platform-url";
 import { ensureAuthUser } from "./supabase-admin";
+import { metadataFrom } from "./attribution";
 
 /**
  * Granting access — the one place it happens.
@@ -49,7 +50,11 @@ export async function grantAccess(
 
   let supabaseSkipped = false;
   if (!isGranted(user)) {
-    const auth = await ensureAuthUser({ email: user.email, name: user.name });
+    const auth = await ensureAuthUser({
+      email: user.email,
+      name: user.name,
+      metadata: { waitlist_id: user.id, ...metadataFrom(user.attribution) },
+    });
     if (!auth.ok) return { ok: false, error: auth.error };
     supabaseSkipped = Boolean(auth.skipped);
 
