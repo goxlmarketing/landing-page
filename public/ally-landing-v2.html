@@ -1293,6 +1293,10 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 .cta h2 em{ color:var(--emerald); }
 .cta h2{ max-width:16ch; }
 .cta-btn{ margin-top:28px; }
+/* the promise sits where the form card used to, level with the copy */
+.cta-grid--closing{ align-items:center; }
+.cta-grid--closing .cta-tag{ margin-top:0; max-width:none; padding:28px 30px; }
+@media (max-width:900px){ .cta-grid--closing .cta-tag{ margin-top:36px; max-width:520px; } }
 .cta-sub{ margin-top:22px; font-size:15.5px; line-height:1.7; color:var(--muted); max-width:440px; }
 /* the closing signature — the last thing read on the page, so it gets
    the emerald and a rule of its own rather than sitting in the run of copy */
@@ -2175,11 +2179,13 @@ html.ea-open .hw{ display:none; }
 <!-- ================= CTA + EARLY ACCESS ================= -->
 <!-- ================= CLOSING ================= -->
 <section class="cta" id="closing">
-  <div class="shell">
-    <p class="eyebrow">The Founder&rsquo;s Compass</p>
-    <h2>You already have a journey. <em>Now understand where it should go next.</em></h2>
-    <p class="cta-sub">Start by understanding where you are today.</p>
-    <a class="btn cta-btn" id="closeCta" href="#early-access">Start your founder journey <span aria-hidden="true">&rarr;</span></a>
+  <div class="shell cta-grid cta-grid--closing">
+    <div>
+      <p class="eyebrow">The Founder&rsquo;s Compass</p>
+      <h2>You already have a journey. <em>Now understand where it should go next.</em></h2>
+      <p class="cta-sub">Start by understanding where you are today.</p>
+      <a class="btn cta-btn" id="closeCta" href="#early-access">Start your founder journey <span aria-hidden="true">&rarr;</span></a>
+    </div>
     <p class="cta-tag"><b>Our promise</b>Your data is encrypted, private and accessible only to you.</p>
   </div>
 </section>
