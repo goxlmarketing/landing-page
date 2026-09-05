@@ -1556,7 +1556,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
   </nav>
   <div class="nav-auth">
     <a class="nav-login" href="/login.html">Log in</a>
-    <a class="nav-cta" id="navCta" href="/signup.html">Sign up <span aria-hidden="true">→</span></a>
+    <a class="nav-cta" id="navCta" href="#early-access">Sign up <span aria-hidden="true">→</span></a>
   </div>
   <button class="nav-burger" type="button" id="navBurger" aria-label="Menu" aria-expanded="false" aria-controls="navMenu">
     <i></i><i></i><i></i>
@@ -1564,7 +1564,7 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
 </header>
 
 <div class="nav-menu" id="navMenu">
-  <a class="btn" id="menuCta" href="/signup.html">Sign up <span aria-hidden="true">→</span></a>
+  <a class="btn" id="menuCta" href="#early-access">Sign up <span aria-hidden="true">→</span></a>
   <a class="menu-login" href="/login.html">Log in</a>
   <nav aria-label="Menu">
     <a href="#experience">Experience</a>
@@ -2706,8 +2706,8 @@ html.viewer-lock, body.viewer-lock{ overflow:hidden; }
     current = { state: state, loginUrl: (extra && extra.loginUrl) || '' };
     if(state === 'new'){
       setCta(heroCta, 'Start your founder journey', '#early-access');
-      setCta(navCta, 'Sign up', '/signup.html');
-      setCta(menuCta, 'Sign up', '/signup.html');
+      setCta(navCta, 'Sign up', '#early-access');
+      setCta(menuCta, 'Sign up', '#early-access');
       if(doneCta) doneCta.hidden = true;
       showForm();
       return;

@@ -70,6 +70,13 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // There is no separate sign-up page: registering IS the form on the home
+      // page. The stub that used to live here only added a click before it.
+      {
+        source: "/signup.html",
+        destination: "/#early-access",
+        permanent: false,
+      },
       {
         source: "/ally-landing.original.html",
         destination: "/",
