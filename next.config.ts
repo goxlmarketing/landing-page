@@ -106,8 +106,11 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // Earlier builds and the iframe demo: still served so old links resolve,
+      // never indexed. robots.ts lists the same paths; the header is what holds
+      // when a crawler arrives by a link rather than by robots.txt.
       {
-        source: "/ally-platform.html",
+        source: "/:page(ally-platform|ally-landing|ally-landing-v1-backup|ally-dashboard).html",
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }],
       },
       // Everything under /assets carries a .vN in its filename, so a given URL
